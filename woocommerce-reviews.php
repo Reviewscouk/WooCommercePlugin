@@ -9,6 +9,8 @@ License: GPL
 Version: 0.1
 */
 
+
+
 if (!class_exists('WooCommerce_Reviews'))
 {
 	class WooCommerce_Reviews
@@ -19,6 +21,9 @@ if (!class_exists('WooCommerce_Reviews'))
 			add_action('admin_init', array(&$this, 'admin_init'));
 			add_action('admin_menu', array(&$this, 'add_menu'));
 			add_filter('init', array($this, 'init'));
+			add_action('my_hourly_event', array($this,'do_this_hourly'));
+			register_activation_hook(__FILE__, array($this, 'my_activation'));
+			register_deactivation_hook( __FILE__, array($this, 'run_on_deactivate') );
 		}
 
 		public function admin_init()
@@ -28,6 +33,7 @@ if (!class_exists('WooCommerce_Reviews'))
 
 		public function init_settings()
 		{
+			register_setting('woocommerce-reviews', 'region');
 			register_setting('woocommerce-reviews', 'store_id');
 			register_setting('woocommerce-reviews', 'api_key');
 			register_setting('woocommerce-reviews', 'product_feed');
@@ -39,7 +45,7 @@ if (!class_exists('WooCommerce_Reviews'))
 			register_setting('woocommerce-reviews', 'product_review_widget');
 			register_setting('woocommerce-reviews', 'send_product_review_invitation');
 			register_setting('woocommerce-reviews', 'send_merchant_review_invitation');
-			register_setting('woocommerce-reviews', 'region');
+			register_setting('woocommerce-reviews', 'enable_cron');
 		}
 
 		public function add_menu()
@@ -57,9 +63,136 @@ if (!class_exists('WooCommerce_Reviews'))
 			include(sprintf("%s/settings-page.php", dirname(__FILE__)));
 		}
 
+		public function do_this_hourly(){
+			/*
+			 * This runs hourly and runs orderCompleted if it hasn't already been run. This solves problems for clients using solutions like Veeqo to complete orders.
+			 */
+			if(get_option('enable_cron')){
+				$orders = get_posts( array(
+				    'numberposts' => 30,
+					'meta_key' => '_reviewscouk_status',
+					'meta_compare' => 'NOT EXISTS',
+				    'post_type'   => wc_get_order_types(),
+				    'post_status' => array('wc-completed'),
+					'date_query' => array(
+				        'after' => date('Y-m-d', strtotime('-5 days'))
+				    ),
+				) );
+
+				foreach($orders as $order){
+					$this->orderCompleted($order->ID);
+				}
+			}
+		}
+
+		public function my_activation(){
+			wp_schedule_event( current_time( 'timestamp' ), 'hourly', 'my_hourly_event');
+		}
+
+		public function run_on_deactivate(){
+			wp_clear_scheduled_hook('my_hourly_event');
+		}
+
+
+		public function orderCompleted($order_id)
+		{
+			update_post_meta($order_id, '_reviewscouk_status','processed');
+
+			$api_url = 'https://api.reviews.co.uk';
+
+			$region = get_option('region');
+			if ($region == 'us'){
+				$api_url = 'https://api.reviews.io';
+			}
+
+			$order = new WC_Order($order_id);
+			$items = $order->get_items();
+
+			foreach ($items as $row)
+			{
+				$productmeta = wc_get_product($row['product_id']);
+				$sku = $productmeta->get_sku();
+
+				if ($productmeta->product_type == 'simple')
+				{
+					$sku = $productmeta->get_sku();
+				}
+				else
+				{
+					$available_variations = $productmeta->get_available_variations();
+					foreach ($available_variations as $variation)
+					{
+						if ($variation['variation_id'] == $row['variation_id'])
+						{
+							$sku = $variation['sku'];
+						}
+					}
+				}
+
+				$url = $productmeta->post->guid;
+
+				$attachment_url = wp_get_attachment_url(get_post_thumbnail_id($row['product_id']));
+
+				$p[] = array(
+					'image'   => $attachment_url,
+					'id'      => $row['product_id'],
+					'sku'     => $sku,
+					'name'    => $row['name'],
+					'pageUrl' => $url
+				);
+			}
+
+			$post_params['order_id'] = $order_id;
+			$post_params['email']    = $order->billing_email;
+			$post_params['name']     = $order->billing_first_name . ' ' . $order->billing_last_name;
+			$post_params['products'] = json_encode($p);
+
+			// Only do this if we have all the info required
+			if (get_option('api_key') != '' && get_option('store_id') != '' && get_option('send_product_review_invitation') == '1')
+			{
+				// Send product request
+				$product_url_string = $api_url . '/product/invitation';
+				$ch                 = curl_init($product_url_string);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+					'store:' . get_option('store_id'),
+					'apikey:' . get_option('api_key')
+				));
+				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
+				curl_setopt($ch, CURLOPT_POST, true);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $post_params);
+				curl_exec($ch);
+				curl_close($ch);
+			}
+
+			if (get_option('api_key') != '' && get_option('store_id') != '' && get_option('send_merchant_review_invitation') == '1')
+			{
+				$order_params             = array();
+				$order_params['name']     = $order->billing_first_name . ' ' . $order->billing_last_name;
+				$order_params['store']    = get_option('store_id');
+				$order_params['email']    = $order->billing_email;
+				$order_params['order_id'] = $order_id;
+				$order_params['api_key']  = get_option('api_key');
+
+				$product_url_string = $api_url . '/merchant/invitation';
+				$ch                 = curl_init($product_url_string);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+					'store:' . get_option('store_id'),
+					'apikey:' . get_option('api_key'
+					)));
+				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
+				curl_setopt($ch, CURLOPT_POST, true);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $order_params);
+				curl_exec($ch);
+
+				curl_close($ch);
+			}
+		}
+
 		function init()
 		{
-			add_action('woocommerce_order_status_completed', 'orderCompleted');
+			add_action('woocommerce_order_status_completed', array($this,'orderCompleted'));
 			add_filter('template_redirect', 'product_feed');
 			add_filter('woocommerce_product_tabs', 'product_review_tab');
 			add_filter('woocommerce_after_single_product_summary', 'productPage');
@@ -226,99 +359,7 @@ if (!class_exists('WooCommerce_Reviews'))
 				}
 			}
 
-			function orderCompleted($order_id)
-			{
-				$api_url = 'https://api.reviews.co.uk';
 
-				$region = get_option('region');
-				if ($region == 'us'){
-					$api_url = 'https://api.reviews.io';
-				}
-
-				$order = new WC_Order($order_id);
-				$items = $order->get_items();
-
-				foreach ($items as $row)
-				{
-					$productmeta = wc_get_product($row['product_id']);
-					$sku = $productmeta->get_sku();
-
-					if ($productmeta->product_type == 'simple')
-					{
-						$sku = $productmeta->get_sku();
-					}
-					else
-					{
-						$available_variations = $productmeta->get_available_variations();
-						foreach ($available_variations as $variation)
-						{
-							if ($variation['variation_id'] == $row['variation_id'])
-							{
-								$sku = $variation['sku'];
-							}
-						}
-					}
-
-					$url = $productmeta->post->guid;
-
-					$attachment_url = wp_get_attachment_url(get_post_thumbnail_id($row['product_id']));
-
-					$p[] = array(
-						'image'   => $attachment_url,
-						'id'      => $row['product_id'],
-						'sku'     => $sku,
-						'name'    => $row['name'],
-						'pageUrl' => $url
-					);
-				}
-
-				$post_params['order_id'] = $order_id;
-				$post_params['email']    = $order->billing_email;
-				$post_params['name']     = $order->billing_first_name . ' ' . $order->billing_last_name;
-				$post_params['products'] = json_encode($p);
-
-				// Only do this if we have all the info required
-				if (get_option('api_key') != '' && get_option('store_id') != '' && get_option('send_product_review_invitation') == '1')
-				{
-					// Send product request
-					$product_url_string = $api_url . '/product/invitation';
-					$ch                 = curl_init($product_url_string);
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-					curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-						'store:' . get_option('store_id'),
-						'apikey:' . get_option('api_key')
-					));
-					curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
-					curl_setopt($ch, CURLOPT_POST, true);
-					curl_setopt($ch, CURLOPT_POSTFIELDS, $post_params);
-					curl_exec($ch);
-					curl_close($ch);
-				}
-
-				if (get_option('api_key') != '' && get_option('store_id') != '' && get_option('send_merchant_review_invitation') == '1')
-				{
-					$order_params             = array();
-					$order_params['name']     = $order->billing_first_name . ' ' . $order->billing_last_name;
-					$order_params['store']    = get_option('store_id');
-					$order_params['email']    = $order->billing_email;
-					$order_params['order_id'] = $order_id;
-					$order_params['api_key']  = get_option('api_key');
-
-					$product_url_string = $api_url . '/merchant/invitation';
-					$ch                 = curl_init($product_url_string);
-					curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-					curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-						'store:' . get_option('store_id'),
-						'apikey:' . get_option('api_key'
-						)));
-					curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
-					curl_setopt($ch, CURLOPT_POST, true);
-					curl_setopt($ch, CURLOPT_POSTFIELDS, $order_params);
-					curl_exec($ch);
-
-					curl_close($ch);
-				}
-			}
 		}
 	}
 }

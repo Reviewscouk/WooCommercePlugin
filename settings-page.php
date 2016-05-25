@@ -185,6 +185,25 @@
 				</td>
 			</tr>
 		</table>
+
+		<h2>Cron (Do Not Enable Unless Required)</h2></td>
+		<table class="form-table">
+			<tr>
+				<th>
+					<label for="product_feed">Enable Cron: </label>
+                    <p style="font-size:12px;font-weight:100;">If you use a third party system to mark orders as completed then review invitations may not be triggered. If this setting is enabled a cron will run hourly which queues invitations for recently completed orders. <br /><br /> To prevent the cron running on visitor page loads you should disable WP_CRON and setup a real cron as described here: https://easyengine.io/tutorials/wordpress/wp-cron-crontab/.</p>
+				</th>
+				<td>
+					<?php
+						$enableCron = get_option('enable_cron');
+					?>
+					<select name="enable_cron">
+						<option <?php echo ($enableCron== 1) ? 'selected' : '' ?> value="1">Yes</option>
+						<option <?php echo ($enableCron== 0) ? 'selected' : '' ?> value="0">No</option>
+					</select>
+				</td>
+			</tr>
+		</table>
 		<?php @submit_button(); ?>
 	</form>
 </div>
