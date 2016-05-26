@@ -35,11 +35,9 @@ foreach ($orders as $o)
 	{
 		$product = wc_get_product($item['product_id']);
 
-		if ($product->product_type == 'simple')
-		{
-			$sku = $product->get_sku();
-		}
-		else
+		$sku = $product->get_sku();
+
+		if($product->product_type == 'variant')
 		{
 			$available_variations = $product->get_available_variations();
 
