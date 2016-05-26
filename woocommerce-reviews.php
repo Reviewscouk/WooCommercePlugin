@@ -113,11 +113,7 @@ if (!class_exists('WooCommerce_Reviews'))
 				$productmeta = wc_get_product($row['product_id']);
 				$sku = $productmeta->get_sku();
 
-				if ($productmeta->product_type == 'simple')
-				{
-					$sku = $productmeta->get_sku();
-				}
-				else
+				if($productmeta->product_type == 'variable')
 				{
 					$available_variations = $productmeta->get_available_variations();
 					foreach ($available_variations as $variation)
@@ -219,7 +215,7 @@ if (!class_exists('WooCommerce_Reviews'))
                     $sku = get_post_meta(get_the_ID(), '_sku');
                     $skus[] = $sku[0];
 
-                    if ($product->product_type != 'simple')
+                    if ($product->product_type == 'variable')
                     {
                         $available_variations = $product->get_available_variations();
                         foreach ($available_variations as $variant)
@@ -321,7 +317,7 @@ if (!class_exists('WooCommerce_Reviews'))
 					// Build SKU Array
 					$sku = get_post_meta(get_the_ID(), '_sku');
 					$skus = array();
-					if ($product->product_type != 'simple')
+					if ($product->product_type == 'variable')
 					{
 						$available_variations = $product->get_available_variations();
 						foreach ($available_variations as $variant)
@@ -358,8 +354,6 @@ if (!class_exists('WooCommerce_Reviews'))
 					echo 'Missing Reviews.co.uk API Credentials';
 				}
 			}
-
-
 		}
 	}
 }
