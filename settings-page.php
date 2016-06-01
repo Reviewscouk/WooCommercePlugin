@@ -16,7 +16,6 @@
 			</p>
 		</div>
 
-
 		<h2>API Settings</h2>
 
 		<p>You can find your API credentials on the Reviews Dashboard. <br /><br /> Go to <b>Company Setup &gt; Automated Review Collection &gt; WooCommerce &gt; Configuration</b></p>
@@ -90,6 +89,21 @@
 					<input type="text" name="widget_hex_colour" value="<?php  echo $widget_hex_colour; ?>" />
 				</td>
 			</tr>
+			<tr>
+				<th>
+                    <label for="enable_product_rating_snippet">Enable Product Rating Snippet: </label>
+                    <p style="font-size:12px;font-weight:100;">When enabled a star rating will be displayed below the product title providing the product has reviews.</p>
+				</th>
+				<td>
+					<?php
+					$enable_product_rating_snippet = get_option('enable_product_rating_snippet');
+					?>
+					<select name="enable_product_rating_snippet">
+						<option <?php echo ($enable_product_rating_snippet == 1) ? 'selected' : '' ?> value="1">Yes</option>
+						<option <?php echo ($enable_product_rating_snippet == 0) ? 'selected' : '' ?> value="0">No</option>
+					</select>
+				</td>
+			</tr>
 		</table>
 		<h2>Review Invitations</h2></td>
 		<table class="form-table">
@@ -128,8 +142,8 @@
 		<table class="form-table">
 			<tr>
 				<th>
-                    <label for="product_feed">Enable Merchant Rich Snippet: </label>
-                    <p style="font-size:12px;font-weight:100;">The rich snippet code will be appended to the footer. You can add some rules to your css to style the #rs_container element.</p>
+                    <label for="enable_rich_snippet">Enable Merchant Rich Snippet: </label>
+                    <p style="font-size:12px;font-weight:100;">This rich snippet will give you stars on natural search results.</p>
 				</th>
 				<td>
 					<?php
@@ -143,8 +157,8 @@
 			</tr>
 			<tr>
 				<th>
-					<label for="product_feed">Enable Product Rich Snippet: </label>
-                    <p style="font-size:12px;font-weight:100;">The rich snippet code will be appended to the footer. You can add some rules to your css to style the #rs_container element.</p>
+					<label for="enable_product_rich_snippet">Enable Product Rich Snippet: </label>
+                    <p style="font-size:12px;font-weight:100;">The product rich snippet will give you stars on natural search results for your product pages.</p>
 				</th>
 				<td>
 					<?php
@@ -153,6 +167,24 @@
 					<select name="enable_product_rich_snippet">
 						<option <?php echo ($enable_product_rich_snippet == 1) ? 'selected' : '' ?> value="1">Yes</option>
 						<option <?php echo ($enable_product_rich_snippet == 0) ? 'selected' : '' ?> value="0">No</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+		<h2>Floating Widget</h2></td>
+		<table class="form-table">
+			<tr>
+				<th>
+                    <label for="enable_floating_widget">Enable Floating Widget: </label>
+                    <p style="font-size:12px;font-weight:100;">A reviews tab will be added to the right side of your site. This is highly recommended if you use Merchant Rich Snippets.</p>
+				</th>
+				<td>
+					<?php
+					$enable_floating_widget = get_option('enable_floating_widget');
+					?>
+					<select name="enable_floating_widget">
+						<option <?php echo ($enable_floating_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
+						<option <?php echo ($enable_floating_widget == 0) ? 'selected' : '' ?> value="0">No</option>
 					</select>
 				</td>
 			</tr>
@@ -190,7 +222,7 @@
 		<table class="form-table">
 			<tr>
 				<th>
-					<label for="product_feed">Enable Cron: </label>
+					<label for="enable_cron">Enable Cron: </label>
                     <p style="font-size:12px;font-weight:100;">If you use a third party system to mark orders as completed then review invitations may not be triggered. If this setting is enabled a cron will run hourly which queues invitations for recently completed orders. <br /><br /> To prevent the cron running on visitor page loads you should disable WP_CRON and setup a real cron as described here: https://easyengine.io/tutorials/wordpress/wp-cron-crontab/.</p>
 				</th>
 				<td>

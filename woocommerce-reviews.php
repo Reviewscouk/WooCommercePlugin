@@ -6,10 +6,8 @@ Plugin URI: http://www.reviews.co.uk
 Description: Integrate Reviews.co.uk with WooCommerce to automatically send review requests.
 Author: Reviews.co.uk
 License: GPL
-Version: 0.1
+Version: 0.2
 */
-
-
 
 if (!class_exists('WooCommerce_Reviews'))
 {
@@ -21,8 +19,8 @@ if (!class_exists('WooCommerce_Reviews'))
 			add_action('admin_init', array(&$this, 'admin_init'));
 			add_action('admin_menu', array(&$this, 'add_menu'));
 			add_filter('init', array($this, 'init'));
-			add_action('my_hourly_event', array($this,'do_this_hourly'));
-			register_activation_hook(__FILE__, array($this, 'my_activation'));
+			add_action('hourly_order_process_event', array($this,'process_recent_orders'));
+			register_activation_hook(__FILE__, array($this, 'run_on_activation'));
 			register_deactivation_hook( __FILE__, array($this, 'run_on_deactivate') );
 		}
 
@@ -39,13 +37,15 @@ if (!class_exists('WooCommerce_Reviews'))
 			register_setting('woocommerce-reviews', 'product_feed');
 			register_setting('woocommerce-reviews', 'create_csv');
 			register_setting('woocommerce-reviews', 'widget_hex_colour');
-			register_setting('woocommerce-reviews', 'enable_rich_snippet');
+			register_setting('woocommerce-reviews', 'output_rich_snippet_code');
 			register_setting('woocommerce-reviews', 'enable_product_rich_snippet');
+			register_setting('woocommerce-reviews', 'enable_product_rating_snippet');
 			register_setting('woocommerce-reviews', 'show_product_questions');
 			register_setting('woocommerce-reviews', 'product_review_widget');
 			register_setting('woocommerce-reviews', 'send_product_review_invitation');
 			register_setting('woocommerce-reviews', 'send_merchant_review_invitation');
 			register_setting('woocommerce-reviews', 'enable_cron');
+			register_setting('woocommerce-reviews', 'enable_floating_widget');
 		}
 
 		public function add_menu()
@@ -58,14 +58,13 @@ if (!class_exists('WooCommerce_Reviews'))
 			if (!current_user_can('manage_options'))
 			{
 				wp_die(__('You do not have sufficient permissions to access this page.'));
-
 			}
 			include(sprintf("%s/settings-page.php", dirname(__FILE__)));
 		}
 
-		public function do_this_hourly(){
+		public function process_recent_orders(){
 			/*
-			 * This runs hourly and runs orderCompleted if it hasn't already been run. This solves problems for clients using solutions like Veeqo to complete orders.
+			 * This runs hourly and runs processCompletedOrder if it hasn't already been run. This solves problems for clients using solutions like Veeqo to complete orders.
 			 */
 			if(get_option('enable_cron')){
 				$orders = get_posts( array(
@@ -80,31 +79,24 @@ if (!class_exists('WooCommerce_Reviews'))
 				) );
 
 				foreach($orders as $order){
-					$this->orderCompleted($order->ID);
+					$this->processCompletedOrder($order->ID);
 				}
 			}
 		}
 
-		public function my_activation(){
-			wp_schedule_event( current_time( 'timestamp' ), 'hourly', 'my_hourly_event');
+		public function run_on_activation(){
+			wp_schedule_event( current_time( 'timestamp' ), 'hourly', 'hourly_order_process_event');
 		}
 
 		public function run_on_deactivate(){
-			wp_clear_scheduled_hook('my_hourly_event');
+			wp_clear_scheduled_hook('hourly_order_process_event');
 		}
 
-
-		public function orderCompleted($order_id)
+		public function processCompletedOrder($order_id)
 		{
 			update_post_meta($order_id, '_reviewscouk_status','processed');
 
-			$api_url = 'https://api.reviews.co.uk';
-
-			$region = get_option('region');
-			if ($region == 'us'){
-				$api_url = 'https://api.reviews.io';
-			}
-
+			$api_url = $this->getApiDomain();
 			$order = new WC_Order($order_id);
 			$items = $order->get_items();
 
@@ -186,174 +178,233 @@ if (!class_exists('WooCommerce_Reviews'))
 			}
 		}
 
-		function init()
-		{
-			add_action('woocommerce_order_status_completed', array($this,'orderCompleted'));
-			add_filter('template_redirect', 'product_feed');
-			add_filter('woocommerce_product_tabs', 'product_review_tab');
-			add_filter('woocommerce_after_single_product_summary', 'productPage');
-			add_action('wp_footer', 'enable_rich_snippet');
+        public function rating_snippet_footer_scripts(){
+            $enabled = get_option('enable_product_rating_snippet');
+            if($enabled){
+            ?>
+                <script src="https://<?php echo $this->getWidgetDomain(); ?>/product/dist.js"></script>
 
-			function enable_rich_snippet()
-			{
-                global $product;
+                <script src="https://<?php echo $this->getWidgetDomain(); ?>/rating-snippet/dist.js"></script>
+                <link rel="stylesheet" href="https://<?php echo $this->getWidgetDomain(); ?>/rating-snippet/dist.css" />
 
-				$enabled = get_option('enable_rich_snippet');
-				$product_enabled = get_option('enable_product_rich_snippet');
-                $region = get_option('region');
-                if($region == 'uk'){
-                    $domain = 'widget.reviews.co.uk';
+                <script>
+                ratingSnippet("ruk_rating_snippet",{
+                store: "<?php echo get_option('store_id'); ?>",
+                    color: "<?php echo $this->getHexColor(); ?>",
+                    linebreak: true,
+                    text: "Reviews"
+                });
+                </script>
+            <?php
+            }
+        }
+
+        public function floating_widget(){  
+            $enabled = get_option('enable_floating_widget');
+            $store = get_option('store_id');
+            if($enabled){
+            ?>
+                <script type="text/javascript" src="https://<?php echo $this->getDashDomain(); ?>/widget/float.js" data-store="<?php echo $store; ?>" data-color="<?php echo $this->getHexColor(); ?>" data-position="right"></script>
+                <link href="https://<?php echo $this->getDashDomain(); ?>/widget/float.css" rel="stylesheet" /> 
+            <?php
+            }
+        }
+
+        public function product_rating_snippet_markup() {
+            $skus = $this->getProductSkus();
+            $enabled = get_option('enable_product_rating_snippet');
+            if($enabled){
+                echo '<div class="ruk_rating_snippet" data-sku="'.implode(';',$skus).'"></div>';
+            }
+        }
+
+        public function getSubDomain($sub){
+            $region = get_option('region');
+            if($region == 'uk'){
+                return $sub.'.reviews.co.uk';
+            }
+            else
+            {
+                return $sub.'.reviews.io';
+            }
+        }
+
+        public function getWidgetDomain(){
+            return $this->getSubDomain('widget');
+        }
+
+        public function getDashDomain(){
+            return $this->getSubDomain('dash');
+        }
+
+        public function getApiDomain(){
+            return $this->getSubDomain('api');
+        }
+
+        public function output_rich_snippet_code()
+        {
+            global $product;
+
+            $enabled = get_option('output_rich_snippet_code');
+            $product_enabled = get_option('enable_product_rich_snippet');
+
+            // Getting Product SKU
+            $skus = $this->getProductSkus();
+
+            if($enabled && empty($skus) ){
+                echo '<script src="https://'.$this->getWidgetDomain().'/rich-snippet/dist.js"></script>
+                <script type="text/javascript">
+                richSnippet({
+                    store: "'.get_option('store_id').'"
+                });
+                </script>';
+            }
+            else if( $product_enabled && !empty($skus) )
+            {
+                echo '<script src="https://'.$this->getWidgetDomain().'/rich-snippet/dist.js"></script>
+                <script>
+                richSnippet({
+                    store: "'.get_option('store_id').'",
+                    sku: "'.implode(';',$skus).'"
+                });
+                </script>';
+            }
+        }
+
+        public function getProductSkus(){
+            global $product;
+            
+            $skus = array();
+            if($product){
+                $sku = get_post_meta(get_the_ID(), '_sku');
+                if(!empty($sku)){
+                    $skus[] = $sku[0];
+                }
+
+                if ($product->product_type == 'variable')
+                {
+                    $available_variations = $product->get_available_variations();
+                    foreach ($available_variations as $variant)
+                    {
+                        $skus[] = $variant['sku'];
+                    }
+                }
+            }
+
+            return $skus;
+        }
+
+        public function product_feed($page_template)
+        {
+            $actual_link = explode('/', 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+
+            $slug = '';
+
+            if ($actual_link[count($actual_link) - 1] == '')
+            {
+                $slug = $actual_link[count($actual_link) - 2];
+            }
+            else
+            {
+                $slug = $actual_link[count($actual_link) - 1];
+            }
+
+            if ($slug == 'product_feed')
+            {
+                $product_feed = get_option('product_feed');
+                if($product_feed)
+                {
+                    global $wp_query;
+                    status_header(200);
+                    $wp_query->is_404 = false;
+                    include(dirname(__FILE__) . '/product-feed.php');
+                    exit();
+                }
+            }
+
+            if($slug == 'order_csv')
+            {
+                if ( is_user_logged_in() && current_user_can( 'manage_options' ) )
+                {
+                    global $wp_query;
+                    status_header(200);
+                    $wp_query->is_404 = false;
+                    include(dirname(__FILE__) . '/order_csv.php');
+                    exit();
                 }
                 else
                 {
-                    $domain = 'widget.reviews.io';
+                    auth_redirect();
                 }
+            }
 
-                // Getting Product SKU
-                $skus = array();
-                if($product){
-                    $sku = get_post_meta(get_the_ID(), '_sku');
-                    $skus[] = $sku[0];
+            return $page_template;
+        }
 
-                    if ($product->product_type == 'variable')
-                    {
-                        $available_variations = $product->get_available_variations();
-                        foreach ($available_variations as $variant)
-                        {
-                            $skus[] = $variant['sku'];
-                        }
-                    }
-                }
+        public function product_review_tab($tabs){
+            if (in_array(get_option('product_review_widget'),array('tab'))){
+                $tabs['reviews'] = array(
+                    'title' => 'Reviews',
+                    'callback' => array($this,'productReviewWidget'),
+                    'priority' => 50
+                );
+            }
 
-                if($enabled && empty($sku) ){
-                    echo '<script src="https://'.$domain.'/rich-snippet/dist.js"></script>
-                    <script type="text/javascript">
-                    richSnippet({
-                        store: "'.get_option('store_id').'"
-                    });
-                    </script>';
-                }
-                else if( $product_enabled && !empty($sku) )
-                {
-                    echo '<script src="https://'.$domain.'/rich-snippet/dist.js"></script>
-                    <script>
-                    richSnippet({
-                        store: "'.get_option('store_id').'",
-                        sku: "'.implode(';',$skus).'"
-                    });
-                    </script>';
-                }
-			}
+            return $tabs;
+        }
 
-			function product_feed($page_template)
-			{
-				$actual_link = explode('/', 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+        public function productPage(){
+            if (in_array(get_option('product_review_widget'),array('summary','1'))){
+                $this->productReviewWidget();
+            }
+        }
 
-				$slug = '';
+        public function getHexColor(){
+            $colour = get_option('widget_hex_colour');
+            if (strpos($colour, '#') === FALSE) $colour = '#' . $colour;
+            if (!preg_match('/^#[a-f0-9]{6}$/i', $colour)) $colour = '#5db11f';
+            return $colour;
+        }
 
-				if ($actual_link[count($actual_link) - 1] == '')
-				{
-					$slug = $actual_link[count($actual_link) - 2];
-				}
-				else
-				{
-					$slug = $actual_link[count($actual_link) - 1];
-				}
+        public function productReviewWidget(){
+            if(get_option('api_key') != '' && get_option('store_id') != ''){
+                $skus = $this->getProductSkus();
 
-				if ($slug == 'product_feed')
-				{
-					$product_feed = get_option('product_feed');
-					if($product_feed)
-					{
-						global $wp_query;
-						status_header(200);
-						$wp_query->is_404 = false;
-						include(dirname(__FILE__) . '/product-feed.php');
-						exit();
-					}
-				}
+                $color = $this->getHexColor();
+                echo '
+                <script src="https://'.$this->getWidgetDomain().'/product/dist.js"></script>
+                <div id="widget"></div>
+                <script type="text/javascript">
+                    productWidget("widget",{
+                    store: "' . get_option('store_id') . '",
+                    sku: "' . implode(';', $skus) . '", // Multiple SKU"s Seperated by Semi-Colons
+                    primaryClr: "' . $colour . '",
+                    neutralClr: "#EBEBEB",
+                    buttonClr: "#EEE",
+                    textClr: "#333",
+                    tabClr: "#eee",
+                    ratingStars: false,
+                    showAvatars: true
+                });
+                </script>';
+            }
+            else
+            {
+                echo 'Missing Reviews.co.uk API Credentials';
+            }
+        }
 
-				if($slug == 'order_csv')
-				{
-					if ( is_user_logged_in() && current_user_can( 'manage_options' ) )
-					{
-						global $wp_query;
-						status_header(200);
-						$wp_query->is_404 = false;
-						include(dirname(__FILE__) . '/order_csv.php');
-						exit();
-					}
-					else
-					{
-						auth_redirect();
-					}
-				}
-
-				return $page_template;
-			}
-
-			function product_review_tab($tabs){
-				if (in_array(get_option('product_review_widget'),array('tab'))){
-					$tabs['reviews'] = array(
-						'title' => 'Reviews',
-						'callback' => 'productReviewWidget',
-						'priority' => 50
-					);
-				}
-
-				return $tabs;
-			}
-
-			function productPage(){
-				if (in_array(get_option('product_review_widget'),array('summary','1'))){
-					productReviewWidget();
-				}
-			}
-
-			function productReviewWidget(){
-				global $woocommerce, $product, $post, $re_wcvt_options;
-
-				if(get_option('api_key') != '' && get_option('store_id') != ''){
-					// Build SKU Array
-					$sku = get_post_meta(get_the_ID(), '_sku');
-					$skus = array();
-					if ($product->product_type == 'variable')
-					{
-						$available_variations = $product->get_available_variations();
-						foreach ($available_variations as $variant)
-						{
-							$skus[] = $variant['sku'];
-						}
-					}
-					$skus[] = $sku[0];
-
-					// Prepare HEX Colour
-					$colour = get_option('widget_hex_colour');
-					if (strpos($colour, '#') === FALSE) $colour = '#' . $colour;
-					if (!preg_match('/^#[a-f0-9]{6}$/i', $colour)) $colour = '#5db11f';
-
-					echo '
-					<script src="https://widget.reviews.co.uk/product/dist.js"></script>
-					<div id="widget"></div>
-					<script type="text/javascript">
-						productWidget("widget",{
-						store: "' . get_option('store_id') . '",
-						sku: "' . implode(';', $skus) . '", // Multiple SKU"s Seperated by Semi-Colons
-						primaryClr: "' . $colour . '",
-						neutralClr: "#EBEBEB",
-						buttonClr: "#EEE",
-						textClr: "#333",
-						tabClr: "#eee",
-						ratingStars: false,
-						showAvatars: true
-					});
-					</script>';
-				}
-				else
-				{
-					echo 'Missing Reviews.co.uk API Credentials';
-				}
-			}
+		function init()
+		{
+			add_action('woocommerce_order_status_completed', array($this,'processCompletedOrder'));
+			add_filter('template_redirect', array($this, 'product_feed'));
+			add_filter('woocommerce_product_tabs', array($this,'product_review_tab'));
+			add_filter('woocommerce_after_single_product_summary', array($this,'productPage'));
+			add_action('wp_footer', array($this,'output_rich_snippet_code'));
+			add_action('wp_footer', array($this,'rating_snippet_footer_scripts'));
+			add_action('wp_footer', array($this,'floating_widget'));
+            add_action('woocommerce_single_product_summary', array($this,'product_rating_snippet_markup'), 6);
+            add_action('woocommerce_after_shop_loop_item', array($this, 'product_rating_snippet_markup'), 5  );
 		}
 	}
 }
