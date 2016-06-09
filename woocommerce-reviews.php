@@ -2,11 +2,11 @@
 /*
 Plugin Name: Reviews.co.uk for WooCommerce
 Depends: WooCommerce
-Plugin URI: http://www.reviews.co.uk
-Description: Integrate Reviews.co.uk with WooCommerce to automatically send review requests.
+Plugin URI: https://wordpress.org/plugins/reviewscouk-for-woocommerce/
+Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
 Author: Reviews.co.uk
 License: GPL
-Version: 0.2
+Version: 0.3
 */
 
 if (!class_exists('WooCommerce_Reviews'))
@@ -35,22 +35,82 @@ if (!class_exists('WooCommerce_Reviews'))
 			register_setting('woocommerce-reviews', 'store_id');
 			register_setting('woocommerce-reviews', 'api_key');
 			register_setting('woocommerce-reviews', 'product_feed');
-			register_setting('woocommerce-reviews', 'create_csv');
 			register_setting('woocommerce-reviews', 'widget_hex_colour');
-			register_setting('woocommerce-reviews', 'output_rich_snippet_code');
+			register_setting('woocommerce-reviews', 'enable_rich_snippet');
 			register_setting('woocommerce-reviews', 'enable_product_rich_snippet');
 			register_setting('woocommerce-reviews', 'enable_product_rating_snippet');
-			register_setting('woocommerce-reviews', 'show_product_questions');
 			register_setting('woocommerce-reviews', 'product_review_widget');
+			register_setting('woocommerce-reviews', 'hide_write_review_button');
 			register_setting('woocommerce-reviews', 'send_product_review_invitation');
 			register_setting('woocommerce-reviews', 'send_merchant_review_invitation');
 			register_setting('woocommerce-reviews', 'enable_cron');
 			register_setting('woocommerce-reviews', 'enable_floating_widget');
+			register_setting('woocommerce-reviews', 'product_identifier');
+		}
+
+		public function setDefaultSettings(){
+			update_option('product_feed', 1);
+			update_option('send_product_review_invitation', 1);
+			update_option('send_merchant_review_invitation', 1);
+			update_option('product_review_widget', 'tab');
+			update_option('product_identifier', 'sku');
 		}
 
 		public function add_menu()
 		{
-			add_options_page('WooCommerce Reviews.co.uk Settings', 'Reviews.co.uk', 'manage_options', 'reviewscouk', array(&$this, 'reviews_settings_page'));
+			$page = add_options_page('Reviews.co.uk Settings', 'Reviews.co.uk', 'manage_options', 'reviewscouk', array(&$this, 'reviews_settings_page'));
+
+			add_action('load-'.$page, function (){
+			   if(isset($_GET['settings-updated']) && $_GET['settings-updated']){
+				   $this->afterSettingsUpdated();
+			   }
+		   });
+		}
+
+		protected function afterSettingsUpdated(){
+			$feed = $this->sendFeed();
+			$install = $this->sendAppInstall();
+		}
+
+		protected function sendFeed(){
+			return $this->apiPost('integration/set-feed', array(
+				'url' => 'http://'.$_SERVER['HTTP_HOST'].'/index.php/reviews/product_feed',
+				'format' => 'csv',
+				'mapping' => array(
+					'id' => 'sku',
+					'name' => 'name',
+					'image_url' => 'image_url',
+					'link' => 'link',
+					'mpn' => 'mpn'
+				)
+			));
+		}
+
+		protected function sendAppInstall(){
+			return $this->apiPost('integration/app-installed', array(
+				'platform' => 'woocommerce'
+			));
+		}
+
+		protected function apiPost($url, $data){
+			try {
+				$ch = curl_init('https://'.$this->getApiDomain().'/'.$url);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+					'store: '.get_option('store_id'),
+					'apikey: '.get_option('api_key'),
+					'Content-Type: application/json'
+				));
+				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+				curl_setopt($ch, CURLOPT_POST, true);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+				$response = curl_exec($ch);
+				curl_close($ch);
+				return $response;
+			}
+			catch(Exception $e){
+				return false;
+			}
 		}
 
 		public function reviews_settings_page()
@@ -62,10 +122,10 @@ if (!class_exists('WooCommerce_Reviews'))
 			include(sprintf("%s/settings-page.php", dirname(__FILE__)));
 		}
 
+		/*
+		 * This runs hourly and runs processCompletedOrder if it hasn't already been run. This solves problems for clients using solutions like Veeqo to complete orders.
+		 */
 		public function process_recent_orders(){
-			/*
-			 * This runs hourly and runs processCompletedOrder if it hasn't already been run. This solves problems for clients using solutions like Veeqo to complete orders.
-			 */
 			if(get_option('enable_cron')){
 				$orders = get_posts( array(
 				    'numberposts' => 30,
@@ -85,6 +145,8 @@ if (!class_exists('WooCommerce_Reviews'))
 		}
 
 		public function run_on_activation(){
+			$this->setDefaultSettings();
+
 			wp_schedule_event( current_time( 'timestamp' ), 'hourly', 'hourly_order_process_event');
 		}
 
@@ -100,10 +162,11 @@ if (!class_exists('WooCommerce_Reviews'))
 			$order = new WC_Order($order_id);
 			$items = $order->get_items();
 
+			$p = array();
 			foreach ($items as $row)
 			{
 				$productmeta = wc_get_product($row['product_id']);
-				$sku = $productmeta->get_sku();
+				$sku = get_option('product_identifier') == 'id'? $row['product_id'] : $productmeta->get_sku();
 
 				if($productmeta->product_type == 'variable')
 				{
@@ -112,7 +175,7 @@ if (!class_exists('WooCommerce_Reviews'))
 					{
 						if ($variation['variation_id'] == $row['variation_id'])
 						{
-							$sku = $variation['sku'];
+							$sku = get_option('product_identifier') == 'id'? $variation['variation_id'] : $variation['sku'];
 						}
 					}
 				}
@@ -122,59 +185,29 @@ if (!class_exists('WooCommerce_Reviews'))
 				$attachment_url = wp_get_attachment_url(get_post_thumbnail_id($row['product_id']));
 
 				$p[] = array(
-					'image'   => $attachment_url,
-					'id'      => $row['product_id'],
 					'sku'     => $sku,
 					'name'    => $row['name'],
+					'image'   => $attachment_url,
 					'pageUrl' => $url
 				);
 			}
 
-			$post_params['order_id'] = $order_id;
-			$post_params['email']    = $order->billing_email;
-			$post_params['name']     = $order->billing_first_name . ' ' . $order->billing_last_name;
-			$post_params['products'] = json_encode($p);
+			$data = array(
+				'order_id' => $order_id,
+				'email' => $order->billing_email,
+				'name' => $order->billing_first_name . ' ' . $order->billing_last_name,
+				'source' => 'woocom',
+				'products' => $p
+			);
 
-			// Only do this if we have all the info required
 			if (get_option('api_key') != '' && get_option('store_id') != '' && get_option('send_product_review_invitation') == '1')
 			{
-				// Send product request
-				$product_url_string = $api_url . '/product/invitation';
-				$ch                 = curl_init($product_url_string);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-					'store:' . get_option('store_id'),
-					'apikey:' . get_option('api_key')
-				));
-				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
-				curl_setopt($ch, CURLOPT_POST, true);
-				curl_setopt($ch, CURLOPT_POSTFIELDS, $post_params);
-				curl_exec($ch);
-				curl_close($ch);
+				$this->apiPost('product/invitation', $data);
 			}
 
 			if (get_option('api_key') != '' && get_option('store_id') != '' && get_option('send_merchant_review_invitation') == '1')
 			{
-				$order_params             = array();
-				$order_params['name']     = $order->billing_first_name . ' ' . $order->billing_last_name;
-				$order_params['store']    = get_option('store_id');
-				$order_params['email']    = $order->billing_email;
-				$order_params['order_id'] = $order_id;
-				$order_params['api_key']  = get_option('api_key');
-
-				$product_url_string = $api_url . '/merchant/invitation';
-				$ch                 = curl_init($product_url_string);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-					'store:' . get_option('store_id'),
-					'apikey:' . get_option('api_key'
-					)));
-				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 15);
-				curl_setopt($ch, CURLOPT_POST, true);
-				curl_setopt($ch, CURLOPT_POSTFIELDS, $order_params);
-				curl_exec($ch);
-
-				curl_close($ch);
+				$this->apiPost('merchant/invitation', $data);
 			}
 		}
 
@@ -192,20 +225,23 @@ if (!class_exists('WooCommerce_Reviews'))
                 store: "<?php echo get_option('store_id'); ?>",
                     color: "<?php echo $this->getHexColor(); ?>",
                     linebreak: true,
-                    text: "Reviews"
+                    text: "Reviews",
+					<?php if(get_option('hide_write_review_button') == '1'){ ?>
+					writeButton: false,
+					<?php } ?>
                 });
                 </script>
             <?php
             }
         }
 
-        public function floating_widget(){  
+        public function floating_widget(){
             $enabled = get_option('enable_floating_widget');
             $store = get_option('store_id');
             if($enabled){
             ?>
                 <script type="text/javascript" src="https://<?php echo $this->getDashDomain(); ?>/widget/float.js" data-store="<?php echo $store; ?>" data-color="<?php echo $this->getHexColor(); ?>" data-position="right"></script>
-                <link href="https://<?php echo $this->getDashDomain(); ?>/widget/float.css" rel="stylesheet" /> 
+                <link href="https://<?php echo $this->getDashDomain(); ?>/widget/float.css" rel="stylesheet" />
             <?php
             }
         }
@@ -245,7 +281,7 @@ if (!class_exists('WooCommerce_Reviews'))
         {
             global $product;
 
-            $enabled = get_option('output_rich_snippet_code');
+            $enabled = get_option('enable_rich_snippet');
             $product_enabled = get_option('enable_product_rich_snippet');
 
             // Getting Product SKU
@@ -273,12 +309,12 @@ if (!class_exists('WooCommerce_Reviews'))
 
         public function getProductSkus(){
             global $product;
-            
+
             $skus = array();
             if($product){
-                $sku = get_post_meta(get_the_ID(), '_sku');
+                $sku = get_option('product_identifier') == 'id'? get_the_ID() : get_post_meta(get_the_ID(), '_sku')[0];
                 if(!empty($sku)){
-                    $skus[] = $sku[0];
+                    $skus[] = $sku;
                 }
 
                 if ($product->product_type == 'variable')
@@ -286,7 +322,7 @@ if (!class_exists('WooCommerce_Reviews'))
                     $available_variations = $product->get_available_variations();
                     foreach ($available_variations as $variant)
                     {
-                        $skus[] = $variant['sku'];
+                        $skus[] = get_option('product_identifier') == 'id'? $variant['variation_id'] : $variant['sku'];
                     }
                 }
             }
@@ -294,7 +330,7 @@ if (!class_exists('WooCommerce_Reviews'))
             return $skus;
         }
 
-        public function product_feed($page_template)
+        public function redirect_hook($page_template)
         {
             $actual_link = explode('/', 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
 
@@ -371,22 +407,26 @@ if (!class_exists('WooCommerce_Reviews'))
                 $skus = $this->getProductSkus();
 
                 $color = $this->getHexColor();
-                echo '
-                <script src="https://'.$this->getWidgetDomain().'/product/dist.js"></script>
-                <div id="widget"></div>
-                <script type="text/javascript">
-                    productWidget("widget",{
-                    store: "' . get_option('store_id') . '",
-                    sku: "' . implode(';', $skus) . '", // Multiple SKU"s Seperated by Semi-Colons
-                    primaryClr: "' . $colour . '",
-                    neutralClr: "#EBEBEB",
-                    buttonClr: "#EEE",
-                    textClr: "#333",
-                    tabClr: "#eee",
-                    ratingStars: false,
-                    showAvatars: true
-                });
-                </script>';
+                ?>
+	                <script src="https://<?php echo $this->getWidgetDomain(); ?>/product/dist.js"></script>
+	                <div id="widget"></div>
+	                <script type="text/javascript">
+	                    productWidget("widget",{
+	                    store: "<?php echo get_option('store_id'); ?>",
+	                    sku: "<?php echo implode(';', $skus); ?>", // Multiple SKU"s Seperated by Semi-Colons
+	                    primaryClr: "<?php echo $color; ?>",
+	                    neutralClr: "#EBEBEB",
+	                    buttonClr: "#EEE",
+	                    textClr: "#333",
+	                    tabClr: "#eee",
+	                    ratingStars: false,
+	                    showAvatars: true,
+						<?php if(get_option('hide_write_review_button') == '1'){ ?>
+						writeButton: false,
+						<?php } ?>
+	                });
+	                </script>
+				<?php
             }
             else
             {
@@ -397,7 +437,7 @@ if (!class_exists('WooCommerce_Reviews'))
 		function init()
 		{
 			add_action('woocommerce_order_status_completed', array($this,'processCompletedOrder'));
-			add_filter('template_redirect', array($this, 'product_feed'));
+			add_filter('template_redirect', array($this, 'redirect_hook'));
 			add_filter('woocommerce_product_tabs', array($this,'product_review_tab'));
 			add_filter('woocommerce_after_single_product_summary', array($this,'productPage'));
 			add_action('wp_footer', array($this,'output_rich_snippet_code'));

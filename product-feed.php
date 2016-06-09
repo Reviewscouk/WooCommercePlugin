@@ -13,7 +13,7 @@ foreach ($products as $product)
 	$_pf      = new WC_Product_Factory();
 	$_product = $_pf->get_product($product->ID);
 
-	$sku        = $_product->get_sku();
+	$sku        = get_option('product_identifier') == 'id'? $product->ID : $_product->get_sku();
 	$image_link = '';
 
 	$image_id = $_product->get_image_id();
@@ -33,7 +33,7 @@ foreach ($products as $product)
 
 		foreach ($available_variations as $variation)
 		{
-			$productArray[] = [$variation['sku'], $product->post_title, $image_url, $_product->post->guid, $variation['sku']];
+			$productArray[] = [ (get_option('product_identifier') == 'id'? $variation['variation_id'] : $variation['sku']), $product->post_title, $image_url, $_product->post->guid, $variation['sku']];
 		}
 	}
 }
