@@ -88,7 +88,8 @@ if (!class_exists('WooCommerce_Reviews'))
 
 		protected function sendAppInstall(){
 			return $this->apiPost('integration/app-installed', array(
-				'platform' => 'woocommerce'
+				'platform' => 'woocommerce',
+				'url' => isset($_SERVER['HTTP_HOST'])? $_SERVER['HTTP_HOST'] : ''
 			));
 		}
 
@@ -443,8 +444,8 @@ if (!class_exists('WooCommerce_Reviews'))
 			add_action('wp_footer', array($this,'output_rich_snippet_code'));
 			add_action('wp_footer', array($this,'rating_snippet_footer_scripts'));
 			add_action('wp_footer', array($this,'floating_widget'));
-            add_action('woocommerce_single_product_summary', array($this,'product_rating_snippet_markup'), 6);
-            add_action('woocommerce_after_shop_loop_item', array($this, 'product_rating_snippet_markup'), 5  );
+            add_action('woocommerce_single_product_summary', array($this,'product_rating_snippet_markup'), 5);
+            add_action('woocommerce_after_shop_loop_item', array($this, 'product_rating_snippet_markup'), 5);
 		}
 	}
 }
