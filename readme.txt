@@ -30,6 +30,11 @@ Step 3: Full Instructions for integration can be found on the Reviews.co.uk Dash
 
 Invitations will automatically be sent when the status of your order is set to Complete.
 
+== Screenshots ==
+
+1. Plugin configuration page
+
+2. Product Reviews Widget
 
 == Frequently Asked Questions ==
 If you have any enquiries please email: support@reviews.co.uk
