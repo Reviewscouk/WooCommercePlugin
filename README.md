@@ -18,6 +18,12 @@ Step 2: Enter your Reviews.co.uk API Credentials and Configure all settings.
 
 Step 3: Full Instructions for integration can be found on the Reviews.co.uk Dashboard at Company Setup > Automated Review Collection > WooCommerce.
 
+## Screenshots
+
+1. Plugin configuration page
+
+2. Product Reviews Widget
+
 ## Usage
 
 Invitations will automatically be sent when the status of your order is set to Complete.
