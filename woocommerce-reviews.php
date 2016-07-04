@@ -313,7 +313,8 @@ if (!class_exists('WooCommerce_Reviews'))
 
             $skus = array();
             if($product){
-                $sku = get_option('product_identifier') == 'id'? get_the_ID() : get_post_meta(get_the_ID(), '_sku')[0];
+                $meta = get_post_meta(get_the_ID(), '_sku');
+                $sku = get_option('product_identifier') == 'id'? get_the_ID() : (isset($meta[0])? $meta[0] : '');
                 if(!empty($sku)){
                     $skus[] = $sku;
                 }
