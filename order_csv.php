@@ -35,26 +35,32 @@ foreach ($orders as $o)
 	{
 		$product = wc_get_product($item['product_id']);
 
-		$sku = $product->get_sku();
+        if($product){
+            $sku = $product->get_sku();
 
-		if($product->product_type == 'variant')
-		{
-			$available_variations = $product->get_available_variations();
+            if($product->product_type == 'variant')
+            {
+                $available_variations = $product->get_available_variations();
 
-			foreach ($available_variations as $variation)
-			{
+                foreach ($available_variations as $variation)
+                {
 
-				if ($variation['variation_id'] == $item['variation_id'])
-				{
-					$sku = $variation['sku'];
-				}
-			}
+                    if ($variation['variation_id'] == $item['variation_id'])
+                    {
+                        $sku = $variation['sku'];
+                    }
+                }
 
-		}
+            }
 
-		$productArray[] = [$o->ID, $firstname, $email, $sku, $o->post_date];
-	}
+            $productArray[] = [$o->ID, $firstname, $email, $sku, $o->post_date];
+        }
+        else
+        {
+            $productArray[] = [$o->ID, $firstname, $email, '', $o->post_date];
+        }
 
+    }
 }
 
 $fp = fopen('php://temp', 'w+');
