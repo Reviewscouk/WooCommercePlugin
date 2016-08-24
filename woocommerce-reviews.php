@@ -415,7 +415,7 @@ if (!class_exists('WooCommerce_Reviews'))
 	                <script type="text/javascript">
 	                    productWidget("widget",{
 	                    store: "<?php echo get_option('store_id'); ?>",
-	                    sku: "<?php echo implode(';', $skus); ?>", // Multiple SKU"s Seperated by Semi-Colons
+	                    sku: "<?php echo implode(';', $skus); ?>", 
 	                    primaryClr: "<?php echo $color; ?>",
 	                    neutralClr: "#EBEBEB",
 	                    buttonClr: "#EEE",
@@ -426,6 +426,11 @@ if (!class_exists('WooCommerce_Reviews'))
 						<?php if(get_option('hide_write_review_button') == '1'){ ?>
 						writeButton: false,
 						<?php } ?>
+						onSummary: function(data){
+							if(jQuery){
+								jQuery('[href="#tab-reviews"]').html('Reviews ('+data.count+')');
+							}
+						}
 	                });
 	                </script>
 				<?php
