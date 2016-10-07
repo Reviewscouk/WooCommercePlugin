@@ -1,4 +1,3 @@
-
 <div class="wrap">
 	<img src="http://dmevjikmobvk2.cloudfront.net/public/images/logo.svg" height="40"  />
 	<form method="post" action="options.php" autocomplete="off">
