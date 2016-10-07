@@ -95,19 +95,17 @@ if (!class_exists('WooCommerce_Reviews'))
 
 		protected function apiPost($url, $data){
 			try {
-				$ch = curl_init('https://'.$this->getApiDomain().'/'.$url);
-				curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-				curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-					'store: '.get_option('store_id'),
-					'apikey: '.get_option('api_key'),
-					'Content-Type: application/json'
+				$response = wp_remote_post('https://'.$this->getApiDomain().'/'.$url, array(
+                    'method' => 'POST',
+                    'headers' => array(
+                        'store' => get_option('store_id'),
+                        'apikey' => get_option('api_key'),
+                        'Content-Type' => 'application/json'
+                    ),
+                    'body' => json_encode($data)
 				));
-				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
-				curl_setopt($ch, CURLOPT_POST, true);
-				curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-				$response = curl_exec($ch);
-				curl_close($ch);
-				return $response;
+
+				return $response['body'];
 			}
 			catch(Exception $e){
 				return false;
