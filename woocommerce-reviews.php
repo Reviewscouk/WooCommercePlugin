@@ -15,7 +15,6 @@ if (!class_exists('WooCommerce_Reviews'))
 	{
 		public function __construct()
 		{
-			wp_reset_query();
 			add_action('admin_init', array(&$this, 'admin_init'));
 			add_action('admin_menu', array(&$this, 'add_menu'));
 			add_filter('init', array($this, 'init'));
@@ -125,6 +124,7 @@ if (!class_exists('WooCommerce_Reviews'))
 		 * This runs hourly and runs processCompletedOrder if it hasn't already been run. This solves problems for clients using solutions like Veeqo to complete orders.
 		 */
 		public function process_recent_orders(){
+            wp_reset_query();
 			if(get_option('enable_cron')){
 				$orders = get_posts( array(
 				    'numberposts' => 30,
