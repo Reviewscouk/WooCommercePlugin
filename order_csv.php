@@ -1,18 +1,12 @@
 <?php
 header('Content-Type: text/csv; charset=UTF-8');
+
 $args = array(
-	'post_type'      => 'shop_order',
-	'post_status'    => 'publish',
-	'posts_per_page' => 300,
-	'orderby'=> 'id',
-	'order' => 'desc',
-	'tax_query'      => array(
-		array(
-			'taxonomy' => 'shop_order_status',
-			'field'    => 'slug',
-			'terms'    => array('completed')
-		)
-	)
+    'post_type'   => 'shop_order',
+    'post_status' => array( 'wc-processing', 'wc-completed' ),
+    'posts_per_page' => 300,
+    'orderby'=> 'id',
+    'order' => 'desc'
 );
 
 $orders = get_posts($args);
@@ -25,8 +19,6 @@ foreach ($orders as $o)
 
 	$order_id = $o->ID;
 	$order    = new WC_Order($order_id);
-
-	$billing_address = $order->get_billing_address();
 
 	$firstname       = $order->billing_first_name .' ' .$order->billing_last_name;
 	$email           = $order->billing_email;
