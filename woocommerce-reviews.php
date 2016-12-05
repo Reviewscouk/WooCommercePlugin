@@ -214,12 +214,12 @@ if (!class_exists('WooCommerce_Reviews'))
             $enabled = get_option('enable_product_rating_snippet');
             if($enabled){
             ?>
-                <script src="https://<?php echo $this->getWidgetDomain(); ?>/product/dist.js"></script>
+                <script src="https://<?php echo $this->getWidgetDomain(); ?>/product/dist.js" data-cfasync="false"></script>
 
-                <script src="https://<?php echo $this->getWidgetDomain(); ?>/rating-snippet/dist.js"></script>
+                <script src="https://<?php echo $this->getWidgetDomain(); ?>/rating-snippet/dist.js" data-cfasync="false"></script>
                 <link rel="stylesheet" href="https://<?php echo $this->getWidgetDomain(); ?>/rating-snippet/dist.css" />
 
-                <script>
+                <script style="text/javascript" data-cfasync="false">
                 ratingSnippet("ruk_rating_snippet",{
                 store: "<?php echo get_option('store_id'); ?>",
                     color: "<?php echo $this->getHexColor(); ?>",
@@ -413,7 +413,7 @@ if (!class_exists('WooCommerce_Reviews'))
 	                <script type="text/javascript">
 	                    productWidget("widget",{
 	                    store: "<?php echo get_option('store_id'); ?>",
-	                    sku: "<?php echo implode(';', $skus); ?>", 
+	                    sku: "<?php echo implode(';', $skus); ?>",
 	                    primaryClr: "<?php echo $color; ?>",
 	                    neutralClr: "#EBEBEB",
 	                    buttonClr: "#EEE",
