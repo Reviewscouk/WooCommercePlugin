@@ -25,7 +25,7 @@ foreach ($products as $product)
 
 	if ($_product->product_type == 'simple')
 	{
-		$productArray[] = [$sku, $product->post_title, $image_url, $_product->post->guid, $sku];
+		$productArray[] = [$sku, $product->post_title, $image_url, get_permalink($product->ID), $sku];
 	}
 	else if ($_product->product_type == 'variable')
 	{
@@ -33,7 +33,7 @@ foreach ($products as $product)
 
 		foreach ($available_variations as $variation)
 		{
-			$productArray[] = [ (get_option('product_identifier') == 'id'? $variation['variation_id'] : $variation['sku']), $product->post_title, $image_url, $_product->post->guid, $variation['sku']];
+			$productArray[] = [ (get_option('product_identifier') == 'id'? $variation['variation_id'] : $variation['sku']), $product->post_title, $image_url, get_permalink($product->ID), $variation['sku']];
 		}
 	}
 }
