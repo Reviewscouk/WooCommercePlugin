@@ -261,6 +261,22 @@
 					<table class="form-table">
 						<tr>
 							<th>
+								<label for="disable_reviews_per_product">Disable Reviews Per Product: </label>
+			                    <p style="font-size:12px;font-weight:100;">If this is enabled then you can use the WooCommerce "Reviews Enabled" setting to disable review collection for certain products</p>
+							</th>
+							<td>
+								<?php
+									$disable_reviews_per_product = get_option('disable_reviews_per_product');
+								?>
+								<select name="disable_reviews_per_product">
+									<option <?php echo ($disable_reviews_per_product== 1) ? 'selected' : '' ?> value="1">Yes</option>
+									<option <?php echo ($disable_reviews_per_product== 0) ? 'selected' : '' ?> value="0">No</option>
+								</select>
+							</td>
+						</tr>
+
+						<tr>
+							<th>
 								<label for="enable_cron">Enable Cron: </label>
 			                    <p style="font-size:12px;font-weight:100;">If you use a third party system to mark orders as completed then review invitations may not be triggered. If this setting is enabled a cron will run hourly which queues invitations for recently completed orders. <br /><br /> To prevent the cron running on visitor page loads you should disable WP_CRON and setup a real cron as described here: https://easyengine.io/tutorials/wordpress/wp-cron-crontab/.</p>
 							</th>

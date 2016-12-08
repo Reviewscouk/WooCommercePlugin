@@ -45,6 +45,7 @@ if (!class_exists('WooCommerce_Reviews'))
 			register_setting('woocommerce-reviews', 'enable_cron');
 			register_setting('woocommerce-reviews', 'enable_floating_widget');
 			register_setting('woocommerce-reviews', 'product_identifier');
+			register_setting('woocommerce-reviews', 'disable_reviews_per_product');
 		}
 
 		public function setDefaultSettings(){
@@ -183,12 +184,14 @@ if (!class_exists('WooCommerce_Reviews'))
 
 				$attachment_url = wp_get_attachment_url(get_post_thumbnail_id($row['product_id']));
 
-				$p[] = array(
-					'sku'     => $sku,
-					'name'    => $row['name'],
-					'image'   => $attachment_url,
-					'pageUrl' => $url
-				);
+				if(!(get_option('disable_reviews_per_product') == '1' && $productmeta->post->comment_status == 'closed')){
+					$p[] = array(
+						'sku'     => $sku,
+						'name'    => $row['name'],
+						'image'   => $attachment_url,
+						'pageUrl' => $url
+					);
+				}
 			}
 
 			$data = array(
@@ -199,7 +202,7 @@ if (!class_exists('WooCommerce_Reviews'))
 				'products' => $p
 			);
 
-			if (get_option('api_key') != '' && get_option('store_id') != '' && get_option('send_product_review_invitation') == '1')
+			if (get_option('api_key') != '' && get_option('store_id') != '' && get_option('send_product_review_invitation') == '1' && count($data['products']) > 0)
 			{
 				$this->apiPost('product/invitation', $data);
 			}
@@ -246,6 +249,9 @@ if (!class_exists('WooCommerce_Reviews'))
         }
 
         public function product_rating_snippet_markup() {
+			if($this->shouldHideProductReviews()){
+				return;
+			}
             $skus = $this->getProductSkus();
             $enabled = get_option('enable_product_rating_snippet');
             if($enabled){
@@ -279,6 +285,10 @@ if (!class_exists('WooCommerce_Reviews'))
         public function output_rich_snippet_code()
         {
             global $product;
+
+			if($this->shouldHideProductReviews()){
+				return;
+			}
 
             $enabled = get_option('enable_rich_snippet');
             $product_enabled = get_option('enable_product_rich_snippet');
@@ -378,20 +388,31 @@ if (!class_exists('WooCommerce_Reviews'))
         }
 
         public function product_review_tab($tabs){
-            if (in_array(get_option('product_review_widget'),array('tab'))){
+            if (in_array(get_option('product_review_widget'), array('tab'))){
                 $tabs['reviews'] = array(
                     'title' => 'Reviews',
                     'callback' => array($this,'productReviewWidget'),
                     'priority' => 50
                 );
+
+				if($this->shouldHideProductReviews()){
+					unset($tabs['reviews']);
+				}
             }
 
             return $tabs;
         }
 
+		private function shouldHideProductReviews(){
+            $post = get_post(get_the_ID());
+			return  get_option('disable_reviews_per_product') == '1' && $post->comment_status == 'closed';
+		}
+
         public function productPage(){
             if (in_array(get_option('product_review_widget'),array('summary','1'))){
-                $this->productReviewWidget();
+				if(!$this->shouldHideProductReviews()){
+	                $this->productReviewWidget();
+				}
             }
         }
 
@@ -404,6 +425,7 @@ if (!class_exists('WooCommerce_Reviews'))
 
         public function productReviewWidget(){
             if(get_option('api_key') != '' && get_option('store_id') != ''){
+
                 $skus = $this->getProductSkus();
 
                 $color = $this->getHexColor();
