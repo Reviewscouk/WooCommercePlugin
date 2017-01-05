@@ -14,7 +14,7 @@ foreach ($products as $product)
 	$_product = $_pf->get_product($product->ID);
 
 	$woocommerce_sku = $_product->get_sku();
-	$woocommerce_id = $_product->ID;
+	$woocommerce_id = $product->ID;
 	$sku    = get_option('product_identifier') == 'id'? $woocommerce_id : $woocommerce_sku;
 	$image_link = '';
 
