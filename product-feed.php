@@ -25,17 +25,23 @@ foreach ($products as $product)
 		$image_url = wp_get_attachment_url($image_id);
 	}
 
-	if ($_product->product_type == 'simple')
-	{
-		$productArray[] = [$sku, $product->post_title, $image_url, get_permalink($product->ID), $sku, $woocommerce_sku, $woocommerce_id];
-	}
-	else if ($_product->product_type == 'variable')
+	// Always add the parent product
+	$productArray[] = [$sku, $product->post_title, $image_url, get_permalink($product->ID), $sku, $woocommerce_sku, $woocommerce_id];
+
+	// Add variants as additional products
+	if ($_product->product_type == 'variable')
 	{
 		$available_variations = $_product->get_available_variations();
 
 		foreach ($available_variations as $variation)
 		{
-			$productArray[] = [ (get_option('product_identifier') == 'id'? $variation['variation_id'] : $variation['sku']), $product->post_title, $image_url, get_permalink($product->ID), $variation['sku'], $variation['sku'], $variation['variation_id']];
+			$variant_sku = get_option('product_identifier') == 'id'? $variation['variation_id'] : $variation['sku'];
+			$variant_attributes = is_array($variation['attributes'])? implode(' ',  array_filter(array_values($variation['attributes']))) : '';
+			$variant_title = $product->post_title;
+			if(!empty($variant_attributes)){
+				$variant_title .= ' - '.$variant_attributes;
+			}
+			$productArray[] = [ $variant_sku, $variant_title, $image_url, get_permalink($product->ID), $variation['sku'], $variation['sku'], $variation['variation_id']];
 		}
 	}
 }
