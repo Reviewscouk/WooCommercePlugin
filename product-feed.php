@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: text/csv; charset=UTF-8');
 
-$args = array('post_type' =>'product', 'showposts'=>1000);
+$args = array('post_type' =>'product', 'showposts'=>10000);
 
 $products = get_posts($args);
 
