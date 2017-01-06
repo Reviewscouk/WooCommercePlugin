@@ -39,7 +39,7 @@ foreach ($products as $product)
 			$variant_attributes = is_array($variation['attributes'])? implode(' ',  array_filter(array_values($variation['attributes']))) : '';
 			$variant_title = $product->post_title;
 			if(!empty($variant_attributes)){
-				$variant_title .= ' - '.$variant_attributes;
+				//$variant_title .= ' - '.$variant_attributes;
 			}
 			$productArray[] = [ $variant_sku, $variant_title, $image_url, get_permalink($product->ID), $variation['sku'], $variation['sku'], $variation['variation_id']];
 		}
