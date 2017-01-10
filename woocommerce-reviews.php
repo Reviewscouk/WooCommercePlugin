@@ -35,6 +35,7 @@ if (!class_exists('WooCommerce_Reviews'))
 			register_setting('woocommerce-reviews', 'api_key');
 			register_setting('woocommerce-reviews', 'product_feed');
 			register_setting('woocommerce-reviews', 'widget_hex_colour');
+			register_setting('woocommerce-reviews', 'widget_custom_css');
 			register_setting('woocommerce-reviews', 'enable_rich_snippet');
 			register_setting('woocommerce-reviews', 'enable_product_rich_snippet');
 			register_setting('woocommerce-reviews', 'enable_product_rating_snippet');
@@ -423,6 +424,17 @@ if (!class_exists('WooCommerce_Reviews'))
             return $colour;
         }
 
+	    /*
+	     * Remove Newlines and Escape Quotes in Custom Widget CSS
+	     */
+	    protected function prepareCss($css){
+	        $css = str_replace("\n",'', $css);
+	        $css = str_replace("\r",'', $css);
+	        $css = str_replace('"','\"', $css);
+	        return $css;
+	    }
+
+
         public function productReviewWidget(){
             if(get_option('api_key') != '' && get_option('store_id') != ''){
 
@@ -450,7 +462,8 @@ if (!class_exists('WooCommerce_Reviews'))
 							if(jQuery){
 								jQuery('[href="#tab-reviews"]').html('Reviews ('+data.count+')');
 							}
-						}
+						},
+						css: "<?php echo $this->prepareCss(get_option('widget_custom_css')); ?>"
 	                });
 	                </script>
 				<?php

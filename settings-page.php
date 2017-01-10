@@ -145,6 +145,18 @@
 						</tr>
 						<tr>
 							<th>
+								<label for="widget_custom_css">Widget Custom CSS: </label>
+			                    <p style="font-size:12px;font-weight:100;">Add custom CSS to the product reviews widget</p>
+							</th>
+							<td>
+								<?php
+									$widget_custom_css = get_option('widget_custom_css');
+								?>
+								<textarea name="widget_custom_css" style="width:300px;height:200px;"><?php echo htmlentities($widget_custom_css); ?></textarea>
+							</td>
+						</tr>
+						<tr>
+							<th>
 			                    <label for="hide_write_review_button">Hide Write Review Button: </label>
 			                    <p style="font-size:12px;font-weight:100;">Write a Review Button will be hidden on product page.</p>
 							</th>
