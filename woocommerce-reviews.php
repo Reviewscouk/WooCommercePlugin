@@ -15,8 +15,8 @@ if (!class_exists('WooCommerce_Reviews'))
 	{
 		public function __construct()
 		{
-			add_action('admin_init', array(&$this, 'admin_init'));
-			add_action('admin_menu', array(&$this, 'add_menu'));
+			add_action('admin_init', array($this, 'admin_init'));
+			add_action('admin_menu', array($this, 'add_menu'));
 			add_filter('init', array($this, 'init'));
 			add_action('hourly_order_process_event', array($this,'process_recent_orders'));
 			register_activation_hook(__FILE__, array($this, 'run_on_activation'));
