@@ -263,7 +263,7 @@
 			                    <p style="font-size:12px;font-weight:100;">Download this CSV and upload it to the <b>Review Booster</b> in the Reviews.co.uk Dashboard to start collecting reviews.</p>
 							</th>
 							<td>
-								<a class="button" href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/index.php/reviews/order_csv">Download Latest Orders CSV</a>
+								<a class="button" href="//<?php echo $_SERVER['HTTP_HOST']; ?>/index.php/reviews/order_csv">Download Latest Orders CSV</a>
 							</td>
 						</tr>
 					</table>
