@@ -23,6 +23,8 @@ foreach ($orders as $o)
 	$firstname       = $order->billing_first_name .' ' .$order->billing_last_name;
 	$email           = $order->billing_email;
 
+    $addedItems = false;
+
 	foreach ($order->get_items() as $item)
 	{
 		$product = wc_get_product($item['product_id']);
@@ -46,12 +48,18 @@ foreach ($orders as $o)
             }
 
             $productArray[] = [$o->ID, $firstname, $email, $sku, $o->post_date];
+            $addedItems = true;
         }
         else
         {
             $productArray[] = [$o->ID, $firstname, $email, '', $o->post_date];
+            $addedItems = true;
         }
 
+    }
+
+    if(!$addedItems){
+        $productArray[] = [$o->ID, $firstname, $email, '', $o->post_date];
     }
 }
 
