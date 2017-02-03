@@ -29,7 +29,7 @@ foreach ($products as $product)
 	$productArray[] = [$sku, $product->post_title, $image_url, get_permalink($product->ID), $sku, $woocommerce_sku, $woocommerce_id];
 
 	// Add variants as additional products
-	if ($_product->product_type == 'variable')
+	if ($_product->product_type == 'variable' && get_option('use_parent_product') != 1)
 	{
 		$available_variations = $_product->get_available_variations();
 

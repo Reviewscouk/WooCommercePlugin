@@ -318,6 +318,21 @@
 								</select>
 							</td>
 						</tr>
+						<tr>
+							<th>
+								<label for="use_parent_product">Use Parent Product</label>
+								<p style="font-size:12px;font-weight:100;">Enable this if you would like to only collect reviews on a parent product level. This is useful if you have products with many variations and you want to keep the data more manageable. </p>
+							</th>
+							<td>
+								<?php
+								$use_parent_product = get_option('use_parent_product');
+								?>
+								<select name="use_parent_product">
+									<option <?php echo ($use_parent_product== 0) ? 'selected' : '' ?> value="0">No (Default)</option>
+									<option <?php echo ($use_parent_product== 1) ? 'selected' : '' ?> value="1">Yes</option>
+								</select>
+							</td>
+						</tr>
 					</table>
 		        </div>
 		    </div>

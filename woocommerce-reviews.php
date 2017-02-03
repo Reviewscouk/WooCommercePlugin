@@ -6,7 +6,7 @@ Plugin URI: https://wordpress.org/plugins/reviewscouk-for-woocommerce/
 Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
 Author: Reviews.co.uk
 License: GPL
-Version: 0.6.14
+Version: 0.7.0
 */
 
 if (!class_exists('WooCommerce_Reviews'))
@@ -47,6 +47,7 @@ if (!class_exists('WooCommerce_Reviews'))
 			register_setting('woocommerce-reviews', 'enable_floating_widget');
 			register_setting('woocommerce-reviews', 'product_identifier');
 			register_setting('woocommerce-reviews', 'disable_reviews_per_product');
+			register_setting('woocommerce-reviews', 'use_parent_product');
 		}
 
 		public function setDefaultSettings(){
@@ -55,6 +56,7 @@ if (!class_exists('WooCommerce_Reviews'))
 			update_option('send_merchant_review_invitation', 1);
 			update_option('product_review_widget', 'tab');
 			update_option('product_identifier', 'sku');
+			update_option('use_parent_product', 0);
 		}
 
 		public function add_menu()
@@ -172,7 +174,7 @@ if (!class_exists('WooCommerce_Reviews'))
 				$productmeta = wc_get_product($row['product_id']);
 				$sku = get_option('product_identifier') == 'id'? $row['product_id'] : $productmeta->get_sku();
 
-				if($productmeta->product_type == 'variable')
+				if($productmeta->product_type == 'variable' && get_option('use_parent_product') != 1)
 				{
 					$available_variations = $productmeta->get_available_variations();
 					foreach ($available_variations as $variation)
