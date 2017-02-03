@@ -1,5 +1,5 @@
 <div class="wrap">
-	<img src="http://dmevjikmobvk2.cloudfront.net/public/images/logo.svg" height="40"  />
+	<img src="http://dmevjikmobvk2.cloudfront.net/public/images/logo.svg" height="40"  style="margin-top:15px;" />
 	<form method="post" action="options.php" autocomplete="off">
 		<h2></h2><!-- Alerts Show Here -->
 
@@ -13,7 +13,6 @@
 				<p>Enter your API Credentials to Start Collecting Reviews from your Customers.</p>
 			</div>
 		</div>
-
 
 		<div id="tabs-container">
 		    <ul class="tabs-menu">
