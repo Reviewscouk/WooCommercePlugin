@@ -172,15 +172,16 @@
 						<tr>
 							<th>
 			                    <label for="enable_product_rating_snippet">Enable Product Rating Snippet: </label>
-			                    <p style="font-size:12px;font-weight:100;">When enabled a star rating will be displayed below the product title providing the product has reviews.</p>
+			                    <p style="font-size:12px;font-weight:100;">When enabled a star rating will be displayed below the product title providing the product has reviews.<br /><br />If you would like to change how the rating is displaying you can choose the manual setting and use shortcode [rating_snippet] to display the rating.</p>
 							</th>
 							<td>
 								<?php
 								$enable_product_rating_snippet = get_option('enable_product_rating_snippet');
 								?>
 								<select name="enable_product_rating_snippet">
-									<option <?php echo ($enable_product_rating_snippet == 1) ? 'selected' : '' ?> value="1">Yes</option>
-									<option <?php echo ($enable_product_rating_snippet == 0) ? 'selected' : '' ?> value="0">No</option>
+									<option <?php echo ($enable_product_rating_snippet == 1) ? 'selected' : '' ?> value="1">Enabled</option>
+									<option <?php echo ($enable_product_rating_snippet == 0) ? 'selected' : '' ?> value="0">Disabled</option>
+									<option <?php echo ($enable_product_rating_snippet == 'manual') ? 'selected' : '' ?> value="manual">Manual</option>
 								</select>
 							</td>
 						</tr>
