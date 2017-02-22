@@ -19,6 +19,7 @@
 		        <li class="current"><a href="#tab-1">API Settings</a></li>
 		        <li><a href="#tab-2">Review Invitations</a></li>
 		        <li><a href="#tab-3">Product Reviews</a></li>
+		        <li><a href="#tab-qa">Q & A</li>
 		        <li><a href="#tab-4">Rich Snippets</a></li>
 		        <li><a href="#tab-5">Data Feeds</a></li>
 		        <li><a href="#tab-6">Advanced</a></li>
@@ -182,6 +183,28 @@
 									<option <?php echo ($enable_product_rating_snippet == 1) ? 'selected' : '' ?> value="1">Enabled</option>
 									<option <?php echo ($enable_product_rating_snippet == 0) ? 'selected' : '' ?> value="0">Disabled</option>
 									<option <?php echo ($enable_product_rating_snippet == 'manual') ? 'selected' : '' ?> value="manual">Manual</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+		        </div>
+		        <div id="tab-qa" class="tab-content">
+					<p>Allow your visitors to ask questions about your products. Your answers will be published publicly.</p>
+
+					<table class="form-table">
+						<tr>
+							<th>
+								<label for="product_review_widget">Show Question Answers Widget: </label>
+			                    <p style="font-size:12px;font-weight:100;">The widget will be displayed in a tab on your product pages.</p>
+							</th>
+							<td>
+								<?php
+									$question_answers_widget = get_option('question_answers_widget');
+								?>
+								<select name="question_answers_widget">
+									<option <?php echo ($question_answers_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Tab</option>
+									<option <?php echo ($question_answers_widget == 'summary') ? 'selected' : '' ?> value="summary">Show Below Product Summary</option>
+									<option <?php echo ($question_answers_widget == '0') ? 'selected' : '' ?> value="0">Dont Display</option>
 								</select>
 							</td>
 						</tr>

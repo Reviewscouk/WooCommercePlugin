@@ -40,6 +40,7 @@ if (!class_exists('WooCommerce_Reviews'))
 			register_setting('woocommerce-reviews', 'enable_product_rich_snippet');
 			register_setting('woocommerce-reviews', 'enable_product_rating_snippet');
 			register_setting('woocommerce-reviews', 'product_review_widget');
+			register_setting('woocommerce-reviews', 'question_answers_widget');
 			register_setting('woocommerce-reviews', 'hide_write_review_button');
 			register_setting('woocommerce-reviews', 'send_product_review_invitation');
 			register_setting('woocommerce-reviews', 'send_merchant_review_invitation');
@@ -412,6 +413,14 @@ if (!class_exists('WooCommerce_Reviews'))
 				}
             }
 
+            if (in_array(get_option('question_answers_widget'), array('tab'))){
+                $tabs['qanda'] = array(
+                    'title' => 'Questions & Answers',
+                    'callback' => array($this,'questionAnswersWidget'),
+                    'priority' => 60
+                );
+            }
+
             return $tabs;
         }
 
@@ -425,6 +434,10 @@ if (!class_exists('WooCommerce_Reviews'))
 				if(!$this->shouldHideProductReviews()){
 	                $this->productReviewWidget();
 				}
+            }
+
+            if (in_array(get_option('question_answers_widget'),array('summary','1'))){
+	            $this->questionAnswersWidget();
             }
         }
 
@@ -477,6 +490,31 @@ if (!class_exists('WooCommerce_Reviews'))
 						css: "<?php echo $this->prepareCss(get_option('widget_custom_css')); ?>"
 	                });
 	                </script>
+				<?php
+            }
+            else
+            {
+                echo 'Missing Reviews.co.uk API Credentials';
+            }
+        }
+
+        public function questionAnswersWidget(){
+            if(get_option('api_key') != '' && get_option('store_id') != ''){
+
+                $skus = $this->getProductSkus();
+
+                $color = $this->getHexColor();
+                ?>
+                    <div id="questions-widget" style="width:100%;"></div>
+                    <script src="https://widget.reviews.co.uk/questions-answers/dist.js" type="text/javascript"></script>
+                    <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        questionsWidget('questions-widget', {
+                            store: "<?php echo get_option('store_id'); ?>",
+                            group: '<?php echo get_the_id(); ?>'
+                        });
+                    });
+                    </script>
 				<?php
             }
             else
