@@ -459,10 +459,10 @@ if (!class_exists('WooCommerce_Reviews'))
 	    }
 
 
-        public function productReviewWidget(){
+        public function productReviewWidget($skus=null){
             if(get_option('api_key') != '' && get_option('store_id') != ''){
 
-                $skus = $this->getProductSkus();
+                $skus = is_array($skus)? $skus : $this->getProductSkus();
 
                 $color = $this->getHexColor();
                 ?>
