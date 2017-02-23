@@ -6,13 +6,16 @@ Plugin URI: https://wordpress.org/plugins/reviewscouk-for-woocommerce/
 Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
 Author: Reviews.co.uk
 License: GPL
-Version: 0.7.3
+Version: 0.7.4
 */
 
 if (!class_exists('WooCommerce_Reviews'))
 {
 	class WooCommerce_Reviews
 	{
+
+        protected $numWidgets = 0;
+
 		public function __construct()
 		{
 			add_action('admin_init', array($this, 'admin_init'));
@@ -460,6 +463,7 @@ if (!class_exists('WooCommerce_Reviews'))
 
 
         public function productReviewWidget($skus=null){
+            $this->numWidgets++;
             if(get_option('api_key') != '' && get_option('store_id') != ''){
 
                 $skus = is_array($skus)? $skus : $this->getProductSkus();
@@ -467,9 +471,9 @@ if (!class_exists('WooCommerce_Reviews'))
                 $color = $this->getHexColor();
                 ?>
 	                <script src="https://<?php echo $this->getWidgetDomain(); ?>/product/dist.js"></script>
-	                <div id="widget"></div>
+                    <div id="widget-<?php echo $this->numWidgets; ?>"></div>
 	                <script type="text/javascript">
-	                    productWidget("widget",{
+                    productWidget("widget-<?php echo $this->numWidgets; ?>",{
 	                    store: "<?php echo get_option('store_id'); ?>",
 	                    sku: "<?php echo implode(';', $skus); ?>",
 	                    primaryClr: "<?php echo $color; ?>",
