@@ -115,7 +115,10 @@ if (!class_exists('WooCommerce_Reviews'))
                     'body' => json_encode($data)
 				));
 
-				return $response['body'];
+                if(is_array($response)){
+				    return $response['body'];
+                }
+                return false;
 			}
 			catch(Exception $e){
 				return false;
