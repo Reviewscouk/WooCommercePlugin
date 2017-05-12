@@ -67,15 +67,17 @@ if (!class_exists('WooCommerce_Reviews'))
 		{
 			$page = add_options_page('Reviews.co.uk Settings', 'Reviews.co.uk', 'manage_options', 'reviewscouk', array(&$this, 'reviews_settings_page'));
 
-			add_action('load-'.$page, function (){
-			   if(isset($_GET['settings-updated']) && $_GET['settings-updated']){
-                   try {
-				    $this->afterSettingsUpdated();
-                   }catch(Exception $e){
-                   }
-			   }
-		   });
+			add_action('load-'.$page, array($this,'load_page'));
 		}
+
+        public function load_page(){
+           if(isset($_GET['settings-updated']) && $_GET['settings-updated']){
+               try {
+                $this->afterSettingsUpdated();
+               }catch(Exception $e){
+               }
+           }
+        }
 
 		protected function afterSettingsUpdated(){
 			$feed = $this->sendFeed();
