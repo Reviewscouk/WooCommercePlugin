@@ -5,7 +5,7 @@ $args = array('post_type' =>'product', 'showposts'=>10000);
 
 $products = get_posts($args);
 
-$productArray[] = arry('sku', 'name', 'image_url', 'link', 'mpn', 'woocommerce_product_sku','woocommerce_product_id');
+$productArray[] = array('sku', 'name', 'image_url', 'link', 'mpn', 'woocommerce_product_sku','woocommerce_product_id');
 
 foreach ($products as $product)
 {
