@@ -409,7 +409,7 @@ if (!class_exists('WooCommerce_Reviews'))
         }
 
         public function product_review_tab($tabs){
-            if (in_array(get_option('product_review_widget'), array('tab'))){
+            if (in_array(get_option('product_review_widget'), array('tab','both'))){
                 $tabs['reviews'] = array(
                     'title' => 'Reviews',
                     'callback' => array($this,'productReviewWidget'),
@@ -421,7 +421,7 @@ if (!class_exists('WooCommerce_Reviews'))
 				}
             }
 
-            if (in_array(get_option('question_answers_widget'), array('tab'))){
+            if (in_array(get_option('question_answers_widget'), array('tab','both'))){
                 $tabs['qanda'] = array(
                     'title' => 'Questions & Answers',
                     'callback' => array($this,'questionAnswersWidget'),
@@ -438,13 +438,13 @@ if (!class_exists('WooCommerce_Reviews'))
 		}
 
         public function productPage(){
-            if (in_array(get_option('product_review_widget'),array('summary','1'))){
+            if (in_array(get_option('product_review_widget'),array('summary','1','both'))){
 				if(!$this->shouldHideProductReviews()){
 	                $this->productReviewWidget();
 				}
             }
 
-            if (in_array(get_option('question_answers_widget'),array('summary','1'))){
+            if (in_array(get_option('question_answers_widget'),array('summary','1','both'))){
 	            $this->questionAnswersWidget();
             }
         }
