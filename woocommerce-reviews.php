@@ -6,7 +6,7 @@ Plugin URI: https://wordpress.org/plugins/reviewscouk-for-woocommerce/
 Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
 Author: Reviews.co.uk
 License: GPL
-Version: 0.8.2
+Version: 0.8.3
 */
 
 if (!class_exists('WooCommerce_Reviews'))
@@ -569,13 +569,13 @@ if (!class_exists('WooCommerce_Reviews'))
                 $opts['height'] = '600';
             }
 
-            if(!isset($opts['headClr'])){
-                $opts['headClr'] = 'ffffff';
+            if(!isset($opts['head'])){
+                $opts['head'] = 'ffffff';
             }
 
             $storeid = get_option('store_id');
 
-            $url = 'https://widget.reviews.co.uk/rich-snippet-reviews/widget?store='.$storeid.'&primaryClr=%23'.$opts['primary'].'&textClr=%23'.$opts['text'].'&bgClr=%23'.$opts['bg'].'&height='.$opts['height'].'&headClr=%23ffffff&header=&headingSize=20px&numReviews=21&names=1&dates=1&footer=1';
+            $url = 'https://widget.reviews.co.uk/rich-snippet-reviews/widget?store='.$storeid.'&primaryClr=%23'.$opts['primary'].'&textClr=%23'.$opts['text'].'&bgClr=%23'.$opts['bg'].'&height='.$opts['height'].'&headClr=%23'.$opts['head'].'&header=&headingSize=20px&numReviews=21&names=1&dates=1&footer=1';
 
             if(isset($opts['tag'])){
                 $url .= '&tag='.$opts['tag'];
