@@ -544,7 +544,53 @@ if (!class_exists('WooCommerce_Reviews'))
             add_action('woocommerce_single_product_summary', array($this,'product_rating_snippet_markup'), 5);
             add_action('woocommerce_after_shop_loop_item', array($this, 'product_rating_snippet_markup'), 5);
             add_shortcode('rating_snippet', array($this, 'product_rating_snippet_shortcode'));
+            add_shortcode('richsnippet', array($this, 'richsnippet_widget'));
 		}
+
+        function richsnippet_widget($opts=[], $content=''){
+
+            $jq = isset($opts['jq'])? $opts['jq'] : true;
+
+            if(!isset($opts['primary'])){
+                $opts['primary'] = '1bd172';
+            }
+
+            if(!isset($opts['text'])){
+                $opts['text'] = '565656';
+            }
+
+            if(!isset($opts['bg'])){
+                $opts['bg'] = 'f9f9f9';
+            }
+
+            if(!isset($opts['height'])){
+                $opts['height'] = '600';
+            }
+
+            if(!isset($opts['headClr'])){
+                $opts['headClr'] = 'ffffff';
+            }
+
+            $storeid = get_option('store_id');
+
+            $url = 'https://widget.reviews.co.uk/rich-snippet-reviews/widget?store='.$storeid.'&primaryClr=%23'.$opts['primary'].'&textClr=%23'.$opts['text'].'&bgClr=%23'.$opts['bg'].'&height='.$opts['height'].'&headClr=%23ffffff&header=&headingSize=20px&numReviews=21&names=1&dates=1&footer=1';
+
+            if(isset($opts['tag'])){
+                $url .= '&tag='.$opts['tag'];
+            }
+        ?>
+        <?php if($jq){ ?>
+        <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <?php } ?>
+        <div id='snippetWidget'></div>
+        <script>
+            $.get('<?php echo $url; ?>', function(r){
+            $('#snippetWidget').html(r);
+        });
+        </script>
+        <?php
+        }
 	}
 }
 
