@@ -577,9 +577,29 @@ if (!class_exists('WooCommerce_Reviews'))
                 $opts['footer'] = 1;
             }
 
+            if(!isset($opts['dates'])){
+                $opts['dates'] = 1;
+            }
+
+            if(!isset($opts['names'])){
+                $opts['names'] = 1;
+            }
+
+            if(!isset($opts['numreviews'])){
+                $opts['numreviews'] = 21;
+            }
+
+            if(!isset($opts['header'])){
+                $opts['header'] = '';
+            }
+
+            if(!isset($opts['headingsize'])){
+                $opts['headingsize'] = 20;
+            }
+
             $storeid = get_option('store_id');
 
-            $url = 'https://widget.reviews.co.uk/rich-snippet-reviews/widget?store='.$storeid.'&primaryClr=%23'.$opts['primary'].'&textClr=%23'.$opts['text'].'&bgClr=%23'.$opts['bg'].'&height='.$opts['height'].'&headClr=%23'.$opts['head'].'&header=&headingSize=20px&numReviews=21&names=1&dates=1&footer='.$opts['footer'];
+            $url = 'https://widget.reviews.co.uk/rich-snippet-reviews/widget?store='.$storeid.'&primaryClr=%23'.$opts['primary'].'&textClr=%23'.$opts['text'].'&bgClr=%23'.$opts['bg'].'&height='.$opts['height'].'&headClr=%23'.$opts['head'].'&header='.$opts['header'].'&headingSize='.$opts['headingsize'].'px&numReviews='.$opts['numreviews'].'&names='.$opts['names'].'&dates='.$opts['dates'].'&footer='.$opts['footer'];
 
             if(isset($opts['tag'])){
                 $url .= '&tag='.$opts['tag'];
