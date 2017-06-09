@@ -6,7 +6,7 @@ Plugin URI: https://wordpress.org/plugins/reviewscouk-for-woocommerce/
 Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
 Author: Reviews.co.uk
 License: GPL
-Version: 0.8.5
+Version: 0.8.6
 */
 
 if (!class_exists('WooCommerce_Reviews'))
@@ -545,6 +545,10 @@ if (!class_exists('WooCommerce_Reviews'))
             add_action('woocommerce_after_shop_loop_item', array($this, 'product_rating_snippet_markup'), 5);
             add_shortcode('rating_snippet', array($this, 'product_rating_snippet_shortcode'));
             add_shortcode('richsnippet', array($this, 'richsnippet_widget'));
+            if(function_exists('WC')){
+                // Remove existing structured data
+                remove_action( 'wp_footer', array( WC()->structured_data, 'output_structured_data' ), 10 );
+            }
 		}
 
         function richsnippet_widget($opts=[], $content=''){
