@@ -32,7 +32,7 @@ foreach ($orders as $o)
         if($product){
             $sku = $product->get_sku();
 
-            if($product->product_type == 'variant')
+            if($product->get_type() == 'variant')
             {
                 $available_variations = $product->get_available_variations();
 
