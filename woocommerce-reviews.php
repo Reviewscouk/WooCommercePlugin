@@ -183,7 +183,7 @@ if (!class_exists('WooCommerce_Reviews'))
 				$productmeta = wc_get_product($row['product_id']);
 				$sku = get_option('product_identifier') == 'id'? $row['product_id'] : $productmeta->get_sku();
 
-				if($productmeta->product_type == 'variable' && get_option('use_parent_product') != 1)
+				if($productmeta->get_type() == 'variable' && get_option('use_parent_product') != 1)
 				{
 					$available_variations = $productmeta->get_available_variations();
 					foreach ($available_variations as $variation)
@@ -348,7 +348,7 @@ if (!class_exists('WooCommerce_Reviews'))
                     $skus[] = $sku;
                 }
 
-                if ($product->product_type == 'variable')
+                if ($product->get_type() == 'variable')
                 {
                     $available_variations = $product->get_available_variations();
                     foreach ($available_variations as $variant)
