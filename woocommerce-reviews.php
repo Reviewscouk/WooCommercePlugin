@@ -545,9 +545,20 @@ if (!class_exists('WooCommerce_Reviews'))
             add_action('woocommerce_after_shop_loop_item', array($this, 'product_rating_snippet_markup'), 5);
             add_shortcode('rating_snippet', array($this, 'product_rating_snippet_shortcode'));
             add_shortcode('richsnippet', array($this, 'richsnippet_widget'));
-            if(function_exists('WC')){
-                // Remove existing structured data
-                remove_action( 'wp_footer', array( WC()->structured_data, 'output_structured_data' ), 10 );
+
+            if (function_exists('WC')) {
+
+                // If WooCommerce...
+
+                // Add filter that remove WooCommerce structured product data
+                add_filter('woocommerce_structured_data_type_for_page', function ($types) {
+                    return array_filter($types, function ($type) {
+
+                        // Do not include structured data, provided by WooCommerce, about the 'product'. We will add our own
+                        // structured data about the product.
+                        return trim(strtolower($type)) !== 'product';
+                    });
+                });
             }
 		}
 
