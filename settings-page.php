@@ -4,7 +4,7 @@
 		<h2></h2><!-- Alerts Show Here -->
 
 		<?php @settings_fields('woocommerce-reviews'); ?>
-		<?php @do_settings_fields('woocommerce-reviews'); ?>
+		<?php @do_settings_sections('woocommerce-reviews'); ?>
 
 		<div style="background:#fff; padding:20px; margin:20px 0; border:1px solid #ccc;">
 			<h2>Automated Review Collection - Powered by Reviews.co.uk</h2>
