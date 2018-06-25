@@ -336,7 +336,6 @@ if (!class_exists('WooCommerce_Reviews')) {
                 richSnippet({
                     store: "' . get_option('store_id') . '",
                     sku: "' . implode(';', $skus) . '",
-                    image: "' . implode(';', $skus) . '",
                     data:{
                         offers:{
                             type: "Offer",
