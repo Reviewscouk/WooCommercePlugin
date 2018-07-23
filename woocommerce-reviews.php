@@ -344,6 +344,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                         "name": "'. $product->name .'",
                         offers:{
                             "@type": "Offer",
+                            itemCondition: "NewCondition",
                             availability: " ' . $this->formatAvailability($product->stock_status) . '",
                             price: "' . $product->price . '",
                             priceCurrency: "' . get_woocommerce_currency() . '",
