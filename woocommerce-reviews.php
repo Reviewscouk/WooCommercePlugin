@@ -6,7 +6,7 @@ Plugin URI: https://wordpress.org/plugins/reviewscouk-for-woocommerce/
 Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
 Author: Reviews.co.uk
 License: GPL
-Version: 0.9.2
+Version: 0.9.3
  */
 
 if (!class_exists('WooCommerce_Reviews')) {
@@ -331,18 +331,31 @@ if (!class_exists('WooCommerce_Reviews')) {
                 </script>';
             } else if ($product_enabled && !empty($skus)) {
 
+                $image = wp_get_attachment_image_src( get_post_thumbnail_id( $product->ID ), 'single-post-thumbnail' );
+
                 echo '<script src="https://' . $this->getWidgetDomain() . '/rich-snippet/dist.js"></script>
                 <script>
                 richSnippet({
                     store: "' . get_option('store_id') . '",
                     sku: "' . implode(';', $skus) . '",
                     data:{
+                        "@context": "http://schema.org",
+                        "@type": "Product",
+                        "name": "'. $product->name .'",
                         offers:{
-                            type: "Offer",
-                            availability:" ' . $this->formatAvailability($product->stock_status) . '",
-                            price:"' . $product->price . '",
-                            priceCurrency: " ' . get_woocommerce_currency() . '"
-                        },
+                            "@type": "Offer",
+                            availability: " ' . $this->formatAvailability($product->stock_status) . '",
+                            price: "' . $product->price . '",
+                            priceCurrency: "' . get_woocommerce_currency() . '",
+                            sku: "'.$skus[0].'",
+                            image: "'. $image[0] .'",
+                            description: "'. $product->description .'",
+                            seller : {
+                                "@type": "Organization",
+                                name: "'. get_bloginfo("name") .'",
+                                url: "'. get_bloginfo("url") .'"
+                            }
+                        }
                     }
                 });
                 </script>';
