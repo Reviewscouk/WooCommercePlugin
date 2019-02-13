@@ -6,7 +6,7 @@ Plugin URI: https://wordpress.org/plugins/reviewscouk-for-woocommerce/
 Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
 Author: Reviews.co.uk
 License: GPL
-Version: 0.9.5
+Version: 0.9.7
  */
 
 if (!class_exists('WooCommerce_Reviews')) {
@@ -188,7 +188,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                 $productmeta = wc_get_product($row['product_id']);
                 $sku         = get_option('product_identifier') == 'id' ? $row['product_id'] : $productmeta->get_sku();
 
-                if ($productmeta->product_type == 'variable' && get_option('use_parent_product') != 1) {
+                if ($productmeta->get_type() == 'variable' && get_option('use_parent_product') != 1) {
                     $available_variations = $productmeta->get_available_variations();
                     foreach ($available_variations as $variation) {
                         if ($variation['variation_id'] == $row['variation_id']) {
@@ -197,7 +197,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     }
                 }
 
-                $url = $productmeta->post->guid;
+                $url = get_permalink($row['product_id']);
 
                 $attachment_url = wp_get_attachment_url(get_post_thumbnail_id($row['product_id']));
 
@@ -213,8 +213,8 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             $data = array(
                 'order_id' => $order_id,
-                'email'    => $order->billing_email,
-                'name'     => $order->billing_first_name . ' ' . $order->billing_last_name,
+                'email'    => $order->get_billing_email(),
+                'name'     => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
                 'source'   => 'woocom',
                 'products' => $p,
             );
@@ -397,7 +397,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     $skus[] = $sku;
                 }
 
-                if ($product->product_type == 'variable') {
+                if ($product->get_type() == 'variable') {
                     $available_variations = $product->get_available_variations();
                     foreach ($available_variations as $variant) {
                         $skus[] = get_option('product_identifier') == 'id' ? $variant['variation_id'] : $variant['sku'];
