@@ -109,7 +109,7 @@
 						</tr>
 					</table>
 
-					<p>The invitation delay can be changed within the Reviews.co.uk Dashboard in <strong>Invitations</strong> &gt; <strong>Edit / Create Invitation Template</strong>.
+					<p>The invitation delay can be changed within the Reviews.co.uk Dashboard in <strong>Company Setup</strong> &gt; <strong>Customize Review Invitation</strong> and <strong>Product Setup</strong> &gt; <strong>Customize Review Invitation</strong><strong>
 		        </div>
 		        <div id="tab-3" class="tab-content">
 					<p>Customize how product reviews are published on your website.</p>

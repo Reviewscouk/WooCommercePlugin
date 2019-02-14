@@ -11,10 +11,10 @@ foreach ($products as $product)
 {
 
 	$_pf      = new WC_Product_Factory();
-	$_product = $_pf->get_product($product->ID);
+	$_product = $_pf->get_product($product->get_id());
 
 	$woocommerce_sku = $_product->get_sku();
-	$woocommerce_id = $product->ID;
+	$woocommerce_id = $product->get_id();
 	$sku    = get_option('product_identifier') == 'id'? $woocommerce_id : $woocommerce_sku;
 	$image_link = '';
 
@@ -26,7 +26,7 @@ foreach ($products as $product)
 	}
 
 	// Always add the parent product
-	$productArray[] = array($sku, $product->post_title, $image_url, get_permalink($product->ID), $sku, $woocommerce_sku, $woocommerce_id);
+	$productArray[] = array($sku, $product->get_post_title(), $image_url, get_permalink($product->get_id()), $sku, $woocommerce_sku, $woocommerce_id);
 
 	// Add variants as additional products
 	if ($_product->product_type == 'variable' && get_option('use_parent_product') != 1)
@@ -37,11 +37,11 @@ foreach ($products as $product)
 		{
 			$variant_sku = get_option('product_identifier') == 'id'? $variation['variation_id'] : $variation['sku'];
 			$variant_attributes = is_array($variation['attributes'])? implode(' ',  array_filter(array_values($variation['attributes']))) : '';
-			$variant_title = $product->post_title;
+			$variant_title = $product->get_post_title();
 			if(!empty($variant_attributes)){
 				//$variant_title .= ' - '.$variant_attributes;
 			}
-			$productArray[] = array( $variant_sku, $variant_title, $image_url, get_permalink($product->ID), $variation['sku'], $variation['sku'], $variation['variation_id']);
+			$productArray[] = array( $variant_sku, $variant_title, $image_url, get_permalink($product->get_id()), $variation['sku'], $variation['sku'], $variation['variation_id']);
 		}
 	}
 }

@@ -1,12 +1,15 @@
 <?php
-/*
-Plugin Name: Reviews.co.uk for WooCommerce
-Depends: WooCommerce
-Plugin URI: https://wordpress.org/plugins/reviewscouk-for-woocommerce/
-Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
-Author: Reviews.co.uk
-License: GPL
-Version: 0.9.7
+/**
+ * Plugin Name: Reviews.co.uk for WooCommerce
+ * Depends: WooCommerce
+ * Plugin URI: https://wordpress.org/plugins/reviewscouk-for-woocommerce/
+ * Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
+ * Author: Reviews.co.uk
+ * License: GPL
+ * Version: 0.9.9
+ *
+ * WC requires at least: 3.0.0
+ * WC tested up to: 3.5.4
  */
 
 if (!class_exists('WooCommerce_Reviews')) {
@@ -285,6 +288,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function getSubDomain($sub)
         {
+
             $region = get_option('region');
             if ($region == 'uk') {
                 return $sub . '.reviews.co.uk';
@@ -331,7 +335,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                 </script>';
             } else if ($product_enabled && !empty($skus)) {
 
-                $image = wp_get_attachment_image_src( get_post_thumbnail_id( $product->ID ), 'single-post-thumbnail' );
+                $image = wp_get_attachment_image_src(get_post_thumbnail_id($product->get_id()), 'single-post-thumbnail');
 
                 echo '<script src="https://' . $this->getWidgetDomain() . '/rich-snippet/dist.js"></script>
                 <script>
@@ -341,20 +345,20 @@ if (!class_exists('WooCommerce_Reviews')) {
                     data:{
                         "@context": "http://schema.org",
                         "@type": "Product",
-                        "name": "'. $product->name .'",
+                        "name": "' . $product->get_name() . '",
                         offers:{
                             "@type": "Offer",
                             itemCondition: "NewCondition",
-                            availability: " ' . $this->formatAvailability($product->stock_status) . '",
-                            price: "' . $product->price . '",
+                            availability: " ' . $this->formatAvailability($product->get_stock_status()) . '",
+                            price: "' . $product->get_price() . '",
                             priceCurrency: "' . get_woocommerce_currency() . '",
-                            sku: "'.$skus[0].'",
-                            image: "'. $image[0] .'",
-                            description: '. json_encode(htmlspecialchars($product->description)) .',
+                            sku: "' . $skus[0] . '",
+                            image: "' . $image[0] . '",
+                            description: ' . json_encode(htmlspecialchars($product->get_description())) . ',
                             seller : {
                                 "@type": "Organization",
-                                name: "'. get_bloginfo("name") .'",
-                                url: "'. get_bloginfo("url") .'"
+                                name: "' . get_bloginfo("name") . '",
+                                url: "' . get_bloginfo("url") . '"
                             }
                         }
                     }
