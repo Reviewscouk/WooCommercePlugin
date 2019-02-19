@@ -16,23 +16,22 @@ $productArray[] = ['order id', 'customer name', 'email', 'sku', 'date'];
 
 foreach ($orders as $o)
 {
+    $order_id = $o->ID;
+    $order    = new WC_Order($order_id);
 
-	$order_id = $o->ID;
-	$order    = new WC_Order($order_id);
-
-	$firstname       = $order->billing_first_name .' ' .$order->billing_last_name;
-	$email           = $order->billing_email;
+    $firstname       = $order->get_billing_first_name() .' ' .$order->get_billing_last_name();
+    $email           = $order->get_billing_email();
 
     $addedItems = false;
 
-	foreach ($order->get_items() as $item)
-	{
-		$product = wc_get_product($item['product_id']);
+    foreach ($order->get_items() as $item)
+    {
+        $product = wc_get_product($item['product_id']);
 
         if($product){
             $sku = $product->get_sku();
 
-            if($product->product_type == 'variant')
+            if($product->get_type() == 'variant')
             {
                 $available_variations = $product->get_available_variations();
 
@@ -47,26 +46,26 @@ foreach ($orders as $o)
 
             }
 
-            $productArray[] = [$o->ID, $firstname, $email, $sku, $o->post_date];
+            $productArray[] = [$o->ID, $firstname, $email, $sku, get_the_date('d/m/Y', $o->ID)];
             $addedItems = true;
         }
         else
         {
-            $productArray[] = [$o->ID, $firstname, $email, '', $o->post_date];
+            $productArray[] = [$o->ID, $firstname, $email, '', get_the_date('d/m/Y', $o->ID)];
             $addedItems = true;
         }
 
     }
 
     if(!$addedItems){
-        $productArray[] = [$o->ID, $firstname, $email, '', $o->post_date];
+        $productArray[] = [$o->ID, $firstname, $email, '', get_the_date('d/m/Y', $o->ID)];
     }
 }
 
 $fp = fopen('php://temp', 'w+');
 foreach ($productArray as $fields)
 {
-	fputcsv($fp, $fields);
+    fputcsv($fp, $fields);
 }
 
 rewind($fp);

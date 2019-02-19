@@ -1,12 +1,15 @@
 <?php
-/*
-Plugin Name: Reviews.co.uk for WooCommerce
-Depends: WooCommerce
-Plugin URI: https://wordpress.org/plugins/reviewscouk-for-woocommerce/
-Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
-Author: Reviews.co.uk
-License: GPL
-Version: 0.9.5
+/**
+ * Plugin Name: Reviews.co.uk for WooCommerce
+ * Depends: WooCommerce
+ * Plugin URI: https://wordpress.org/plugins/reviewscouk-for-woocommerce/
+ * Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
+ * Author: Reviews.co.uk
+ * License: GPL
+ * Version: 0.9.12
+ *
+ * WC requires at least: 3.0.0
+ * WC tested up to: 3.5.4
  */
 
 if (!class_exists('WooCommerce_Reviews')) {
@@ -188,7 +191,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                 $productmeta = wc_get_product($row['product_id']);
                 $sku         = get_option('product_identifier') == 'id' ? $row['product_id'] : $productmeta->get_sku();
 
-                if ($productmeta->product_type == 'variable' && get_option('use_parent_product') != 1) {
+                if ($productmeta->get_type() == 'variable' && get_option('use_parent_product') != 1) {
                     $available_variations = $productmeta->get_available_variations();
                     foreach ($available_variations as $variation) {
                         if ($variation['variation_id'] == $row['variation_id']) {
@@ -197,7 +200,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     }
                 }
 
-                $url = $productmeta->post->guid;
+                $url = get_permalink($row['product_id']);
 
                 $attachment_url = wp_get_attachment_url(get_post_thumbnail_id($row['product_id']));
 
@@ -213,8 +216,8 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             $data = array(
                 'order_id' => $order_id,
-                'email'    => $order->billing_email,
-                'name'     => $order->billing_first_name . ' ' . $order->billing_last_name,
+                'email'    => $order->get_billing_email(),
+                'name'     => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
                 'source'   => 'woocom',
                 'products' => $p,
             );
@@ -285,6 +288,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function getSubDomain($sub)
         {
+
             $region = get_option('region');
             if ($region == 'uk') {
                 return $sub . '.reviews.co.uk';
@@ -322,16 +326,22 @@ if (!class_exists('WooCommerce_Reviews')) {
             // Getting Product SKU
             $skus = $this->getProductSkus();
 
-            if ($enabled && empty($skus)) {
+            if (is_product()) {
+                $productPage = true;
+            } else {
+                $productPage = false;
+            }
+
+            if ($enabled && !$productPage) {
                 echo '<script src="https://' . $this->getWidgetDomain() . '/rich-snippet/dist.js"></script>
                 <script type="text/javascript">
                 richSnippet({
                     store: "' . get_option('store_id') . '"
                 });
                 </script>';
-            } else if ($product_enabled && !empty($skus)) {
+            } else if ($productPage && $product_enabled && !empty($skus)) {
 
-                $image = wp_get_attachment_image_src( get_post_thumbnail_id( $product->ID ), 'single-post-thumbnail' );
+                $image = wp_get_attachment_image_src(get_post_thumbnail_id($product->get_id()), 'single-post-thumbnail');
 
                 echo '<script src="https://' . $this->getWidgetDomain() . '/rich-snippet/dist.js"></script>
                 <script>
@@ -341,20 +351,20 @@ if (!class_exists('WooCommerce_Reviews')) {
                     data:{
                         "@context": "http://schema.org",
                         "@type": "Product",
-                        "name": "'. $product->name .'",
+                        "name": "' . $product->get_name() . '",
                         offers:{
                             "@type": "Offer",
                             itemCondition: "NewCondition",
-                            availability: " ' . $this->formatAvailability($product->stock_status) . '",
-                            price: "' . $product->price . '",
+                            availability: " ' . $this->formatAvailability($product->get_stock_status()) . '",
+                            price: "' . $product->get_price() . '",
                             priceCurrency: "' . get_woocommerce_currency() . '",
-                            sku: "'.$skus[0].'",
-                            image: "'. $image[0] .'",
-                            description: '. json_encode(htmlspecialchars($product->description)) .',
+                            sku: "' . $skus[0] . '",
+                            image: "' . $image[0] . '",
+                            description: ' . json_encode(htmlspecialchars($product->get_description())) . ',
                             seller : {
                                 "@type": "Organization",
-                                name: "'. get_bloginfo("name") .'",
-                                url: "'. get_bloginfo("url") .'"
+                                name: "' . get_bloginfo("name") . '",
+                                url: "' . get_bloginfo("url") . '"
                             }
                         }
                     }
@@ -397,7 +407,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     $skus[] = $sku;
                 }
 
-                if ($product->product_type == 'variable') {
+                if ($product->get_type() == 'variable') {
                     $available_variations = $product->get_available_variations();
                     foreach ($available_variations as $variant) {
                         $skus[] = get_option('product_identifier') == 'id' ? $variant['variation_id'] : $variant['sku'];
