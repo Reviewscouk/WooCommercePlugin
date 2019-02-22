@@ -298,7 +298,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                 });
 
 
-                <?php if (get_option('disable_rating_snippet_popup') == '1') {?>
+                <?php if (get_option('disable_rating_snippet_popup') == '0') {?>
                     var snippetul = document.querySelectorAll(".ruk_rating_snippet");
                     if (snippetul[0]) {
                         snippetul[0].onclick = function(event) {
