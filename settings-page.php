@@ -109,7 +109,7 @@
 						</tr>
 					</table>
 
-					<p>The invitation delay can be changed within the Reviews.co.uk Dashboard in <strong>Invitations</strong> &gt; <strong>Edit / Create Invitation Template</strong>.
+					<p>The invitation delay can be changed within the Reviews.co.uk Dashboard in <strong>Company Setup</strong> &gt; <strong>Customize Review Invitation</strong> and <strong>Product Setup</strong> &gt; <strong>Customize Review Invitation</strong><strong>
 		        </div>
 		        <div id="tab-3" class="tab-content">
 					<p>Customize how product reviews are published on your website.</p>
@@ -132,6 +132,36 @@
 								</select>
 							</td>
 						</tr>
+
+						<tr>
+							<th>
+								<label for="disable_rating_snippet_popup">Disable/Enable the rating snippet popup: </label>
+			                    <p style="font-size:12px;font-weight:100;">This option will disable/enable the rating snippet popup on product pages and anchor to product widget.</p>
+							</th>
+							<td>
+								<?php
+									$disable_rating_snippet_popup = get_option('disable_rating_snippet_popup');
+								?>
+								<select name="disable_rating_snippet_popup">
+									<option <?php echo ($disable_rating_snippet_popup == '0') ? 'selected' : '' ?> value="0">Popup Disabled</option>
+									<option <?php echo ($disable_rating_snippet_popup == '1') ? 'selected' : '' ?> value="1">Popup Enabled</option>
+								</select>
+							</td>
+						</tr>
+
+						<tr>
+							<th>
+								<label for="disable_rating_snippet_popup">Offset: (Default = 0)</label>
+			                    <p style="font-size:12px;font-weight:100;">This option set the offset to the product widget element. (Integer Number)</p>
+							</th>
+							<td>
+								<?php
+									$disable_rating_snippet_offset = get_option('disable_rating_snippet_offset');
+								?> 
+								<input type="text" name="disable_rating_snippet_offset" value="<?php  echo $disable_rating_snippet_offset; ?>" />
+							</td>
+						</tr>
+
 						<tr>
 							<th>
 								<label for="widget_hex_colour">Widget Hex Colour: </label>

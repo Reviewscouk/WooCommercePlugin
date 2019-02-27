@@ -6,7 +6,7 @@
  * Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.9.12
+ * Version: 0.10.01
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 3.5.4
@@ -15,6 +15,19 @@
 if (!class_exists('WooCommerce_Reviews')) {
     class WooCommerce_Reviews
     {
+
+        /**
+         * Used for local testing
+         *
+         * 'live' -- for live server
+         * 'dev' -- for dev testing
+         */
+        protected $env  = 'live'; // change to 'dev' for testing and setup your urls !!! DON'T forget to revert when push to live !!!
+        protected $urls = [
+            'widget' => 'http://localhost:8040/',
+            'dash'   => 'http://dashboard.test/',
+            'api'    => 'http://api.test/', 
+        ];
 
         protected $numWidgets = 0;
 
@@ -26,6 +39,34 @@ if (!class_exists('WooCommerce_Reviews')) {
             add_action('hourly_order_process_event', array($this, 'process_recent_orders'));
             register_activation_hook(__FILE__, array($this, 'run_on_activation'));
             register_deactivation_hook(__FILE__, array($this, 'run_on_deactivate'));
+        }
+
+        public function getSubDomain($sub)
+        {
+            if ($this->env == 'dev') {
+                return $this->urls[$sub];
+            }
+            $region = get_option('region');
+            if ($region == 'uk') {
+                return 'https://' . $sub . '.reviews.co.uk/';
+            } else {
+                return 'https://' . $sub . '.reviews.io/';
+            }
+        }
+
+        public function getWidgetDomain()
+        {
+            return $this->getSubDomain('widget');
+        }
+
+        public function getDashDomain()
+        {
+            return $this->getSubDomain('dash');
+        }
+
+        public function getApiDomain()
+        {
+            return $this->getSubDomain('api');
         }
 
         public function admin_init()
@@ -54,6 +95,8 @@ if (!class_exists('WooCommerce_Reviews')) {
             register_setting('woocommerce-reviews', 'product_identifier');
             register_setting('woocommerce-reviews', 'disable_reviews_per_product');
             register_setting('woocommerce-reviews', 'use_parent_product');
+            register_setting('woocommerce-reviews', 'disable_rating_snippet_popup');
+            register_setting('woocommerce-reviews', 'disable_rating_snippet_offset');
         }
 
         public function setDefaultSettings()
@@ -64,6 +107,8 @@ if (!class_exists('WooCommerce_Reviews')) {
             update_option('product_review_widget', 'tab');
             update_option('product_identifier', 'sku');
             update_option('use_parent_product', 0);
+            update_option('disable_rating_snippet_popup', 1);
+            update_option('disable_rating_snippet_offset', 0);
         }
 
         public function add_menu()
@@ -115,7 +160,7 @@ if (!class_exists('WooCommerce_Reviews')) {
         protected function apiPost($url, $data)
         {
             try {
-                $response = wp_remote_post('https://' . $this->getApiDomain() . '/' . $url, array(
+                $response = wp_remote_post( $this->getApiDomain() . $url, array(
                     'method'  => 'POST',
                     'headers' => array(
                         'store'        => get_option('store_id'),
@@ -234,16 +279,16 @@ if (!class_exists('WooCommerce_Reviews')) {
         public function rating_snippet_footer_scripts()
         {
             $enabled = get_option('enable_product_rating_snippet');
-            if ($enabled) {
-                ?>
-                <script src="https://<?php echo $this->getWidgetDomain(); ?>/product/dist.js" data-cfasync="false"></script>
+            if ($enabled) {?>
 
-                <script src="https://<?php echo $this->getWidgetDomain(); ?>/rating-snippet/dist.js" data-cfasync="false"></script>
-                <link rel="stylesheet" href="https://<?php echo $this->getWidgetDomain(); ?>/rating-snippet/dist.css" />
+                <script src="<?php echo $this->getWidgetDomain(); ?>product/dist.js" data-cfasync="false"></script>
+                
+                <script src="<?php echo $this->getWidgetDomain(); ?>rating-snippet/dist.js" data-cfasync="false"></script>
+                <link rel="stylesheet" href="<?php echo $this->getWidgetDomain(); ?>rating-snippet/dist.css" />
 
                 <script style="text/javascript" data-cfasync="false">
                 ratingSnippet("ruk_rating_snippet",{
-                store: "<?php echo get_option('store_id'); ?>",
+                    store: "<?php echo get_option('store_id'); ?>",
                     color: "<?php echo $this->getHexColor(); ?>",
                     linebreak: true,
                     text: "Reviews",
@@ -251,7 +296,24 @@ if (!class_exists('WooCommerce_Reviews')) {
                     writeButton: false,
                     <?php }?>
                 });
+
+
+                <?php if (get_option('disable_rating_snippet_popup') == '0') {?>
+                    var snippetul = document.querySelectorAll(".ruk_rating_snippet");
+                    if (snippetul[0]) {
+                        snippetul[0].onclick = function(event) {
+                            event.preventDefault();
+                            var productWidget = document.getElementById("widget-2");
+                            if (productWidget) {
+                                var topPos = productWidget.offsetTop;
+                                productWidget.scrollTop = topPos;
+                                window.scrollTo(0, topPos - parseInt(<?php echo get_option('disable_rating_snippet_offset') !=='' ? get_option('disable_rating_snippet_offset') : 0; ?>));
+                            }
+                        }
+                    }
+                <?php };?>
                 </script>
+
             <?php
 }
         }
@@ -262,8 +324,8 @@ if (!class_exists('WooCommerce_Reviews')) {
             $store   = get_option('store_id');
             if ($enabled) {
                 ?>
-                <script type="text/javascript" src="https://<?php echo $this->getDashDomain(); ?>/widget/float.js" data-store="<?php echo $store; ?>" data-color="<?php echo $this->getHexColor(); ?>" data-position="right"></script>
-                <link href="https://<?php echo $this->getDashDomain(); ?>/widget/float.css" rel="stylesheet" />
+                <script type="text/javascript" src="<?php echo $this->getDashDomain(); ?>widget/float.js" data-store="<?php echo $store; ?>" data-color="<?php echo $this->getHexColor(); ?>" data-position="right"></script>
+                <link href="<?php echo $this->getDashDomain(); ?>widget/float.css" rel="stylesheet" />
             <?php
 }
         }
@@ -286,32 +348,6 @@ if (!class_exists('WooCommerce_Reviews')) {
             echo '<div class="ruk_rating_snippet" data-sku="' . implode(';', $skus) . '"></div>';
         }
 
-        public function getSubDomain($sub)
-        {
-
-            $region = get_option('region');
-            if ($region == 'uk') {
-                return $sub . '.reviews.co.uk';
-            } else {
-                return $sub . '.reviews.io';
-            }
-        }
-
-        public function getWidgetDomain()
-        {
-            return $this->getSubDomain('widget');
-        }
-
-        public function getDashDomain()
-        {
-            return $this->getSubDomain('dash');
-        }
-
-        public function getApiDomain()
-        {
-            return $this->getSubDomain('api');
-        }
-
         public function output_rich_snippet_code()
         {
             global $product;
@@ -326,24 +362,18 @@ if (!class_exists('WooCommerce_Reviews')) {
             // Getting Product SKU
             $skus = $this->getProductSkus();
 
-            if (is_product()) {
-                $productPage = true;
-            } else {
-                $productPage = false;
-            }
-
-            if ($enabled && !$productPage) {
-                echo '<script src="https://' . $this->getWidgetDomain() . '/rich-snippet/dist.js"></script>
+            if ($enabled && empty($skus)) {
+                echo '<script src="' . $this->getWidgetDomain() . 'rich-snippet/dist.js"></script>
                 <script type="text/javascript">
                 richSnippet({
                     store: "' . get_option('store_id') . '"
                 });
                 </script>';
-            } else if ($productPage && $product_enabled && !empty($skus)) {
+            } else if ($product_enabled && !empty($skus)) {
 
                 $image = wp_get_attachment_image_src(get_post_thumbnail_id($product->get_id()), 'single-post-thumbnail');
 
-                echo '<script src="https://' . $this->getWidgetDomain() . '/rich-snippet/dist.js"></script>
+                echo '<script src="' . $this->getWidgetDomain() . 'rich-snippet/dist.js"></script>
                 <script>
                 richSnippet({
                     store: "' . get_option('store_id') . '",
@@ -525,6 +555,10 @@ if (!class_exists('WooCommerce_Reviews')) {
             return $css;
         }
 
+        /**
+         * Product Review Widget 
+         * Rendered 
+         */
         public function productReviewWidget($skus = null)
         {
             $this->numWidgets++;
@@ -534,7 +568,8 @@ if (!class_exists('WooCommerce_Reviews')) {
 
                 $color = $this->getHexColor();
                 ?>
-                    <script src="https://<?php echo $this->getWidgetDomain(); ?>/product/dist.js"></script>
+                    <script src="<?php echo $this->getWidgetDomain(); ?>product/dist.js"></script>
+
                     <div id="widget-<?php echo $this->numWidgets; ?>"></div>
                     <script type="text/javascript">
                     productWidget("widget-<?php echo $this->numWidgets; ?>",{
@@ -555,11 +590,11 @@ if (!class_exists('WooCommerce_Reviews')) {
                                 jQuery('[href="#tab-reviews"]').html('Reviews ('+data.count+')');
                             }
                         },
-                        css: "<?php echo $this->prepareCss(get_option('widget_custom_css')); ?>"
+                        css: "<?php echo $this->prepareCss(get_option('widget_custom_css')); ?>",
                     });
                     </script>
                 <?php
-} else {
+        } else {
                 echo 'Missing Reviews.co.uk API Credentials';
             }
         }
@@ -573,7 +608,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                 $color = $this->getHexColor();
                 ?>
                     <div id="questions-widget" style="width:100%;"></div>
-                    <script src="https://widget.reviews.co.uk/questions-answers/dist.js" type="text/javascript"></script>
+                    <script src="<?php echo $this->getWidgetDomain(); ?>questions-answers/dist.js" type="text/javascript"></script>
                     <script>
                     document.addEventListener("DOMContentLoaded", function() {
                         questionsWidget('questions-widget', {
@@ -583,7 +618,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     });
                     </script>
                 <?php
-} else {
+        } else {
                 echo 'Missing Reviews.co.uk API Credentials';
             }
         }
@@ -660,7 +695,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             $storeid = get_option('store_id');
 
-            $url = 'https://widget.reviews.co.uk/rich-snippet-reviews/widget?store=' . $storeid . '&primaryClr=%23' . $opts['primary'] . '&textClr=%23' . $opts['text'] . '&bgClr=%23' . $opts['bg'] . '&height=' . $opts['height'] . '&headClr=%23' . $opts['head'] . '&header=' . $opts['header'] . '&headingSize=' . $opts['headingsize'] . 'px&numReviews=' . $opts['numreviews'] . '&names=' . $opts['names'] . '&dates=' . $opts['dates'] . '&footer=' . $opts['footer'];
+            $url = $this->getWidgetDomain() . 'rich-snippet-reviews/widget?store=' . $storeid . '&primaryClr=%23' . $opts['primary'] . '&textClr=%23' . $opts['text'] . '&bgClr=%23' . $opts['bg'] . '&height=' . $opts['height'] . '&headClr=%23' . $opts['head'] . '&header=' . $opts['header'] . '&headingSize=' . $opts['headingsize'] . 'px&numReviews=' . $opts['numreviews'] . '&names=' . $opts['names'] . '&dates=' . $opts['dates'] . '&footer=' . $opts['footer'];
 
             if (isset($opts['tag'])) {
                 $url .= '&tag=' . $opts['tag'];
