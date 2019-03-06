@@ -6,7 +6,7 @@
  * Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.10.02
+ * Version: 0.10.03
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 3.5.4
@@ -358,6 +358,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             $enabled         = get_option('enable_rich_snippet');
             $product_enabled = get_option('enable_product_rich_snippet');
+            $isProductPage = is_product();
 
             // Getting Product SKU
             $skus = $this->getProductSkus();
@@ -369,7 +370,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     store: "' . get_option('store_id') . '"
                 });
                 </script>';
-            } else if ($product_enabled && !empty($skus)) {
+            } else if ($product_enabled && !empty($skus) && $isProductPage) {
 
                 $image = wp_get_attachment_image_src(get_post_thumbnail_id($product->get_id()), 'single-post-thumbnail');
 
