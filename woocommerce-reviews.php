@@ -638,8 +638,11 @@ if (!class_exists('WooCommerce_Reviews')) {
             add_shortcode('rating_snippet', array($this, 'product_rating_snippet_shortcode'));
             add_shortcode('richsnippet', array($this, 'richsnippet_widget'));
             if (function_exists('WC')) {
-                // Remove existing structured data
-                remove_action('wp_footer', array(WC()->structured_data, 'output_structured_data'), 10);
+                $enabled  = get_option('enable_rich_snippet');
+                if ($enabled) {
+                    // Remove existing structured data
+                    remove_action('wp_footer', array(WC()->structured_data, 'output_structured_data'), 10);
+                }
             }
         }
 
