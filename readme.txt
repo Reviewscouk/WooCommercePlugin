@@ -1,8 +1,8 @@
-=== Reviews.co.uk WooCommerce Plugin ===
+=== Reviews.co.uk and Reviews.io WooCommerce Plugin ===
 Contributors: Reviewscouk
 Tags: Reviews, Seller Ratings, Google Reviews, Company Reviews, Business Reviews, Product Reviews, Facebook Reviews, Amazon Reviews, Google Partner, Google Seller Ratings, Google Stars, Stars in Adwords
 Author URI: https://www.reviews.io
-Tested up to: 5.1 
+Tested up to: 5.3.2 
 
 Get Stars and Seller Ratings in Google and across the web by collecting genuine, verified reviews with a Google-licensed Reviews Partner.
 
