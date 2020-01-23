@@ -22,7 +22,7 @@ if (!class_exists('WooCommerce_Reviews')) {
          * 'live' -- for live server
          * 'dev' -- for dev testing
          */
-        protected $env  = 'dev'; // change to 'dev' for testing and setup your urls !!! DON'T forget to revert when push to live !!!
+        protected $env  = 'live'; // change to 'dev' for testing and setup your urls !!! DON'T forget to revert when push to live !!!
         protected $urls = [
             'widget' => 'http://localhost:8040/',
             'dash'   => 'https://dashboard.test/',
