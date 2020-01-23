@@ -6,10 +6,10 @@
  * Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.10.05
+ * Version: 0.12.01
  *
  * WC requires at least: 3.0.0
- * WC tested up to: 3.5.4
+ * WC tested up to: 3.9.0
  */
 
 if (!class_exists('WooCommerce_Reviews')) {
@@ -22,11 +22,11 @@ if (!class_exists('WooCommerce_Reviews')) {
          * 'live' -- for live server
          * 'dev' -- for dev testing
          */
-        protected $env  = 'live'; // change to 'dev' for testing and setup your urls !!! DON'T forget to revert when push to live !!!
+        protected $env  = 'dev'; // change to 'dev' for testing and setup your urls !!! DON'T forget to revert when push to live !!!
         protected $urls = [
             'widget' => 'http://localhost:8040/',
-            'dash'   => 'http://dashboard.test/',
-            'api'    => 'http://api.test/', 
+            'dash'   => 'https://dashboard.test/',
+            'api'    => 'http://restapi.test/', 
         ];
 
         protected $numWidgets = 0;
@@ -259,12 +259,18 @@ if (!class_exists('WooCommerce_Reviews')) {
                 }
             }
 
+            $country_code = 'GB';
+            if (isset($order->get_address()['country'])) {
+                $country_code = $order->get_address()['country'];
+            }
+
             $data = array(
                 'order_id' => $order_id,
                 'email'    => $order->get_billing_email(),
                 'name'     => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
                 'source'   => 'woocom',
                 'products' => $p,
+                'country_code' => $country_code,
             );
 
             if (get_option('api_key') != '' && get_option('store_id') != '' && get_option('send_product_review_invitation') == '1' && count($data['products']) > 0) {
@@ -383,6 +389,8 @@ if (!class_exists('WooCommerce_Reviews')) {
                         "@context": "http://schema.org",
                         "@type": "Product",
                         "name": "' . $product->get_name() . '",
+                        image: "' . $image[0] . '",
+                        description: ' . json_encode(htmlspecialchars($product->get_description())) . ',
                         offers:{
                             "@type": "Offer",
                             itemCondition: "NewCondition",
@@ -390,8 +398,6 @@ if (!class_exists('WooCommerce_Reviews')) {
                             price: "' . $product->get_price() . '",
                             priceCurrency: "' . get_woocommerce_currency() . '",
                             sku: "' . $skus[0] . '",
-                            image: "' . $image[0] . '",
-                            description: ' . json_encode(htmlspecialchars($product->get_description())) . ',
                             seller : {
                                 "@type": "Organization",
                                 name: "' . get_bloginfo("name") . '",
@@ -638,7 +644,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             add_shortcode('rating_snippet', array($this, 'product_rating_snippet_shortcode'));
             add_shortcode('richsnippet', array($this, 'richsnippet_widget'));
             if (function_exists('WC')) {
-                $enabled  = get_option('enable_rich_snippet');
+                $enabled  = get_option('enable_rich_snippet') || get_option('enable_product_rich_snippet');
                 if ($enabled) {
                     // Remove existing structured data
                     remove_action('wp_footer', array(WC()->structured_data, 'output_structured_data'), 10);
