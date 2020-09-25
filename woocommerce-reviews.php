@@ -712,8 +712,8 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
             ?>
         <?php if ($jq) {?>
-        <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-        <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        <!-- <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script> -->
+        <!-- <script src="https://code.jquery.com/jquery-migrate-1.2.1.min.js"></script> -->
         <?php }?>
         <div id='snippetWidget'></div>
         <script>
