@@ -1,5 +1,5 @@
 <div class="wrap">
-	<img src="http://dmevjikmobvk2.cloudfront.net/public/images/logo.svg" height="40"  style="margin-top:15px;" />
+	<img src="<?php echo plugin_dir_url( __FILE__ ) . 'assets/logo.svg'; ?>" height="40"  style="margin-top:15px;" />
 	<form method="post" action="options.php" autocomplete="off">
 		<h2></h2><!-- Alerts Show Here -->
 
