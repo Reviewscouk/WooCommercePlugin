@@ -32,12 +32,12 @@ foreach ($products as $product)
 
 	foreach($try as $t) {
 
-		if(!empty($barcode)) continue;
+		if(!empty($barcode)) break;
 
 		$barcode = get_post_meta($product->ID, $t, true);
 
 	}
-	
+
 	// Always add the parent product
 	$productArray[] = array($sku, $product->post_title, $image_url, get_permalink($product->ID), $sku, $woocommerce_sku, $woocommerce_id, $barcode);
 
