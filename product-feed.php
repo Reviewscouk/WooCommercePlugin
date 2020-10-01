@@ -26,7 +26,7 @@ foreach ($products as $product)
 	}
 
 	// Try to get barcode from meta, if nothing found, will return empty string
-	$try = ['_barcode', 'barcode', '_gtin', 'gtin'];
+	$try = array('_barcode', 'barcode', '_gtin', 'gtin');
 
 	$barcode = '';
 
