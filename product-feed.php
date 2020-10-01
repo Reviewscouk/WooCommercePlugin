@@ -25,11 +25,19 @@ foreach ($products as $product)
 		$image_url = wp_get_attachment_url($image_id);
 	}
 
-	// Try to get barcode from meta, if nothing found, will return empty string 
-	$barcode = get_post_meta($product->ID, '_barcode', true);
+	// Try to get barcode from meta, if nothing found, will return empty string
+	$try = ['_barcode', 'barcode', '_gtin', 'gtin'];
 
-	if(empty($barcode)) $barcode = get_post_meta($product->ID, 'barcode', true);
+	$barcode = '';
 
+	foreach($try as $t) {
+
+		if(!empty($barcode)) continue;
+
+		$barcode = get_post_meta($product->ID, $t, true);
+
+	}
+	
 	// Always add the parent product
 	$productArray[] = array($sku, $product->post_title, $image_url, get_permalink($product->ID), $sku, $woocommerce_sku, $woocommerce_id, $barcode);
 
