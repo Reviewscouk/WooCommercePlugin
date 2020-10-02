@@ -9,7 +9,7 @@
  * Version: 0.12.01
  *
  * WC requires at least: 3.0.0
- * WC tested up to: 3.9.0
+ * WC tested up to: 5.5.1
  */
 
 if (!class_exists('WooCommerce_Reviews')) {
@@ -26,7 +26,7 @@ if (!class_exists('WooCommerce_Reviews')) {
         protected $urls = [
             'widget' => 'http://localhost:8040/',
             'dash'   => 'https://dashboard.test/',
-            'api'    => 'http://restapi.test/', 
+            'api'    => 'http://restapi.test/',
         ];
 
         protected $numWidgets = 0;
@@ -288,7 +288,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             if ($enabled) {?>
 
                 <script src="<?php echo $this->getWidgetDomain(); ?>product/dist.js" data-cfasync="false"></script>
-                
+
                 <script src="<?php echo $this->getWidgetDomain(); ?>rating-snippet/dist.js" data-cfasync="false"></script>
                 <link rel="stylesheet" href="<?php echo $this->getWidgetDomain(); ?>rating-snippet/dist.css" />
 
@@ -563,8 +563,8 @@ if (!class_exists('WooCommerce_Reviews')) {
         }
 
         /**
-         * Product Review Widget 
-         * Rendered 
+         * Product Review Widget
+         * Rendered
          */
         public function productReviewWidget($skus = null)
         {
