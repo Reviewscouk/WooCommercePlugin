@@ -1,5 +1,5 @@
 <div class="wrap">
-	<img src="<?php echo plugin_dir_url( __FILE__ ) . '/assets/logo.svg'; ?>" height="40"  style="margin-top:15px;" />
+	    <img src="<?php echo plugin_dir_url( __FILE__ ) . 'assets/logo.svg'; ?>" height="40"  style="margin-top:15px;" />
 	<form method="post" action="options.php" autocomplete="off">
 		<h2></h2><!-- Alerts Show Here -->
 
@@ -393,89 +393,7 @@
 		    </div>
 		</div>
 
-		<script type="text/javascript">
-		jQuery(document).ready(function() {
-		    jQuery(".tabs-menu a").click(function(event) {
-		        event.preventDefault();
-		        jQuery(this).parent().addClass("current");
-		        jQuery(this).parent().siblings().removeClass("current");
-		        var tab = jQuery(this).attr("href");
-		        jQuery(".tab-content").not(tab).css("display", "none");
-		        jQuery(tab).fadeIn();
-		    });
-		});
-		</script>
-
-		<style type="text/css">
-		.tabs-menu {
-		    height: 30px;
-		    clear: both;
-			margin:0;
-		}
-
-		.tabs-menu li {
-		    height: 30px;
-		    line-height: 30px;
-		    float: left;
-			margin-bottom:-2px;
-		    margin-right: 10px;
-		    background-color: #0085ba;
-		    border-top: 1px solid #d4d4d1;
-		    border-right: 1px solid #d4d4d1;
-		    border-left: 1px solid #d4d4d1;
-			outline:0;
-		}
-
-		.tabs-menu li.current {
-		    position: relative;
-		    background-color: #fff;
-		    border-bottom: 1px solid #fff;
-		    z-index: 5;
-		}
-
-		.tabs-menu li a {
-		    padding: 10px;
-		    text-transform: uppercase;
-		    color: #fff;
-		    text-decoration: none;
-			box-shadow:none;
-			outline:0;
-		}
-
-		.tabs-menu .current a {
-		    color: #2e7da3;
-		}
-
-		.tab {
-			clear: both;
-		    border: 1px solid #d4d4d1;
-		    background-color: #fff;
-		    margin-bottom: 20px;
-		    width: auto;
-		}
-
-		.tab-content {
-		    width: 660px;
-		    padding: 20px;
-		    display: none;
-		}
-
-		#tab-1 {
-		 display: block;
-		}
-		</style>
+		<?php add_action('admin_enqueue_scripts','reviewsio_admin_scripts'); ?>
 		<?php @submit_button(); ?>
-
-		<script>
-			jQuery.ajax({
-				url: 'https://api.reviews.co.uk/merchant/latest?store=<?php echo get_option('store_id'); ?>',
-				success: function(data){
-					if(data.stats.total_reviews > 0){
-						var message = '<p>Rated <strong>' + data.stats.average_rating + ' stars (' + data.word + ')</strong> based on <strong>' + data.stats.total_reviews + '</strong> Merchant Reviews.</p>';
-						jQuery('#welcomeText').html(message);
-					}
-				}
-			});
-		</script>
 	</form>
 </div>
