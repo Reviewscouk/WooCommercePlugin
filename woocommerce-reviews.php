@@ -551,6 +551,7 @@ if (!class_exists('WooCommerce_Reviews')) {
         public function product_rating_snippet_shortcode()
         {
             $skus = $this->getProductSkus();
+            add_action('wp_footer', array($this, 'reviewsio_rating_snippet_scripts'));
             echo '<div class="ruk_rating_snippet" data-sku="' . implode(';', $skus) . '"></div>';
         }
 
