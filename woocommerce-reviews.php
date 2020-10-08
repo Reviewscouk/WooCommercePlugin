@@ -12,7 +12,7 @@
  * WC tested up to: 4.5.2
  */
 function reviewsio_admin_scripts() {
-    wp_register_script('reviewsio-admin-script',false, array(),'', false);
+    wp_register_script('reviewsio-admin-script',false, array(),false, false);
     wp_enqueue_script('reviewsio-admin-script');
     wp_add_inline_script('reviewsio-admin-script','
         jQuery(document).ready(function() {
@@ -370,9 +370,9 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function reviewsio_rating_snippet_scripts() {
 
-            wp_register_script('reviewsio-product-review',$this->getWidgetDomain().'product/dist.js', array(),'', false);
-            wp_register_script('reviewsio-rating-snippet',$this->getWidgetDomain().'rating-snippet/dist.js', array(),'', false);
-            wp_register_style( 'reviewsio-rating-snippet-style',  $this->getWidgetDomain().'rating-snippet/dist.css', array(), '', false);
+            wp_register_script('reviewsio-product-review',$this->getWidgetDomain().'product/dist.js', array(),false, false);
+            wp_register_script('reviewsio-rating-snippet',$this->getWidgetDomain().'rating-snippet/dist.js', array(),false, false);
+            wp_register_style( 'reviewsio-rating-snippet-style',  $this->getWidgetDomain().'rating-snippet/dist.css', array(), false, false);
 
             wp_enqueue_script('reviewsio-product-review');
             wp_enqueue_script('reviewsio-rating-snippet');
@@ -417,7 +417,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function reviewsio_product_review_scripts()
         {
-            wp_register_script('reviewsio-product-review',$this->getWidgetDomain().'product/dist.js', array(),'', false);
+            wp_register_script('reviewsio-product-review',$this->getWidgetDomain().'product/dist.js', array(),false, false);
             wp_enqueue_script('reviewsio-product-review');
 
             $writeButton = '';
@@ -454,7 +454,7 @@ if (!class_exists('WooCommerce_Reviews')) {
         }
 
         public function reviewsio_qa_scripts() {
-            wp_register_script('reviewsio-qa',$this->getWidgetDomain().'questions-answers/dist.js', array(),'', false);
+            wp_register_script('reviewsio-qa',$this->getWidgetDomain().'questions-answers/dist.js', array(),false, false);
             wp_enqueue_script('reviewsio-qa');
             wp_add_inline_script('reviewsio-qa','
                 document.addEventListener("DOMContentLoaded", function() {
@@ -467,8 +467,8 @@ if (!class_exists('WooCommerce_Reviews')) {
         }
 
         public function reviewsio_floating_widget_snippet_scripts() {
-            wp_register_script('reviewsio-floating-widget',$this->getDashDomain().'widget/float.js', array(),'', false);
-            wp_register_style( 'reviewsio-floating-widget-style',  $this->getDashDomain().'widget/float.css', array(), '', false);
+            wp_register_script('reviewsio-floating-widget',$this->getDashDomain().'widget/float.js', array(),false, false);
+            wp_register_style( 'reviewsio-floating-widget-style',  $this->getDashDomain().'widget/float.css', array(), false, false);
 
             wp_enqueue_script('reviewsio-floating-widget');
             wp_enqueue_style('reviewsio-floating-widget-style');
@@ -484,7 +484,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function reviewsio_rich_snippet_scripts() {
 
-            wp_register_script('reviewsio-rich-snippet',$this->getDashDomain().'rich-snippet/dist.js', array(),'', false);
+            wp_register_script('reviewsio-rich-snippet',$this->getWidgetDomain().'rich-snippet/dist.js', array(),false, false);
             wp_enqueue_script('reviewsio-rich-snippet');
 
             global $product;
