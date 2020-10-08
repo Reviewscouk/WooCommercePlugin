@@ -112,7 +112,7 @@ if (!class_exists('WooCommerce_Reviews')) {
         protected $urls = [
             'widget' => 'http://localhost:8040/',
             'dash'   => 'https://dashboard.test/',
-            'api'    => 'http://restapi.test/', 
+            'api'    => 'http://restapi.test/',
         ];
 
         protected $numWidgets = 0;
@@ -409,11 +409,11 @@ if (!class_exists('WooCommerce_Reviews')) {
                         color: "'. $this->getHexColor() .'",
                         linebreak: true,
                         text: "Reviews",
-                        '. $writeButton . ' 
+                        '. $writeButton . '
                     });
                 });
                 '. $snippet_disable .'
-            ');  
+            ');
         }
 
         public function reviewsio_product_review_scripts()
@@ -547,7 +547,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
         }
 
-      
+
 
         public function product_rating_snippet_shortcode()
         {
@@ -709,8 +709,8 @@ if (!class_exists('WooCommerce_Reviews')) {
         }
 
         /**
-         * Product Review Widget 
-         * Rendered 
+         * Product Review Widget
+         * Rendered
          */
         public function productReviewWidget($skus = null)
         {
@@ -744,19 +744,19 @@ if (!class_exists('WooCommerce_Reviews')) {
             add_filter('template_redirect', array($this, 'redirect_hook'));
             add_filter('woocommerce_product_tabs', array($this, 'product_review_tab'));
             add_filter('woocommerce_after_single_product_summary', array($this, 'productPage'));
-            
+
             add_action('woocommerce_single_product_summary', array($this, 'product_rating_snippet_markup'), 5);
             add_action('woocommerce_after_shop_loop_item', array($this, 'product_rating_snippet_markup'), 5);
             add_shortcode('rating_snippet', array($this, 'product_rating_snippet_shortcode'));
             add_shortcode('richsnippet', array($this, 'richsnippet_widget'));
-            
+
             if(get_option('enable_product_rating_snippet')) {
                 add_action('wp_footer', array($this, 'reviewsio_rating_snippet_scripts'));
             }
             if(get_option('enable_floating_widget')) {
                 add_action('wp_footer', array($this, 'reviewsio_floating_widget_snippet_scripts'));
             }
-            
+
             add_action('wp_footer', array($this, 'reviewsio_rich_snippet_scripts'));
 
             if (function_exists('WC')) {
@@ -774,8 +774,8 @@ if (!class_exists('WooCommerce_Reviews')) {
             wp_register_script('richsnippet-shortcode-script',false, array(),false, false);
             wp_enqueue_script('richsnippet-shortcode-script');
             wp_add_inline_script('richsnippet-shortcode-script',"
-                $.get('".$this->richsnippet_shortcode_url."', function(r){
-                    $('#snippetWidget').html(r);
+                jQuery.get('".$this->richsnippet_shortcode_url."', function(r){
+                    jQuery('#snippetWidget').html(r);
                 });
             ");
         }
