@@ -116,6 +116,7 @@ if (!class_exists('WooCommerce_Reviews')) {
         ];
 
         protected $numWidgets = 0;
+        protected $richsnippet_shortcode_url = '';
 
         public function __construct()
         {
@@ -769,6 +770,16 @@ if (!class_exists('WooCommerce_Reviews')) {
             add_action('admin_enqueue_scripts', 'reviewsio_admin_scripts');
         }
 
+        public function add_richsnippet_shortcode_scripts() {
+            wp_register_script('richsnippet-shortcode-script',false, array(),false, false);
+            wp_enqueue_script('richsnippet-shortcode-script');
+            wp_add_inline_script('richsnippet-shortcode-script',"
+                $.get('".$this->richsnippet_shortcode_url."', function(r){
+                    $('#snippetWidget').html(r);
+                });
+            ");
+        }
+
         public function richsnippet_widget($opts = [], $content = '')
         {
 
@@ -822,28 +833,17 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             $storeid = get_option('store_id');
 
-            $url = $this->getWidgetDomain() . 'rich-snippet-reviews/widget?store=' . $storeid . '&primaryClr=%23' . $opts['primary'] . '&textClr=%23' . $opts['text'] . '&bgClr=%23' . $opts['bg'] . '&height=' . $opts['height'] . '&headClr=%23' . $opts['head'] . '&header=' . $opts['header'] . '&headingSize=' . $opts['headingsize'] . 'px&numReviews=' . $opts['numreviews'] . '&names=' . $opts['names'] . '&dates=' . $opts['dates'] . '&footer=' . $opts['footer'];
+            $this->richsnippet_shortcode_url = $this->getWidgetDomain() . 'rich-snippet-reviews/widget?store=' . $storeid . '&primaryClr=%23' . $opts['primary'] . '&textClr=%23' . $opts['text'] . '&bgClr=%23' . $opts['bg'] . '&height=' . $opts['height'] . '&headClr=%23' . $opts['head'] . '&header=' . $opts['header'] . '&headingSize=' . $opts['headingsize'] . 'px&numReviews=' . $opts['numreviews'] . '&names=' . $opts['names'] . '&dates=' . $opts['dates'] . '&footer=' . $opts['footer'];
 
 
             if (isset($opts['tag'])) {
-                $url .= '&tag=' . $opts['tag'];
+                $this->richsnippet_shortcode_url .= '&tag=' . $opts['tag'];
             }
             ?>
 
         <div id='snippetWidget'></div>
-        <script>
-            // $.get('<?php echo $url; ?>', function(r){
-            //     $('#snippetWidget').html(r);
-            // });
-        </script>
         <?php
-
-            wp_add_inline_script('wp_footer',"
-                $.get('".$url."', function(r){
-                    $('#snippetWidget').html(r);
-                });
-            ");
-
+            add_action('wp_footer', array($this, 'add_richsnippet_shortcode_scripts'));
             $contents = ob_get_contents();
             ob_end_clean();
             return $contents;
