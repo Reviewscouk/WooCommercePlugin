@@ -505,6 +505,8 @@ if (!class_exists('WooCommerce_Reviews')) {
                 ');
             } else if ($product_enabled && !empty($skus) && $isProductPage) {
 
+                $brand = $product->get_attribute( 'pa_brand' );
+
                 $image = wp_get_attachment_image_src(get_post_thumbnail_id($product->get_id()), 'single-post-thumbnail');
                 wp_add_inline_script('reviewsio-rich-snippet','
                     richSnippet({
@@ -515,7 +517,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             "@type": "Product",
                             "name": "' . $product->get_name() . '",
                             image: "' . $image[0] . '",
-                            description: ' . json_encode(htmlspecialchars($product->get_description())) . ',
+                            description: ' . json_encode(htmlspecialchars(strip_tags($product->get_description()))) . ',
                             offers:{
                                 "@type": "Offer",
                                 itemCondition: "NewCondition",
@@ -523,6 +525,12 @@ if (!class_exists('WooCommerce_Reviews')) {
                                 price: "' . $product->get_price() . '",
                                 priceCurrency: "' . get_woocommerce_currency() . '",
                                 sku: "' . $skus[0] . '",
+                                priceValidUntil: "'. date('y-m-d', strtotime('-30 days')) .'",
+                                url: "'.get_permalink($product->get_id()).'",
+                                brand: {
+                                  "@type": "Brand",
+                                  name: "'.(!empty($brand) ? $brand : get_bloginfo("name")).'"
+                                },
                                 seller : {
                                     "@type": "Organization",
                                     name: "' . get_bloginfo("name") . '",
