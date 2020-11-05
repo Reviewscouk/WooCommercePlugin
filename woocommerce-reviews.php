@@ -26,7 +26,7 @@ if (!class_exists('WooCommerce_Reviews')) {
         protected $urls = [
             'widget' => 'http://localhost:8040/',
             'dash'   => 'https://dashboard.test/',
-            'api'    => 'http://restapi.test/', 
+            'api'    => 'http://restapi.test/',
         ];
 
         protected $numWidgets = 0;
@@ -288,7 +288,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             if ($enabled) {?>
 
                 <script src="<?php echo $this->getWidgetDomain(); ?>product/dist.js" data-cfasync="false"></script>
-                
+
                 <script src="<?php echo $this->getWidgetDomain(); ?>rating-snippet/dist.js" data-cfasync="false"></script>
                 <link rel="stylesheet" href="<?php echo $this->getWidgetDomain(); ?>rating-snippet/dist.css" />
 
@@ -378,36 +378,69 @@ if (!class_exists('WooCommerce_Reviews')) {
                 </script>';
             } else if ($product_enabled && !empty($skus) && $isProductPage) {
 
-                $image = wp_get_attachment_image_src(get_post_thumbnail_id($product->get_id()), 'single-post-thumbnail');
+              $validUntil = date('Y-m-d', strtotime('+30 days'));
 
-                echo '<script src="' . $this->getWidgetDomain() . 'rich-snippet/dist.js"></script>
-                <script>
-                richSnippet({
-                    store: "' . get_option('store_id') . '",
-                    sku: "' . implode(';', $skus) . '",
-                    data:{
-                        "@context": "http://schema.org",
-                        "@type": "Product",
-                        "name": "' . $product->get_name() . '",
-                        image: "' . $image[0] . '",
-                        description: ' . json_encode(htmlspecialchars($product->get_description())) . ',
-                        offers:{
-                            "@type": "Offer",
-                            itemCondition: "NewCondition",
-                            availability: " ' . $this->formatAvailability($product->get_stock_status()) . '",
-                            price: "' . $product->get_price() . '",
-                            priceCurrency: "' . get_woocommerce_currency() . '",
-                            sku: "' . $skus[0] . '",
-                            seller : {
-                                "@type": "Organization",
-                                name: "' . get_bloginfo("name") . '",
-                                url: "' . get_bloginfo("url") . '"
-                            }
-                        }
-                    }
-                });
-                </script>';
-            }
+              $brand = $product->get_attribute( 'pa_brand' );
+
+              $variants = $product->get_available_variations();
+
+              $offer = '{
+                  "@type": "Offer",
+                  itemCondition: "NewCondition",
+                  availability: " ' . $this->formatAvailability($product->get_stock_status()) . '",
+                  price: "' . $product->get_price() . '",
+                  priceCurrency: "' . get_woocommerce_currency() . '",
+                  sku: "' . $skus[0] . '",
+                  priceValidUntil: "'. $validUntil .'",
+                  url: "'.get_permalink($product->get_id()).'",
+                  seller : {
+                      "@type": "Organization",
+                      name: "' . get_bloginfo("name") . '",
+                      url: "' . get_bloginfo("url") . '"
+                  }
+              },';
+
+              if(!empty($variants)) {
+                foreach($variants as $variant) {
+                  $offer.= '{
+                      "@type": "Offer",
+                      itemCondition: "NewCondition",
+                      availability: " ' . $this->formatAvailability($variant['is_purchasable']) . '",
+                      price: "' . $variant['display_price'] . '",
+                      priceCurrency: "' . get_woocommerce_currency() . '",
+                      sku: "' . $variant['sku'] . '",
+                      priceValidUntil: "'. $validUntil .'",
+                      url: "'.get_permalink($product->get_id()).'",
+                      seller : {
+                          "@type": "Organization",
+                          name: "' . get_bloginfo("name") . '",
+                          url: "' . get_bloginfo("url") . '"
+                      }
+                  },';
+                }
+              }
+
+
+              $image = wp_get_attachment_image_src(get_post_thumbnail_id($product->get_id()), 'single-post-thumbnail');
+              wp_add_inline_script('reviewsio-rich-snippet','
+                  richSnippet({
+                      store: "' . get_option('store_id') . '",
+                      sku: "' . implode(';', $skus) . '",
+                      data:{
+                          "@context": "http://schema.org",
+                          "@type": "Product",
+                          "name": "' . $product->get_name() . '",
+                          image: "' . $image[0] . '",
+                          description: ' . json_encode(htmlspecialchars(strip_tags($product->get_description()))) . ',
+                          brand: {
+                            "@type": "Brand",
+                            name: "'.(!empty($brand) ? $brand : get_bloginfo("name")).'"
+                          },
+                          offers: ['.($offer).']
+                      }
+                  });
+              ');
+          }
         }
 
         /**
@@ -563,8 +596,8 @@ if (!class_exists('WooCommerce_Reviews')) {
         }
 
         /**
-         * Product Review Widget 
-         * Rendered 
+         * Product Review Widget
+         * Rendered
          */
         public function productReviewWidget($skus = null)
         {
