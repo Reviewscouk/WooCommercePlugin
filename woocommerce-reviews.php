@@ -532,7 +532,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                   $offer.= '{
                       "@type": "Offer",
                       itemCondition: "NewCondition",
-                      availability: " ' . $this->formatAvailability($variant['is_purchasable']) . '",
+                      availability: "' . $this->formatAvailability(($variant['is_purchasable'] ? 'instock' : 'outofstock')) . '",
                       price: "' . $variant['display_price'] . '",
                       priceCurrency: "' . get_woocommerce_currency() . '",
                       sku: "' . $variant['sku'] . '",
@@ -603,11 +603,9 @@ if (!class_exists('WooCommerce_Reviews')) {
         {
           switch ($stock_status) {
               case 'instock':
-              case true:
                   return 'http://schema.org/InStock';
                   break;
               case 'outofstock':
-              case false:
                   return 'http://schema.org/OutOfStock';
                   break;
 
