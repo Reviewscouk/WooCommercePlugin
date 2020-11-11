@@ -485,54 +485,89 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function reviewsio_rich_snippet_scripts() {
 
-            wp_register_script('reviewsio-rich-snippet',$this->getWidgetDomain().'rich-snippet/dist.js', array(),false, false);
-            wp_enqueue_script('reviewsio-rich-snippet');
+          wp_register_script('reviewsio-rich-snippet',$this->getWidgetDomain().'rich-snippet/dist.js', array(),false, false);
+          wp_enqueue_script('reviewsio-rich-snippet');
 
-            global $product;
-            if ($this->shouldHideProductReviews()) {
-                return;
+          global $product;
+          if ($this->shouldHideProductReviews()) {
+              return;
+          }
+          $enabled         = get_option('enable_rich_snippet');
+          $product_enabled = get_option('enable_product_rich_snippet');
+          $isProductPage   = is_product();
+          $skus            = $this->getProductSkus();
+
+          if ($enabled && empty($skus)) {
+              wp_add_inline_script('reviewsio-rich-snippet','
+                  richSnippet({
+                      store: "' . get_option('store_id') . '"
+                  });
+              ');
+          } else if ($product_enabled && !empty($skus) && $isProductPage) {
+
+            $validUntil = date('Y-m-d', strtotime('+30 days'));
+
+            $brand = $product->get_attribute( 'pa_brand' );
+
+            $variants = $product->get_available_variations();
+
+            $offer = '{
+                "@type": "Offer",
+                itemCondition: "NewCondition",
+                availability: " ' . $this->formatAvailability($product->get_stock_status()) . '",
+                price: "' . $product->get_price() . '",
+                priceCurrency: "' . get_woocommerce_currency() . '",
+                sku: "' . $skus[0] . '",
+                priceValidUntil: "'. $validUntil .'",
+                url: "'.get_permalink($product->get_id()).'",
+                seller : {
+                    "@type": "Organization",
+                    name: "' . get_bloginfo("name") . '",
+                    url: "' . get_bloginfo("url") . '"
+                }
+            },';
+
+            if(!empty($variants)) {
+              foreach($variants as $variant) {
+                $offer.= '{
+                    "@type": "Offer",
+                    itemCondition: "NewCondition",
+                    availability: "' . $this->formatAvailability((!empty($variant['is_purchasable']) ? 'instock' : 'outofstock')) . '",
+                    price: "' . $variant['display_price'] . '",
+                    priceCurrency: "' . get_woocommerce_currency() . '",
+                    sku: "' . $variant['sku'] . '",
+                    priceValidUntil: "'. $validUntil .'",
+                    url: "'.get_permalink($product->get_id()).'",
+                    seller : {
+                        "@type": "Organization",
+                        name: "' . get_bloginfo("name") . '",
+                        url: "' . get_bloginfo("url") . '"
+                    }
+                },';
+              }
             }
-            $enabled         = get_option('enable_rich_snippet');
-            $product_enabled = get_option('enable_product_rich_snippet');
-            $isProductPage   = is_product();
-            $skus            = $this->getProductSkus();
 
-            if ($enabled && empty($skus)) {
-                wp_add_inline_script('reviewsio-rich-snippet','
-                    richSnippet({
-                        store: "' . get_option('store_id') . '"
-                    });
-                ');
-            } else if ($product_enabled && !empty($skus) && $isProductPage) {
 
-                $image = wp_get_attachment_image_src(get_post_thumbnail_id($product->get_id()), 'single-post-thumbnail');
-                wp_add_inline_script('reviewsio-rich-snippet','
-                    richSnippet({
-                        store: "' . get_option('store_id') . '",
-                        sku: "' . implode(';', $skus) . '",
-                        data:{
-                            "@context": "http://schema.org",
-                            "@type": "Product",
-                            "name": "' . $product->get_name() . '",
-                            image: "' . $image[0] . '",
-                            description: ' . json_encode(htmlspecialchars($product->get_description())) . ',
-                            offers:{
-                                "@type": "Offer",
-                                itemCondition: "NewCondition",
-                                availability: " ' . $this->formatAvailability($product->get_stock_status()) . '",
-                                price: "' . $product->get_price() . '",
-                                priceCurrency: "' . get_woocommerce_currency() . '",
-                                sku: "' . $skus[0] . '",
-                                seller : {
-                                    "@type": "Organization",
-                                    name: "' . get_bloginfo("name") . '",
-                                    url: "' . get_bloginfo("url") . '"
-                                }
-                            }
-                        }
-                    });
-                ');
-            }
+            $image = wp_get_attachment_image_src(get_post_thumbnail_id($product->get_id()), 'single-post-thumbnail');
+            wp_add_inline_script('reviewsio-rich-snippet','
+                richSnippet({
+                    store: "' . get_option('store_id') . '",
+                    sku: "' . implode(';', $skus) . '",
+                    data:{
+                        "@context": "http://schema.org",
+                        "@type": "Product",
+                        "name": "' . $product->get_name() . '",
+                        image: "' . $image[0] . '",
+                        description: ' . json_encode(htmlspecialchars(strip_tags($product->get_description()))) . ',
+                        brand: {
+                          "@type": "Brand",
+                          name: "'.(!empty($brand) ? $brand : get_bloginfo("name")).'"
+                        },
+                        offers: ['.($offer).']
+                    }
+                });
+            ');
+          }
         }
 
         public function product_rating_snippet_markup()
