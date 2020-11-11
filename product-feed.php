@@ -41,8 +41,6 @@ foreach ($products as $product)
 	// Always add the parent product
 	$productArray[] = array($sku, $product->post_title, $image_url, get_permalink($product->ID), $sku, $woocommerce_sku, $woocommerce_id, $barcode);
 
-	//print_r($_product);
-
 	// Add variants as additional products
 	if ($_pf->get_product_type($product->ID) == 'variable' && get_option('use_parent_product') != 1)
 	{
