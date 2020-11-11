@@ -6,7 +6,7 @@
  * Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.12.02
+ * Version: 0.12.04
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 4.5.2
