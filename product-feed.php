@@ -5,7 +5,7 @@ $args = array('post_type' =>'product', 'showposts'=>10000);
 
 $products = get_posts($args);
 
-$productArray[] = array('sku', 'name', 'image_url', 'link', 'mpn', 'woocommerce_product_sku','woocommerce_product_id');
+$productArray[] = array('sku', 'name', 'image_url', 'link', 'mpn', 'woocommerce_product_sku','woocommerce_product_id', 'post_meta_barcode');
 
 foreach ($products as $product)
 {
@@ -25,8 +25,21 @@ foreach ($products as $product)
 		$image_url = wp_get_attachment_url($image_id);
 	}
 
+	// Try to get barcode from meta, if nothing found, will return empty string
+	$try = array('_barcode', 'barcode', '_gtin', 'gtin');
+
+	$barcode = '';
+
+	foreach($try as $t) {
+
+		if(!empty($barcode)) break;
+
+		$barcode = get_post_meta($product->ID, $t, true);
+
+	}
+
 	// Always add the parent product
-	$productArray[] = array($sku, $product->post_title, $image_url, get_permalink($product->ID), $sku, $woocommerce_sku, $woocommerce_id);
+	$productArray[] = array($sku, $product->post_title, $image_url, get_permalink($product->ID), $sku, $woocommerce_sku, $woocommerce_id, $barcode);
 
 	//print_r($_product);
 
