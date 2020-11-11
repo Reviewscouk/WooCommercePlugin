@@ -509,7 +509,10 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             $brand = $product->get_attribute( 'pa_brand' );
 
-            $variants = $product->get_available_variations();
+
+            if ($product->is_type('variable')) {
+              $variants = $product->get_available_variations();
+            }
 
             $offer = '{
                 "@type": "Offer",
