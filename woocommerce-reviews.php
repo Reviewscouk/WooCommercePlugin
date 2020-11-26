@@ -488,13 +488,11 @@ if (!class_exists('WooCommerce_Reviews')) {
             wp_register_script('reviewsio-rich-snippet',$this->getWidgetDomain().'rich-snippet/dist.js', array(),false, false);
             wp_enqueue_script('reviewsio-rich-snippet');
 
-            global $product;
             if ($this->shouldHideProductReviews()) {
                 return;
             }
             $enabled         = get_option('enable_rich_snippet');
             $product_enabled = get_option('enable_product_rich_snippet');
-            $isProductPage   = is_product();
             $skus            = $this->getProductSkus();
 
             if ($enabled && empty($skus)) {
@@ -503,8 +501,9 @@ if (!class_exists('WooCommerce_Reviews')) {
                         store: "' . get_option('store_id') . '"
                     });
                 ');
-            } else if ($product_enabled && !empty($skus) && $isProductPage) {
+            } else if ($product_enabled && !empty($skus) && is_product()) {
 
+                global $product;
                 $image = wp_get_attachment_image_src(get_post_thumbnail_id($product->get_id()), 'single-post-thumbnail');
                 wp_add_inline_script('reviewsio-rich-snippet','
                     richSnippet({
