@@ -493,7 +493,6 @@ if (!class_exists('WooCommerce_Reviews')) {
           }
           $enabled         = get_option('enable_rich_snippet');
           $product_enabled = get_option('enable_product_rich_snippet');
-          $isProductPage   = is_product();
           $skus            = $this->getProductSkus();
 
           if ($enabled && empty($skus)) {
