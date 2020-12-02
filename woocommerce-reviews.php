@@ -352,7 +352,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             $data = array(
-                'order_id' => $order_id,
+                'order_id' => $order->get_order_number(),
                 'email'    => $order->get_billing_email(),
                 'name'     => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
                 'source'   => 'woocom',
