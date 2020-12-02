@@ -16,8 +16,9 @@ $productArray[] = ['order id', 'customer name', 'email', 'sku', 'date'];
 
 foreach ($orders as $o)
 {
-    $order_id = $o->ID;
-    $order    = new WC_Order($order_id);
+    $order    = new WC_Order($o->ID);
+
+    $order_id = $order->get_order_number();
 
     $firstname       = $order->get_billing_first_name() .' ' .$order->get_billing_last_name();
     $email           = $order->get_billing_email();
@@ -46,19 +47,19 @@ foreach ($orders as $o)
 
             }
 
-            $productArray[] = [$o->ID, $firstname, $email, $sku, get_the_date('d/m/Y', $o->ID)];
+            $productArray[] = [$order_id, $firstname, $email, $sku, get_the_date('d/m/Y', $o->ID)];
             $addedItems = true;
         }
         else
         {
-            $productArray[] = [$o->ID, $firstname, $email, '', get_the_date('d/m/Y', $o->ID)];
+            $productArray[] = [$order_id, $firstname, $email, '', get_the_date('d/m/Y', $o->ID)];
             $addedItems = true;
         }
 
     }
 
     if(!$addedItems){
-        $productArray[] = [$o->ID, $firstname, $email, '', get_the_date('d/m/Y', $o->ID)];
+        $productArray[] = [$order_id, $firstname, $email, '', get_the_date('d/m/Y', $o->ID)];
     }
 }
 
