@@ -47,19 +47,19 @@ foreach ($orders as $o)
 
             }
 
-            $productArray[] = [$order_id, $firstname, $email, $sku, get_the_date('d/m/Y', $order_id)];
+            $productArray[] = [$order_id, $firstname, $email, $sku, get_the_date('d/m/Y', $o->ID)];
             $addedItems = true;
         }
         else
         {
-            $productArray[] = [$order_id, $firstname, $email, '', get_the_date('d/m/Y', $order_id)];
+            $productArray[] = [$order_id, $firstname, $email, '', get_the_date('d/m/Y', $o->ID)];
             $addedItems = true;
         }
 
     }
 
     if(!$addedItems){
-        $productArray[] = [$order_id, $firstname, $email, '', get_the_date('d/m/Y', $order_id)];
+        $productArray[] = [$order_id, $firstname, $email, '', get_the_date('d/m/Y', $o->ID)];
     }
 }
 
