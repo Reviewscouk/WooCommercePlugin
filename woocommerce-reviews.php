@@ -6,7 +6,7 @@
  * Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.12.05
+ * Version: 0.12.06
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 4.5.2
@@ -39,13 +39,13 @@ function reviewsio_admin_scripts() {
     wp_register_style( 'reviewsio-admin-style',  false, array(), '', false);
     wp_enqueue_style('reviewsio-admin-style');
     wp_add_inline_style('reviewsio-admin-style','
-        .tabs-menu {
+        .settings_page_reviewscouk .tabs-menu {
             height: 30px;
             clear: both;
             margin:0;
         }
 
-        .tabs-menu li {
+        .settings_page_reviewscouk .tabs-menu li {
             height: 30px;
             line-height: 30px;
             float: left;
@@ -58,14 +58,14 @@ function reviewsio_admin_scripts() {
             outline:0;
         }
 
-        .tabs-menu li.current {
+        .settings_page_reviewscouk .tabs-menu li.current {
             position: relative;
             background-color: #fff;
             border-bottom: 1px solid #fff;
             z-index: 5;
         }
 
-        .tabs-menu li a {
+        .settings_page_reviewscouk .tabs-menu li a {
             padding: 10px;
             text-transform: uppercase;
             color: #fff;
@@ -74,11 +74,11 @@ function reviewsio_admin_scripts() {
             outline:0;
         }
 
-        .tabs-menu .current a {
+        .settings_page_reviewscouk .tabs-menu .current a {
             color: #2e7da3;
         }
 
-        .tab {
+        .settings_page_reviewscouk .tab {
             clear: both;
             border: 1px solid #d4d4d1;
             background-color: #fff;
@@ -86,13 +86,13 @@ function reviewsio_admin_scripts() {
             width: auto;
         }
 
-        .tab-content {
+        .settings_page_reviewscouk .tab-content {
             width: 660px;
             padding: 20px;
             display: none;
         }
 
-        #tab-1 {
+        .settings_page_reviewscouk #tab-1 {
          display: block;
         }
     ');
