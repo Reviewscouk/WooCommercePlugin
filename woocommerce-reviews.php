@@ -15,7 +15,7 @@ function reviewsio_admin_scripts() {
     wp_register_script('reviewsio-admin-script',false, array(),false, false);
     wp_enqueue_script('reviewsio-admin-script');
     wp_add_inline_script('reviewsio-admin-script','
-        jQuery(document).ready(function() {
+        document.addEventListener("DOMContentLoaded", function() {
             jQuery(".tabs-menu a").click(function(event) {
                 event.preventDefault();
                 jQuery(this).parent().addClass("current");
@@ -403,7 +403,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             wp_add_inline_script( 'reviewsio-rating-snippet', '
-                jQuery(document).ready(function() {
+                document.addEventListener("DOMContentLoaded", function() {
                     ratingSnippet("ruk_rating_snippet",{
                         store: "'. get_option("store_id").'",
                         color: "'. $this->getHexColor() .'",
@@ -431,7 +431,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             $custom_css = $this->prepareCss(get_option('widget_custom_css'));
 
             wp_add_inline_script('reviewsio-product-review','
-                jQuery(document).ready(function() {
+                document.addEventListener("DOMContentLoaded", function() {
                     productWidget("widget-'.$this->numWidgets.'",{
                         store: "'.get_option('store_id').'",
                         sku: "'.implode(';', $skus).'",
@@ -731,7 +731,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             if (!preg_match('/^#[a-f0-9]{6}$/i', $colour)) {
-                $colour = '#5db11f';
+                $colour = '#f47e27';
             }
 
             return $colour;
