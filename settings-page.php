@@ -27,7 +27,7 @@
 		    <div class="tab">
 		        <div id="tab-1" class="tab-content">
 					<!-- API Settings -->
-					<p>You can find your API credentials on the Reviews Dashboard. <br /><br /> Go to <b>Company Setup &gt; Automated Review Collection &gt; WooCommerce &gt; Configuration</b></p>
+					<p>You can find your API credentials on the Reviews Dashboard. <br /><br /> Go to <b>Reviews Setup &gt; Collection &gt; Integration Library &gt; WooCommerce &gt; Configuration</b></p>
 
 					<table class="form-table">
 						<tr>
