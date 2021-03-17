@@ -194,13 +194,17 @@ if (!class_exists('WooCommerce_Reviews')) {
             update_option('product_feed', 1);
             update_option('send_product_review_invitation', 1);
             update_option('send_merchant_review_invitation', 1);
-            update_option('polaris_review_widget', 'tab');
+
+            if(!get_option('product_review_widget')) {
+              update_option('polaris_review_widget', 'tab');
+              update_option('hide_legacy', 1);
+            }
+
             update_option('product_identifier', 'sku');
             update_option('use_parent_product', 0);
             update_option('disable_rating_snippet_popup', 1);
             update_option('disable_rating_snippet_offset', 0);
             update_option('rating_snippet_no_linebreak', 0);
-            update_option('hide_legacy', 1);
         }
 
         public function add_menu()
