@@ -383,6 +383,10 @@ if (!class_exists('WooCommerce_Reviews')) {
             wp_enqueue_script('reviewsio-rating-snippet');
             wp_enqueue_style('reviewsio-rating-snippet-style');
 
+            wp_register_style( 'reviewsio-rating-snippet-font-style',  false, array(), '', false);
+            wp_enqueue_style('reviewsio-rating-snippet-font-style');
+            wp_add_inline_style('reviewsio-rating-snippet-font-style','.ruk_rating_snippet > .ruk-rating-snippet-count { font-family: inherit!important; }');
+
             $writeButton = '';
             if(get_option("hide_write_review_button") == "1") {
                 $writeButton = 'writeButton: false,';
