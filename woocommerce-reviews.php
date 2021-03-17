@@ -274,8 +274,6 @@ if (!class_exists('WooCommerce_Reviews')) {
             if (!current_user_can('manage_options')) {
                 wp_die(__('You do not have sufficient permissions to access this page.'));
             }
-            $this->init_settings();
-            $this->setDefaultSettings();
 
             include sprintf("%s/settings-page.php", dirname(__FILE__));
         }
