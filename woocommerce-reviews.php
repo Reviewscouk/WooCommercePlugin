@@ -480,7 +480,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
                   //Content settings (store_review,product_review,questions). Choose what to display in this widget:
                   options: {
-                    types: 'product_review,questions',
+                    types: 'product_review',
                     lang: 'en',
                     //Possible layout options: bordered, large and reverse.
                     layout: '',
