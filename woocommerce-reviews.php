@@ -186,6 +186,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             register_setting('woocommerce-reviews', 'disable_rating_snippet_popup');
             register_setting('woocommerce-reviews', 'disable_rating_snippet_offset');
             register_setting('woocommerce-reviews', 'hide_legacy');
+            register_setting('woocommerce-reviews', 'rating_snippet_no_linebreak');
         }
 
         public function setDefaultSettings()
@@ -198,6 +199,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             update_option('use_parent_product', 0);
             update_option('disable_rating_snippet_popup', 1);
             update_option('disable_rating_snippet_offset', 0);
+            update_option('rating_snippet_no_linebreak', 0);
             update_option('hide_legacy', 1);
         }
 
@@ -415,7 +417,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     ratingSnippet("ruk_rating_snippet",{
                         store: "'. get_option("store_id").'",
                         color: "'. $this->getHexColor() .'",
-                        linebreak: true,
+                        linebreak: "' . (get_option('rating_snippet_no_linebreak') == 1 ? false : true).'",
                         text: "Reviews",
                         '. $writeButton . '
                     });

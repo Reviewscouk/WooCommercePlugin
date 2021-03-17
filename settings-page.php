@@ -127,7 +127,7 @@
 							 	<th>
 								<label for="polaris_review_widget">Show <strong>New</strong> Product Review Widget: </label>
 				                    <p style="font-size:12px;font-weight:100;">
-															A mobile friendly product reviews widget displaying product & customer attributes, photos, videos as well as questions & answers.</p>
+															A mobile friendly product reviews widget displaying product & customer attributes, photos and videos.</p>
 							</th>
 							<td>
 
@@ -224,8 +224,10 @@
 
 
 
-						<tr>
+						<tr style="border-top: 1px solid #e4e4e4;">
 							<th>
+								<h3><strong>Rating Snippet Settings:</strong></h3>
+
 			                    <label for="enable_product_rating_snippet">Enable Product Rating Snippet: </label>
 			                    <p style="font-size:12px;font-weight:100;">When enabled a star rating will be displayed below the product title providing the product has reviews.<br /><br />If you would like to change how the rating is displaying you can choose the manual setting and use shortcode [rating_snippet] to display the rating.</p>
 							</th>
@@ -242,6 +244,22 @@
 						</tr>
 
 						<tr>
+							<th>
+													<label for="enable_product_rating_snippet">Rating Snippet Linebreak: </label>
+													<p style="font-size:12px;font-weight:100;">Adds a line break between rating stars and text.</p>
+							</th>
+							<td>
+								<?php
+								$rating_snippet_no_linebreak = get_option('rating_snippet_no_linebreak');
+								?>
+								<select name="rating_snippet_no_linebreak">
+									<option <?php echo ($rating_snippet_no_linebreak == 0) ? 'selected' : '' ?> value="0">Enabled (Default)</option>
+									<option <?php echo ($rating_snippet_no_linebreak == 1) ? 'selected' : '' ?> value="1">Disabled</option>
+								</select>
+							</td>
+						</tr>
+
+						<tr style="border-bottom: 1px solid #e4e4e4;">
 							<th>
 								<label for="disable_rating_snippet_popup">Disable/Enable the rating snippet popup: </label>
 			                    <p style="font-size:12px;font-weight:100;">This option will disable/enable the rating snippet popup on product pages and anchor to product widget.</p>
