@@ -14,6 +14,11 @@
 			</div>
 		</div>
 
+
+		<?php
+			$hide_legacy = get_option('hide_legacy');
+ 		?>
+
 		<div id="tabs-container">
 		    <ul class="tabs-menu">
 		        <li class="current"><a href="#tab-1">API Settings</a></li>
@@ -115,40 +120,65 @@
 					<p>Customize how product reviews are published on your website.</p>
 
 					<table class="form-table">
+						<?php
+							$polaris_review_widget = get_option('polaris_review_widget');
+						?>
 						<tr>
-							<th>
-								<label for="product_review_widget">Show Product Review Widget: </label>
-			                    <p style="font-size:12px;font-weight:100;">Product reviews will be displayed at the bottom of your product pages.</p>
+							 	<th>
+								<label for="polaris_review_widget">Show <strong>New</strong> Product Review Widget: </label>
+				                    <p style="font-size:12px;font-weight:100;">
+															A mobile friendly product reviews widget displaying product & customer attributes, photos, videos as well as questions & answers.</p>
 							</th>
 							<td>
-								<?php
-									$product_review_widget = get_option('product_review_widget');
-								?>
+
+								<select name="polaris_review_widget">
+									<option <?php echo ($polaris_review_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Reviews Tab</option>
+									<option <?php echo ($polaris_review_widget == 'summary') ? 'selected' : '' ?> value="summary">Show Below Product Summary</option>
+									<option <?php echo ($polaris_review_widget == '0') ? 'selected' : '' ?> value="0">Do Not Display</option>
+								</select>
+							</td>
+						</tr>
+
+						<?php
+							$product_review_widget = get_option('product_review_widget');
+							if(!$hide_legacy) {
+						?>
+						<tr style="border-top: 1px solid #e4e4e4;">
+
+							 	<th>
+									<h3><strong>Legacy Widget Settings:</strong></h3>
+
+								<label for="product_review_widget">Show Legacy Product Review Widget: </label>
+			                    <p style="font-size:12px;font-weight:100;">Please note that to use the Legacy Widget, the "Show New Product Review Widget" setting must be set to "Do Not Display".</p>
+							</th>
+							<td>
+
 								<select name="product_review_widget">
 									<option <?php echo ($product_review_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Reviews Tab</option>
 									<option <?php echo ($product_review_widget == 'summary') ? 'selected' : '' ?> value="summary">Show Below Product Summary</option>
                                     <option <?php echo ($product_review_widget == 'both') ? 'selected' : '' ?> value="both">Show in Both Places</option>
-									<option <?php echo ($product_review_widget == '0') ? 'selected' : '' ?> value="0">Dont Display</option>
+									<option <?php echo ($product_review_widget == '0') ? 'selected' : '' ?> value="0">Do Not Display</option>
 								</select>
 							</td>
 						</tr>
 
-						<tr>
+						<tr style="border-bottom: 1px solid #e4e4e4">
 							<th>
-								<label for="disable_rating_snippet_popup">Disable/Enable the rating snippet popup: </label>
-			                    <p style="font-size:12px;font-weight:100;">This option will disable/enable the rating snippet popup on product pages and anchor to product widget.</p>
+								<label for="widget_custom_css">Widget Custom CSS: </label>
+													<p style="font-size:12px;font-weight:100;">Add custom CSS to the product reviews widget</p>
 							</th>
 							<td>
 								<?php
-									$disable_rating_snippet_popup = get_option('disable_rating_snippet_popup');
+									$widget_custom_css = get_option('widget_custom_css');
 								?>
-								<select name="disable_rating_snippet_popup">
-									<option <?php echo ($disable_rating_snippet_popup == '0') ? 'selected' : '' ?> value="0">Popup Disabled</option>
-									<option <?php echo ($disable_rating_snippet_popup == '1') ? 'selected' : '' ?> value="1">Popup Enabled</option>
-								</select>
+								<textarea name="widget_custom_css" style="width:300px;height:200px;"><?php echo htmlentities($widget_custom_css); ?></textarea>
 							</td>
 						</tr>
 
+
+						<?php
+						}
+						?>
 						<tr>
 							<th>
 								<label for="disable_rating_snippet_popup">Offset: (Default = 0)</label>
@@ -157,7 +187,7 @@
 							<td>
 								<?php
 									$disable_rating_snippet_offset = get_option('disable_rating_snippet_offset');
-								?> 
+								?>
 								<input type="text" name="disable_rating_snippet_offset" value="<?php  echo $disable_rating_snippet_offset; ?>" />
 							</td>
 						</tr>
@@ -174,18 +204,7 @@
 								<input type="text" name="widget_hex_colour" value="<?php  echo $widget_hex_colour; ?>" />
 							</td>
 						</tr>
-						<tr>
-							<th>
-								<label for="widget_custom_css">Widget Custom CSS: </label>
-			                    <p style="font-size:12px;font-weight:100;">Add custom CSS to the product reviews widget</p>
-							</th>
-							<td>
-								<?php
-									$widget_custom_css = get_option('widget_custom_css');
-								?>
-								<textarea name="widget_custom_css" style="width:300px;height:200px;"><?php echo htmlentities($widget_custom_css); ?></textarea>
-							</td>
-						</tr>
+
 						<tr>
 							<th>
 			                    <label for="hide_write_review_button">Hide Write Review Button: </label>
@@ -201,6 +220,10 @@
 								</select>
 							</td>
 						</tr>
+
+
+
+
 						<tr>
 							<th>
 			                    <label for="enable_product_rating_snippet">Enable Product Rating Snippet: </label>
@@ -214,6 +237,22 @@
 									<option <?php echo ($enable_product_rating_snippet == 1) ? 'selected' : '' ?> value="1">Enabled</option>
 									<option <?php echo ($enable_product_rating_snippet == 0) ? 'selected' : '' ?> value="0">Disabled</option>
 									<option <?php echo ($enable_product_rating_snippet == 'manual') ? 'selected' : '' ?> value="manual">Manual</option>
+								</select>
+							</td>
+						</tr>
+
+						<tr>
+							<th>
+								<label for="disable_rating_snippet_popup">Disable/Enable the rating snippet popup: </label>
+			                    <p style="font-size:12px;font-weight:100;">This option will disable/enable the rating snippet popup on product pages and anchor to product widget.</p>
+							</th>
+							<td>
+								<?php
+									$disable_rating_snippet_popup = get_option('disable_rating_snippet_popup');
+								?>
+								<select name="disable_rating_snippet_popup">
+									<option <?php echo ($disable_rating_snippet_popup == '0') ? 'selected' : '' ?> value="0">Popup Disabled</option>
+									<option <?php echo ($disable_rating_snippet_popup == '1') ? 'selected' : '' ?> value="1">Popup Enabled</option>
 								</select>
 							</td>
 						</tr>
@@ -385,6 +424,19 @@
 								<select name="use_parent_product">
 									<option <?php echo ($use_parent_product== 0) ? 'selected' : '' ?> value="0">No (Default)</option>
 									<option <?php echo ($use_parent_product== 1) ? 'selected' : '' ?> value="1">Yes</option>
+								</select>
+							</td>
+						</tr>
+
+						<tr>
+							<th>
+								<label for="hide_legacy">Show Legacy Widget Settings</label>
+								<p style="font-size:12px;font-weight:100;">Enable this if you would like to use the legacy product widget. </p>
+							</th>
+							<td>
+								<select name="hide_legacy">
+									<option <?php echo ($hide_legacy== 1) ? 'selected' : '' ?> value="1">No (Recommended)</option>
+									<option <?php echo ($hide_legacy== 0) ? 'selected' : '' ?> value="0">Yes</option>
 								</select>
 							</td>
 						</tr>

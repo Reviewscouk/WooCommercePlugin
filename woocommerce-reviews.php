@@ -172,6 +172,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             register_setting('woocommerce-reviews', 'enable_rich_snippet');
             register_setting('woocommerce-reviews', 'enable_product_rich_snippet');
             register_setting('woocommerce-reviews', 'enable_product_rating_snippet');
+            register_setting('woocommerce-reviews', 'polaris_review_widget');
             register_setting('woocommerce-reviews', 'product_review_widget');
             register_setting('woocommerce-reviews', 'question_answers_widget');
             register_setting('woocommerce-reviews', 'hide_write_review_button');
@@ -184,6 +185,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             register_setting('woocommerce-reviews', 'use_parent_product');
             register_setting('woocommerce-reviews', 'disable_rating_snippet_popup');
             register_setting('woocommerce-reviews', 'disable_rating_snippet_offset');
+            register_setting('woocommerce-reviews', 'hide_legacy');
         }
 
         public function setDefaultSettings()
@@ -191,11 +193,12 @@ if (!class_exists('WooCommerce_Reviews')) {
             update_option('product_feed', 1);
             update_option('send_product_review_invitation', 1);
             update_option('send_merchant_review_invitation', 1);
-            update_option('product_review_widget', 'tab');
+            update_option('polaris_review_widget', 'tab');
             update_option('product_identifier', 'sku');
             update_option('use_parent_product', 0);
             update_option('disable_rating_snippet_popup', 1);
             update_option('disable_rating_snippet_offset', 0);
+            update_option('hide_legacy', 1);
         }
 
         public function add_menu()
@@ -271,6 +274,9 @@ if (!class_exists('WooCommerce_Reviews')) {
             if (!current_user_can('manage_options')) {
                 wp_die(__('You do not have sufficient permissions to access this page.'));
             }
+            $this->init_settings();
+            $this->setDefaultSettings();
+
             include sprintf("%s/settings-page.php", dirname(__FILE__));
         }
 
@@ -453,6 +459,204 @@ if (!class_exists('WooCommerce_Reviews')) {
                     });
                 });
             ');
+        }
+
+        public function reviewsio_polaris_review_scripts() {
+          wp_register_script('reviewsio-polaris-review',$this->getWidgetDomain().'polaris/build.js', array(),false, false);
+          wp_enqueue_script('reviewsio-polaris-review');
+
+
+          $skus = $this->getProductSkus();
+          $color = $this->getHexColor();
+
+          wp_add_inline_script('reviewsio-polaris-review',"
+              document.addEventListener('DOMContentLoaded', function() {
+                new ReviewsWidget(('#widget-".$this->numWidgets."'), {
+                  //Your REVIEWS.io account ID and widget type:
+                  store: '".get_option('store_id')."',
+                  widget: 'polaris',
+
+                  //Content settings (store_review,product_review,questions). Choose what to display in this widget:
+                  options: {
+                    types: 'product_review,questions',
+                    lang: 'en',
+                    //Possible layout options: bordered, large and reverse.
+                    layout: '',
+                    //How many reviews & questions to show per page?
+                    per_page: 15,
+                    //Product specific settings. Provide product SKU for which reviews should be displayed:
+                    product_review:{
+                        //Display product reviews - include multiple product SKUs seperated by Semi-Colons (Main Indentifer in your product catalog )
+                        sku: '".(implode(';', $skus))."',
+                        hide_if_no_results: false,
+                        enable_rich_snippets: false,
+                    },
+                    //Questions settings:
+                    questions:{
+                        hide_if_no_results: false,
+                        enable_ask_question: true,
+                        show_dates: true,
+                        //Display group questions by providing a grouping variable, new questions will be assigned to this group.
+                        grouping: '".(implode(';', $skus))."',
+                    },
+
+                    //Header settings:
+                    header:{
+                        enable_summary: true, //Show overall rating & review count
+                        enable_ratings: true,
+                        enable_attributes: true,
+                        enable_image_gallery: true, //Show photo & video gallery
+                        enable_percent_recommended: false, //Show what percentage of reviewers recommend it
+                        enable_write_review: ".(get_option('hide_write_review_button') == '1' ? 'false' : 'true' ).",
+                        enable_ask_question: true,
+                        enable_sub_header: true, //Show subheader
+                    },
+
+                    //Filtering settings:
+                    filtering:{
+                        enable: true, //Show filtering options
+                        enable_text_search: true, //Show search field
+                        enable_sorting: true, //Show sorting options (most recent, most popular)
+                        enable_overall_rating_filter: true, //Show overall rating breakdown filter
+                        enable_ratings_filters: true, //Show product attributes filter
+                        enable_attributes_filters: true, //Show author attributes filter
+                    },
+
+                    //Review settings:
+                    reviews:{
+                        enable_avatar: true, //Show author avatar
+                        enable_reviewer_name:  true, //Show author name
+                        enable_reviewer_address:  true, //Show author location
+                        reviewer_address_format: 'city, country', //Author location display format
+                        enable_verified_badge: true,
+                        enable_reviewer_recommends: true,
+                        enable_attributes: true, //Show author attributes
+                        enable_product_name: true, //Show display product name
+                        enable_images: true, //Show display review photos
+                        enable_ratings: true, //Show product attributes (additional ratings)
+                        enable_share: true, //Show share buttons
+                        enable_helpful_vote: true,
+                        enable_helpful_display: true, //Show how many times times review upvoted
+                        enable_report: true, //Show report button
+                        enable_date: true, //Show when review was published
+                    },
+                  },
+                  //Translation settings
+                  translations: {
+                    'Verified Customer': 'Verified Customer'
+                  },
+                  //Style settings:
+                  styles: {
+                    //Base font size is a reference size for all text elements. When base value gets changed, all TextHeading and TexBody elements get proportionally adjusted.
+                    '--base-font-size': '16px',
+
+                    //Button styles (shared between buttons):
+                    '--common-button-font-family': 'inherit',
+                    '--common-button-font-size':'16px',
+                    '--common-button-font-weight':'500',
+                    '--common-button-letter-spacing':'0',
+                    '--common-button-text-transform':'none',
+                    '--common-button-vertical-padding':'10px',
+                    '--common-button-horizontal-padding':'20px',
+                    '--common-button-border-width':'2px',
+                    '--common-button-border-radius':'0px',
+
+                    //Primary button styles:
+                    '--primary-button-bg-color': '#0E1311',
+                    '--primary-button-border-color': '#0E1311',
+                    '--primary-button-text-color': '#ffffff',
+
+                    //Secondary button styles:
+                    '--secondary-button-bg-color': 'transparent',
+                    '--secondary-button-border-color': '#0E1311',
+                    '--secondary-button-text-color': '#0E1311',
+
+                    //Star styles:
+                    '--common-star-color': '". ($color) . "',
+                    '--common-star-disabled-color': 'rgba(0,0,0,0.25)',
+                    '--medium-star-size': '22px',
+                    '--small-star-size': '19px',
+
+                    //Heading styles:
+                    '--heading-text-color': '#0E1311',
+                    '--heading-text-font-weight': '600',
+                    '--heading-text-font-family': 'inherit',
+                    '--heading-text-line-height': '1.4',
+                    '--heading-text-letter-spacing': '0',
+                    '--heading-text-transform': 'none',
+
+                    //Body text styles:
+                    '--body-text-color': '#0E1311',
+                    '--body-text-font-weight': '400',
+                    '--body-text-font-family': 'inherit',
+                    '--body-text-line-height': '1.4',
+                    '--body-text-letter-spacing': '0',
+                    '--body-text-transform': 'none',
+
+                    //Input field styles:
+                    '--inputfield-text-font-family': 'inherit',
+                    '--input-text-font-size': '14px',
+                    '--inputfield-text-font-weight': '400',
+                    '--inputfield-text-color': '#0E1311',
+                    '--inputfield-border-color': 'rgba(0,0,0,0.2)',
+                    '--inputfield-background-color': 'transparent',
+                    '--inputfield-border-width': '1px',
+                    '--inputfield-border-radius': '0px',
+
+                    '--common-border-color': 'rgba(0,0,0,0.15)',
+                    '--common-border-width': '1px',
+                    '--common-sidebar-width': '190px',
+
+                    //Slider indicator (for attributes) styles:
+                    '--slider-indicator-bg-color': 'rgba(0,0,0,0.1)',
+                    '--slider-indicator-button-color': '#0E1311',
+                    '--slider-indicator-width': '190px',
+
+                    //Badge styles:
+                    '--badge-icon-color': '#0E1311',
+                    '--badge-icon-font-size': 'inherit',
+                    '--badge-text-color': '#0E1311',
+                    '--badge-text-font-size': 'inherit',
+                    '--badge-text-letter-spacing': 'inherit',
+                    '--badge-text-transform': 'inherit',
+
+                    //Author styles:
+                    '--author-font-size': 'inherit',
+                    '--author-text-transform': 'none',
+
+                    //Author avatar styles:
+                    '--avatar-thumbnail-size': '60px',
+                    '--avatar-thumbnail-border-radius': '100px',
+                    '--avatar-thumbnail-text-color': '#0E1311',
+                    '--avatar-thumbnail-bg-color': 'rgba(0,0,0,0.1)',
+
+                    //Product photo or review photo styles:
+                    '--photo-video-thumbnail-size': '80px',
+                    '--photo-video-thumbnail-border-radius': '0px',
+
+                    //Media (photo & video) slider styles:
+                    '--mediaslider-scroll-button-icon-color': '#0E1311',
+                    '--mediaslider-scroll-button-bg-color': 'rgba(255, 255, 255, 0.85)',
+                    '--mediaslider-overlay-text-color': '#ffffff',
+                    '--mediaslider-overlay-bg-color': 'rgba(0, 0, 0, 0.8))',
+                    '--mediaslider-item-size': '110px',
+
+                    //Pagination & tabs styles (normal):
+                    '--pagination-tab-text-color': '#0E1311',
+                    '--pagination-tab-text-transform': 'none',
+                    '--pagination-tab-text-letter-spacing': '0',
+                    '--pagination-tab-text-font-size': '16px',
+                    '--pagination-tab-text-font-weight': '600',
+
+                    //Pagination & tabs styles (active):
+                    '--pagination-tab-active-text-color': '#0E1311',
+                    '--pagination-tab-active-text-font-weight': '600',
+                    '--pagination-tab-active-border-color': '#0E1311',
+                    '--pagination-tab-border-width': '3px',
+                  },
+                  });
+              });
+          ");
         }
 
         public function reviewsio_qa_scripts() {
@@ -681,7 +885,17 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function product_review_tab($tabs)
         {
-            if (in_array(get_option('product_review_widget'), array('tab', 'both'))) {
+          if (in_array(get_option('polaris_review_widget'), array('tab'))) {
+              $tabs['reviews'] = array(
+                  'title'    => 'Reviews',
+                  'callback' => array($this, 'polarisReviewWidget'),
+                  'priority' => 50,
+              );
+
+              if ($this->shouldHideProductReviews()) {
+                  unset($tabs['reviews']);
+              }
+          } else if (in_array(get_option('product_review_widget'), array('tab', 'both'))) {
                 $tabs['reviews'] = array(
                     'title'    => 'Reviews',
                     'callback' => array($this, 'productReviewWidget'),
@@ -712,7 +926,11 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function productPage()
         {
-            if (in_array(get_option('product_review_widget'), array('summary', '1', 'both'))) {
+          if (in_array(get_option('polaris_review_widget'), array('summary', '1'))) {
+              if (!$this->shouldHideProductReviews()) {
+                  $this->polarisReviewWidget();
+              }
+            } else if (in_array(get_option('product_review_widget'), array('summary', '1', 'both'))) {
                 if (!$this->shouldHideProductReviews()) {
                     $this->productReviewWidget();
                 }
@@ -764,6 +982,20 @@ if (!class_exists('WooCommerce_Reviews')) {
                 echo 'Missing Reviews.co.uk API Credentials';
             }
         }
+
+        public function polarisReviewWidget($skus = null)
+        {
+          $this->numWidgets++;
+          if (get_option('api_key') != '' && get_option('store_id') != '') {
+              ?>
+                  <?php add_action('wp_footer', array($this, 'reviewsio_polaris_review_scripts')); ?>
+                  <div id="widget-<?php echo $this->numWidgets; ?>"></div>
+              <?php
+        } else {
+                echo 'Missing Reviews.co.uk API Credentials';
+            }
+        }
+
 
         public function questionAnswersWidget()
         {
