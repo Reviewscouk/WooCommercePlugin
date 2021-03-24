@@ -24,7 +24,7 @@
 		        <li class="current"><a href="#tab-1">API Settings</a></li>
 		        <li><a href="#tab-2">Review Invitations</a></li>
 		        <li><a href="#tab-3">Product Reviews</a></li>
-		        <li><a href="#tab-qa">Q & A</li>
+		        <li><a href="#tab-qa">Q&A</a></li>
 		        <li><a href="#tab-4">Rich Snippets</a></li>
 		        <li><a href="#tab-5">Data Feeds</a></li>
 		        <li><a href="#tab-6">Advanced</a></li>
