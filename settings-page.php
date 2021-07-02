@@ -181,8 +181,31 @@
 						?>
 						<tr>
 							<th>
+								<label for="minimum_rating">Minimum Review Rating</label>
+													<p style="font-size:12px;font-weight:100;">This option sets the minimum star rating of reviews displayed.</p>
+							</th>
+							<td>
+								<?php
+									$minimum_rating = get_option('minimum_rating');
+								?>
+								<select name='minimum_rating'>
+									<?php
+										foreach(['None (Default)' => 1, '2 Stars' => 2, '3 Stars' => 3, '4 Stars' => 4, '5 Stars' => 5] as $key => $value) {
+										?>
+										<option <?php echo ($value == $minimum_rating ? 'selected' : ''); ?> value='<?php echo $value; ?>'>
+											<?php echo $key; ?>
+										</option>
+										<?php
+											}
+											?>
+								</select>
+							</td>
+						</tr>
+
+						<tr>
+							<th>
 								<label for="disable_rating_snippet_popup">Offset: (Default = 0)</label>
-			                    <p style="font-size:12px;font-weight:100;">This option set the offset to the product widget element. (Integer Number)</p>
+			                    <p style="font-size:12px;font-weight:100;">This option sets the offset to the product widget element. (Integer Number)</p>
 							</th>
 							<td>
 								<?php

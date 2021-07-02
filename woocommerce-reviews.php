@@ -6,7 +6,7 @@
  * Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.12.08
+ * Version: 0.12.09
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 4.5.2
@@ -184,6 +184,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             register_setting('woocommerce-reviews', 'disable_reviews_per_product');
             register_setting('woocommerce-reviews', 'use_parent_product');
             register_setting('woocommerce-reviews', 'disable_rating_snippet_popup');
+            register_setting('woocommerce-reviews', 'minimum_rating');
             register_setting('woocommerce-reviews', 'disable_rating_snippet_offset');
             register_setting('woocommerce-reviews', 'hide_legacy');
             register_setting('woocommerce-reviews', 'rating_snippet_no_linebreak');
@@ -194,7 +195,6 @@ if (!class_exists('WooCommerce_Reviews')) {
             update_option('product_feed', 1);
             update_option('send_product_review_invitation', 1);
             update_option('send_merchant_review_invitation', 1);
-
             if(!get_option('product_review_widget')) {
               update_option('polaris_review_widget', 'tab');
               update_option('hide_legacy', 1);
@@ -203,6 +203,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             update_option('product_identifier', 'sku');
             update_option('use_parent_product', 0);
             update_option('disable_rating_snippet_popup', 1);
+            update_option('minimum_rating', "1");
             update_option('disable_rating_snippet_offset', 0);
             update_option('rating_snippet_no_linebreak', 0);
         }
@@ -422,6 +423,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                         store: "'. get_option("store_id").'",
                         color: "'. $this->getHexColor() .'",
                         linebreak: "' . (get_option('rating_snippet_no_linebreak') == 1 ? false : true).'",
+                        minRating: "' . (get_option('minimum_rating') ? get_option('minimum_rating') : 1).'",
                         text: "Reviews",
                         '. $writeButton . '
                     });
@@ -449,7 +451,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     productWidget("widget-'.$this->numWidgets.'",{
                         store: "'.get_option('store_id').'",
                         sku: "'.implode(';', $skus).'",
-                        minRating: 1,
+                        minRating: "' . (get_option('minimum_rating') ? get_option('minimum_rating') : 1).'",
                         primaryClr: "'. $color .'",
                         neutralClr: "#EBEBEB",
                         buttonClr: "#EEE",
@@ -496,6 +498,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     product_review:{
                         //Display product reviews - include multiple product SKUs seperated by Semi-Colons (Main Indentifer in your product catalog )
                         sku: '".(implode(';', $skus))."',
+                        min_rating: '" . (get_option('minimum_rating') ? get_option('minimum_rating') : 1)."',
                         hide_if_no_results: false,
                         enable_rich_snippets: false,
                     },
