@@ -139,6 +139,30 @@
 							</td>
 						</tr>
 
+						<tr>
+							<th>
+								<label for="minimum_rating">Widget Language</label>
+								<p style="font-size:12px;font-weight:100;">This option sets the language of the New Product Review Widget.</p>
+							</th>
+							<td>
+								<?php
+									$polaris_lang = get_option('polaris_lang');
+								?>
+								<select name='polaris_lang'>
+									<?php
+										foreach(['English (Default)' => 'en', 'Deutsch' => 'de', 'Deutsch (Informal)' => 'de-informal', 'Español' => 'es', 'Français' => 'fr',
+										'Italiano' => 'it', 'Nederlands' => 'nl', 'Suomi' => 'fi'] as $key => $value) {
+										?>
+										<option <?php echo ($value == $polaris_lang ? 'selected' : ''); ?> value='<?php echo $value; ?>'>
+											<?php echo $key; ?>
+										</option>
+										<?php
+											}
+											?>
+								</select>
+							</td>
+						</tr>
+
 						<?php
 							$product_review_widget = get_option('product_review_widget');
 							if(!$hide_legacy) {
@@ -279,6 +303,19 @@
 									<option <?php echo ($rating_snippet_no_linebreak == 0) ? 'selected' : '' ?> value="0">Enabled (Default)</option>
 									<option <?php echo ($rating_snippet_no_linebreak == 1) ? 'selected' : '' ?> value="1">Disabled</option>
 								</select>
+							</td>
+						</tr>
+
+						<tr>
+							<th>
+									<label for="enable_product_rating_snippet">Rating Snippet Text: </label>
+									<p style="font-size:12px;font-weight:100;">Sets the descriptor after the number of reviews on the Rating Snippet.</p>
+							</th>
+							<td>
+								<?php
+								$rating_snippet_text = get_option('rating_snippet_text');
+								?>
+								<input name='rating_snippet_text' value='<?php echo (isset($rating_snippet_text) ? $rating_snippet_text : 'Reviews'); ?>'>
 							</td>
 						</tr>
 

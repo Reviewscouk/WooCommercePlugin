@@ -185,6 +185,8 @@ if (!class_exists('WooCommerce_Reviews')) {
             register_setting('woocommerce-reviews', 'use_parent_product');
             register_setting('woocommerce-reviews', 'disable_rating_snippet_popup');
             register_setting('woocommerce-reviews', 'minimum_rating');
+            register_setting('woocommerce-reviews', 'rating_snippet_text');
+            register_setting('woocommerce-reviews', 'polaris_lang');
             register_setting('woocommerce-reviews', 'disable_rating_snippet_offset');
             register_setting('woocommerce-reviews', 'hide_legacy');
             register_setting('woocommerce-reviews', 'rating_snippet_no_linebreak');
@@ -204,6 +206,8 @@ if (!class_exists('WooCommerce_Reviews')) {
             update_option('use_parent_product', 0);
             update_option('disable_rating_snippet_popup', 1);
             update_option('minimum_rating', "1");
+            update_option('rating_snippet_text', "Reviews");
+            update_option('polaris_lang', "en");
             update_option('disable_rating_snippet_offset', 0);
             update_option('rating_snippet_no_linebreak', 0);
         }
@@ -424,7 +428,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                         color: "'. $this->getHexColor() .'",
                         linebreak: "' . (get_option('rating_snippet_no_linebreak') == 1 ? false : true).'",
                         minRating: "' . (get_option('minimum_rating') ? get_option('minimum_rating') : 1).'",
-                        text: "Reviews",
+                        text: "' . (get_option('rating_snippet_text') ? get_option('rating_snippet_text') : 'Reviews').'",
                         '. $writeButton . '
                     });
                 });
@@ -489,7 +493,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                   //Content settings (store_review,product_review,questions). Choose what to display in this widget:
                   options: {
                     types: 'product_review',
-                    lang: 'en',
+                    lang: '" . (get_option('polaris_lang') ? get_option('polaris_lang') : 'en')."',
                     //Possible layout options: bordered, large and reverse.
                     layout: '',
                     //How many reviews & questions to show per page?
@@ -551,10 +555,6 @@ if (!class_exists('WooCommerce_Reviews')) {
                         enable_report: true, //Show report button
                         enable_date: true, //Show when review was published
                     },
-                  },
-                  //Translation settings
-                  translations: {
-                    'Verified Customer': 'Verified Customer'
                   },
                   //Style settings:
                   styles: {
