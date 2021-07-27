@@ -497,7 +497,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     //Possible layout options: bordered, large and reverse.
                     layout: '',
                     //How many reviews & questions to show per page?
-                    per_page: 15,
+                    per_page: 8,
                     //Product specific settings. Provide product SKU for which reviews should be displayed:
                     product_review:{
                         //Display product reviews - include multiple product SKUs seperated by Semi-Colons (Main Indentifer in your product catalog )
