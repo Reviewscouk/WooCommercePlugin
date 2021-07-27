@@ -6,7 +6,7 @@
  * Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.12.09
+ * Version: 0.12.10
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 4.5.2
@@ -937,7 +937,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function productPage()
         {
-          if (in_array(get_option('polaris_review_widget'), array('summary', '1'))) {
+          if (in_array(get_option('polaris_review_widget'), array('summary', '1', 'bottom'))) {
               if (!$this->shouldHideProductReviews()) {
                   $this->polarisReviewWidget();
               }
@@ -1026,7 +1026,12 @@ if (!class_exists('WooCommerce_Reviews')) {
             add_action('woocommerce_order_status_completed', array($this, 'processCompletedOrder'));
             add_filter('template_redirect', array($this, 'redirect_hook'));
             add_filter('woocommerce_product_tabs', array($this, 'product_review_tab'));
-            add_filter('woocommerce_after_single_product_summary', array($this, 'productPage'));
+
+            if(get_option('polaris_review_widget') == 'bottom') {
+              add_filter('woocommerce_after_single_product', array($this, 'productPage'));
+            } else {
+              add_filter('woocommerce_after_single_product_summary', array($this, 'productPage'));
+            }
 
             add_action('woocommerce_single_product_summary', array($this, 'product_rating_snippet_markup'), 5);
             add_action('woocommerce_after_shop_loop_item', array($this, 'product_rating_snippet_markup'), 5);

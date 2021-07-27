@@ -134,6 +134,7 @@
 								<select name="polaris_review_widget">
 									<option <?php echo ($polaris_review_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Reviews Tab</option>
 									<option <?php echo ($polaris_review_widget == 'summary') ? 'selected' : '' ?> value="summary">Show Below Product Summary</option>
+									<option <?php echo ($polaris_review_widget == 'bottom') ? 'selected' : '' ?> value="bottom">Show At Bottom of Page</option>
 									<option <?php echo ($polaris_review_widget == '0') ? 'selected' : '' ?> value="0">Do Not Display</option>
 								</select>
 							</td>
@@ -316,7 +317,7 @@
 								$rating_snippet_text = get_option('rating_snippet_text');
 								?>
 								<input name='rating_snippet_text' value='<?php echo (isset($rating_snippet_text) ? $rating_snippet_text : 'Reviews'); ?>'>
-							</td>
+ 								</td>
 						</tr>
 
 						<tr style="border-bottom: 1px solid #e4e4e4;">
