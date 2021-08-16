@@ -6,7 +6,7 @@
  * Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.12.11
+ * Version: 0.13
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 4.5.2
@@ -238,7 +238,7 @@ if (!class_exists('WooCommerce_Reviews')) {
         protected function sendFeed()
         {
             return $this->apiPost('integration/set-feed', array(
-                'url'     => 'http://' . $_SERVER['HTTP_HOST'] . '/index.php/reviews/product_feed',
+                'url'     => get_site_url() . '/index.php/reviews/product_feed',
                 'format'  => 'csv',
                 'mapping' => array(
                     'id'        => 'sku',
@@ -254,7 +254,7 @@ if (!class_exists('WooCommerce_Reviews')) {
         {
             return $this->apiPost('integration/app-installed', array(
                 'platform' => 'woocommerce',
-                'url'      => isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '',
+                'url'      => get_site_url(),
             ));
         }
 
@@ -861,17 +861,10 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function redirect_hook($page_template)
         {
-            $actual_link = explode('/', 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']);
+            $actual_link = explode('/', get_site_url() . $_SERVER['REQUEST_URI']);
 
-            $slug = '';
 
-            if ($actual_link[count($actual_link) - 1] == '') {
-                $slug = $actual_link[count($actual_link) - 2];
-            } else {
-                $slug = $actual_link[count($actual_link) - 1];
-            }
-
-            if ($slug == 'product_feed') {
+            if (in_array('product_feed', $actual_link) && in_array('reviews', $actual_link)) {
                 $product_feed = get_option('product_feed');
                 if ($product_feed) {
                     global $wp_query;
@@ -882,7 +875,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                 }
             }
 
-            if ($slug == 'order_csv') {
+            if (in_array('order_csv', $actual_link) && in_array('reviews', $actual_link)) {
                 if (is_user_logged_in() && current_user_can('manage_options')) {
                     global $wp_query;
                     status_header(200);

@@ -417,7 +417,7 @@
 						<tr>
 							<th>
 								<label for="product_feed">Enable Product Feed: </label>
-			                    <p style="font-size:12px;font-weight:100;">For best integration we require a feed of your products. If you enable this feature a product feed will be available at: <b>http://<?php echo $_SERVER['HTTP_HOST']; ?>/index.php/reviews/product_feed</b>. You can add this in the Reviews.co.uk Dashboard at Product Setup -&gt; Product Catalog -&gt; Add Product</p>
+			                    <p style="font-size:12px;font-weight:100;">For best integration we require a feed of your products. If you enable this feature a product feed will be available at: <b><?php echo get_site_url(); ?>/index.php/reviews/product_feed</b>. You can add this in the Reviews.co.uk Dashboard at Product Setup -&gt; Product Catalog -&gt; Add Product</p>
 							</th>
 							<td>
 								<?php
@@ -436,7 +436,7 @@
 			                    <p style="font-size:12px;font-weight:100;">Download this CSV and upload it to the <b>Review Booster</b> in the Reviews.co.uk Dashboard to start collecting reviews.</p>
 							</th>
 							<td>
-								<a class="button" href="//<?php echo $_SERVER['HTTP_HOST']; ?>/index.php/reviews/order_csv">Download Latest Orders CSV</a>
+								<a class="button" href="<?php echo get_site_url(); ?>/index.php/reviews/order_csv">Download Latest Orders CSV</a>
 							</td>
 						</tr>
 					</table>
