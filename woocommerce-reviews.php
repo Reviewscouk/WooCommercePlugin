@@ -428,6 +428,8 @@ if (!class_exists('WooCommerce_Reviews')) {
                 document.addEventListener("DOMContentLoaded", function() {
                     ratingSnippet("ruk_rating_snippet",{
                         store: "'. get_option("store_id").'",
+                        lang: "' . (get_option('polaris_lang') ? get_option('polaris_lang') : 'en').'",
+                        usePolaris: true,
                         color: "'. $this->getHexColor() .'",
                         linebreak: "' . (get_option('rating_snippet_no_linebreak') == 1 ? false : true).'",
                         minRating: "' . (get_option('minimum_rating') ? get_option('minimum_rating') : 1).'",
