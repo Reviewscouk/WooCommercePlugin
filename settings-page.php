@@ -125,7 +125,7 @@
 						?>
 						<tr>
 							 	<th>
-								<label for="polaris_review_widget">Show <strong>New</strong> Product Review Widget: </label>
+								<label for="polaris_review_widget">Show Product Review Widget: </label>
 				                    <p style="font-size:12px;font-weight:100;">
 															A mobile friendly product reviews widget displaying product & customer attributes, photos and videos.</p>
 							</th>
