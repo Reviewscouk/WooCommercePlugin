@@ -7,7 +7,7 @@
 		<?php @do_settings_sections('woocommerce-reviews'); ?>
 
 		<div style="background:#fff; padding:20px; margin:20px 0; border:1px solid #ccc;">
-			<h2>Automated Review Collection - Powered by Reviews.co.uk</h2>
+			<h2>Automated Review Collection - Powered by REVIEWS.io</h2>
 
 			<div id="welcomeText">
 				<p>Enter your API Credentials to Start Collecting Reviews from your Customers.</p>
@@ -32,7 +32,7 @@
 		    <div class="tab">
 		        <div id="tab-1" class="tab-content">
 					<!-- API Settings -->
-					<p>You can find your API credentials on the Reviews Dashboard. <br /><br /> Go to <b>Company Setup &gt; Automated Review Collection &gt; WooCommerce &gt; Configuration</b></p>
+					<p>You can find your API credentials on the REVIEWS.io Dashboard, click the <b>Integrations</b> menu, and then scroll to <b>WooCommerce</b>.</p>
 
 					<table class="form-table">
 						<tr>
@@ -74,9 +74,11 @@
 						</tr>
 					</table>
 
-					<p><strong>Not a Reviews.co.uk Customer?</strong></p>
+					<p><strong>Not a REVIEWS.io Customer?</strong></p>
 					<p>
-						You'll need to sign up for one of our packages at <a href="http://www.reviews.co.uk" target="_blank">Reviews.co.uk</a> or <a href="http://www.reviews.io" target="_blank">Reviews.io</a> to use this plugin.
+						You can sign up for a REVIEWS.io plan here:
+						<a href='https://www.reviews.io/business-solutions' target="_blank">UK</a> or
+						<a href='https://www.reviews.io/business-solutions' target="_blank">International</a>
 					</p>
 		        </div>
 		        <div id="tab-2" class="tab-content">
@@ -114,7 +116,7 @@
 						</tr>
 					</table>
 
-					<p>The invitation delay can be changed within the Reviews.co.uk Dashboard in <strong>Company Setup</strong> &gt; <strong>Customize Review Invitation</strong> and <strong>Product Setup</strong> &gt; <strong>Customize Review Invitation</strong><strong>
+					<p>The invitation delay can be changed within the REVIEWS.io Dashboard under the <strong>Invitations</strong> menu.<strong>
 		        </div>
 		        <div id="tab-3" class="tab-content">
 					<p>Customize how product reviews are published on your website.</p>
@@ -448,7 +450,7 @@
 						<tr>
 							<th>
 								<label for="product_feed">Enable Product Feed: </label>
-			                    <p style="font-size:12px;font-weight:100;">For best integration we require a feed of your products. If you enable this feature a product feed will be available at: <b><?php echo get_site_url(); ?>/index.php/reviews/product_feed</b>. You can add this in the Reviews.co.uk Dashboard at Product Setup -&gt; Product Catalog -&gt; Add Product</p>
+			                    <p style="font-size:12px;font-weight:100;">For best integration we require a feed of your products. If you enable this feature a product feed will be available at: <b><?php echo get_site_url(); ?>/index.php/reviews/product_feed</b>. You can add this in the REVIEWS.io Dashboard at Product Setup -&gt; Product Catalog -&gt; Add Product</p>
 							</th>
 							<td>
 								<?php
@@ -464,7 +466,7 @@
 						<tr>
 							<th>
 								<label>Latest Orders CSV:</label>
-			                    <p style="font-size:12px;font-weight:100;">Download this CSV and upload it to the <b>Review Booster</b> in the Reviews.co.uk Dashboard to start collecting reviews.</p>
+			                    <p style="font-size:12px;font-weight:100;">Download this CSV and upload it to the <b>Review Booster</b> in the REVIEWS.io Dashboard to start collecting reviews.</p>
 							</th>
 							<td>
 								<a class="button" href="<?php echo get_site_url(); ?>/index.php/reviews/order_csv">Download Latest Orders CSV</a>
