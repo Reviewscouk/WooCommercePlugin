@@ -143,7 +143,7 @@
 						<tr>
 							<th>
 								<label for="minimum_rating">Widget Language</label>
-								<p style="font-size:12px;font-weight:100;">This option sets the language of the New Product Review Widget.</p>
+								<p style="font-size:12px;font-weight:100;">This option sets the language of the Product Review Widget.</p>
 							</th>
 							<td>
 								<?php
@@ -174,7 +174,7 @@
 									<h3><strong>Legacy Widget Settings:</strong></h3>
 
 								<label for="product_review_widget">Show Legacy Product Review Widget: </label>
-			                    <p style="font-size:12px;font-weight:100;">Please note that to use the Legacy Widget, the "Show New Product Review Widget" setting must be set to "Do Not Display".</p>
+			                    <p style="font-size:12px;font-weight:100;">Please note that to use the Legacy Widget, the "Show Product Review Widget" setting must be set to "Do Not Display".</p>
 							</th>
 							<td>
 
@@ -340,10 +340,13 @@
 		        <div id="tab-qa" class="tab-content">
 					<p>Allow your visitors to ask questions about your products. Your answers will be published publicly.</p>
 
+					<?php
+							if(!$hide_legacy) {
+					 ?>
 					<table class="form-table">
 						<tr>
 							<th>
-								<label for="product_review_widget">Show Question Answers Widget: </label>
+								<label for="product_review_widget">Show Legacy Question Answers Widget: </label>
 			                    <p style="font-size:12px;font-weight:100;">The widget will be displayed in a tab on your product pages.</p>
 							</th>
 							<td>
@@ -359,6 +362,34 @@
 							</td>
 						</tr>
 					</table>
+
+					<?php
+							} else {
+					 ?>
+
+					 <table class="form-table">
+						 <tr>
+ 							<th>
+                <label for="enable_rich_snippet">Enable Q&A: </label>
+                <p style="font-size:12px;font-weight:100;">This will add a Q&A Tab to your Product Reviews Widget.</p>
+ 							</th>
+ 							<td>
+ 								<?php
+ 								$polaris_review_widget_questions = get_option('polaris_review_widget_questions');
+ 								?>
+ 								<select name="polaris_review_widget_questions">
+ 									<option <?php echo ($polaris_review_widget_questions == 1) ? 'selected' : '' ?> value="1">Yes</option>
+ 									<option <?php echo ($polaris_review_widget_questions == 0) ? 'selected' : '' ?> value="0">No</option>
+ 								</select>
+ 							</td>
+ 						</tr>
+					 </table>
+
+				 <?php
+			 			}
+					?>
+
+
 		        </div>
 		        <div id="tab-4" class="tab-content">
 

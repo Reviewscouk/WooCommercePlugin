@@ -6,7 +6,7 @@
  * Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.13
+ * Version: 0.13.1
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 4.5.2
@@ -173,6 +173,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             register_setting('woocommerce-reviews', 'enable_product_rich_snippet');
             register_setting('woocommerce-reviews', 'enable_product_rating_snippet');
             register_setting('woocommerce-reviews', 'polaris_review_widget');
+            register_setting('woocommerce-reviews', 'polaris_review_widget_questions');
             register_setting('woocommerce-reviews', 'product_review_widget');
             register_setting('woocommerce-reviews', 'question_answers_widget');
             register_setting('woocommerce-reviews', 'hide_write_review_button');
@@ -495,9 +496,8 @@ if (!class_exists('WooCommerce_Reviews')) {
                   store: '".get_option('store_id')."',
                   widget: 'polaris',
 
-                  //Content settings (store_review,product_review,questions). Choose what to display in this widget:
                   options: {
-                    types: 'product_review',
+                    types: 'product_review". (get_option('polaris_review_widget_questions') ? ', questions' : '') ."',
                     lang: '" . (get_option('polaris_lang') ? get_option('polaris_lang') : 'en')."',
                     //Possible layout options: bordered, large and reverse.
                     layout: '',
@@ -916,7 +916,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                 }
             }
 
-            if (in_array(get_option('question_answers_widget'), array('tab', 'both'))) {
+            if (!get_option('hide_legacy') && in_array(get_option('question_answers_widget'), array('tab', 'both'))) {
                 $tabs['qanda'] = array(
                     'title'    => 'Questions & Answers',
                     'callback' => array($this, 'questionAnswersWidget'),
@@ -945,7 +945,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                 }
             }
 
-            if (in_array(get_option('question_answers_widget'), array('summary', '1', 'both'))) {
+            if (!get_option('hide_legacy') && in_array(get_option('question_answers_widget'), array('summary', '1', 'both'))) {
                 $this->questionAnswersWidget();
             }
         }
