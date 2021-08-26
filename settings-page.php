@@ -6,7 +6,7 @@
 		<?php @settings_fields('woocommerce-reviews'); ?>
 		<?php @do_settings_sections('woocommerce-reviews'); ?>
 
-		<div style="background:#fff; padding:20px; margin:20px 0; border:1px solid #ccc;">
+		<div style="background:#fff; padding:20px; margin:20px 0; box-shadow: 0 2px 10px -2px rgb(0 0 0 / 7%); border-radius: 4px;">
 			<h2>Automated Review Collection - Powered by REVIEWS.io</h2>
 
 			<div id="welcomeText">

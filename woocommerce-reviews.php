@@ -81,7 +81,8 @@ function reviewsio_admin_scripts() {
 
         .settings_page_reviewscouk .tab {
             clear: both;
-            border: 1px solid #d4d4d1;
+            box-shadow: 0 2px 10px -2px rgb(0 0 0 / 7%);
+            border-radius: 4px;
             background-color: #fff;
             margin-bottom: 20px;
             width: auto;
