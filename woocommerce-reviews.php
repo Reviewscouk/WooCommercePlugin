@@ -217,7 +217,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function add_menu()
         {
-            $page = add_options_page('Reviews.co.uk Settings', 'Reviews.co.uk', 'manage_options', 'reviewscouk', array(&$this, 'reviews_settings_page'));
+            $page = add_options_page('REVIEWS.io Settings', 'REVIEWS.io', 'manage_options', 'reviewscouk', array(&$this, 'reviews_settings_page'));
 
             add_action('load-' . $page, array($this, 'load_page'));
         }
@@ -990,7 +990,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     <div id="widget-<?php echo $this->numWidgets; ?>"></div>
                 <?php
         } else {
-                echo 'Missing Reviews.co.uk API Credentials';
+                echo 'Missing REVIEWS.io API Credentials';
             }
         }
 
@@ -1003,7 +1003,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                   <div id="widget-<?php echo $this->numWidgets; ?>"></div>
               <?php
         } else {
-                echo 'Missing Reviews.co.uk API Credentials';
+                echo 'Missing REVIEWS.io API Credentials';
             }
         }
 
@@ -1017,7 +1017,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     <?php add_action('wp_footer', array($this, 'reviewsio_qa_scripts')); ?>
                 <?php
         } else {
-                echo 'Missing Reviews.co.uk API Credentials';
+                echo 'Missing REVIEWS.io API Credentials';
             }
         }
 
