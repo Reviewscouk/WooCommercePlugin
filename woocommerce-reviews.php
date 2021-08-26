@@ -40,9 +40,10 @@ function reviewsio_admin_scripts() {
     wp_enqueue_style('reviewsio-admin-style');
     wp_add_inline_style('reviewsio-admin-style','
         .settings_page_reviewscouk .tabs-menu {
-            height: 30px;
-            clear: both;
-            margin:0;
+          height: 29px;
+          clear: both;
+          margin: 0;
+          margin-bottom: 10px;
         }
 
         .settings_page_reviewscouk .tabs-menu li {
@@ -51,11 +52,11 @@ function reviewsio_admin_scripts() {
             float: left;
             margin-bottom:-2px;
             margin-right: 10px;
-            background-color: #0085ba;
-            border-top: 1px solid #d4d4d1;
-            border-right: 1px solid #d4d4d1;
-            border-left: 1px solid #d4d4d1;
-            outline:0;
+            border-width: 1px;
+            border-radius: 4px;
+            background: #fff;
+            border-color: rgba(35,36,53,.1);
+            box-shadow: 0 2px 10px -2px rgb(0 0 0 / 7%);
         }
 
         .settings_page_reviewscouk .tabs-menu li.current {
@@ -67,15 +68,15 @@ function reviewsio_admin_scripts() {
 
         .settings_page_reviewscouk .tabs-menu li a {
             padding: 10px;
-            text-transform: uppercase;
-            color: #fff;
+            color: #000;
             text-decoration: none;
             box-shadow:none;
             outline:0;
         }
 
         .settings_page_reviewscouk .tabs-menu .current a {
-            color: #2e7da3;
+            color: #000;
+            font-weight: 600;
         }
 
         .settings_page_reviewscouk .tab {
