@@ -32,7 +32,7 @@
 		    <div class="tab">
 		        <div id="tab-1" class="tab-content">
 					<!-- API Settings -->
-					<p>You can find your API credentials on the REVIEWS.io Dashboard, click the <b>Integrations</b> menu, and then scroll to <b>WooCommerce</b>.</p>
+					<p>You can find your API credentials on the REVIEWS.io Dashboard. Click the <b>Integrations</b> menu, and then scroll to <b>WooCommerce</b>.</p>
 
 					<table class="form-table">
 						<tr>
