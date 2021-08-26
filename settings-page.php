@@ -249,8 +249,8 @@
 									$disable_rating_snippet_popup = get_option('disable_rating_snippet_popup');
 								?>
 								<select name="disable_rating_snippet_popup">
-									<option <?php echo ($disable_rating_snippet_popup == '0') ? 'selected' : '' ?> value="0">Popup Disabled (Anchor to Product Review Widget)</option>
-									<option <?php echo ($disable_rating_snippet_popup == '1') ? 'selected' : '' ?> value="1">Popup Enabled</option>
+									<option <?php echo ($disable_rating_snippet_popup == '0') ? 'selected' : '' ?> value="0">Disabled (Anchor to Product Review Widget)</option>
+									<option <?php echo ($disable_rating_snippet_popup == '1') ? 'selected' : '' ?> value="1">Enabled</option>
 								</select>
 							</td>
 						</tr>
@@ -320,7 +320,7 @@
 						<tr>
 						  <th>
 						    <label for="widget_hex_colour">Star Colour: </label>
-						              <p style="font-size:12px;font-weight:100;">Sets the primary colour for your widgets.</p>
+						              <p style="font-size:12px;font-weight:100;">Sets the primary colour for your widgets, including the stars.</p>
 						  </th>
 						  <td>
 						    <?php
