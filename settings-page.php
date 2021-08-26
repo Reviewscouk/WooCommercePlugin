@@ -1,5 +1,5 @@
 <div class="wrap">
-	    <img src="<?php echo plugin_dir_url( __FILE__ ) . 'assets/logo.svg'; ?>" height="40"  style="margin-top:15px;" />
+	<img src="https://assets.reviews.io/img/all-global-assets/logo/reviewsio-logo.svg" height="40"  style="margin-top:15px;" />
 	<form method="post" action="options.php" autocomplete="off">
 		<h2></h2><!-- Alerts Show Here -->
 
