@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name: Reviews.co.uk for WooCommerce
+ * Plugin Name: REVIEWS.io for WooCommerce
  * Depends: WooCommerce
  * Plugin URI: https://wordpress.org/plugins/reviewscouk-for-woocommerce/
- * Description: Integrate Reviews.co.uk with WooCommerce. Automatically Send Review Invitation Emails and Publish Reviews.
+ * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
  * Version: 0.13.1
