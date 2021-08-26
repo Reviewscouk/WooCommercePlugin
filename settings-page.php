@@ -101,7 +101,7 @@
 						</tr>
 						<tr>
 							<th>
-								<label for="send_merchant_review_invitation">Queue Merchant Review Emails: </label>
+								<label for="send_merchant_review_invitation">Queue Company Review Emails: </label>
 			                    <p style="font-size:12px;font-weight:100;">Review Invitations will be queued when orders are dispatched.</p>
 							</th>
 							<td>
@@ -407,8 +407,7 @@
 					<table class="form-table">
 						<tr>
 							<th>
-			                    <label for="enable_rich_snippet">Enable Merchant Rich Snippet: </label>
-			                    <p style="font-size:12px;font-weight:100;">This rich snippet will give you stars on natural search results.</p>
+			                    <label for="enable_rich_snippet">Enable Company Rich Snippet: </label>
 							</th>
 							<td>
 								<?php
@@ -438,7 +437,7 @@
 						<tr>
 							<th>
 			                    <label for="enable_floating_widget">Enable Floating Widget: </label>
-			                    <p style="font-size:12px;font-weight:100;">A floating reviews tab will be added to the right side of your site. This is highly recommended if you use Merchant Rich Snippets.</p>
+			                    <p style="font-size:12px;font-weight:100;">A floating reviews tab will be added to the right side of your site.</p>
 							</th>
 							<td>
 								<?php
@@ -458,7 +457,7 @@
 						<tr>
 							<th>
 								<label for="product_feed">Enable Product Feed: </label>
-			                    <p style="font-size:12px;font-weight:100;">For best integration we require a feed of your products. If you enable this feature a product feed will be available at: <b><?php echo get_site_url(); ?>/index.php/reviews/product_feed</b>. You can add this in the REVIEWS.io Dashboard at Product Setup -&gt; Product Catalog -&gt; Add Product</p>
+			                    <p style="font-size:12px;font-weight:100;">For Product Invitations to queue correctly, we require access to your Product catalogue via a feed, which we will make available from <b><?php echo get_site_url(); ?>/index.php/reviews/product_feed</b>.</p>
 							</th>
 							<td>
 								<?php
