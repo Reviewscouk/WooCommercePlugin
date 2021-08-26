@@ -119,7 +119,7 @@
 					<p>The invitation delay can be changed within the REVIEWS.io Dashboard under the <strong>Invitations</strong> menu.<strong>
 		        </div>
 		        <div id="tab-3" class="tab-content">
-					<p>Customize how product reviews are published on your website.</p>
+					<p>Customise how product reviews are published on your website.</p>
 
 					<table class="form-table">
 						<?php
@@ -127,6 +127,8 @@
 						?>
 						<tr>
 							 	<th>
+									<h3><strong>Product Review Widget Settings:</strong></h3>
+
 								<label for="polaris_review_widget">Show Product Review Widget: </label>
 				                    <p style="font-size:12px;font-weight:100;">
 															A mobile friendly product reviews widget displaying product & customer attributes, photos and videos.</p>
@@ -142,29 +144,7 @@
 							</td>
 						</tr>
 
-						<tr>
-							<th>
-								<label for="minimum_rating">Widget Language</label>
-								<p style="font-size:12px;font-weight:100;">This option sets the language of the Product Review Widget.</p>
-							</th>
-							<td>
-								<?php
-									$polaris_lang = get_option('polaris_lang');
-								?>
-								<select name='polaris_lang'>
-									<?php
-										foreach(['English (Default)' => 'en', 'Deutsch' => 'de', 'Deutsch (Informal)' => 'de-informal', 'Español' => 'es', 'Français' => 'fr',
-										'Italiano' => 'it', 'Nederlands' => 'nl', 'Suomi' => 'fi'] as $key => $value) {
-										?>
-										<option <?php echo ($value == $polaris_lang ? 'selected' : ''); ?> value='<?php echo $value; ?>'>
-											<?php echo $key; ?>
-										</option>
-										<?php
-											}
-											?>
-								</select>
-							</td>
-						</tr>
+
 
 						<?php
 							$product_review_widget = get_option('product_review_widget');
@@ -206,70 +186,7 @@
 						<?php
 						}
 						?>
-						<tr>
-							<th>
-								<label for="minimum_rating">Minimum Review Rating</label>
-													<p style="font-size:12px;font-weight:100;">This option sets the minimum star rating of reviews displayed.</p>
-							</th>
-							<td>
-								<?php
-									$minimum_rating = get_option('minimum_rating');
-								?>
-								<select name='minimum_rating'>
-									<?php
-										foreach(['None (Default)' => 1, '2 Stars' => 2, '3 Stars' => 3, '4 Stars' => 4, '5 Stars' => 5] as $key => $value) {
-										?>
-										<option <?php echo ($value == $minimum_rating ? 'selected' : ''); ?> value='<?php echo $value; ?>'>
-											<?php echo $key; ?>
-										</option>
-										<?php
-											}
-											?>
-								</select>
-							</td>
-						</tr>
 
-						<tr>
-							<th>
-								<label for="disable_rating_snippet_popup">Offset: (Default = 0)</label>
-			                    <p style="font-size:12px;font-weight:100;">This option sets the offset to the product widget element. (Integer Number)</p>
-							</th>
-							<td>
-								<?php
-									$disable_rating_snippet_offset = get_option('disable_rating_snippet_offset');
-								?>
-								<input type="text" name="disable_rating_snippet_offset" value="<?php  echo $disable_rating_snippet_offset; ?>" />
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-								<label for="widget_hex_colour">Widget Hex Colour: </label>
-			                    <p style="font-size:12px;font-weight:100;">This will be used as the primary colour of your product review widget.</p>
-							</th>
-							<td>
-								<?php
-									$widget_hex_colour = get_option('widget_hex_colour');
-								?>
-								<input type="text" name="widget_hex_colour" value="<?php  echo $widget_hex_colour; ?>" />
-							</td>
-						</tr>
-
-						<tr>
-							<th>
-			                    <label for="hide_write_review_button">Hide Write Review Button: </label>
-			                    <p style="font-size:12px;font-weight:100;">Write a Review Button will be hidden on product page.</p>
-							</th>
-							<td>
-								<?php
-								$hide_write_review_button = get_option('hide_write_review_button');
-								?>
-								<select name="hide_write_review_button">
-									<option <?php echo ($hide_write_review_button == 1) ? 'selected' : '' ?> value="1">Hide Button</option>
-									<option <?php echo ($hide_write_review_button == 0) ? 'selected' : '' ?> value="0">Show Button</option>
-								</select>
-							</td>
-						</tr>
 
 
 
@@ -322,20 +239,111 @@
  								</td>
 						</tr>
 
-						<tr style="border-bottom: 1px solid #e4e4e4;">
+						<tr>
 							<th>
-								<label for="disable_rating_snippet_popup">Disable/Enable the rating snippet popup: </label>
-			                    <p style="font-size:12px;font-weight:100;">This option will disable/enable the rating snippet popup on product pages and anchor to product widget.</p>
+								<label for="disable_rating_snippet_popup">Rating Snippet Popup: </label>
+			                    <p style="font-size:12px;font-weight:100;">Disable or Enable the Rating Snippet Popup..</p>
 							</th>
 							<td>
 								<?php
 									$disable_rating_snippet_popup = get_option('disable_rating_snippet_popup');
 								?>
 								<select name="disable_rating_snippet_popup">
-									<option <?php echo ($disable_rating_snippet_popup == '0') ? 'selected' : '' ?> value="0">Popup Disabled</option>
+									<option <?php echo ($disable_rating_snippet_popup == '0') ? 'selected' : '' ?> value="0">Popup Disabled (Anchor to Product Review Widget)</option>
 									<option <?php echo ($disable_rating_snippet_popup == '1') ? 'selected' : '' ?> value="1">Popup Enabled</option>
 								</select>
 							</td>
+						</tr>
+
+
+						<tr style="border-top: 1px solid #e4e4e4;">
+							<th>
+								<h3><strong>Customise Widgets:</strong></h3>
+
+						    <label for="minimum_rating">Widget Language</label>
+						    <p style="font-size:12px;font-weight:100;">Set the Language of the Product Review Widget and Rating Snippet popup.</p>
+						  </th>
+						  <td>
+						    <?php
+						      $polaris_lang = get_option('polaris_lang');
+						    ?>
+						    <select name='polaris_lang'>
+						      <?php
+						        foreach(['English (Default)' => 'en', 'Deutsch' => 'de', 'Deutsch (Informal)' => 'de-informal', 'Español' => 'es', 'Français' => 'fr',
+						        'Italiano' => 'it', 'Nederlands' => 'nl', 'Suomi' => 'fi'] as $key => $value) {
+						        ?>
+						        <option <?php echo ($value == $polaris_lang ? 'selected' : ''); ?> value='<?php echo $value; ?>'>
+						          <?php echo $key; ?>
+						        </option>
+						        <?php
+						          }
+						          ?>
+						    </select>
+						  </td>
+						</tr>
+						<tr>
+						  <th>
+						    <label for="minimum_rating">Minimum Review Rating</label>
+						              <p style="font-size:12px;font-weight:100;">This option sets the minimum star rating of reviews displayed.</p>
+						  </th>
+						  <td>
+						    <?php
+						      $minimum_rating = get_option('minimum_rating');
+						    ?>
+						    <select name='minimum_rating'>
+						      <?php
+						        foreach(['None (Default)' => 1, '2 Stars' => 2, '3 Stars' => 3, '4 Stars' => 4, '5 Stars' => 5] as $key => $value) {
+						        ?>
+						        <option <?php echo ($value == $minimum_rating ? 'selected' : ''); ?> value='<?php echo $value; ?>'>
+						          <?php echo $key; ?>
+						        </option>
+						        <?php
+						          }
+						          ?>
+						    </select>
+						  </td>
+						</tr>
+
+						<tr>
+						  <th>
+						    <label for="disable_rating_snippet_popup">Offset: (Default = 0)</label>
+						              <p style="font-size:12px;font-weight:100;">This option sets the offset to the product widget element (Integer Number).</p>
+						  </th>
+						  <td>
+						    <?php
+						      $disable_rating_snippet_offset = get_option('disable_rating_snippet_offset');
+						    ?>
+						    <input type="text" name="disable_rating_snippet_offset" value="<?php  echo $disable_rating_snippet_offset; ?>" />
+						  </td>
+						</tr>
+
+						<tr>
+						  <th>
+						    <label for="widget_hex_colour">Star Colour: </label>
+						              <p style="font-size:12px;font-weight:100;">Sets the primary colour for your widgets.</p>
+						  </th>
+						  <td>
+						    <?php
+						      $widget_hex_colour = get_option('widget_hex_colour');
+						    ?>
+						    <input type="text" name="widget_hex_colour" value="<?php  echo $widget_hex_colour; ?>" />
+						  </td>
+						</tr>
+
+						<tr>
+						  <th>
+		              <label for="hide_write_review_button">Hide Write Review Button: </label>
+		              <p style="font-size:12px;font-weight:100;">Write a Review Button will be hidden on your widgets.</p>
+						  </th>
+						  <td>
+						    <?php
+						    $hide_write_review_button = get_option('hide_write_review_button');
+						    ?>
+						    <select name="hide_write_review_button">
+						      <option <?php echo ($hide_write_review_button == 1) ? 'selected' : '' ?> value="1">Hide Button</option>
+						      <option <?php echo ($hide_write_review_button == 0) ? 'selected' : '' ?> value="0">Show Button</option>
+						    </select>
+						  </td>
 						</tr>
 					</table>
 		        </div>
@@ -373,7 +381,7 @@
 						 <tr>
  							<th>
                 <label for="enable_rich_snippet">Enable Q&A: </label>
-                <p style="font-size:12px;font-weight:100;">This will add a Q&A Tab to your Product Reviews Widget.</p>
+                <p style="font-size:12px;font-weight:100;">This will add a Q&A Tab to your Product Review Widget.</p>
  							</th>
  							<td>
  								<?php
@@ -466,7 +474,7 @@
 						<tr>
 							<th>
 								<label>Latest Orders CSV:</label>
-			                    <p style="font-size:12px;font-weight:100;">Download this CSV and upload it to the <b>Review Booster</b> in the REVIEWS.io Dashboard to start collecting reviews.</p>
+			                    <p style="font-size:12px;font-weight:100;">Download this CSV and upload it to the <b>Review Booster</b> section in the REVIEWS.io Dashboard to start collecting reviews.</p>
 							</th>
 							<td>
 								<a class="button" href="<?php echo get_site_url(); ?>/index.php/reviews/order_csv">Download Latest Orders CSV</a>
@@ -480,7 +488,7 @@
 						<tr>
 							<th>
 								<label for="disable_reviews_per_product">Disable Reviews Per Product: </label>
-			                    <p style="font-size:12px;font-weight:100;">If this is enabled then you can use the WooCommerce "Reviews Enabled" setting to disable review collection for certain products</p>
+			                    <p style="font-size:12px;font-weight:100;">If this is enabled then you can use the WooCommerce "Reviews Enabled" setting to disable review collection for certain products.</p>
 							</th>
 							<td>
 								<?php
@@ -496,7 +504,7 @@
 						<tr>
 							<th>
 								<label for="enable_cron">Enable Cron: </label>
-			                    <p style="font-size:12px;font-weight:100;">If you use a third party system to mark orders as completed then review invitations may not be triggered. If this setting is enabled a cron will run hourly which queues invitations for recently completed orders. <br /><br /> To prevent the cron running on visitor page loads you should disable WP_CRON and setup a real cron as described here: https://easyengine.io/tutorials/wordpress/wp-cron-crontab/.</p>
+			                    <p style="font-size:12px;font-weight:100;">If you use a third party system to mark orders as completed then review invitations may not be triggered. If this setting is enabled a cron will run hourly which queues invitations for recently completed orders. <br /><br /> To prevent the cron running on visitor page loads you should disable WP_CRON and setup a real cron as described <a target='_blank' href='https://easyengine.io/tutorials/wordpress/wp-cron-crontab/'>here</a>.</p>
 							</th>
 							<td>
 								<?php
