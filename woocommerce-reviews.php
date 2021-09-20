@@ -418,9 +418,11 @@ if (!class_exists('WooCommerce_Reviews')) {
                             event.preventDefault();
                             var productWidget = document.getElementById('widget-' + ".$this->numWidgets.");
                             if (productWidget) {
-                                reviewsTabButton = jQuery('.wc-tabs a[href=\"#tab-reviews\"]');
-                                if(reviewsTabButton.length) {
-                                  reviewsTabButton.trigger('click');
+                                if(jQuery){
+                                  reviewsTabButton = jQuery('.wc-tabs a[href=\"#tab-reviews\"]');
+                                  if(reviewsTabButton.length) {
+                                    reviewsTabButton.trigger('click');
+                                  }
                                 }
                                 var topPos = productWidget.offsetTop;
                                 productWidget.scrollTop = topPos;
