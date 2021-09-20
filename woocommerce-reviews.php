@@ -410,7 +410,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             $snippet_disable = '';
-            if (get_option('disable_rating_snippet_popup') == "0") {
+            if (is_product() && get_option('disable_rating_snippet_popup') == "0") {
                 $scroll_pos =  get_option('disable_rating_snippet_offset') !=='' ? get_option('disable_rating_snippet_offset') : 0;
                 $snippet_disable = "snippetul = document.querySelectorAll('.ruk_rating_snippet');
                     if (snippetul[0]) {
@@ -418,6 +418,10 @@ if (!class_exists('WooCommerce_Reviews')) {
                             event.preventDefault();
                             var productWidget = document.getElementById('widget-' + ".$this->numWidgets.");
                             if (productWidget) {
+                                reviewsTabButton = jQuery('.wc-tabs a[href=\"#tab-reviews\"]');
+                                if(reviewsTabButton.length) {
+                                  reviewsTabButton.trigger('click');
+                                }
                                 var topPos = productWidget.offsetTop;
                                 productWidget.scrollTop = topPos;
                                 window.scrollTo(0, topPos - parseInt(".$scroll_pos ."));
@@ -439,8 +443,8 @@ if (!class_exists('WooCommerce_Reviews')) {
                         text: "' . (get_option('rating_snippet_text') ? get_option('rating_snippet_text') : 'Reviews').'",
                         '. $writeButton . '
                     });
+                    '. $snippet_disable .'
                 });
-                '. $snippet_disable .'
             ');
         }
 
