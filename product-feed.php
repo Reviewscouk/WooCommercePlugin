@@ -19,6 +19,7 @@ foreach ($products as $product)
 	$image_link = '';
 
 	$image_id = $_product->get_image_id();
+	$image_url = '';
 
 	if ($image_id)
 	{
