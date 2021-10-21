@@ -6,7 +6,7 @@
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.13.2
+ * Version: 0.13.3
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 4.5.2
@@ -498,7 +498,7 @@ if (!class_exists('WooCommerce_Reviews')) {
           $color = $this->getHexColor();
 
           wp_add_inline_script('reviewsio-polaris-review',"
-              document.addEventListener('DOMContentLoaded', function() {
+              window.addEventListener('load', function() {
                 new ReviewsWidget(('#widget-".$this->numWidgets."'), {
                   //Your REVIEWS.io account ID and widget type:
                   store: '".get_option('store_id')."',
