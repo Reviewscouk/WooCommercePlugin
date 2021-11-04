@@ -789,7 +789,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                         "@type": "Product",
                         "name": "' . htmlspecialchars($product->get_name()) . '",
                         image: "' . $image[0] . '",
-                        description: ' . htmlspecialchars(strip_tags($product->get_description())) . ',
+                        description: ' . json_encode(htmlspecialchars(strip_tags($product->get_description()))) . ',
                         brand: {
                           "@type": "Brand",
                           name: "'.htmlspecialchars(!empty($brand) ? $brand : get_bloginfo("name")).'"
