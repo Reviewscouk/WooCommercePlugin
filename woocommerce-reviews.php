@@ -6,7 +6,7 @@
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.13.3
+ * Version: 0.13.4
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 4.5.2
