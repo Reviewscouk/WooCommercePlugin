@@ -771,7 +771,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     url: "'.get_permalink($product->get_id()).'",
                     seller : {
                         "@type": "Organization",
-                        name: "' . get_bloginfo("name") . '",
+                        name: "' . htmlspecialchars(get_bloginfo("name")) . '",
                         url: "' . get_bloginfo("url") . '"
                     }
                 },';
@@ -787,12 +787,12 @@ if (!class_exists('WooCommerce_Reviews')) {
                     data:{
                         "@context": "http://schema.org",
                         "@type": "Product",
-                        "name": "' . $product->get_name() . '",
+                        "name": "' . htmlspecialchars($product->get_name()) . '",
                         image: "' . $image[0] . '",
-                        description: ' . json_encode(htmlspecialchars(strip_tags($product->get_description()))) . ',
+                        description: ' . htmlspecialchars(strip_tags($product->get_description())) . ',
                         brand: {
                           "@type": "Brand",
-                          name: "'.(!empty($brand) ? $brand : get_bloginfo("name")).'"
+                          name: "'.htmlspecialchars(!empty($brand) ? $brand : get_bloginfo("name")).'"
                         },
                         offers: ['.($offer).']
                     }
