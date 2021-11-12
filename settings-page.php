@@ -86,8 +86,8 @@
 					<table class="form-table">
 						<tr>
 							<th>
-								<label for="send_product_review_invitation">Queue Products Review Emails: </label>
-			                    <p style="font-size:12px;font-weight:100;">Product Review Invitations will be queued when orders are dispatched.</p>
+								<label for="send_product_review_invitation">Queue Invitations: </label>
+			                    <p style="font-size:12px;font-weight:100;">Invitations will be queued when orders are Completed.</p>
 							</th>
 							<td>
 								<?php
@@ -99,24 +99,9 @@
 								</select>
 							</td>
 						</tr>
-						<tr>
-							<th>
-								<label for="send_merchant_review_invitation">Queue Company Review Emails: </label>
-			                    <p style="font-size:12px;font-weight:100;">Review Invitations will be queued when orders are dispatched.</p>
-							</th>
-							<td>
-								<?php
-									$send_merchant_review_invitation = get_option('send_merchant_review_invitation');
-								?>
-								<select name="send_merchant_review_invitation">
-									<option <?php echo ($send_merchant_review_invitation == 1) ? 'selected' : '' ?> value="1">Yes</option>
-									<option <?php echo ($send_merchant_review_invitation == 0) ? 'selected' : '' ?> value="0">No</option>
-								</select>
-							</td>
-						</tr>
 					</table>
 
-					<p>The invitation delay can be changed within the REVIEWS.io Dashboard under the <strong>Invitations</strong> menu.<strong>
+					<p>The invitation delay can be changed within the REVIEWS.io Dashboard under the <strong>Invitations</strong> menu, or from your <strong>Flow</strong>.
 		        </div>
 		        <div id="tab-3" class="tab-content">
 					<p>Customise how product reviews are published on your website.</p>

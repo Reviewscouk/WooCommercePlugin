@@ -6,7 +6,7 @@
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.13.4
+ * Version: 0.13.5
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 4.5.2
@@ -180,7 +180,6 @@ if (!class_exists('WooCommerce_Reviews')) {
             register_setting('woocommerce-reviews', 'question_answers_widget');
             register_setting('woocommerce-reviews', 'hide_write_review_button');
             register_setting('woocommerce-reviews', 'send_product_review_invitation');
-            register_setting('woocommerce-reviews', 'send_merchant_review_invitation');
             register_setting('woocommerce-reviews', 'enable_cron');
             register_setting('woocommerce-reviews', 'enable_floating_widget');
             register_setting('woocommerce-reviews', 'product_identifier');
@@ -199,7 +198,6 @@ if (!class_exists('WooCommerce_Reviews')) {
         {
             update_option('product_feed', 1);
             update_option('send_product_review_invitation', 1);
-            update_option('send_merchant_review_invitation', 1);
             if(!get_option('product_review_widget')) {
               update_option('polaris_review_widget', 'tab');
               update_option('hide_legacy', 1);
@@ -382,11 +380,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             );
 
             if (get_option('api_key') != '' && get_option('store_id') != '' && get_option('send_product_review_invitation') == '1' && count($data['products']) > 0) {
-                $this->apiPost('product/invitation', $data);
-            }
-
-            if (get_option('api_key') != '' && get_option('store_id') != '' && get_option('send_merchant_review_invitation') == '1') {
-                $this->apiPost('merchant/invitation', $data);
+                $this->apiPost('invitation', $data);
             }
         }
 
