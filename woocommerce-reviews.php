@@ -6,7 +6,7 @@
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.13.5
+ * Version: 0.13.6
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 4.5.2
@@ -429,18 +429,22 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             wp_add_inline_script( 'reviewsio-rating-snippet', '
                 document.addEventListener("DOMContentLoaded", function() {
-                    ratingSnippet("ruk_rating_snippet",{
-                        store: "'. get_option("store_id").'",
-                        lang: "' . (get_option('polaris_lang') ? get_option('polaris_lang') : 'en').'",
-                        usePolaris: true,
-                        color: "'. $this->getHexColor() .'",
-                        linebreak: "' . (get_option('rating_snippet_no_linebreak') == 1 ? false : true).'",
-                        minRating: "' . (get_option('minimum_rating') ? get_option('minimum_rating') : 1).'",
-                        text: "' . (get_option('rating_snippet_text') ? get_option('rating_snippet_text') : 'Reviews').'",
-                        '. $writeButton . '
-                    });
+                    loadReviewsIORating();
                     '. $snippet_disable .'
                 });
+
+                var loadReviewsIORating = function () {
+                  ratingSnippet("ruk_rating_snippet",{
+                      store: "'. get_option("store_id").'",
+                      lang: "' . (get_option('polaris_lang') ? get_option('polaris_lang') : 'en').'",
+                      usePolaris: true,
+                      color: "'. $this->getHexColor() .'",
+                      linebreak: "' . (get_option('rating_snippet_no_linebreak') == 1 ? false : true).'",
+                      minRating: "' . (get_option('minimum_rating') ? get_option('minimum_rating') : 1).'",
+                      text: "' . (get_option('rating_snippet_text') ? get_option('rating_snippet_text') : 'Reviews').'",
+                      '. $writeButton . '
+                  });
+                }
             ');
         }
 
