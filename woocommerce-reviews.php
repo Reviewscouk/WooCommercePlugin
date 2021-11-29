@@ -429,11 +429,11 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             wp_add_inline_script( 'reviewsio-rating-snippet', '
                 document.addEventListener("DOMContentLoaded", function() {
-                    loadReviewsIORating();
+                    loadReviewsIoRatingSnippets();
                     '. $snippet_disable .'
                 });
 
-                var loadReviewsIORating = function () {
+                var loadReviewsIoRatingSnippets = function () {
                   ratingSnippet("ruk_rating_snippet",{
                       store: "'. get_option("store_id").'",
                       lang: "' . (get_option('polaris_lang') ? get_option('polaris_lang') : 'en').'",
