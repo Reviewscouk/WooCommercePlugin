@@ -121,13 +121,31 @@
 							<td>
 
 								<select name="polaris_review_widget">
-									<option <?php echo ($polaris_review_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Reviews Tab</option>
+									<option <?php echo ($polaris_review_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Tab</option>
 									<option <?php echo ($polaris_review_widget == 'summary') ? 'selected' : '' ?> value="summary">Show Below Product Summary</option>
 									<option <?php echo ($polaris_review_widget == 'bottom') ? 'selected' : '' ?> value="bottom">Show At Bottom of Page</option>
 									<option <?php echo ($polaris_review_widget == '0') ? 'selected' : '' ?> value="0">Do Not Display</option>
 								</select>
 							</td>
 						</tr>
+
+						<?php if($polaris_review_widget == 'tab') { ?>
+							<tr>
+								<th>
+										<label for="enable_product_rating_snippet">Review Tab Text: </label>
+										<p style="font-size:12px;font-weight:100;">Sets the name of the review tab.</p>
+								</th>
+								<td>
+									<?php
+									$reviews_tab_name = get_option('reviews_tab_name');
+									?>
+									<input name='reviews_tab_name' value='<?php echo (!empty($reviews_tab_name) ? $reviews_tab_name : 'Reviews'); ?>'>
+									</td>
+							</tr>
+
+						<?php } ?>
+
+
 
 
 

@@ -6,7 +6,7 @@
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.13.7
+ * Version: 0.14
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 4.5.2
@@ -175,6 +175,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             register_setting('woocommerce-reviews', 'enable_product_rich_snippet');
             register_setting('woocommerce-reviews', 'enable_product_rating_snippet');
             register_setting('woocommerce-reviews', 'polaris_review_widget');
+            register_setting('woocommerce-reviews', 'reviews_tab_name');
             register_setting('woocommerce-reviews', 'polaris_review_widget_questions');
             register_setting('woocommerce-reviews', 'product_review_widget');
             register_setting('woocommerce-reviews', 'question_answers_widget');
@@ -203,6 +204,7 @@ if (!class_exists('WooCommerce_Reviews')) {
               update_option('hide_legacy', 1);
             }
 
+            update_option('reviews_tab_name', 'Reviews');
             update_option('product_identifier', 'sku');
             update_option('use_parent_product', 0);
             update_option('disable_rating_snippet_popup', 1);
@@ -902,7 +904,7 @@ if (!class_exists('WooCommerce_Reviews')) {
         {
           if (in_array(get_option('polaris_review_widget'), array('tab'))) {
               $tabs['reviews'] = array(
-                  'title'    => 'Reviews',
+                  'title'    => !empty(get_option('reviews_tab_name')) ? get_option('reviews_tab_name') : 'Reviews',
                   'callback' => array($this, 'polarisReviewWidget'),
                   'priority' => 50,
               );
@@ -912,7 +914,7 @@ if (!class_exists('WooCommerce_Reviews')) {
               }
           } else if (in_array(get_option('product_review_widget'), array('tab', 'both'))) {
                 $tabs['reviews'] = array(
-                    'title'    => 'Reviews',
+                    'title'    => !empty(get_option('reviews_tab_name')) ? get_option('reviews_tab_name') : 'Reviews',
                     'callback' => array($this, 'productReviewWidget'),
                     'priority' => 50,
                 );
