@@ -550,6 +550,19 @@
 							</td>
 						</tr>
 
+						<tr style="border-bottom: 1px solid #e4e4e4">
+							<th>
+								<label for="widget_custom_css">Advanced Product Reviews Widget Styles</label>
+													<p style="font-size:12px;font-weight:100;">Sets the styles for the Product Reviews Widget. After using the designer tool, copy the "styles" block, which begins with "styles: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
+							</th>
+							<td>
+								<?php
+									$custom_reviews_widget_styles = get_option('custom_reviews_widget_styles');
+								?>
+								<textarea name="custom_reviews_widget_styles" style="width:300px;height:200px;"><?php echo htmlentities($custom_reviews_widget_styles); ?></textarea>
+							</td>
+						</tr>
+
 						<tr>
 							<th>
 								<label for="hide_legacy">Show Legacy Widget Settings</label>
