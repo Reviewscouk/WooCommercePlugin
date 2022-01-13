@@ -6,7 +6,7 @@
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.16
+ * Version: 0.17
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 4.5.2
@@ -358,7 +358,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
                 $attachment_url = wp_get_attachment_url(get_post_thumbnail_id($row['product_id']));
 
-                if (!(get_option('disable_reviews_per_product') == '1' && $productmeta->post->comment_status == 'closed')) {
+                if (!empty($sku) && !(get_option('disable_reviews_per_product') == '1' && $productmeta->post->comment_status == 'closed')) {
                     $p[] = array(
                         'sku'     => $sku,
                         'name'    => $row['name'],
@@ -382,7 +382,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                 'country_code' => $country_code,
             );
 
-            if (get_option('api_key') != '' && get_option('store_id') != '' && get_option('send_product_review_invitation') == '1' && count($data['products']) > 0) {
+            if (get_option('api_key') != '' && get_option('store_id') != '' && get_option('send_product_review_invitation') == '1') {
                 $this->apiPost('invitation', $data);
             }
         }
