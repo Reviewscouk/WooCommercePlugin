@@ -6,7 +6,7 @@
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.17
+ * Version: 0.18
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 4.5.2
@@ -381,6 +381,21 @@ if (!class_exists('WooCommerce_Reviews')) {
                 'products' => $p,
                 'country_code' => $country_code,
             );
+
+            // Get phone number, format, and send
+            $phone = $order->get_billing_phone();
+            if(!empty($phone)) {
+              $dialing_code = WC()->countries->get_country_calling_code($country_code);
+              if(!empty($dialing_code) && is_string($dialing_code) && isset($phone[0])) {
+                if ($phone[0] == '0') {
+                  $data['phone'] = $dialing_code . ltrim($phone, '0');
+                } elseif ($phone[0] == '+') {
+                  $data['phone'] = $phone;
+                } else {
+                  $data['phone'] = $dialing_code . $phone;
+                }
+              }
+            }
 
             if (get_option('api_key') != '' && get_option('store_id') != '' && get_option('send_product_review_invitation') == '1') {
                 $this->apiPost('invitation', $data);
