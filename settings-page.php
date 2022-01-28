@@ -348,6 +348,19 @@
 						    </select>
 						  </td>
 						</tr>
+
+						<tr>
+						  <th>
+		              <label for="per_page_review_widget">Reviews Per Page: </label>
+		              <p style="font-size:12px;font-weight:100;">The amount of reviews displayed per page on the Product Review Widget.</p>
+						  </th>
+						  <td>
+						    <?php
+						    $per_page_review_widget = get_option('per_page_review_widget');
+						    ?>
+						    <input value='<?php echo (!empty($per_page_review_widget) ? $per_page_review_widget : 8); ?>' type='number' min='0' max='30' name="per_page_review_widget">
+						  </td>
+						</tr>
 					</table>
 		        </div>
 		        <div id="tab-qa" class="tab-content">

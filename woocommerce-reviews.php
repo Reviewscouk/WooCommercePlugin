@@ -6,7 +6,7 @@
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.20
+ * Version: 0.21
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 4.5.2
@@ -180,6 +180,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             register_setting('woocommerce-reviews', 'product_review_widget');
             register_setting('woocommerce-reviews', 'question_answers_widget');
             register_setting('woocommerce-reviews', 'hide_write_review_button');
+            register_setting('woocommerce-reviews', 'per_page_review_widget');
             register_setting('woocommerce-reviews', 'send_product_review_invitation');
             register_setting('woocommerce-reviews', 'enable_cron');
             register_setting('woocommerce-reviews', 'enable_floating_widget');
@@ -849,7 +850,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                           //Possible layout options: bordered, large and reverse.
                           layout: '',
                           //How many reviews & questions to show per page?
-                          per_page: 8,
+                          per_page: <?php echo !empty(get_option('per_page_review_widget')) && is_int((int)get_option('per_page_review_widget')) ? get_option('per_page_review_widget') : 8 ?>,
                           //Product specific settings. Provide product SKU for which reviews should be displayed:
                           product_review:{
                               //Display product reviews - include multiple product SKUs seperated by Semi-Colons (Main Indentifer in your product catalog )
