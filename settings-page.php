@@ -37,7 +37,7 @@
 					<table class="form-table">
 						<tr>
 							<th>
-								<label for="store_id">Store ID: </label>
+								<label for="REVIEWSio_store_id">Store ID: </label>
 
 			                    	</th>
 							<td>
@@ -49,7 +49,7 @@
 						</tr>
 						<tr>
 							<th>
-								<label for="api_key">API Key: </label>
+								<label for="REVIEWSio_api_key">API Key: </label>
 							</th>
 							<td>
 								<?php
@@ -60,7 +60,7 @@
 						</tr>
 						<tr>
 							<th>
-								<label for="region">Region: </label>
+								<label for="REVIEWSio_region">Region: </label>
 							</th>
 							<td>
 								<?php
@@ -86,7 +86,7 @@
 					<table class="form-table">
 						<tr>
 							<th>
-								<label for="send_product_review_invitation">Queue Invitations: </label>
+								<label for="REVIEWSio_send_product_review_invitation">Queue Invitations: </label>
 			                    <p style="font-size:12px;font-weight:100;">Invitations will be queued when orders are Completed.</p>
 							</th>
 							<td>
@@ -114,7 +114,7 @@
 							 	<th>
 									<h3><strong>Product Review Widget Settings:</strong></h3>
 
-								<label for="polaris_review_widget">Show Product Review Widget: </label>
+								<label for="REVIEWSio_polaris_review_widget">Show Product Review Widget: </label>
 				                    <p style="font-size:12px;font-weight:100;">
 															A mobile friendly product reviews widget displaying product & customer attributes, photos and videos.</p>
 							</th>
@@ -132,7 +132,7 @@
 						<?php if($polaris_review_widget == 'tab') { ?>
 							<tr>
 								<th>
-										<label for="enable_product_rating_snippet">Review Tab Text: </label>
+										<label for="REVIEWSio_enable_product_rating_snippet">Review Tab Text: </label>
 										<p style="font-size:12px;font-weight:100;">Sets the name of the review tab.</p>
 								</th>
 								<td>
@@ -158,7 +158,7 @@
 							 	<th>
 									<h3><strong>Legacy Widget Settings:</strong></h3>
 
-								<label for="product_review_widget">Show Legacy Product Review Widget: </label>
+								<label for="REVIEWSio_product_review_widget">Show Legacy Product Review Widget: </label>
 			                    <p style="font-size:12px;font-weight:100;">Please note that to use the Legacy Widget, the "Show Product Review Widget" setting must be set to "Do Not Display".</p>
 							</th>
 							<td>
@@ -174,7 +174,7 @@
 
 						<tr style="border-bottom: 1px solid #e4e4e4">
 							<th>
-								<label for="widget_custom_css">Widget Custom CSS: </label>
+								<label for="REVIEWSio_widget_custom_css">Widget Custom CSS: </label>
 													<p style="font-size:12px;font-weight:100;">Add custom CSS to the product reviews widget</p>
 							</th>
 							<td>
@@ -198,7 +198,7 @@
 							<th>
 								<h3><strong>Rating Snippet Settings:</strong></h3>
 
-			                    <label for="enable_product_rating_snippet">Enable Product Rating Snippet: </label>
+			                    <label for="REVIEWSio_enable_product_rating_snippet">Enable Product Rating Snippet: </label>
 			                    <p style="font-size:12px;font-weight:100;">When enabled a star rating will be displayed below the product title providing the product has reviews.<br /><br />If you would like to change how the rating is displaying you can choose the manual setting and use shortcode [rating_snippet] to display the rating.</p>
 							</th>
 							<td>
@@ -215,7 +215,7 @@
 
 						<tr>
 							<th>
-													<label for="enable_product_rating_snippet">Rating Snippet Linebreak: </label>
+													<label for="REVIEWSio_enable_product_rating_snippet">Rating Snippet Linebreak: </label>
 													<p style="font-size:12px;font-weight:100;">Adds a line break between rating stars and text.</p>
 							</th>
 							<td>
@@ -231,7 +231,7 @@
 
 						<tr>
 							<th>
-									<label for="enable_product_rating_snippet">Rating Snippet Text: </label>
+									<label for="REVIEWSio_enable_product_rating_snippet">Rating Snippet Text: </label>
 									<p style="font-size:12px;font-weight:100;">Sets the descriptor after the number of reviews on the Rating Snippet.</p>
 							</th>
 							<td>
@@ -244,7 +244,7 @@
 
 						<tr>
 							<th>
-								<label for="disable_rating_snippet_popup">Rating Snippet Popup: </label>
+								<label for="REVIEWSio_disable_rating_snippet_popup">Rating Snippet Popup: </label>
 			                    <p style="font-size:12px;font-weight:100;">Disable or Enable the Rating Snippet Popup..</p>
 							</th>
 							<td>
@@ -263,7 +263,7 @@
 							<th>
 								<h3><strong>Customise Widgets:</strong></h3>
 
-						    <label for="minimum_rating">Widget Language</label>
+						    <label for="REVIEWSio_minimum_rating">Widget Language</label>
 						    <p style="font-size:12px;font-weight:100;">Set the Language of the Product Review Widget and Rating Snippet popup.</p>
 						  </th>
 						  <td>
@@ -286,7 +286,7 @@
 						</tr>
 						<tr>
 						  <th>
-						    <label for="minimum_rating">Minimum Review Rating</label>
+						    <label for="REVIEWSio_minimum_rating">Minimum Review Rating</label>
 						              <p style="font-size:12px;font-weight:100;">This option sets the minimum star rating of reviews displayed.</p>
 						  </th>
 						  <td>
@@ -309,7 +309,7 @@
 
 						<tr>
 						  <th>
-						    <label for="disable_rating_snippet_popup">Offset: (Default = 0)</label>
+						    <label for="REVIEWSio_disable_rating_snippet_popup">Offset: (Default = 0)</label>
 						              <p style="font-size:12px;font-weight:100;">This option sets the offset to the product widget element (Integer Number).</p>
 						  </th>
 						  <td>
@@ -322,7 +322,7 @@
 
 						<tr>
 						  <th>
-						    <label for="widget_hex_colour">Star Colour: </label>
+						    <label for="REVIEWSio_widget_hex_colour">Star Colour: </label>
 						              <p style="font-size:12px;font-weight:100;">Sets the primary colour for your widgets, including the stars.</p>
 						  </th>
 						  <td>
@@ -335,7 +335,7 @@
 
 						<tr>
 						  <th>
-		              <label for="hide_write_review_button">Hide Write Review Button: </label>
+		              <label for="REVIEWSio_hide_write_review_button">Hide Write Review Button: </label>
 		              <p style="font-size:12px;font-weight:100;">Write a Review Button will be hidden on your widgets.</p>
 						  </th>
 						  <td>
@@ -351,7 +351,7 @@
 
 						<tr>
 						  <th>
-		              <label for="per_page_review_widget">Reviews Per Page: </label>
+		              <label for="REVIEWSio_per_page_review_widget">Reviews Per Page: </label>
 		              <p style="font-size:12px;font-weight:100;">The amount of reviews displayed per page on the Product Review Widget.</p>
 						  </th>
 						  <td>
@@ -372,7 +372,7 @@
 					<table class="form-table">
 						<tr>
 							<th>
-								<label for="product_review_widget">Show Legacy Question Answers Widget: </label>
+								<label for="REVIEWSio_product_review_widget">Show Legacy Question Answers Widget: </label>
 			                    <p style="font-size:12px;font-weight:100;">The widget will be displayed in a tab on your product pages.</p>
 							</th>
 							<td>
@@ -396,7 +396,7 @@
 					 <table class="form-table">
 						 <tr>
  							<th>
-                <label for="enable_rich_snippet">Enable Q&A: </label>
+                <label for="REVIEWSio_enable_rich_snippet">Enable Q&A: </label>
                 <p style="font-size:12px;font-weight:100;">This will add a Q&A Tab to your Product Review Widget.</p>
  							</th>
  							<td>
@@ -423,7 +423,7 @@
 					<table class="form-table">
 						<tr>
 							<th>
-			                    <label for="enable_rich_snippet">Enable Company Rich Snippet: </label>
+			                    <label for="REVIEWSio_enable_rich_snippet">Enable Company Rich Snippet: </label>
 							</th>
 							<td>
 								<?php
@@ -437,7 +437,7 @@
 						</tr>
 						<tr>
 							<th>
-								<label for="enable_product_rich_snippet">Enable Product Rich Snippet: </label>
+								<label for="REVIEWSio_enable_product_rich_snippet">Enable Product Rich Snippet: </label>
 			                    <p style="font-size:12px;font-weight:100;">The product rich snippet will give you stars on natural search results for your product pages.</p>
 							</th>
 							<td>
@@ -452,7 +452,7 @@
 						</tr>
 						<tr>
 							<th>
-			                    <label for="enable_floating_widget">Enable Floating Widget: </label>
+			                    <label for="REVIEWSio_enable_floating_widget">Enable Floating Widget: </label>
 			                    <p style="font-size:12px;font-weight:100;">A floating reviews tab will be added to the right side of your site.</p>
 							</th>
 							<td>
@@ -472,7 +472,7 @@
 					<table class="form-table">
 						<tr>
 							<th>
-								<label for="product_feed">Enable Product Feed: </label>
+								<label for="REVIEWSio_product_feed">Enable Product Feed: </label>
 			                    <p style="font-size:12px;font-weight:100;">For Product Invitations to queue correctly, we require access to your Product catalogue via a feed, which we will make available from <b><?php echo get_site_url(); ?>/index.php/reviews/product_feed</b>.</p>
 							</th>
 							<td>
@@ -502,7 +502,7 @@
 					<table class="form-table">
 						<tr>
 							<th>
-								<label for="disable_reviews_per_product">Disable Reviews Per Product: </label>
+								<label for="REVIEWSio_disable_reviews_per_product">Disable Reviews Per Product: </label>
 			                    <p style="font-size:12px;font-weight:100;">If this is enabled then you can use the WooCommerce "Reviews Enabled" setting to disable review collection for certain products.</p>
 							</th>
 							<td>
@@ -518,7 +518,7 @@
 
 						<tr>
 							<th>
-								<label for="enable_cron">Enable Cron: </label>
+								<label for="REVIEWSio_enable_cron">Enable Cron: </label>
 			                    <p style="font-size:12px;font-weight:100;">If you use a third party system to mark orders as completed then review invitations may not be triggered. If this setting is enabled a cron will run hourly which queues invitations for recently completed orders. <br /><br /> To prevent the cron running on visitor page loads you should disable WP_CRON and setup a real cron as described <a target='_blank' href='https://easyengine.io/tutorials/wordpress/wp-cron-crontab/'>here</a>.</p>
 							</th>
 							<td>
@@ -534,7 +534,7 @@
 
 						<tr>
 							<th>
-								<label for="product_identifier">Change Product Identifier</label>
+								<label for="REVIEWSio_product_identifier">Change Product Identifier</label>
 								<p style="font-size:12px;font-weight:100;">Use a different identifier for your products and variants. This identifier will be used for new invitations and for looking up existing reviews.</p>
 							</th>
 							<td>
@@ -549,7 +549,7 @@
 						</tr>
 						<tr>
 							<th>
-								<label for="use_parent_product">Use Parent Product</label>
+								<label for="REVIEWSio_use_parent_product">Use Parent Product</label>
 								<p style="font-size:12px;font-weight:100;">Enable this if you would like to only collect reviews on a parent product level. This is useful if you have products with many variations and you want to keep the data more manageable. </p>
 							</th>
 							<td>
@@ -565,7 +565,7 @@
 
 						<tr style="border-bottom: 1px solid #e4e4e4">
 							<th>
-								<label for="widget_custom_css">Advanced Product Reviews Widget Styles</label>
+								<label for="REVIEWSio_widget_custom_css">Advanced Product Reviews Widget Styles</label>
 													<p style="font-size:12px;font-weight:100;">Sets the styles for the Product Reviews Widget. After using the designer tool, copy the "styles" block, which begins with "styles: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
 							</th>
 							<td>
@@ -578,7 +578,7 @@
 
 						<tr>
 							<th>
-								<label for="hide_legacy">Show Legacy Widget Settings</label>
+								<label for="REVIEWSio_hide_legacy">Show Legacy Widget Settings</label>
 								<p style="font-size:12px;font-weight:100;">Enable this if you would like to use the legacy product widget. </p>
 							</th>
 							<td>
