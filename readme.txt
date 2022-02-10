@@ -16,11 +16,11 @@ We help 1000s of businesses collect and publish their reviews in Google, Bing & 
 
 ### What are Google Seller Ratings?
 
-[Google Seller Ratings](https://www.reviews.io/front/google-seller-ratings?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=google-seller-ratings) are the stars you see around the web when you search for products and companies on Google. They appear under Adwords ads, in Google Shopping product listing adverts, and in organic search results. Google Seller Ratings give your company a mind-boggling 17% increase in clicks to your site, meaning more traffic and sales. Google Seller Ratings are only achievable by collecting Company and Product reviews with a licensed Google Review Partner like Reviews.io. [Read more about Google Seller Ratings here.](https://www.reviews.co.uk/front/google-seller-ratings?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=google-seller-ratings)
+[Google Seller Ratings](https://www.reviews.io/front/google-seller-ratings?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=google-seller-ratings) are the stars you see around the web when you search for products and companies on Google. They appear under Adwords ads, in Google Shopping product listing adverts, and in organic search results. Google Seller Ratings give your company a mind-boggling 17% increase in clicks to your site, meaning more traffic and sales. Google Seller Ratings are only achievable by collecting Company and Product reviews with a licensed Google Review Partner like REVIEWS.io. [Read more about Google Seller Ratings here.](https://www.reviews.co.uk/front/google-seller-ratings?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=google-seller-ratings)
 
 ### What Are Company Reviews?
 
-[Company reviews](https://www.reviews.co.uk/front/company-reviews?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=company-reviews) are reviews on your store which help your company increase trust online and improve conversion to sale on your website. Company reviews are independently collected by Reviews.io and are a source of fantastic user-generated content, boosting your click-through rates and generating more sales for your woocommerce store. [Read more about Company Reviews here](https://www.reviews.co.uk/front/company-reviews?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=company-reviews)
+[Company reviews](https://www.reviews.co.uk/front/company-reviews?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=company-reviews) are reviews on your store which help your company increase trust online and improve conversion to sale on your website. Company reviews are independently collected by REVIEWS.io and are a source of fantastic user-generated content, boosting your click-through rates and generating more sales for your woocommerce store. [Read more about Company Reviews here](https://www.reviews.co.uk/front/company-reviews?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=company-reviews)
 
 ### What Are Product Reviews?
 
@@ -32,7 +32,7 @@ The module will automatically email your customers at a set time after purchase 
 
 ### Third Party Review Collection and Reputation Management
 
-Unique to Reviews.io, you can now [collect reviews on third party platforms](https://www.reviews.co.uk/front/reputation-management?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=reputation-management) including Facebook, Google Local, Amazon and Trustpilot, ensuring you have a consistent reputation throughout the web. Manage your reviews across the web all in one handy dashboard, not across 20 tabs in your Internet browser. [Read more about 3rd Party Review Collection here](https://www.reviews.co.uk/front/reputation-management).
+Unique to REVIEWS.io, you can now [collect reviews on third party platforms](https://www.reviews.co.uk/front/reputation-management?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=reputation-management) including Facebook, Google Local, Amazon and Trustpilot, ensuring you have a consistent reputation throughout the web. Manage your reviews across the web all in one handy dashboard, not across 20 tabs in your Internet browser. [Read more about 3rd Party Review Collection here](https://www.reviews.co.uk/front/reputation-management).
 
 ### Fair pricing, no long contracts
 
@@ -44,7 +44,7 @@ Our service starts at [$45](https://www.reviews.io/front/pricingplans?utm_source
 
 ### The best platform for features
 
-We've packed so many features into Reviews.io. [Take a look at our website for the full list](https://www.reviews.co.uk/business-solutions?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=business-solutions). We include:-
+We've packed so many features into REVIEWS.io. [Take a look at our website for the full list](https://www.reviews.co.uk/business-solutions?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=business-solutions). We include:-
 
 *   [Company Reviews](https://www.reviews.co.uk/front/company-reviews?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=company-reviews)
 *   [Product Reviews](https://www.reviews.co.uk/front/productreviews?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=productreviews)
@@ -98,7 +98,7 @@ We are always working on new features that will help increase your ROI, new core
 
 ## IN WHICH COUNTRIES IS REVIEWS.io SUPPORTED?
 
-REVIEWS.io functionality is currently available in English speaking countries. That said if you are from a country outside of the UK you may be better off using our international site Reviews.io.
+REVIEWS.io functionality is currently available in English speaking countries. That said if you are from a country outside of the UK you may be better off using our international site REVIEWS.io.
 
 ## ARE CUSTOM PLANS AVAILABLE?
 
