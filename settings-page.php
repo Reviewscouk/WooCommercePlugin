@@ -14,6 +14,8 @@
 			</div>
 		</div>
 
+		 <input hidden name='REVIEWSio_new_variables_set' value='1' />
+
 
 		<?php
 			$hide_legacy = get_option('REVIEWSio_hide_legacy');
