@@ -15,7 +15,7 @@ foreach ($products as $product)
 
 	$woocommerce_sku = $_product->get_sku();
 	$woocommerce_id = $product->ID;
-	$sku    = get_option('product_identifier') == 'id'? $woocommerce_id : $woocommerce_sku;
+	$sku    = get_option('REVIEWSio_product_identifier') == 'id'? $woocommerce_id : $woocommerce_sku;
 	$image_link = '';
 
 	$image_id = $_product->get_image_id();
@@ -54,13 +54,13 @@ foreach ($products as $product)
 	$productArray[] = array($sku, $product->post_title, $image_url, get_permalink($product->ID), $sku, $woocommerce_sku, $woocommerce_id, $barcode, $categories_string);
 
 	// Add variants as additional products
-	if ($_pf->get_product_type($product->ID) == 'variable' && get_option('use_parent_product') != 1)
+	if ($_pf->get_product_type($product->ID) == 'variable' && get_option('REVIEWSio_use_parent_product') != 1)
 	{
 		$available_variations = $_product->get_available_variations();
 
 		foreach ($available_variations as $variation)
 		{
-			$variant_sku = get_option('product_identifier') == 'id'? $variation['variation_id'] : $variation['sku'];
+			$variant_sku = get_option('REVIEWSio_product_identifier') == 'id'? $variation['variation_id'] : $variation['sku'];
 			$variant_attributes = is_array($variation['attributes'])? implode(' ',  array_filter(array_values($variation['attributes']))) : '';
 			$variant_title = $product->post_title;
 			if(!empty($variant_attributes)){

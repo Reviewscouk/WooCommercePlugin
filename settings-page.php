@@ -16,7 +16,7 @@
 
 
 		<?php
-			$hide_legacy = get_option('hide_legacy');
+			$hide_legacy = get_option('REVIEWSio_hide_legacy');
  		?>
 
 		<div id="tabs-container">
@@ -42,7 +42,7 @@
 			                    	</th>
 							<td>
 								<?php
-								$store_id = get_option('store_id');
+								$store_id = get_option('REVIEWSio_store_id');
 								?>
 								<input type="text" name="store_id" value="<?php  echo $store_id; ?>" />
 							</td>
@@ -53,7 +53,7 @@
 							</th>
 							<td>
 								<?php
-									$api_key = get_option('api_key');
+									$api_key = get_option('REVIEWSio_api_key');
 								?>
 								<input type="text" name="api_key" value="<?php  echo $api_key; ?>" />
 							</td>
@@ -64,7 +64,7 @@
 							</th>
 							<td>
 								<?php
-								$region = get_option('region');
+								$region = get_option('REVIEWSio_region');
 								?>
 								<select name="region">
 									<option <?php echo ($region == 'uk') ? 'selected' : '' ?> value="uk">UK</option>
@@ -91,7 +91,7 @@
 							</th>
 							<td>
 								<?php
-									$send_product_review_invitation = get_option('send_product_review_invitation');
+									$send_product_review_invitation = get_option('REVIEWSio_send_product_review_invitation');
 								?>
 								<select name="send_product_review_invitation">
 									<option <?php echo ($send_product_review_invitation == 1) ? 'selected' : '' ?> value="1">Yes</option>
@@ -108,7 +108,7 @@
 
 					<table class="form-table">
 						<?php
-							$polaris_review_widget = get_option('polaris_review_widget');
+							$polaris_review_widget = get_option('REVIEWSio_polaris_review_widget');
 						?>
 						<tr>
 							 	<th>
@@ -137,7 +137,7 @@
 								</th>
 								<td>
 									<?php
-									$reviews_tab_name = get_option('reviews_tab_name');
+									$reviews_tab_name = get_option('REVIEWSio_reviews_tab_name');
 									?>
 									<input name='reviews_tab_name' value='<?php echo (!empty($reviews_tab_name) ? $reviews_tab_name : 'Reviews'); ?>'>
 									</td>
@@ -150,7 +150,7 @@
 
 
 						<?php
-							$product_review_widget = get_option('product_review_widget');
+							$product_review_widget = get_option('REVIEWSio_product_review_widget');
 							if(!$hide_legacy) {
 						?>
 						<tr style="border-top: 1px solid #e4e4e4;">
@@ -179,7 +179,7 @@
 							</th>
 							<td>
 								<?php
-									$widget_custom_css = get_option('widget_custom_css');
+									$widget_custom_css = get_option('REVIEWSio_widget_custom_css');
 								?>
 								<textarea name="widget_custom_css" style="width:300px;height:200px;"><?php echo htmlentities($widget_custom_css); ?></textarea>
 							</td>
@@ -203,7 +203,7 @@
 							</th>
 							<td>
 								<?php
-								$enable_product_rating_snippet = get_option('enable_product_rating_snippet');
+								$enable_product_rating_snippet = get_option('REVIEWSio_enable_product_rating_snippet');
 								?>
 								<select name="enable_product_rating_snippet">
 									<option <?php echo ($enable_product_rating_snippet == 1) ? 'selected' : '' ?> value="1">Enabled</option>
@@ -220,7 +220,7 @@
 							</th>
 							<td>
 								<?php
-								$rating_snippet_no_linebreak = get_option('rating_snippet_no_linebreak');
+								$rating_snippet_no_linebreak = get_option('REVIEWSio_rating_snippet_no_linebreak');
 								?>
 								<select name="rating_snippet_no_linebreak">
 									<option <?php echo ($rating_snippet_no_linebreak == 0) ? 'selected' : '' ?> value="0">Enabled (Default)</option>
@@ -236,7 +236,7 @@
 							</th>
 							<td>
 								<?php
-								$rating_snippet_text = get_option('rating_snippet_text');
+								$rating_snippet_text = get_option('REVIEWSio_rating_snippet_text');
 								?>
 								<input name='rating_snippet_text' value='<?php echo (isset($rating_snippet_text) ? $rating_snippet_text : 'Reviews'); ?>'>
  								</td>
@@ -249,7 +249,7 @@
 							</th>
 							<td>
 								<?php
-									$disable_rating_snippet_popup = get_option('disable_rating_snippet_popup');
+									$disable_rating_snippet_popup = get_option('REVIEWSio_disable_rating_snippet_popup');
 								?>
 								<select name="disable_rating_snippet_popup">
 									<option <?php echo ($disable_rating_snippet_popup == '0') ? 'selected' : '' ?> value="0">Disabled (Anchor to Product Review Widget)</option>
@@ -268,7 +268,7 @@
 						  </th>
 						  <td>
 						    <?php
-						      $polaris_lang = get_option('polaris_lang');
+						      $polaris_lang = get_option('REVIEWSio_polaris_lang');
 						    ?>
 						    <select name='polaris_lang'>
 						      <?php
@@ -291,7 +291,7 @@
 						  </th>
 						  <td>
 						    <?php
-						      $minimum_rating = get_option('minimum_rating');
+						      $minimum_rating = get_option('REVIEWSio_minimum_rating');
 						    ?>
 						    <select name='minimum_rating'>
 						      <?php
@@ -314,7 +314,7 @@
 						  </th>
 						  <td>
 						    <?php
-						      $disable_rating_snippet_offset = get_option('disable_rating_snippet_offset');
+						      $disable_rating_snippet_offset = get_option('REVIEWSio_disable_rating_snippet_offset');
 						    ?>
 						    <input type="text" name="disable_rating_snippet_offset" value="<?php  echo $disable_rating_snippet_offset; ?>" />
 						  </td>
@@ -327,7 +327,7 @@
 						  </th>
 						  <td>
 						    <?php
-						      $widget_hex_colour = get_option('widget_hex_colour');
+						      $widget_hex_colour = get_option('REVIEWSio_widget_hex_colour');
 						    ?>
 						    <input type="text" name="widget_hex_colour" value="<?php  echo $widget_hex_colour; ?>" />
 						  </td>
@@ -340,7 +340,7 @@
 						  </th>
 						  <td>
 						    <?php
-						    $hide_write_review_button = get_option('hide_write_review_button');
+						    $hide_write_review_button = get_option('REVIEWSio_hide_write_review_button');
 						    ?>
 						    <select name="hide_write_review_button">
 						      <option <?php echo ($hide_write_review_button == 1) ? 'selected' : '' ?> value="1">Hide Button</option>
@@ -356,7 +356,7 @@
 						  </th>
 						  <td>
 						    <?php
-						    $per_page_review_widget = get_option('per_page_review_widget');
+						    $per_page_review_widget = get_option('REVIEWSio_per_page_review_widget');
 						    ?>
 						    <input value='<?php echo (!empty($per_page_review_widget) ? $per_page_review_widget : 8); ?>' type='number' min='0' max='30' name="per_page_review_widget">
 						  </td>
@@ -377,7 +377,7 @@
 							</th>
 							<td>
 								<?php
-									$question_answers_widget = get_option('question_answers_widget');
+									$question_answers_widget = get_option('REVIEWSio_question_answers_widget');
 								?>
 								<select name="question_answers_widget">
 									<option <?php echo ($question_answers_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Tab</option>
@@ -401,7 +401,7 @@
  							</th>
  							<td>
  								<?php
- 								$polaris_review_widget_questions = get_option('polaris_review_widget_questions');
+ 								$polaris_review_widget_questions = get_option('REVIEWSio_polaris_review_widget_questions');
  								?>
  								<select name="polaris_review_widget_questions">
  									<option <?php echo ($polaris_review_widget_questions == 1) ? 'selected' : '' ?> value="1">Yes</option>
@@ -427,7 +427,7 @@
 							</th>
 							<td>
 								<?php
-								$enable_rich_snippet = get_option('enable_rich_snippet');
+								$enable_rich_snippet = get_option('REVIEWSio_enable_rich_snippet');
 								?>
 								<select name="enable_rich_snippet">
 									<option <?php echo ($enable_rich_snippet == 1) ? 'selected' : '' ?> value="1">Yes</option>
@@ -442,7 +442,7 @@
 							</th>
 							<td>
 								<?php
-								$enable_product_rich_snippet = get_option('enable_product_rich_snippet');
+								$enable_product_rich_snippet = get_option('REVIEWSio_enable_product_rich_snippet');
 								?>
 								<select name="enable_product_rich_snippet">
 									<option <?php echo ($enable_product_rich_snippet == 1) ? 'selected' : '' ?> value="1">Yes</option>
@@ -457,7 +457,7 @@
 							</th>
 							<td>
 								<?php
-								$enable_floating_widget = get_option('enable_floating_widget');
+								$enable_floating_widget = get_option('REVIEWSio_enable_floating_widget');
 								?>
 								<select name="enable_floating_widget">
 									<option <?php echo ($enable_floating_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
@@ -477,7 +477,7 @@
 							</th>
 							<td>
 								<?php
-									$enableProductFeed = get_option('product_feed');
+									$enableProductFeed = get_option('REVIEWSio_product_feed');
 								?>
 								<select name="product_feed">
 									<option <?php echo ($enableProductFeed == 1) ? 'selected' : '' ?> value="1">Yes</option>
@@ -507,7 +507,7 @@
 							</th>
 							<td>
 								<?php
-									$disable_reviews_per_product = get_option('disable_reviews_per_product');
+									$disable_reviews_per_product = get_option('REVIEWSio_disable_reviews_per_product');
 								?>
 								<select name="disable_reviews_per_product">
 									<option <?php echo ($disable_reviews_per_product== 1) ? 'selected' : '' ?> value="1">Yes</option>
@@ -523,7 +523,7 @@
 							</th>
 							<td>
 								<?php
-									$enableCron = get_option('enable_cron');
+									$enableCron = get_option('REVIEWSio_enable_cron');
 								?>
 								<select name="enable_cron">
 									<option <?php echo ($enableCron== 1) ? 'selected' : '' ?> value="1">Yes</option>
@@ -539,7 +539,7 @@
 							</th>
 							<td>
 								<?php
-								$product_identifier = get_option('product_identifier');
+								$product_identifier = get_option('REVIEWSio_product_identifier');
 								?>
 								<select name="product_identifier">
 									<option <?php echo ($product_identifier == 'sku') ? 'selected' : '' ?> value="sku">SKU (Recommended)</option>
@@ -554,7 +554,7 @@
 							</th>
 							<td>
 								<?php
-								$use_parent_product = get_option('use_parent_product');
+								$use_parent_product = get_option('REVIEWSio_use_parent_product');
 								?>
 								<select name="use_parent_product">
 									<option <?php echo ($use_parent_product== 0) ? 'selected' : '' ?> value="0">No (Default)</option>
@@ -570,7 +570,7 @@
 							</th>
 							<td>
 								<?php
-									$custom_reviews_widget_styles = get_option('custom_reviews_widget_styles');
+									$custom_reviews_widget_styles = get_option('REVIEWSio_custom_reviews_widget_styles');
 								?>
 								<textarea name="custom_reviews_widget_styles" style="width:300px;height:200px;"><?php echo htmlentities($custom_reviews_widget_styles); ?></textarea>
 							</td>
