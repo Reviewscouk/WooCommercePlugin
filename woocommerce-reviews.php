@@ -863,7 +863,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                               enable_attributes: true,
                               enable_image_gallery: true, //Show photo & video gallery
                               enable_percent_recommended: false, //Show what percentage of reviewers recommend it
-                              enable_write_review: "<?php echo (get_option('REVIEWSio_hide_write_review_button') == '1' ? 'false' : 'true' ) ?>",
+                              enable_write_review: "<?php echo (get_option('REVIEWSio_hide_write_review_button') == '1' ? false : true ) ?>",
                               enable_ask_question: true,
                               enable_sub_header: true, //Show subheader
                           },
