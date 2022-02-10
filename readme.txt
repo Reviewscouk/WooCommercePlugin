@@ -52,9 +52,8 @@ We've packed so many features into REVIEWS.io. [Take a look at our website for t
 *   [Rich Snippets](https://www.reviews.co.uk/front/google-seller-ratings?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=google-seller-ratings)
 *   [Review Booster](https://www.reviews.co.uk/front/review-collection?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=review-collection)
 *   [Automated Review Collection](https://www.reviews.co.uk/front/review-collection?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=review-collection)
-*   [Simple integration](https://support.reviews.io/en/article/installation-woocommerce-reviews-plugin?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=installation-woocommerce-reviews-plugin)
+*   [Simple integration](https://support.reviews.io/en/articles/3203716-woocommerce-plugin?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=installation-woocommerce-reviews-plugin)
 *   [API Access](https://www.reviews.co.uk/front/developer_center)
-*   [Voucher Codes](https://support.reviews.io/en/article/voucher-codes?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=voucher-codes)
 *   [Plug and Play Badges and Widgets](https://www.reviews.co.uk/front/review-publishing?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=review-publishing)
 *   [Full Reporting and Statistics](https://www.reviews.co.uk/front/review-reporting?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=review-reporting)
 *   UK based phone, email and Live Chat support
