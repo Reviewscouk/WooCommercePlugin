@@ -2,7 +2,7 @@
 Contributors: Reviewscouk
 Tags: Reviews, Seller Ratings, Google Reviews, Company Reviews, Business Reviews, Product Reviews, Facebook Reviews, Amazon Reviews, Google Partner, Google Seller Ratings, Google Stars, Stars in Adwords
 Author URI: https://www.reviews.io
-Tested up to: 5.8.1
+Tested up to: 5.9
 
 Get Stars and Seller Ratings in Google and across the web by collecting genuine, verified reviews with a Google-licensed Reviews Partner.
 
@@ -121,7 +121,7 @@ We can ensure that all data sent to REVIEWS.io is handled securely. All data is 
 
 ## HOW DO I CANCEL THE SERVICE?
 
-Canceling REVIEWS.io is an easy and no-questions-asked process. You do it simply from your dashboard. If you close your account with REVIEWS.io, we simply remove the access to the dashboard and 3rd party publishing.
+Cancelling REVIEWS.io is an easy and no-questions-asked process. You do it simply from your dashboard. If you close your account with REVIEWS.io, we simply remove the access to the dashboard and 3rd party publishing.
 
 ## I HAVE MORE QUESTIONS?
 
