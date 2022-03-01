@@ -583,7 +583,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     sku: "' . $variant['sku'] . '",
                     priceValidUntil: "'. $validUntil .'",
                     url: "'.get_permalink($product->get_id()).'",
-                    ' . apply_filters(('REVIEWSio_offer-'. $variant['variation_id']), "", $product, $variant). '
+                    ' . apply_filters(('REVIEWSio_snippet-'. $variant['variation_id']), "", $product, $variant). '
                     seller : {
                         "@type": "Organization",
                         name: "' . htmlspecialchars(get_bloginfo("name")) . '",
