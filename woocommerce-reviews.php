@@ -6,7 +6,7 @@
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.3.1
+ * Version: 0.3.2
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 4.5.2
@@ -574,7 +574,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             if(!empty($variants)) {
               foreach($variants as $variant) {
-                $offer.= '{
+                $offer.= ('{
                     "@type": "Offer",
                     itemCondition: "NewCondition",
                     availability: "' . $this->formatAvailability((!empty($variant['is_purchasable']) ? 'instock' : 'outofstock')) . '",
@@ -583,12 +583,13 @@ if (!class_exists('WooCommerce_Reviews')) {
                     sku: "' . $variant['sku'] . '",
                     priceValidUntil: "'. $validUntil .'",
                     url: "'.get_permalink($product->get_id()).'",
+                    ' . apply_filters(('REVIEWSio_offer-'. $variant['variation_id']), "", $product, $variant). '
                     seller : {
                         "@type": "Organization",
                         name: "' . htmlspecialchars(get_bloginfo("name")) . '",
                         url: "' . get_bloginfo("url") . '"
                     }
-                },';
+                },');
               }
             }
 
@@ -603,11 +604,12 @@ if (!class_exists('WooCommerce_Reviews')) {
                         "@type": "Product",
                         "name": "' . htmlspecialchars($product->get_name()) . '",
                         image: "' . $image[0] . '",
-                        description: ' . apply_filters('REVIEWSio_description', (json_encode(htmlspecialchars(strip_tags($product->get_description()))))) . ',
+                        description: ' . json_encode(apply_filters('REVIEWSio_description', htmlspecialchars(strip_tags($product->get_description())), $product)) . ',
                         brand: {
                           "@type": "Brand",
-                          name: "'.apply_filters('REVIEWSio_brand', (htmlspecialchars(!empty($brand) ? $brand : get_bloginfo("name")))).'"
+                          name: "'.apply_filters('REVIEWSio_brand', (htmlspecialchars(!empty($brand) ? $brand : get_bloginfo("name"))), $product).'"
                         },
+                        ' . apply_filters('REVIEWSio_snippet', "", $product). '
                         offers: ['.($offer).']
                     }
                 });
