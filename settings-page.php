@@ -1,3 +1,9 @@
+<?php
+if(!defined('ABSPATH')) {
+  exit;
+}
+?>
+
 <div class="wrap">
 	<img src="https://assets.reviews.io/img/all-global-assets/logo/reviewsio-logo.svg" height="40"  style="margin-top:15px;" />
 	<form method="post" action="options.php" autocomplete="off">

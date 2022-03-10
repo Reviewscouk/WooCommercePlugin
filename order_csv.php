@@ -1,4 +1,8 @@
 <?php
+if(!defined('ABSPATH')) {
+  exit;
+}
+
 header('Content-Type: text/csv; charset=UTF-8');
 
 $args = array(
