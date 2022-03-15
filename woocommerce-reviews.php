@@ -11,7 +11,7 @@ if(!defined('ABSPATH')) {
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.3.3
+ * Version: 0.3.4
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 4.5.2
@@ -516,19 +516,25 @@ if (!class_exists('WooCommerce_Reviews')) {
         }
 
         public function reviewsio_floating_widget_snippet_scripts() {
-            wp_register_script('reviewsio-floating-widget',$this->getDashDomain().'widget/float.js', array(),false, false);
-            wp_register_style( 'reviewsio-floating-widget-style',  $this->getDashDomain().'widget/float.css', array(), false, false);
+            wp_register_script('reviewsio-floating-widget-script', $this->getWidgetDomain().'rich-snippet-reviews-widgets/dist.js', array(),false, false);
+            wp_register_style( 'reviewsio-floating-widget-style',  $this->getWidgetDomain().'floating-widget/css/dist.css', array(), false, false);
 
-            wp_enqueue_script('reviewsio-floating-widget');
+            wp_enqueue_script('reviewsio-floating-widget-script');
             wp_enqueue_style('reviewsio-floating-widget-style');
 
-            add_filter('script_loader_tag',array($this, 'add_floating_widget_data'), 10, 3);
-        }
-
-        public function add_floating_widget_data($tag, $handle, $src) {
-            if($handle != 'reviewsio-floating-widget') return $tag;
-
-            return '<script type="text/javascript" src="' . $src . '" data-store="'.get_option('REVIEWSio_store_id').'" data-color="'.$this->getHexColor().'" data-position="right"></script>';
+            wp_add_inline_script('reviewsio-floating-widget-script','
+              window.addEventListener("load", (event) => {
+                    richSnippetReviewsWidgets({
+                        store: "'.(get_option('REVIEWSio_store_id')).'",
+                        primaryClr: "'. ($this->getHexColor()) .'",
+                        widgetName: "floating-widget",
+                        numReviews: 40,
+                        floatPosition: "right",
+                        contentMode: "company",
+                        tabStyle: "normal",
+                        hideDates: false
+                    });
+              });');
         }
 
         public function reviewsio_rich_snippet_scripts() {
