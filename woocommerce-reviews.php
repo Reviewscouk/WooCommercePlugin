@@ -685,6 +685,10 @@ if (!class_exists('WooCommerce_Reviews')) {
                     $skus[] = $sku;
                 }
 
+                if(get_option('REVIEWSio_use_parent_product') == 1) {
+                  return $skus;
+                }
+
                 if ($product->get_type() == 'variable') {
                     $available_variations = $product->get_available_variations();
                     foreach ($available_variations as $variant) {
