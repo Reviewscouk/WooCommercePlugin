@@ -11,7 +11,7 @@ if(!defined('ABSPATH')) {
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.3.5
+ * Version: 0.3.6
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 4.5.2
@@ -583,7 +583,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                 }
             },';
 
-            if(!empty($variants)) {
+            if(!empty($variants) && !(get_option('REVIEWSio_use_parent_product') == 1)) {
               foreach($variants as $variant) {
                 $offer.= ('{
                     "@type": "Offer",
