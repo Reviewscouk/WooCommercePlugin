@@ -684,8 +684,8 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             $skus = [];
             if (is_object($product) && $product instanceof WC_Product) {
-
-                $sku  = get_option('REVIEWSio_product_identifier') == 'id' ? get_the_ID() : $product->get_sku();
+                $meta = get_post_meta(get_the_ID(), '_sku');
+                $sku  = get_option('REVIEWSio_product_identifier') == 'id' ? get_the_ID() : (isset($meta[0]) ? $meta[0] : '');
                 if (!empty($sku)) {
                     $skus[] = $sku;
                 }
