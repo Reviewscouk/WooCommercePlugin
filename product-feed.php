@@ -99,7 +99,6 @@ foreach ($products as $product)
           }
       }
   }
-
 	// Add variants as additional products
 	if ($_pf->get_product_type($product->ID) == 'variable' && get_option('REVIEWSio_use_parent_product') != 1)
 	{
@@ -110,11 +109,28 @@ foreach ($products as $product)
 			$variant_sku = get_option('REVIEWSio_product_identifier') == 'id'? $variation['variation_id'] : $variation['sku'];
 			$variant_attributes = is_array($variation['attributes'])? implode(' ',  array_filter(array_values($variation['attributes']))) : '';
 			$variant_title = $product->post_title;
+
 			if(!empty($variant_attributes)){
 				//$variant_title .= ' - '.$variant_attributes;
 			}
 			$productArray[] = array( $variant_sku, $variant_title, $image_url, get_permalink($product->ID), $variation['sku'], $variation['sku'], $variation['variation_id'], $barcode, $categories_string, $categories_json);
+
+      $newFields = [];
       //Append main product attribute fields for variant products
+      foreach($_product->get_attributes() as $productAttribute) {
+          if(in_array($productAttribute['name'], $customProductAttributes)) {
+              $newFields[$productAttribute['name']] = $productAttribute['options'][0];
+          }
+      }
+      //Overwrite new column value if variant attribute data is available
+      if(!empty($variation['attributes'])){
+          foreach ($variation['attributes'] as $variant_attribute_key => $variant_attribute_value) {
+              $variantAttributeColumnName = str_replace('attribute_', '', $variant_attribute_key);
+              $variantAttributeColumnValue = $variant_attribute_value;
+              $newFields[$variantAttributeColumnName] = $variant_attribute_value;
+          }
+      }
+      //Insert additional data
       if(!empty($newFields)) {
           foreach ($newFields as $columnName => $columnValue) {
               $insertAtColumnIndex = false;
@@ -136,6 +152,7 @@ foreach ($products as $product)
               }
           }
       }
+
 		}
 	}
 }
