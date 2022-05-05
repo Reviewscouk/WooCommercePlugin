@@ -114,6 +114,28 @@ foreach ($products as $product)
 				//$variant_title .= ' - '.$variant_attributes;
 			}
 			$productArray[] = array( $variant_sku, $variant_title, $image_url, get_permalink($product->ID), $variation['sku'], $variation['sku'], $variation['variation_id'], $barcode, $categories_string, $categories_json);
+      //Append main product attribute fields for variant products
+      if(!empty($newFields)) {
+          foreach ($newFields as $columnName => $columnValue) {
+              $insertAtColumnIndex = false;
+              //Insert column name if does not exist or get the column index
+              if(!in_array($columnName, $productArray[0])) {
+                  $productArray[0][] = $columnName;
+              } else {
+                  $insertAtColumnIndex = array_search($columnName, $productArray[0]);
+              }
+              //If colummn already exists check and update existing value else add to end
+              $newProductLine = $productArray[count($productArray)-1];
+              if(!empty($insertAtColumnIndex)) {
+                  if($newProductLine[$insertAtColumnIndex] != $columnValue) {
+                      $newProductLine[$insertAtColumnIndex] = $columnValue;
+                      $productArray[count($productArray)-1] = $newProductLine;
+                  }
+              } else {
+                  $productArray[count($productArray)-1][] = $columnValue;
+              }
+          }
+      }
 		}
 	}
 }
