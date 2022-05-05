@@ -502,7 +502,7 @@ if(!defined('ABSPATH')) {
                 <?php
                   $product_feed_custom_attributes = get_option('REVIEWSio_product_feed_custom_attributes');
                 ?>
-                <textarea name="REVIEWSio_product_feed_custom_attributes" style="width:300px;height:200px;" placeholder="_barcode, barcode, _gtin, gtin, mpn', _mpn"><?php echo htmlentities($product_feed_custom_attributes); ?></textarea>
+                <textarea name="REVIEWSio_product_feed_custom_attributes" style="width:300px;height:200px;" placeholder="_barcode, barcode, _gtin, gtin, mpn, _mpn"><?php echo htmlentities($product_feed_custom_attributes); ?></textarea>
               </td>
 						</tr>
 
