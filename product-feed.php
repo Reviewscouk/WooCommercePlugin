@@ -9,7 +9,7 @@ $args = array('post_type' =>'product', 'showposts'=>10000);
 
 $products = get_posts($args);
 
-$productArray[] = array('sku', 'name', 'image_url', 'link', 'mpn', 'woocommerce_product_sku','woocommerce_product_id', 'barcode', 'category');
+$productArray[] = array('sku', 'name', 'image_url', 'link', 'mpn', 'woocommerce_product_sku','woocommerce_product_id', 'barcode', 'category', 'categories');
 
 foreach ($products as $product)
 {
@@ -38,7 +38,9 @@ foreach ($products as $product)
 			$categories_string[] = $cat->name;
 		}
 	}
+	$categories_json = json_encode($categories_string);
 
+	
 	$categories_string = implode(', ', $categories_string);
 
 	// Try to get barcode from meta, if nothing found, will return empty string
@@ -55,7 +57,7 @@ foreach ($products as $product)
 	}
 
 	// Always add the parent product
-	$productArray[] = array($sku, $product->post_title, $image_url, get_permalink($product->ID), $sku, $woocommerce_sku, $woocommerce_id, $barcode, $categories_string);
+	$productArray[] = array($sku, $product->post_title, $image_url, get_permalink($product->ID), $sku, $woocommerce_sku, $woocommerce_id, $barcode, $categories_string, $categories_json);
 
 	// Add variants as additional products
 	if ($_pf->get_product_type($product->ID) == 'variable' && get_option('REVIEWSio_use_parent_product') != 1)
@@ -70,7 +72,7 @@ foreach ($products as $product)
 			if(!empty($variant_attributes)){
 				//$variant_title .= ' - '.$variant_attributes;
 			}
-			$productArray[] = array( $variant_sku, $variant_title, $image_url, get_permalink($product->ID), $variation['sku'], $variation['sku'], $variation['variation_id'], $barcode, $categories_string);
+			$productArray[] = array( $variant_sku, $variant_title, $image_url, get_permalink($product->ID), $variation['sku'], $variation['sku'], $variation['variation_id'], $barcode, $categories_string, $categories_json);
 		}
 	}
 }
