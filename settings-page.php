@@ -429,7 +429,7 @@ if(!defined('ABSPATH')) {
 
 					<!-- Rich Snippets -->
 					<table class="form-table">
-						<tr>
+						<!-- <tr>
 							<th>
 			                    <label for="REVIEWSio_enable_rich_snippet">Enable Company Rich Snippet: </label>
 							</th>
@@ -442,7 +442,7 @@ if(!defined('ABSPATH')) {
 									<option <?php echo ($enable_rich_snippet == 0) ? 'selected' : '' ?> value="0">No</option>
 								</select>
 							</td>
-						</tr>
+						</tr> -->
 						<tr>
 							<th>
 								<label for="REVIEWSio_enable_product_rich_snippet">Enable Product Rich Snippet: </label>
