@@ -40,7 +40,7 @@ foreach ($products as $product)
 	}
 	$categories_json = json_encode($categories_string);
 
-	
+
 	$categories_string = implode(', ', $categories_string);
 
 	// Try to get barcode from meta, if nothing found, will return empty string
@@ -58,6 +58,47 @@ foreach ($products as $product)
 
 	// Always add the parent product
 	$productArray[] = array($sku, $product->post_title, $image_url, get_permalink($product->ID), $sku, $woocommerce_sku, $woocommerce_id, $barcode, $categories_string, $categories_json);
+
+  $newFields = [];
+  $customProductAttributes = array('_barcode', 'barcode', '_gtin', 'gtin', 'mpn', '_mpn');
+  if (!empty(get_option('REVIEWSio_product_feed_custom_attributes'))) {
+    $additionalCustomProductAttributes = get_option('REVIEWSio_product_feed_custom_attributes');
+    $additionalCustomProductAttributes = explode(',', $additionalCustomProductAttributes);
+    if(!empty($additionalCustomProductAttributes)) {
+      foreach ($additionalCustomProductAttributes as $additionalCustomProductAttribute) {
+        if(!in_array($additionalCustomProductAttribute, $customProductAttributes)) {
+          $customProductAttributes[] = trim($additionalCustomProductAttribute);
+        }
+      }
+    }
+  }
+  foreach($_product->get_attributes() as $productAttribute) {
+      if(in_array($productAttribute['name'], $customProductAttributes)) {
+          $newFields[$productAttribute['name']] = $productAttribute['options'][0];
+      }
+  }
+  //Add any matching attributes to product feeds and update existing columns
+  if(!empty($newFields)) {
+      foreach ($newFields as $columnName => $columnValue) {
+          $insertAtColumnIndex = false;
+          //Insert column name if does not exist or get the column index
+          if(!in_array($columnName, $productArray[0])) {
+              $productArray[0][] = $columnName;
+          } else {
+              $insertAtColumnIndex = array_search($columnName, $productArray[0]);
+          }
+          //If colummn already exists check and update existing value else add to end
+          $newProductLine = $productArray[count($productArray)-1];
+          if(!empty($insertAtColumnIndex)) {
+              if($newProductLine[$insertAtColumnIndex] != $columnValue) {
+                  $newProductLine[$insertAtColumnIndex] = $columnValue;
+                  $productArray[count($productArray)-1] = $newProductLine;
+              }
+          } else {
+              $productArray[count($productArray)-1][] = $columnValue;
+          }
+      }
+  }
 
 	// Add variants as additional products
 	if ($_pf->get_product_type($product->ID) == 'variable' && get_option('REVIEWSio_use_parent_product') != 1)

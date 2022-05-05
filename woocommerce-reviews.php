@@ -178,7 +178,7 @@ if (!class_exists('WooCommerce_Reviews')) {
           "hide_write_review_button","per_page_review_widget","send_product_review_invitation","enable_cron",
           "enable_floating_widget","product_identifier","disable_reviews_per_product","use_parent_product",
           "custom_reviews_widget_styles","disable_rating_snippet_popup","minimum_rating","rating_snippet_text",
-          "polaris_lang","disable_rating_snippet_offset","hide_legacy","rating_snippet_no_linebreak","new_variables_set"];
+          "polaris_lang","disable_rating_snippet_offset","hide_legacy","rating_snippet_no_linebreak","new_variables_set", "product_feed_custom_attributes"];
 
           foreach($options as $o) {
             register_setting('woocommerce-reviews', $optionsPrefix . $o);
