@@ -496,7 +496,7 @@ if(!defined('ABSPATH')) {
             <tr>
 							<th>
 								<label for="REVIEWSio_product_feed_custom_attributes">Include Product Data Attributes Feed: </label>
-			                    <p style="font-size:12px;font-weight:100;">Add additional product data attributes field to be included as columns in your product feed. The following are always include by default: _barcode, barcode, _gtin, gtin, mpn, _mpn</p>
+			                    <p style="font-size:12px;font-weight:100;">Add additional product data attributes field to be included as columns in your product feed. The following are always included by default: _barcode, barcode, _gtin, gtin, mpn, _mpn</p>
 							</th>
               <td>
                 <?php
