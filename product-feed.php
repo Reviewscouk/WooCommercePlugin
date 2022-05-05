@@ -127,7 +127,7 @@ foreach ($products as $product)
           foreach ($variation['attributes'] as $variant_attribute_key => $variant_attribute_value) {
               $variantAttributeColumnName = str_replace('attribute_', '', $variant_attribute_key);
               $variantAttributeColumnValue = $variant_attribute_value;
-              $newFields[$variantAttributeColumnName] = $variant_attribute_value;
+              $newFields[$variantAttributeColumnName] = $variantAttributeColumnValue;
           }
       }
       //Insert additional data
