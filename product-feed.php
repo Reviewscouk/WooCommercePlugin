@@ -66,21 +66,22 @@ foreach ($products as $product)
     $additionalCustomProductAttributes = explode(',', $additionalCustomProductAttributes);
     if(!empty($additionalCustomProductAttributes)) {
       foreach ($additionalCustomProductAttributes as $additionalCustomProductAttribute) {
-        if(!in_array($additionalCustomProductAttribute, $customProductAttributes)) {
-          $customProductAttributes[] = trim($additionalCustomProductAttribute);
+        if(!in_array(strtolower($additionalCustomProductAttribute), $customProductAttributes)) {
+          $customProductAttributes[] = trim(strtolower($additionalCustomProductAttribute));
         }
       }
     }
   }
   foreach($_product->get_attributes() as $productAttribute) {
-      if(in_array($productAttribute['name'], $customProductAttributes)) {
-          $newFields[$productAttribute['name']] = $productAttribute['options'][0];
+      if(in_array(strtolower($productAttribute['name']), $customProductAttributes)) {
+          $newFields[strtolower($productAttribute['name'])] = $productAttribute['options'][0];
       }
   }
   //Add any matching attributes to product feeds and update existing columns
   if(!empty($newFields)) {
       foreach ($newFields as $columnName => $columnValue) {
           $insertAtColumnIndex = false;
+          $columnName = strtolower($columnName);
           //Insert column name if does not exist or get the column index
           if(!in_array($columnName, $productArray[0])) {
               $productArray[0][] = $columnName;
@@ -118,11 +119,11 @@ foreach ($products as $product)
       $newFields = [];
       //Append main product attribute fields for variant products
       foreach($_product->get_attributes() as $productAttribute) {
-          if(in_array($productAttribute['name'], $customProductAttributes)) {
-              $newFields[$productAttribute['name']] = $productAttribute['options'][0];
+          if(in_array(strtolower($productAttribute['name']), $customProductAttributes)) {
+              $newFields[strtolower($productAttribute['name'])] = $productAttribute['options'][0];
           }
       }
-      //Overwrite new column value if variant attribute data is available
+      //Overwrite with variant specific values if available
       if(!empty($variation['attributes'])){
           foreach ($variation['attributes'] as $variant_attribute_key => $variant_attribute_value) {
               $variantAttributeColumnName = str_replace('attribute_', '', $variant_attribute_key);
@@ -130,10 +131,10 @@ foreach ($products as $product)
               $newFields[$variantAttributeColumnName] = $variantAttributeColumnValue;
           }
       }
-      //Insert additional data
       if(!empty($newFields)) {
           foreach ($newFields as $columnName => $columnValue) {
               $insertAtColumnIndex = false;
+              $columnName = strtolower($columnName);
               //Insert column name if does not exist or get the column index
               if(!in_array($columnName, $productArray[0])) {
                   $productArray[0][] = $columnName;
