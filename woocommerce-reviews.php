@@ -11,10 +11,10 @@ if(!defined('ABSPATH')) {
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.3.8
+ * Version: 0.3.9
  *
  * WC requires at least: 3.0.0
- * WC tested up to: 4.5.2
+ * WC tested up to: 5.9.3
  */
 
 function reviewsio_admin_scripts() {
@@ -203,6 +203,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             update_option('REVIEWSio_product_identifier', 'sku');
             update_option('REVIEWSio_use_parent_product', 0);
             update_option('REVIEWSio_disable_rating_snippet_popup', 1);
+            update_option('REVIEWSio_disable_rating_snippet_category', 1);
             update_option('REVIEWSio_minimum_rating', "1");
             update_option('REVIEWSio_rating_snippet_text', "Reviews");
             update_option('REVIEWSio_polaris_lang', "en");
@@ -396,13 +397,19 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
         }
 
+        function add_async_attribute($tag, $handle) {	
+            if (stripos($handle, 'reviewsio-rating-snippet')!==false){         
+                return str_replace(' src=', ' async="async" src=', $tag);
+            }else{
+                return $tag;
+            }
+        }
+
         public function reviewsio_rating_snippet_scripts() {
+            add_filter('script_loader_tag', [$this, 'add_async_attribute'], 10, 2);
 
-            wp_register_script('reviewsio-rating-snippet',$this->getWidgetDomain().'rating-snippet/dist.js', array(),false, false);
-            wp_register_style( 'reviewsio-rating-snippet-style',  $this->getWidgetDomain().'rating-snippet/dist.css', array(), false, false);
-
+            wp_register_script('reviewsio-rating-snippet', $this->getWidgetDomain().'rating-snippet/dist.js', array(),false, false);
             wp_enqueue_script('reviewsio-rating-snippet');
-            wp_enqueue_style('reviewsio-rating-snippet-style');
 
             wp_register_style( 'reviewsio-rating-snippet-font-style',  false, array(), '', false);
             wp_enqueue_style('reviewsio-rating-snippet-font-style');
@@ -414,6 +421,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             $snippet_disable = '';
+          
             if (is_product() && get_option('REVIEWSio_disable_rating_snippet_popup') == "0") {
                 $scroll_pos =  get_option('REVIEWSio_disable_rating_snippet_offset') !=='' ? get_option('REVIEWSio_disable_rating_snippet_offset') : 0;
                 $snippet_disable = "snippetul = document.querySelectorAll('.ruk_rating_snippet');
@@ -435,19 +443,32 @@ if (!class_exists('WooCommerce_Reviews')) {
                         }
                     }
                 ";
+            } else if (!is_product() && get_option('REVIEWSio_disable_rating_snippet_popup_category') == "0") {
+                $snippet_disable = "snippetul = document.querySelectorAll('.ruk_rating_snippet');
+                    if (snippetul[0]) {
+                        snippetul[0].onclick = function(event) {
+                           
+                        }
+                    }
+                ";
             }
 
-            wp_add_inline_script( 'reviewsio-rating-snippet', '
-                document.addEventListener("DOMContentLoaded", function() {
+            wp_add_inline_script('reviewsio-rating-snippet', '
+                window.onload = function() {
+                    var snippetCss= document.createElement("link");
+                    snippetCss.rel = "stylesheet";
+                    snippetCss.href = "'.$this->getWidgetDomain().'rating-snippet/dist.css";
+                    document.head.insertBefore(snippetCss, document.head.childNodes[document.head.childNodes.length - 1].nextSibling);
+
                     loadReviewsIoRatingSnippets();
                     '. $snippet_disable .'
-                });
+                };
 
                 var loadReviewsIoRatingSnippets = function () {
                   ratingSnippet("ruk_rating_snippet",{
                       store: "'. get_option("REVIEWSio_store_id").'",
                       lang: "' . (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en').'",
-                      usePolaris: true,
+                      usePolaris: '.($snippet_disable==''?"true":"false").',
                       color: "'. $this->getHexColor() .'",
                       linebreak: "' . (get_option('REVIEWSio_rating_snippet_no_linebreak') == 1 ? false : true).'",
                       minRating: "' . (get_option('REVIEWSio_minimum_rating') ? get_option('REVIEWSio_minimum_rating') : 1).'",
