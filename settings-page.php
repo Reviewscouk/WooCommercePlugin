@@ -268,16 +268,16 @@ if(!defined('ABSPATH')) {
 
 						<tr>
 							<th>
-								<label for="REVIEWSio_disable_rating_snippet_popup">Rating Snippet Popup on Category Pages: </label>
+								<label for="REVIEWSio_disable_rating_snippet_popup_category">Rating Snippet Popup on Category Pages: </label>
 			                    <p style="font-size:12px;font-weight:100;">Disable or Enable the Rating Snippet Popup on homepage and category pages.</p>
 							</th>
 							<td>
 								<?php
-									$disable_rating_snippet_popup = get_option('REVIEWSio_disable_rating_snippet_popup_category');
+									$disable_rating_snippet_popup_category = get_option('REVIEWSio_disable_rating_snippet_popup_category');
 								?>
 								<select name="REVIEWSio_disable_rating_snippet_popup_category">
-									<option <?php echo ($disable_rating_snippet_popup == '0') ? 'selected' : '' ?> value="0">Disabled</option>
-									<option <?php echo ($disable_rating_snippet_popup == '1') ? 'selected' : '' ?> value="1">Enabled</option>
+									<option <?php echo ($disable_rating_snippet_popup_category == '0') ? 'selected' : '' ?> value="0">Disabled</option>
+									<option <?php echo ($disable_rating_snippet_popup_category == '1') ? 'selected' : '' ?> value="1">Enabled</option>
 								</select>
 							</td>
 						</tr>
