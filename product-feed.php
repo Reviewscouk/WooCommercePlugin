@@ -72,9 +72,17 @@ foreach ($products as $product)
       }
     }
   }
-  foreach($_product->get_attributes() as $productAttribute) {
-      if(in_array(strtolower($productAttribute['name']), $customProductAttributes)) {
-          $newFields[strtolower($productAttribute['name'])] = $productAttribute['options'][0];
+  $tmp = $_product->get_attributes();
+  $productAttributes = [];
+  foreach ($tmp as $p) {
+      $productAttributes[strtolower($p['name'])] = $p;
+  }
+  foreach ($customProductAttributes as $key) {
+      $key = strtolower($key);
+      if(isset($productAttributes[$key])) {
+        $newFields[$key] = $productAttributes[$key]['options'][0];
+      } else {
+        $newFields[$key] = ' ';
       }
   }
   //Add any matching attributes to product feeds and update existing columns
@@ -100,6 +108,15 @@ foreach ($products as $product)
           }
       }
   }
+  //Set MPN to SKU value if was converted to blank
+  if(!empty($productArray[count($productArray)-1])) {
+      $mpn = $productArray[count($productArray)-1][4];
+      if(empty($mpn) || $mpn == ' ') {
+          $newProductLine = $productArray[count($productArray)-1];
+          $newProductLine[4] = $sku;
+          $productArray[count($productArray)-1] = $newProductLine;
+      }
+  }
 	// Add variants as additional products
 	if ($_pf->get_product_type($product->ID) == 'variable' && get_option('REVIEWSio_use_parent_product') != 1)
 	{
@@ -118,9 +135,17 @@ foreach ($products as $product)
 
       $newFields = [];
       //Append main product attribute fields for variant products
-      foreach($_product->get_attributes() as $productAttribute) {
-          if(in_array(strtolower($productAttribute['name']), $customProductAttributes)) {
-              $newFields[strtolower($productAttribute['name'])] = $productAttribute['options'][0];
+      $tmp = $_product->get_attributes();
+      $productAttributes = [];
+      foreach ($tmp as $p) {
+          $productAttributes[strtolower($p['name'])] = $p;
+      }
+      foreach ($customProductAttributes as $key) {
+          $key = strtolower($key);
+          if(isset($productAttributes[$key])) {
+            $newFields[$key] = $productAttributes[$key]['options'][0];
+          } else {
+            $newFields[$key] = ' ';
           }
       }
       //Overwrite with variant specific values if available
@@ -133,6 +158,7 @@ foreach ($products as $product)
               }
           }
       }
+      //insert additional
       if(!empty($newFields)) {
           foreach ($newFields as $columnName => $columnValue) {
               $insertAtColumnIndex = false;
@@ -153,6 +179,15 @@ foreach ($products as $product)
               } else {
                   $productArray[count($productArray)-1][] = $columnValue;
               }
+          }
+      }
+      //Set MPN to SKU value if was converted to blank
+      if(!empty($productArray[count($productArray)-1])) {
+          $mpn = $productArray[count($productArray)-1][4];
+          if(empty($mpn) || $mpn == ' ') {
+              $newProductLine = $productArray[count($productArray)-1];
+              $newProductLine[4] = $sku;
+              $productArray[count($productArray)-1] = $newProductLine;
           }
       }
 
