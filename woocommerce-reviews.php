@@ -178,7 +178,8 @@ if (!class_exists('WooCommerce_Reviews')) {
           "hide_write_review_button","per_page_review_widget","send_product_review_invitation","enable_cron",
           "enable_floating_widget","product_identifier","disable_reviews_per_product","use_parent_product",
           "custom_reviews_widget_styles","disable_rating_snippet_popup", "disable_rating_snippet_popup_category", "minimum_rating","rating_snippet_text",
-          "polaris_lang","disable_rating_snippet_offset","hide_legacy","rating_snippet_no_linebreak","new_variables_set", "product_feed_custom_attributes"];
+          "polaris_lang","disable_rating_snippet_offset","hide_legacy","rating_snippet_no_linebreak","new_variables_set", "product_feed_custom_attributes",
+          "widget_custom_header_config", "widget_custom_filtering_config" , "widget_custom_reviews_config"];
 
           foreach($options as $o) {
             register_setting('woocommerce-reviews', $optionsPrefix . $o);
@@ -397,8 +398,8 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
         }
 
-        function add_async_attribute($tag, $handle) {	
-            if (stripos($handle, 'reviewsio-rating-snippet')!==false){         
+        function add_async_attribute($tag, $handle) {
+            if (stripos($handle, 'reviewsio-rating-snippet')!==false){
                 return str_replace(' src=', ' async="async" src=', $tag);
             }else{
                 return $tag;
@@ -421,7 +422,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             $snippet_disable = '';
-          
+
             if (is_product() && get_option('REVIEWSio_disable_rating_snippet_popup') == "0") {
                 $scroll_pos =  get_option('REVIEWSio_disable_rating_snippet_offset') !=='' ? get_option('REVIEWSio_disable_rating_snippet_offset') : 0;
                 $snippet_disable = "snippetul = document.querySelectorAll('.ruk_rating_snippet');
@@ -447,7 +448,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                 $snippet_disable = "snippetul = document.querySelectorAll('.ruk_rating_snippet');
                     for (i in snippetul) {
                         snippetul[i].onclick = function(event) {
-                        
+
                         }
                     }
                 ";
@@ -899,7 +900,10 @@ if (!class_exists('WooCommerce_Reviews')) {
                               //Display group questions by providing a grouping variable, new questions will be assigned to this group.
                               grouping: '<?php echo implode(';', $skus) ?>',
                           },
-
+                          <?php if (!empty(get_option('REVIEWSio_widget_custom_header_config'))) {
+                            echo get_option('REVIEWSio_widget_custom_header_config');
+                          } else {
+                          ?>
                           //Header settings:
                           header:{
                               enable_summary: true, //Show overall rating & review count
@@ -911,7 +915,13 @@ if (!class_exists('WooCommerce_Reviews')) {
                               enable_ask_question: true,
                               enable_sub_header: true, //Show subheader
                           },
-
+                          <?php
+                          }
+                          ?>
+                          <?php if (!empty(get_option('REVIEWSio_widget_custom_filtering_config'))) {
+                            echo get_option('REVIEWSio_widget_custom_filtering_config');
+                          } else {
+                          ?>
                           //Filtering settings:
                           filtering:{
                               enable: true, //Show filtering options
@@ -921,7 +931,13 @@ if (!class_exists('WooCommerce_Reviews')) {
                               enable_ratings_filters: true, //Show product attributes filter
                               enable_attributes_filters: true, //Show author attributes filter
                           },
-
+                          <?php
+                          }
+                          ?>
+                          <?php if (!empty(get_option('REVIEWSio_widget_custom_reviews_config'))) {
+                            echo get_option('REVIEWSio_widget_custom_reviews_config');
+                          } else {
+                          ?>
                           //Review settings:
                           reviews:{
                               enable_avatar: true, //Show author avatar
@@ -940,6 +956,9 @@ if (!class_exists('WooCommerce_Reviews')) {
                               enable_report: true, //Show report button
                               enable_date: true, //Show when review was published
                           },
+                          <?php
+                          }
+                          ?>
                         },
                         //Style settings:
                         <?php if (!empty(get_option('REVIEWSio_custom_reviews_widget_styles'))) {

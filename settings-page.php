@@ -599,6 +599,42 @@ if(!defined('ABSPATH')) {
 							</td>
 						</tr>
 
+						<tr style="border-top: 1px solid #e4e4e4">
+							<th>
+								<label for="REVIEWSio_widget_custom_header_config">Advanced Product Reviews Header Config </label>
+													<p style="font-size:12px;font-weight:100;">Sets header section config for the Product Reviews Widget. After using the designer tool, copy the "header" block, which begins with "header: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
+							</th>
+							<td>
+								<?php
+									$custom_widget_header_config = get_option('REVIEWSio_widget_custom_header_config');
+								?>
+								<textarea name="REVIEWSio_widget_custom_header_config" style="width:300px;height:200px;"><?php echo htmlentities($custom_widget_header_config); ?></textarea>
+							</td>
+						</tr>
+						<tr>
+							<th>
+								<label for="REVIEWSio_widget_custom_filtering_config">Advanced Product Reviews Filtering Config </label>
+													<p style="font-size:12px;font-weight:100;">Sets filtering section config for the Product Reviews Widget. After using the designer tool, copy the "filtering" block, which begins with "filtering: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
+							</th>
+							<td>
+								<?php
+									$custom_widget_filtering_config = get_option('REVIEWSio_widget_custom_filtering_config');
+								?>
+								<textarea name="REVIEWSio_widget_custom_filtering_config" style="width:300px;height:200px;"><?php echo htmlentities($custom_widget_filtering_config); ?></textarea>
+							</td>
+						</tr>
+						<tr>
+							<th>
+								<label for="REVIEWSio_widget_custom_reviews_config">Advanced Product Reviews 'Reviews' Config </label>
+													<p style="font-size:12px;font-weight:100;">Sets reviews section config for the Product Reviews Widget. After using the designer tool, copy the "reviews" block, which begins with "reviews: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
+							</th>
+							<td>
+								<?php
+									$custom_widget_reviews_config = get_option('REVIEWSio_widget_custom_reviews_config');
+								?>
+								<textarea name="REVIEWSio_widget_custom_reviews_config" style="width:300px;height:200px;"><?php echo htmlentities($custom_widget_reviews_config); ?></textarea>
+							</td>
+						</tr>
 						<tr style="border-bottom: 1px solid #e4e4e4">
 							<th>
 								<label for="REVIEWSio_widget_custom_css">Advanced Product Reviews Widget Styles</label>
