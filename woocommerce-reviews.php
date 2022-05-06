@@ -445,9 +445,9 @@ if (!class_exists('WooCommerce_Reviews')) {
                 ";
             } else if (!is_product() && get_option('REVIEWSio_disable_rating_snippet_popup_category') == "0") {
                 $snippet_disable = "snippetul = document.querySelectorAll('.ruk_rating_snippet');
-                    if (snippetul[0]) {
-                        snippetul[0].onclick = function(event) {
-                           
+                    for (i in snippetul) {
+                        snippetul[i].onclick = function(event) {
+                        
                         }
                     }
                 ";
