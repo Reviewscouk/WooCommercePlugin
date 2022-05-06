@@ -601,8 +601,8 @@ if(!defined('ABSPATH')) {
 
 						<tr style="border-top: 1px solid #e4e4e4">
 							<th>
-								<label for="REVIEWSio_widget_custom_header_config">Advanced Product Reviews Header Config </label>
-													<p style="font-size:12px;font-weight:100;">Sets header section config for the Product Reviews Widget. After using the designer tool, copy the "header" block, which begins with "header: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
+								<label for="REVIEWSio_widget_custom_header_config">Advanced Product Reviews 'Header' Config</label>
+													<p style="font-size:12px;font-weight:100;">Sets 'header' section config for the Product Reviews Widget. After using the designer tool, copy the "header" block, which begins with "header: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
 							</th>
 							<td>
 								<?php
@@ -613,8 +613,8 @@ if(!defined('ABSPATH')) {
 						</tr>
 						<tr>
 							<th>
-								<label for="REVIEWSio_widget_custom_filtering_config">Advanced Product Reviews Filtering Config </label>
-													<p style="font-size:12px;font-weight:100;">Sets filtering section config for the Product Reviews Widget. After using the designer tool, copy the "filtering" block, which begins with "filtering: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
+								<label for="REVIEWSio_widget_custom_filtering_config">Advanced Product Reviews 'Filtering' Config</label>
+													<p style="font-size:12px;font-weight:100;">Sets 'filtering' section config for the Product Reviews Widget. After using the designer tool, copy the "filtering" block, which begins with "filtering: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
 							</th>
 							<td>
 								<?php
@@ -625,8 +625,8 @@ if(!defined('ABSPATH')) {
 						</tr>
 						<tr>
 							<th>
-								<label for="REVIEWSio_widget_custom_reviews_config">Advanced Product Reviews 'Reviews' Config </label>
-													<p style="font-size:12px;font-weight:100;">Sets reviews section config for the Product Reviews Widget. After using the designer tool, copy the "reviews" block, which begins with "reviews: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
+								<label for="REVIEWSio_widget_custom_reviews_config">Advanced Product Reviews 'Reviews' Config</label>
+													<p style="font-size:12px;font-weight:100;">Sets 'reviews' section config for the Product Reviews Widget. After using the designer tool, copy the "reviews" block, which begins with "reviews: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
 							</th>
 							<td>
 								<?php
@@ -637,8 +637,8 @@ if(!defined('ABSPATH')) {
 						</tr>
 						<tr style="border-bottom: 1px solid #e4e4e4">
 							<th>
-								<label for="REVIEWSio_widget_custom_css">Advanced Product Reviews Widget Styles</label>
-													<p style="font-size:12px;font-weight:100;">Sets the styles for the Product Reviews Widget. After using the designer tool, copy the "styles" block, which begins with "styles: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
+								<label for="REVIEWSio_widget_custom_css">Advanced Product Reviews Widget 'Styles' Config</label>
+													<p style="font-size:12px;font-weight:100;">Sets the 'styles' for the Product Reviews Widget. After using the designer tool, copy the "styles" block, which begins with "styles: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
 							</th>
 							<td>
 								<?php
