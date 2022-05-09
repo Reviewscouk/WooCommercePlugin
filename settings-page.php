@@ -253,7 +253,7 @@ if(!defined('ABSPATH')) {
 						<tr>
 							<th>
 								<label for="REVIEWSio_disable_rating_snippet_popup">Rating Snippet Popup: </label>
-			                    <p style="font-size:12px;font-weight:100;">Disable or Enable the Rating Snippet Popup..</p>
+			                    <p style="font-size:12px;font-weight:100;">Disable or Enable the Rating Snippet Popup on product pages.</p>
 							</th>
 							<td>
 								<?php
@@ -262,6 +262,22 @@ if(!defined('ABSPATH')) {
 								<select name="REVIEWSio_disable_rating_snippet_popup">
 									<option <?php echo ($disable_rating_snippet_popup == '0') ? 'selected' : '' ?> value="0">Disabled (Anchor to Product Review Widget)</option>
 									<option <?php echo ($disable_rating_snippet_popup == '1') ? 'selected' : '' ?> value="1">Enabled</option>
+								</select>
+							</td>
+						</tr>
+
+						<tr>
+							<th>
+								<label for="REVIEWSio_disable_rating_snippet_popup_category">Rating Snippet Popup on Category Pages: </label>
+			                    <p style="font-size:12px;font-weight:100;">Disable or Enable the Rating Snippet Popup on homepage and category pages.</p>
+							</th>
+							<td>
+								<?php
+									$disable_rating_snippet_popup_category = get_option('REVIEWSio_disable_rating_snippet_popup_category');
+								?>
+								<select name="REVIEWSio_disable_rating_snippet_popup_category">
+									<option <?php echo ($disable_rating_snippet_popup_category == '0') ? 'selected' : '' ?> value="0">Disabled</option>
+									<option <?php echo ($disable_rating_snippet_popup_category == '1') ? 'selected' : '' ?> value="1">Enabled</option>
 								</select>
 							</td>
 						</tr>
@@ -429,7 +445,7 @@ if(!defined('ABSPATH')) {
 
 					<!-- Rich Snippets -->
 					<table class="form-table">
-						<tr>
+						<!-- <tr>
 							<th>
 			                    <label for="REVIEWSio_enable_rich_snippet">Enable Company Rich Snippet: </label>
 							</th>
@@ -442,7 +458,7 @@ if(!defined('ABSPATH')) {
 									<option <?php echo ($enable_rich_snippet == 0) ? 'selected' : '' ?> value="0">No</option>
 								</select>
 							</td>
-						</tr>
+						</tr> -->
 						<tr>
 							<th>
 								<label for="REVIEWSio_enable_product_rich_snippet">Enable Product Rich Snippet: </label>
@@ -492,6 +508,18 @@ if(!defined('ABSPATH')) {
 									<option <?php echo ($enableProductFeed == 0) ? 'selected' : '' ?> value="0">No</option>
 								</select>
 							</td>
+						</tr>
+            <tr>
+							<th>
+								<label for="REVIEWSio_product_feed_custom_attributes">Include Product Data Attributes Feed: </label>
+			                    <p style="font-size:12px;font-weight:100;">Add additional product data attributes field to be included as columns in your product feed. The following are always included by default: _barcode, barcode, _gtin, gtin, mpn, _mpn</p>
+							</th>
+              <td>
+                <?php
+                  $product_feed_custom_attributes = get_option('REVIEWSio_product_feed_custom_attributes');
+                ?>
+                <textarea name="REVIEWSio_product_feed_custom_attributes" style="width:300px;height:200px;" placeholder="_barcode, barcode, _gtin, gtin, mpn, _mpn"><?php echo htmlentities($product_feed_custom_attributes); ?></textarea>
+              </td>
 						</tr>
 
 						<tr>
@@ -571,10 +599,46 @@ if(!defined('ABSPATH')) {
 							</td>
 						</tr>
 
+						<tr style="border-top: 1px solid #e4e4e4">
+							<th>
+								<label for="REVIEWSio_widget_custom_header_config">Advanced Product Reviews 'Header' Config</label>
+													<p style="font-size:12px;font-weight:100;">Sets 'header' section config for the Product Reviews Widget. After using the designer tool, copy the "header" block, which begins with "header: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
+							</th>
+							<td>
+								<?php
+									$custom_widget_header_config = get_option('REVIEWSio_widget_custom_header_config');
+								?>
+								<textarea name="REVIEWSio_widget_custom_header_config" style="width:300px;height:200px;"><?php echo htmlentities($custom_widget_header_config); ?></textarea>
+							</td>
+						</tr>
+						<tr>
+							<th>
+								<label for="REVIEWSio_widget_custom_filtering_config">Advanced Product Reviews 'Filtering' Config</label>
+													<p style="font-size:12px;font-weight:100;">Sets 'filtering' section config for the Product Reviews Widget. After using the designer tool, copy the "filtering" block, which begins with "filtering: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
+							</th>
+							<td>
+								<?php
+									$custom_widget_filtering_config = get_option('REVIEWSio_widget_custom_filtering_config');
+								?>
+								<textarea name="REVIEWSio_widget_custom_filtering_config" style="width:300px;height:200px;"><?php echo htmlentities($custom_widget_filtering_config); ?></textarea>
+							</td>
+						</tr>
+						<tr>
+							<th>
+								<label for="REVIEWSio_widget_custom_reviews_config">Advanced Product Reviews 'Reviews' Config</label>
+													<p style="font-size:12px;font-weight:100;">Sets 'reviews' section config for the Product Reviews Widget. After using the designer tool, copy the "reviews" block, which begins with "reviews: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
+							</th>
+							<td>
+								<?php
+									$custom_widget_reviews_config = get_option('REVIEWSio_widget_custom_reviews_config');
+								?>
+								<textarea name="REVIEWSio_widget_custom_reviews_config" style="width:300px;height:200px;"><?php echo htmlentities($custom_widget_reviews_config); ?></textarea>
+							</td>
+						</tr>
 						<tr style="border-bottom: 1px solid #e4e4e4">
 							<th>
-								<label for="REVIEWSio_widget_custom_css">Advanced Product Reviews Widget Styles</label>
-													<p style="font-size:12px;font-weight:100;">Sets the styles for the Product Reviews Widget. After using the designer tool, copy the "styles" block, which begins with "styles: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
+								<label for="REVIEWSio_widget_custom_css">Advanced Product Reviews Widget 'Styles' Config</label>
+													<p style="font-size:12px;font-weight:100;">Sets the 'styles' for the Product Reviews Widget. After using the designer tool, copy the "styles" block, which begins with "styles: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
 							</th>
 							<td>
 								<?php

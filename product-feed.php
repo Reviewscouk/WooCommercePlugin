@@ -40,7 +40,7 @@ foreach ($products as $product)
 	}
 	$categories_json = json_encode($categories_string);
 
-	
+
 	$categories_string = implode(', ', $categories_string);
 
 	// Try to get barcode from meta, if nothing found, will return empty string
@@ -59,6 +59,64 @@ foreach ($products as $product)
 	// Always add the parent product
 	$productArray[] = array($sku, $product->post_title, $image_url, get_permalink($product->ID), $sku, $woocommerce_sku, $woocommerce_id, $barcode, $categories_string, $categories_json);
 
+  $newFields = [];
+  $customProductAttributes = array('_barcode', 'barcode', '_gtin', 'gtin', 'mpn', '_mpn');
+  if (!empty(get_option('REVIEWSio_product_feed_custom_attributes'))) {
+    $additionalCustomProductAttributes = get_option('REVIEWSio_product_feed_custom_attributes');
+    $additionalCustomProductAttributes = explode(',', $additionalCustomProductAttributes);
+    if(!empty($additionalCustomProductAttributes)) {
+      foreach ($additionalCustomProductAttributes as $additionalCustomProductAttribute) {
+        if(!in_array(strtolower($additionalCustomProductAttribute), $customProductAttributes)) {
+          $customProductAttributes[] = trim(strtolower($additionalCustomProductAttribute));
+        }
+      }
+    }
+  }
+  $tmp = $_product->get_attributes();
+  $productAttributes = [];
+  foreach ($tmp as $p) {
+      $productAttributes[strtolower($p['name'])] = $p;
+  }
+  foreach ($customProductAttributes as $key) {
+      $key = strtolower($key);
+      if(isset($productAttributes[$key])) {
+        $newFields[$key] = $productAttributes[$key]['options'][0];
+      } else {
+        $newFields[$key] = ' ';
+      }
+  }
+  //Add any matching attributes to product feeds and update existing columns
+  if(!empty($newFields)) {
+      foreach ($newFields as $columnName => $columnValue) {
+          $insertAtColumnIndex = false;
+          $columnName = strtolower($columnName);
+          //Insert column name if does not exist or get the column index
+          if(!in_array($columnName, $productArray[0])) {
+              $productArray[0][] = $columnName;
+          } else {
+              $insertAtColumnIndex = array_search($columnName, $productArray[0]);
+          }
+          //If colummn already exists check and update existing value else add to end
+          $newProductLine = $productArray[count($productArray)-1];
+          if(!empty($insertAtColumnIndex)) {
+              if($newProductLine[$insertAtColumnIndex] != $columnValue) {
+                  $newProductLine[$insertAtColumnIndex] = $columnValue;
+                  $productArray[count($productArray)-1] = $newProductLine;
+              }
+          } else {
+              $productArray[count($productArray)-1][] = $columnValue;
+          }
+      }
+  }
+  //Set MPN to SKU value if was converted to blank
+  if(!empty($productArray[count($productArray)-1])) {
+      $mpn = $productArray[count($productArray)-1][4];
+      if(empty($mpn) || $mpn == ' ') {
+          $newProductLine = $productArray[count($productArray)-1];
+          $newProductLine[4] = $sku;
+          $productArray[count($productArray)-1] = $newProductLine;
+      }
+  }
 	// Add variants as additional products
 	if ($_pf->get_product_type($product->ID) == 'variable' && get_option('REVIEWSio_use_parent_product') != 1)
 	{
@@ -69,10 +127,70 @@ foreach ($products as $product)
 			$variant_sku = get_option('REVIEWSio_product_identifier') == 'id'? $variation['variation_id'] : $variation['sku'];
 			$variant_attributes = is_array($variation['attributes'])? implode(' ',  array_filter(array_values($variation['attributes']))) : '';
 			$variant_title = $product->post_title;
+
 			if(!empty($variant_attributes)){
 				//$variant_title .= ' - '.$variant_attributes;
 			}
 			$productArray[] = array( $variant_sku, $variant_title, $image_url, get_permalink($product->ID), $variation['sku'], $variation['sku'], $variation['variation_id'], $barcode, $categories_string, $categories_json);
+
+      $newFields = [];
+      //Append main product attribute fields for variant products
+      $tmp = $_product->get_attributes();
+      $productAttributes = [];
+      foreach ($tmp as $p) {
+          $productAttributes[strtolower($p['name'])] = $p;
+      }
+      foreach ($customProductAttributes as $key) {
+          $key = strtolower($key);
+          if(isset($productAttributes[$key])) {
+            $newFields[$key] = $productAttributes[$key]['options'][0];
+          } else {
+            $newFields[$key] = ' ';
+          }
+      }
+      //Overwrite with variant specific values if available
+      if(!empty($variation['attributes'])){
+          foreach ($variation['attributes'] as $variant_attribute_key => $variant_attribute_value) {
+              $variantAttributeColumnName = str_replace('attribute_', '', $variant_attribute_key);
+              $variantAttributeColumnValue = $variant_attribute_value;
+              if(!empty($newFields[strtolower($variantAttributeColumnName)])) {
+                $newFields[strtolower($variantAttributeColumnName)] = $variantAttributeColumnValue;
+              }
+          }
+      }
+      //insert additional
+      if(!empty($newFields)) {
+          foreach ($newFields as $columnName => $columnValue) {
+              $insertAtColumnIndex = false;
+              $columnName = strtolower($columnName);
+              //Insert column name if does not exist or get the column index
+              if(!in_array($columnName, $productArray[0])) {
+                  $productArray[0][] = $columnName;
+              } else {
+                  $insertAtColumnIndex = array_search($columnName, $productArray[0]);
+              }
+              //If colummn already exists check and update existing value else add to end
+              $newProductLine = $productArray[count($productArray)-1];
+              if(!empty($insertAtColumnIndex)) {
+                  if($newProductLine[$insertAtColumnIndex] != $columnValue) {
+                      $newProductLine[$insertAtColumnIndex] = $columnValue;
+                      $productArray[count($productArray)-1] = $newProductLine;
+                  }
+              } else {
+                  $productArray[count($productArray)-1][] = $columnValue;
+              }
+          }
+      }
+      //Set MPN to SKU value if was converted to blank
+      if(!empty($productArray[count($productArray)-1])) {
+          $mpn = $productArray[count($productArray)-1][4];
+          if(empty($mpn) || $mpn == ' ') {
+              $newProductLine = $productArray[count($productArray)-1];
+              $newProductLine[4] = $sku;
+              $productArray[count($productArray)-1] = $newProductLine;
+          }
+      }
+
 		}
 	}
 }

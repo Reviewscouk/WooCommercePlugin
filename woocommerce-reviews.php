@@ -11,10 +11,10 @@ if(!defined('ABSPATH')) {
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.3.8
+ * Version: 0.4
  *
  * WC requires at least: 3.0.0
- * WC tested up to: 4.5.2
+ * WC tested up to: 5.9.3
  */
 
 function reviewsio_admin_scripts() {
@@ -177,8 +177,9 @@ if (!class_exists('WooCommerce_Reviews')) {
           "reviews_tab_name","polaris_review_widget_questions","product_review_widget","question_answers_widget",
           "hide_write_review_button","per_page_review_widget","send_product_review_invitation","enable_cron",
           "enable_floating_widget","product_identifier","disable_reviews_per_product","use_parent_product",
-          "custom_reviews_widget_styles","disable_rating_snippet_popup","minimum_rating","rating_snippet_text",
-          "polaris_lang","disable_rating_snippet_offset","hide_legacy","rating_snippet_no_linebreak","new_variables_set"];
+          "custom_reviews_widget_styles","disable_rating_snippet_popup", "disable_rating_snippet_popup_category", "minimum_rating","rating_snippet_text",
+          "polaris_lang","disable_rating_snippet_offset","hide_legacy","rating_snippet_no_linebreak","new_variables_set", "product_feed_custom_attributes",
+          "widget_custom_header_config", "widget_custom_filtering_config" , "widget_custom_reviews_config"];
 
           foreach($options as $o) {
             register_setting('woocommerce-reviews', $optionsPrefix . $o);
@@ -203,6 +204,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             update_option('REVIEWSio_product_identifier', 'sku');
             update_option('REVIEWSio_use_parent_product', 0);
             update_option('REVIEWSio_disable_rating_snippet_popup', 1);
+            update_option('REVIEWSio_disable_rating_snippet_popup_category', 1);
             update_option('REVIEWSio_minimum_rating', "1");
             update_option('REVIEWSio_rating_snippet_text', "Reviews");
             update_option('REVIEWSio_polaris_lang', "en");
@@ -396,13 +398,19 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
         }
 
+        function add_async_attribute($tag, $handle) {
+            if (stripos($handle, 'reviewsio-rating-snippet')!==false){
+                return str_replace(' src=', ' async="async" src=', $tag);
+            }else{
+                return $tag;
+            }
+        }
+
         public function reviewsio_rating_snippet_scripts() {
+            add_filter('script_loader_tag', [$this, 'add_async_attribute'], 10, 2);
 
-            wp_register_script('reviewsio-rating-snippet',$this->getWidgetDomain().'rating-snippet/dist.js', array(),false, false);
-            wp_register_style( 'reviewsio-rating-snippet-style',  $this->getWidgetDomain().'rating-snippet/dist.css', array(), false, false);
-
+            wp_register_script('reviewsio-rating-snippet', $this->getWidgetDomain().'rating-snippet/dist.js', array(),false, false);
             wp_enqueue_script('reviewsio-rating-snippet');
-            wp_enqueue_style('reviewsio-rating-snippet-style');
 
             wp_register_style( 'reviewsio-rating-snippet-font-style',  false, array(), '', false);
             wp_enqueue_style('reviewsio-rating-snippet-font-style');
@@ -414,6 +422,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             $snippet_disable = '';
+
             if (is_product() && get_option('REVIEWSio_disable_rating_snippet_popup') == "0") {
                 $scroll_pos =  get_option('REVIEWSio_disable_rating_snippet_offset') !=='' ? get_option('REVIEWSio_disable_rating_snippet_offset') : 0;
                 $snippet_disable = "snippetul = document.querySelectorAll('.ruk_rating_snippet');
@@ -435,10 +444,34 @@ if (!class_exists('WooCommerce_Reviews')) {
                         }
                     }
                 ";
+            } else if (!is_product() && get_option('REVIEWSio_disable_rating_snippet_popup_category') == "0") {
+                $snippet_disable = "snippetul = document.querySelectorAll('.ruk_rating_snippet');
+                    for (i in snippetul) {
+                        snippetul[i].onclick = function(event) {
+
+                        }
+                    }
+                ";
+            }
+            if (is_product() && get_option('REVIEWSio_disable_rating_snippet_popup_category') == "0") {
+                $snippet_disable .= "let ReviewsIO_additionalSnippets = document.querySelectorAll('.ruk_rating_snippet');
+                    for (let i=1; i < ReviewsIO_additionalSnippets.length; i++) {
+                        if(ReviewsIO_additionalSnippets[i]) {
+                            ReviewsIO_additionalSnippets[i].onclick = function(event) {
+
+                            }
+                        }
+                    }
+                ";
             }
 
-            wp_add_inline_script( 'reviewsio-rating-snippet', '
-                document.addEventListener("DOMContentLoaded", function() {
+            wp_add_inline_script('reviewsio-rating-snippet', '
+                window.addEventListener("load", function() {
+                    var snippetCss= document.createElement("link");
+                    snippetCss.rel = "stylesheet";
+                    snippetCss.href = "'.$this->getWidgetDomain().'rating-snippet/dist.css";
+                    document.head.insertBefore(snippetCss, document.head.childNodes[document.head.childNodes.length - 1].nextSibling);
+
                     loadReviewsIoRatingSnippets();
                     '. $snippet_disable .'
                 });
@@ -447,7 +480,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                   ratingSnippet("ruk_rating_snippet",{
                       store: "'. get_option("REVIEWSio_store_id").'",
                       lang: "' . (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en').'",
-                      usePolaris: true,
+                      usePolaris: '.($snippet_disable==''?"true":"false").',
                       color: "'. $this->getHexColor() .'",
                       linebreak: "' . (get_option('REVIEWSio_rating_snippet_no_linebreak') == 1 ? false : true).'",
                       minRating: "' . (get_option('REVIEWSio_minimum_rating') ? get_option('REVIEWSio_minimum_rating') : 1).'",
@@ -473,7 +506,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             $custom_css = $this->prepareCss(get_option('REVIEWSio_widget_custom_css'));
 
             wp_add_inline_script('reviewsio-product-review','
-                document.addEventListener("DOMContentLoaded", function() {
+                window.addEventListener("load", function() {
                     productWidget("widget-'.$this->numWidgets.'",{
                         store: "'.get_option('REVIEWSio_store_id').'",
                         sku: "'.implode(';', $skus).'",
@@ -506,7 +539,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             wp_register_script('reviewsio-qa',$this->getWidgetDomain().'questions-answers/dist.js', array(),false, false);
             wp_enqueue_script('reviewsio-qa');
             wp_add_inline_script('reviewsio-qa','
-                document.addEventListener("DOMContentLoaded", function() {
+                document.addEventListener("load", function() {
                     questionsWidget("questions-widget", {
                         store: "'.get_option('REVIEWSio_store_id').'",
                         group: "'.get_the_id().'"
@@ -878,7 +911,10 @@ if (!class_exists('WooCommerce_Reviews')) {
                               //Display group questions by providing a grouping variable, new questions will be assigned to this group.
                               grouping: '<?php echo implode(';', $skus) ?>',
                           },
-
+                          <?php if (!empty(get_option('REVIEWSio_widget_custom_header_config'))) {
+                            echo get_option('REVIEWSio_widget_custom_header_config');
+                          } else {
+                          ?>
                           //Header settings:
                           header:{
                               enable_summary: true, //Show overall rating & review count
@@ -890,7 +926,13 @@ if (!class_exists('WooCommerce_Reviews')) {
                               enable_ask_question: true,
                               enable_sub_header: true, //Show subheader
                           },
-
+                          <?php
+                          }
+                          ?>
+                          <?php if (!empty(get_option('REVIEWSio_widget_custom_filtering_config'))) {
+                            echo get_option('REVIEWSio_widget_custom_filtering_config');
+                          } else {
+                          ?>
                           //Filtering settings:
                           filtering:{
                               enable: true, //Show filtering options
@@ -900,7 +942,13 @@ if (!class_exists('WooCommerce_Reviews')) {
                               enable_ratings_filters: true, //Show product attributes filter
                               enable_attributes_filters: true, //Show author attributes filter
                           },
-
+                          <?php
+                          }
+                          ?>
+                          <?php if (!empty(get_option('REVIEWSio_widget_custom_reviews_config'))) {
+                            echo get_option('REVIEWSio_widget_custom_reviews_config');
+                          } else {
+                          ?>
                           //Review settings:
                           reviews:{
                               enable_avatar: true, //Show author avatar
@@ -919,6 +967,9 @@ if (!class_exists('WooCommerce_Reviews')) {
                               enable_report: true, //Show report button
                               enable_date: true, //Show when review was published
                           },
+                          <?php
+                          }
+                          ?>
                         },
                         //Style settings:
                         <?php if (!empty(get_option('REVIEWSio_custom_reviews_widget_styles'))) {
