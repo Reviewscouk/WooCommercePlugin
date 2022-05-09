@@ -466,7 +466,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             wp_add_inline_script('reviewsio-rating-snippet', '
-                window.onload = function() {
+                window.addEventListener("load", function() {
                     var snippetCss= document.createElement("link");
                     snippetCss.rel = "stylesheet";
                     snippetCss.href = "'.$this->getWidgetDomain().'rating-snippet/dist.css";
@@ -474,7 +474,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
                     loadReviewsIoRatingSnippets();
                     '. $snippet_disable .'
-                };
+                });
 
                 var loadReviewsIoRatingSnippets = function () {
                   ratingSnippet("ruk_rating_snippet",{
@@ -506,7 +506,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             $custom_css = $this->prepareCss(get_option('REVIEWSio_widget_custom_css'));
 
             wp_add_inline_script('reviewsio-product-review','
-                document.addEventListener("DOMContentLoaded", function() {
+                window.addEventListener("load", function() {
                     productWidget("widget-'.$this->numWidgets.'",{
                         store: "'.get_option('REVIEWSio_store_id').'",
                         sku: "'.implode(';', $skus).'",
@@ -539,7 +539,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             wp_register_script('reviewsio-qa',$this->getWidgetDomain().'questions-answers/dist.js', array(),false, false);
             wp_enqueue_script('reviewsio-qa');
             wp_add_inline_script('reviewsio-qa','
-                document.addEventListener("DOMContentLoaded", function() {
+                document.addEventListener("load", function() {
                     questionsWidget("questions-widget", {
                         store: "'.get_option('REVIEWSio_store_id').'",
                         group: "'.get_the_id().'"
