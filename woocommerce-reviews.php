@@ -11,7 +11,7 @@ if(!defined('ABSPATH')) {
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.4
+ * Version: 0.4.0
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 5.9.3
@@ -421,9 +421,11 @@ if (!class_exists('WooCommerce_Reviews')) {
                 $writeButton = 'writeButton: false,';
             }
 
+            $load_polaris = true;
             $snippet_disable = '';
 
             if (is_product() && get_option('REVIEWSio_disable_rating_snippet_popup') == "0") {
+                $load_polaris = false;
                 $scroll_pos =  get_option('REVIEWSio_disable_rating_snippet_offset') !=='' ? get_option('REVIEWSio_disable_rating_snippet_offset') : 0;
                 $snippet_disable = "snippetul = document.querySelectorAll('.ruk_rating_snippet');
                     if (snippetul[0]) {
@@ -445,6 +447,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     }
                 ";
             } else if (!is_product() && get_option('REVIEWSio_disable_rating_snippet_popup_category') == "0") {
+                $load_polaris = false;
                 $snippet_disable = "snippetul = document.querySelectorAll('.ruk_rating_snippet');
                     for (i in snippetul) {
                         snippetul[i].onclick = function(event) {
@@ -458,7 +461,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     for (let i=1; i < ReviewsIO_additionalSnippets.length; i++) {
                         if(ReviewsIO_additionalSnippets[i]) {
                             ReviewsIO_additionalSnippets[i].onclick = function(event) {
-
+                                
                             }
                         }
                     }
@@ -480,7 +483,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                   ratingSnippet("ruk_rating_snippet",{
                       store: "'. get_option("REVIEWSio_store_id").'",
                       lang: "' . (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en').'",
-                      usePolaris: '.($snippet_disable==''?"true":"false").',
+                      usePolaris: '.($load_polaris?"true":"false").',
                       color: "'. $this->getHexColor() .'",
                       linebreak: "' . (get_option('REVIEWSio_rating_snippet_no_linebreak') == 1 ? false : true).'",
                       minRating: "' . (get_option('REVIEWSio_minimum_rating') ? get_option('REVIEWSio_minimum_rating') : 1).'",
