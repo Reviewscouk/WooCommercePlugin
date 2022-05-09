@@ -453,6 +453,17 @@ if (!class_exists('WooCommerce_Reviews')) {
                     }
                 ";
             }
+            if (is_product() && get_option('REVIEWSio_disable_rating_snippet_popup_category') == "0") {
+                $snippet_disable .= "let ReviewsIO_additionalSnippets = document.querySelectorAll('.ruk_rating_snippet');
+                    for (let i=1; i < ReviewsIO_additionalSnippets.length; i++) {
+                        if(ReviewsIO_additionalSnippets[i]) {
+                            ReviewsIO_additionalSnippets[i].onclick = function(event) {
+
+                            }
+                        }
+                    }
+                ";
+            }
 
             wp_add_inline_script('reviewsio-rating-snippet', '
                 window.onload = function() {
