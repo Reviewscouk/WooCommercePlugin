@@ -72,6 +72,11 @@ foreach ($products as $product)
       }
     }
   }
+  //Yoast Global Identifiers
+  if(get_option('REVIEWSio_product_feed_wpseo_global_ids')) {
+      $customProductAttributes[] = 'wpseo_gtin';
+      $customProductAttributes[] = 'wpseo_mpn';
+  }
   $tmp = $_product->get_attributes();
   $productAttributes = [];
   foreach ($tmp as $p) {
@@ -85,6 +90,20 @@ foreach ($products as $product)
         $newFields[$key] = ' ';
       }
   }
+  //Yoast Global Identifiers
+  if(get_option('REVIEWSio_product_feed_wpseo_global_ids')) {
+      $productMetaGlobalIds = get_post_meta($_product->get_id(), 'wpseo_global_identifier_values', true);
+      if(!empty($productMetaGlobalIds)) {
+          foreach ($productMetaGlobalIds as $columnName => $columnValue) {
+              if(strpos($columnName, 'gtin') !== false && !empty($columnValue)) {
+                  $newFields['wpseo_gtin'] = $columnValue;
+              }
+              if(strpos($columnName, 'mpn') !== false && !empty($columnValue)) {
+                  $newFields['wpseo_mpn'] = $columnValue;
+              }
+          }
+      }
+  }
   //Add any matching attributes to product feeds and update existing columns
   if(!empty($newFields)) {
       foreach ($newFields as $columnName => $columnValue) {
@@ -96,7 +115,7 @@ foreach ($products as $product)
           } else {
               $insertAtColumnIndex = array_search($columnName, $productArray[0]);
           }
-          //If colummn already exists check and update existing value else add to end
+          //If column already exists check and update existing value else add to end
           $newProductLine = $productArray[count($productArray)-1];
           if(!empty($insertAtColumnIndex)) {
               if($newProductLine[$insertAtColumnIndex] != $columnValue) {
@@ -135,26 +154,30 @@ foreach ($products as $product)
 
       $newFields = [];
       //Append main product attribute fields for variant products
-      $tmp = $_product->get_attributes();
-      $productAttributes = [];
-      foreach ($tmp as $p) {
-          $productAttributes[strtolower($p['name'])] = $p;
-      }
       foreach ($customProductAttributes as $key) {
           $key = strtolower($key);
-          if(isset($productAttributes[$key])) {
-            $newFields[$key] = $productAttributes[$key]['options'][0];
-          } else {
-            $newFields[$key] = ' ';
-          }
+          $newFields[$key] = !empty($productAttributes[$key]['options'][0]) ? $productAttributes[$key]['options'][0] : ' ';
       }
       //Overwrite with variant specific values if available
       if(!empty($variation['attributes'])){
           foreach ($variation['attributes'] as $variant_attribute_key => $variant_attribute_value) {
               $variantAttributeColumnName = str_replace('attribute_', '', $variant_attribute_key);
-              $variantAttributeColumnValue = $variant_attribute_value;
+              $variantAttributeColumnValue = !empty($variant_attribute_value) ? $variant_attribute_value : ' ';
               if(!empty($newFields[strtolower($variantAttributeColumnName)])) {
                 $newFields[strtolower($variantAttributeColumnName)] = $variantAttributeColumnValue;
+              }
+          }
+      }
+      //Yoast Global Identifiers
+      if(get_option('REVIEWSio_product_feed_wpseo_global_ids')) {
+          if(!empty($productMetaGlobalIds)) {
+              foreach ($productMetaGlobalIds as $columnName => $columnValue) {
+                  if(strpos($columnName, 'gtin') !== false && !empty($columnValue)) {
+                      $newFields['wpseo_gtin'] = $columnValue;
+                  }
+                  if(strpos($columnName, 'mpn') !== false && !empty($columnValue)) {
+                      $newFields['wpseo_mpn'] = $columnValue;
+                  }
               }
           }
       }

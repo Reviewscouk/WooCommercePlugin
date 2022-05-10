@@ -509,6 +509,23 @@ if(!defined('ABSPATH')) {
 								</select>
 							</td>
 						</tr>
+						<tr>
+							<th>
+								<label for="REVIEWSio_product_feed_wpseo_global_ids">Include WooCommerce SEO Global Product Identifiers: </label>
+                    <p style="font-size:12px;font-weight:100;">
+                        Add product global identifiers from WooCommece SEO (Yoast) into the product feed.
+                    </p>
+							</th>
+							<td>
+								<?php
+									$enableWpSeoGlobalIds = get_option('REVIEWSio_product_feed_wpseo_global_ids');
+								?>
+								<select name="REVIEWSio_product_feed_wpseo_global_ids">
+									<option <?php echo ($enableWpSeoGlobalIds == 1) ? 'selected' : '' ?> value="1">Yes</option>
+									<option <?php echo ($enableWpSeoGlobalIds == 0) ? 'selected' : '' ?> value="0">No</option>
+								</select>
+							</td>
+						</tr>
             <tr>
 							<th>
 								<label for="REVIEWSio_product_feed_custom_attributes">Include Product Data Attributes Feed: </label>
