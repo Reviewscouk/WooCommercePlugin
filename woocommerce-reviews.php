@@ -179,7 +179,7 @@ if (!class_exists('WooCommerce_Reviews')) {
           "enable_floating_widget","product_identifier","disable_reviews_per_product","use_parent_product",
           "custom_reviews_widget_styles","disable_rating_snippet_popup", "disable_rating_snippet_popup_category", "minimum_rating","rating_snippet_text",
           "polaris_lang","disable_rating_snippet_offset","hide_legacy","rating_snippet_no_linebreak","new_variables_set", "product_feed_custom_attributes",
-          "widget_custom_header_config", "widget_custom_filtering_config" , "widget_custom_reviews_config"];
+          "widget_custom_header_config", "widget_custom_filtering_config" , "widget_custom_reviews_config", "product_feed_wpseo_global_ids"];
 
           foreach($options as $o) {
             register_setting('woocommerce-reviews', $optionsPrefix . $o);
@@ -461,7 +461,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     for (let i=1; i < ReviewsIO_additionalSnippets.length; i++) {
                         if(ReviewsIO_additionalSnippets[i]) {
                             ReviewsIO_additionalSnippets[i].onclick = function(event) {
-                                
+
                             }
                         }
                     }
