@@ -613,17 +613,17 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             $offer = '{
                 "@type": "Offer",
-                itemCondition: "NewCondition",
-                availability: " ' . $this->formatAvailability($product->get_stock_status()) . '",
-                price: "' . $product->get_price() . '",
-                priceCurrency: "' . get_woocommerce_currency() . '",
-                sku: "' . $skus[0] . '",
-                priceValidUntil: "'. $validUntil .'",
-                url: "'.get_permalink($product->get_id()).'",
-                seller : {
+                "itemCondition": "NewCondition",
+                "availability": " ' . $this->formatAvailability($product->get_stock_status()) . '",
+                "price": "' . $product->get_price() . '",
+                "priceCurrency": "' . get_woocommerce_currency() . '",
+                "sku": "' . $skus[0] . '",
+                "priceValidUntil": "'. $validUntil .'",
+                "url": "'.get_permalink($product->get_id()).'",
+                "seller" : {
                     "@type": "Organization",
-                    name: "' . get_bloginfo("name") . '",
-                    url: "' . get_bloginfo("url") . '"
+                    "name": "' . get_bloginfo("name") . '",
+                    "url": "' . get_bloginfo("url") . '"
                 }
             },';
 
@@ -631,25 +631,24 @@ if (!class_exists('WooCommerce_Reviews')) {
               foreach($variants as $variant) {
                 $offer.= ('{
                     "@type": "Offer",
-                    itemCondition: "NewCondition",
-                    availability: "' . $this->formatAvailability((!empty($variant['is_purchasable']) ? 'instock' : 'outofstock')) . '",
-                    price: "' . $variant['display_price'] . '",
-                    priceCurrency: "' . get_woocommerce_currency() . '",
-                    sku: "' . $variant['sku'] . '",
-                    priceValidUntil: "'. $validUntil .'",
-                    url: "'.get_permalink($product->get_id()).'",
+                    "itemCondition": "NewCondition",
+                    "availability": "' . $this->formatAvailability((!empty($variant['is_purchasable']) ? 'instock' : 'outofstock')) . '",
+                    "price": "' . $variant['display_price'] . '",
+                    "priceCurrency": "' . get_woocommerce_currency() . '",
+                    "sku": "' . $variant['sku'] . '",
+                    "priceValidUntil": "'. $validUntil .'",
+                    "url": "'.get_permalink($product->get_id()).'",
                     ' . apply_filters(('REVIEWSio_snippet-'. $variant['variation_id']), "", $product, $variant). '
-                    seller : {
+                    "seller" : {
                         "@type": "Organization",
-                        name: "' . htmlspecialchars(get_bloginfo("name")) . '",
-                        url: "' . get_bloginfo("url") . '"
+                        "name": "' . htmlspecialchars(get_bloginfo("name")) . '",
+                        "url": "' . get_bloginfo("url") . '"
                     }
                 },');
               }
             }
 
             $image = wp_get_attachment_image_src(get_post_thumbnail_id($product->get_id()), 'single-post-thumbnail');
-
             if (get_option('REVIEWSio_enable_product_rich_snippet_server_side')) { 
                 $baseData = [
                     "@context" => "http://schema.org",
@@ -661,7 +660,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                         "@type" => "Brand",
                         "name: " => apply_filters('REVIEWSio_brand', (htmlspecialchars(!empty($brand) ? $brand : get_bloginfo("name"))), $product)
                     ],
-                    "offers" => [($offer)]
+                    "offers" => [json_decode('['.rtrim($offer, ',').']')]
                 ];
 
                 $snippets = $this->getServerSideSnippets(implode(';', $skus), $baseData);
