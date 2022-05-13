@@ -134,7 +134,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             add_action('hourly_order_process_event', array($this, 'process_recent_orders'));
             register_activation_hook(__FILE__, array($this, 'run_on_activation'));
             register_deactivation_hook(__FILE__, array($this, 'run_on_deactivate'));
-        
+
             if (get_option('REVIEWSio_enable_product_rich_snippet')) {
                 add_filter( 'wpseo_schema_product', '__return_false');
             }
@@ -649,7 +649,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             $image = wp_get_attachment_image_src(get_post_thumbnail_id($product->get_id()), 'single-post-thumbnail');
-            if (get_option('REVIEWSio_enable_product_rich_snippet_server_side')) { 
+            if (get_option('REVIEWSio_enable_product_rich_snippet_server_side')) {
                 $baseData = [
                     "@context" => "http://schema.org",
                     "@type" => "Product",
@@ -665,7 +665,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
                 $snippets = $this->getServerSideSnippets(implode(';', $skus), $baseData);
 
-                if ($snippets) {    
+                if ($snippets) {
                     echo ("<script type='application/ld+json'>" . json_encode($snippets,  JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) . "</script>");
                 }
             } else {
@@ -696,10 +696,10 @@ if (!class_exists('WooCommerce_Reviews')) {
         private function getServerSideSnippets($sku, $baseData) {
             $json = false;
             $maxRetries = 3;
-            $url = 'https://api.reviews.io/json-ld/product/richsnippet?store=my-company&sku='.urlencode($sku).'&data=true&k=1';
+            $url = 'https://api.reviews.io/json-ld/product/richsnippet?store='.get_option('REVIEWSio_store_id').'&sku='.urlencode($sku).'&data=true&k=1';
             for ($i=0; $i<$maxRetries; $i++) {
                 $data = @file_get_contents($url);
-                
+
                 if (($json = json_decode($data, 1)) !== false) {
                     break;
                 } else {
@@ -1189,7 +1189,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                 add_action('wp_footer', array($this, 'reviewsio_floating_widget_snippet_scripts'));
             }
 
-            if (get_option('REVIEWSio_enable_product_rich_snippet_server_side')) { 
+            if (get_option('REVIEWSio_enable_product_rich_snippet_server_side')) {
                 add_action('wp_head', array($this, 'reviewsio_rich_snippet_scripts'));
 
             } else {
