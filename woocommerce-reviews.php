@@ -679,7 +679,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             "@context": "http://schema.org",
                             "@type": "Product",
                             "name": "' . htmlspecialchars($product->get_name()) . '",
-                            image: "' . $image[0] . '",
+                            image: "' . ($image[0] ?? "") . '",
                             description: ' . json_encode(apply_filters('REVIEWSio_description', htmlspecialchars(strip_tags($product->get_description())), $product)) . ',
                             brand: {
                             "@type": "Brand",
