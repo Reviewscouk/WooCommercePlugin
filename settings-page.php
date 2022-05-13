@@ -476,6 +476,21 @@ if(!defined('ABSPATH')) {
 						</tr>
 						<tr>
 							<th>
+								<label for="REVIEWSio_enable_product_rich_snippet_server_side">Server Side Rich Snippets: </label>
+			                    <p style="font-size:12px;font-weight:100;">Add the structured data into the HTML source of your page instead of using a Javascript widget.</p>
+							</th>
+							<td>
+								<?php
+								$enable_product_rich_snippet = get_option('REVIEWSio_enable_product_rich_snippet_server_side');
+								?>
+								<select name="REVIEWSio_enable_product_rich_snippet_server_side">
+									<option <?php echo ($enable_product_rich_snippet == 1) ? 'selected' : '' ?> value="1">Yes</option>
+									<option <?php echo ($enable_product_rich_snippet == 0) ? 'selected' : '' ?> value="0">No</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<th>
 			                    <label for="REVIEWSio_enable_floating_widget">Enable Floating Widget: </label>
 			                    <p style="font-size:12px;font-weight:100;">A floating reviews tab will be added to the right side of your site.</p>
 							</th>

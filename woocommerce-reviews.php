@@ -11,7 +11,7 @@ if(!defined('ABSPATH')) {
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.4.0
+ * Version: 0.4.3
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 5.9.3
@@ -134,6 +134,10 @@ if (!class_exists('WooCommerce_Reviews')) {
             add_action('hourly_order_process_event', array($this, 'process_recent_orders'));
             register_activation_hook(__FILE__, array($this, 'run_on_activation'));
             register_deactivation_hook(__FILE__, array($this, 'run_on_deactivate'));
+        
+            if (get_option('REVIEWSio_enable_product_rich_snippet')) {
+                add_filter( 'wpseo_schema_product', '__return_false');
+            }
         }
 
         public function getSubDomain($sub)
@@ -173,7 +177,7 @@ if (!class_exists('WooCommerce_Reviews')) {
         {
           $optionsPrefix = 'REVIEWSio_';
           $options = ["region","store_id","api_key","product_feed","widget_hex_colour","widget_custom_css",
-          "enable_rich_snippet","enable_product_rich_snippet","enable_product_rating_snippet","polaris_review_widget",
+          "enable_rich_snippet","enable_product_rich_snippet","enable_product_rich_snippet_server_side","enable_product_rating_snippet","polaris_review_widget",
           "reviews_tab_name","polaris_review_widget_questions","product_review_widget","question_answers_widget",
           "hide_write_review_button","per_page_review_widget","send_product_review_invitation","enable_cron",
           "enable_floating_widget","product_identifier","disable_reviews_per_product","use_parent_product",
@@ -641,27 +645,71 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             $image = wp_get_attachment_image_src(get_post_thumbnail_id($product->get_id()), 'single-post-thumbnail');
-            wp_add_inline_script('reviewsio-rich-snippet','
-                var reviewsIOConfig = {"store" : `'.get_option('REVIEWSio_store_id').'`, "sku" : `'. implode(';', $skus) .'`};
-                richSnippet({
-                    store: "'.get_option('REVIEWSio_store_id').'",
-                    sku: "'.implode(';', $skus).'",
-                    data:{
-                        "@context": "http://schema.org",
-                        "@type": "Product",
-                        "name": "' . htmlspecialchars($product->get_name()) . '",
-                        image: "' . $image[0] . '",
-                        description: ' . json_encode(apply_filters('REVIEWSio_description', htmlspecialchars(strip_tags($product->get_description())), $product)) . ',
-                        brand: {
-                          "@type": "Brand",
-                          name: "'.apply_filters('REVIEWSio_brand', (htmlspecialchars(!empty($brand) ? $brand : get_bloginfo("name"))), $product).'"
-                        },
-                        ' . apply_filters('REVIEWSio_snippet', "", $product). '
-                        offers: ['.($offer).']
-                    }
-                });
-            ');
+
+            if (get_option('REVIEWSio_enable_product_rich_snippet_server_side')) { 
+                $baseData = [
+                    "@context" => "http://schema.org",
+                    "@type" => "Product",
+                    "name"=> htmlspecialchars($product->get_name()),
+                    "image" => $image[0] ?? '',
+                    "description" => json_encode(apply_filters('REVIEWSio_description', htmlspecialchars(strip_tags($product->get_description())), $product)),
+                    "brand" => [
+                        "@type" => "Brand",
+                        "name: " => apply_filters('REVIEWSio_brand', (htmlspecialchars(!empty($brand) ? $brand : get_bloginfo("name"))), $product)
+                    ],
+                    "offers" => [($offer)]
+                ];
+
+                $snippets = $this->getServerSideSnippets(implode(';', $skus), $baseData);
+
+                if ($snippets) {    
+                    echo ("<script type='application/ld+json'>" . json_encode($snippets,  JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE) . "</script>");
+                }
+            } else {
+                wp_add_inline_script('reviewsio-rich-snippet','
+                    var reviewsIOConfig = {"store" : `'.get_option('REVIEWSio_store_id').'`, "sku" : `'. implode(';', $skus) .'`};
+                    richSnippet({
+                        store: "'.get_option('REVIEWSio_store_id').'",
+                        sku: "'.implode(';', $skus).'",
+                        data:{
+                            "@context": "http://schema.org",
+                            "@type": "Product",
+                            "name": "' . htmlspecialchars($product->get_name()) . '",
+                            image: "' . $image[0] . '",
+                            description: ' . json_encode(apply_filters('REVIEWSio_description', htmlspecialchars(strip_tags($product->get_description())), $product)) . ',
+                            brand: {
+                            "@type": "Brand",
+                            name: "'.apply_filters('REVIEWSio_brand', (htmlspecialchars(!empty($brand) ? $brand : get_bloginfo("name"))), $product).'"
+                            },
+                            ' . apply_filters('REVIEWSio_snippet', "", $product). '
+                            offers: ['.($offer).']
+                        }
+                    });
+                ');
+            }
           }
+        }
+
+        private function getServerSideSnippets($sku, $baseData) {
+            $json = false;
+            $maxRetries = 3;
+            $url = 'https://api.reviews.io/json-ld/product/richsnippet?store=my-company&sku='.urlencode($sku).'&data=true&k=1';
+            for ($i=0; $i<$maxRetries; $i++) {
+                $data = @file_get_contents($url);
+                
+                if (($json = json_decode($data, 1)) !== false) {
+                    break;
+                } else {
+                    msleep(10);
+                    $url .= "1";
+                }
+            }
+
+            if (!$json) {
+                $json = [];
+            }
+
+            return array_merge($json, $baseData);
         }
 
         public function product_rating_snippet_markup()
