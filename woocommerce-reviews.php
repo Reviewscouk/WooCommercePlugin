@@ -493,6 +493,10 @@ if (!class_exists('WooCommerce_Reviews')) {
                       minRating: "' . (get_option('REVIEWSio_minimum_rating') ? get_option('REVIEWSio_minimum_rating') : 1).'",
                       text: "' . (get_option('REVIEWSio_rating_snippet_text') ? get_option('REVIEWSio_rating_snippet_text') : 'Reviews').'",
                       '. $writeButton . '
+                      '. (!empty(get_option('REVIEWSio_per_page_review_widget')) && is_int((int)get_option('REVIEWSio_per_page_review_widget')) ? 'polarisPerPage:' .get_option('REVIEWSio_per_page_review_widget').',' : '') .'
+                      '. (!empty(get_option('REVIEWSio_widget_custom_header_config')) ? 'polarisHeader: {' .get_option('REVIEWSio_widget_custom_header_config').'},' : '') .'
+                      '. (!empty(get_option('REVIEWSio_widget_custom_filtering_config')) ? 'polarisFiltering: {' .get_option('REVIEWSio_widget_custom_filtering_config').'},' : '') .'
+                      '. (!empty(get_option('REVIEWSio_widget_custom_reviews_config')) ? 'polarisReviews: {' .get_option('REVIEWSio_widget_custom_reviews_config').'},' : '') .'
                   });
                 }
             ');

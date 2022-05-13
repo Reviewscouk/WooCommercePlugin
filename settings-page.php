@@ -376,7 +376,7 @@ if(!defined('ABSPATH')) {
 						<tr>
 						  <th>
 		              <label for="REVIEWSio_per_page_review_widget">Reviews Per Page: </label>
-		              <p style="font-size:12px;font-weight:100;">The amount of reviews displayed per page on the Product Review Widget.</p>
+		              <p style="font-size:12px;font-weight:100;">The amount of reviews displayed per page in the Product Review Widget and Popup Product Review Widget.</p>
 						  </th>
 						  <td>
 						    <?php
