@@ -14,7 +14,7 @@ if(!defined('ABSPATH')) {
  * Version: 0.4.2
  *
  * WC requires at least: 3.0.0
- * WC tested up to: 5.9.3
+ * WC tested up to: 6.5.1
  */
 
 function reviewsio_admin_scripts() {
