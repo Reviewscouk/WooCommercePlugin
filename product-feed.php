@@ -199,6 +199,7 @@ foreach ($products as $product)
               }
           }
       }
+      
       //insert additional
       if(!empty($newFields)) {
           foreach ($newFields as $columnName => $columnValue) {
