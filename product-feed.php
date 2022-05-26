@@ -19,6 +19,7 @@ foreach ($products as $product)
 
 	$woocommerce_sku = $_product->get_sku();
 	$woocommerce_id = $product->ID;
+
 	$sku    = get_option('REVIEWSio_product_identifier') == 'id'? $woocommerce_id : $woocommerce_sku;
 	$image_link = '';
 
@@ -72,20 +73,37 @@ foreach ($products as $product)
       }
     }
   }
+
   //Yoast Global Identifiers
   if(get_option('REVIEWSio_product_feed_wpseo_global_ids')) {
       $customProductAttributes[] = 'wpseo_gtin';
       $customProductAttributes[] = 'wpseo_mpn';
   }
-  $tmp = $_product->get_attributes();
+
+  $attributes = $_product->get_attributes();
+  $meta = get_post_meta($product->ID);
+
   $productAttributes = [];
-  foreach ($tmp as $p) {
+  foreach ($attributes as $p) {
       $productAttributes[strtolower($p['name'])] = $p;
   }
+
+  foreach ($meta as $k => $a) {
+      if(empty($productAttributes[strtolower($k)])) {
+        if(is_string($a)) {
+          $productAttributes[strtolower($k)] = $a;
+        } elseif(is_array($a) && isset($a[0]) && is_string($a[0])) {
+          $productAttributes[strtolower($k)] = $a[0];
+        }
+      }
+  }
+
   foreach ($customProductAttributes as $key) {
       $key = strtolower($key);
-      if(isset($productAttributes[$key])) {
+      if(isset($productAttributes[$key]['options'][0])) {
         $newFields[$key] = $productAttributes[$key]['options'][0];
+      } elseif(isset($productAttributes[$key]) && is_string($productAttributes[$key])) {
+        $newFields[$key] = $productAttributes[$key];
       } else {
         $newFields[$key] = ' ';
       }
