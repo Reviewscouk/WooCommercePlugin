@@ -36,7 +36,7 @@ Unique to REVIEWS.io, you can now [collect reviews on third party platforms](htt
 
 ### Fair pricing, no long contracts
 
-Our service starts at [$45](https://www.reviews.io/front/pricingplans?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=pricingplans)/[£45](https://www.reviews.co.uk/front/pricingplans?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=pricingplans) per month, with no long contracts. We believe firmly that you shouldn't pay over the odds for your licensed Reviews Management platform. Our excellent customer service supports you month in/month out. We'll never lock you into a long contract, meaning you'll stick with us because you want to, not because you have to.
+Our service starts at [$45](https://www.reviews.io/front/pricingplans?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=pricingplans)/[£29](https://www.reviews.co.uk/front/pricingplans?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=pricingplans) per month, with no long contracts. We believe firmly that you shouldn't pay over the odds for your licensed Reviews Management platform. Our excellent customer service supports you month in/month out. We'll never lock you into a long contract, meaning you'll stick with us because you want to, not because you have to.
 
 [Read more about UK pricing here.](https://www.reviews.co.uk/front/pricingplans?utm_source=woocommerce&utm_medium=referral&utm_campaign=apps-modules&utm_content=pricingplans)
 
@@ -94,10 +94,6 @@ Price increases only affect new clients signing up, not existing clients.
 ## WHAT ABOUT NEW FEATURES?
 
 We are always working on new features that will help increase your ROI, new core features will be added to your account automatically. In the last 12 months we have added over 8 new core features that we gave to our existing client base free of charge.
-
-## IN WHICH COUNTRIES IS REVIEWS.io SUPPORTED?
-
-REVIEWS.io functionality is currently available in English speaking countries. That said if you are from a country outside of the UK you may be better off using our international site REVIEWS.io.
 
 ## ARE CUSTOM PLANS AVAILABLE?
 
