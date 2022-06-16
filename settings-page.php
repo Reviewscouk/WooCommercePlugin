@@ -629,6 +629,22 @@ if(!defined('ABSPATH')) {
 									<option <?php echo ($use_parent_product== 1) ? 'selected' : '' ?> value="1">Yes</option>
 								</select>
 							</td>
+						</tr
+
+            <tr>
+							<th>
+								<label for="REVIEWSio_use_parent_product_rich_snippet">Use Parent Product only on Rich Snippets</label>
+								<p style="font-size:12px;font-weight:100;">Enable this if you would like to only show rich snippet data for the parent product, and not any accompanying variants.</p>
+							</th>
+							<td>
+								<?php
+								$use_parent_product_rich = get_option('REVIEWSio_use_parent_product_rich_snippet');
+								?>
+								<select name="REVIEWSio_use_parent_product_rich_snippet">
+									<option <?php echo ($use_parent_product_rich== 0) ? 'selected' : '' ?> value="0">No (Default)</option>
+									<option <?php echo ($use_parent_product_rich== 1) ? 'selected' : '' ?> value="1">Yes</option>
+								</select>
+							</td>
 						</tr>
 
 						<tr style="border-top: 1px solid #e4e4e4">

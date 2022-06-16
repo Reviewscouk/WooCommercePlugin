@@ -11,7 +11,7 @@ if(!defined('ABSPATH')) {
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.4.5
+ * Version: 0.4.6
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 6.5.1
@@ -180,7 +180,7 @@ if (!class_exists('WooCommerce_Reviews')) {
           "enable_rich_snippet","enable_product_rich_snippet","enable_product_rich_snippet_server_side","enable_product_rating_snippet","polaris_review_widget",
           "reviews_tab_name","polaris_review_widget_questions","product_review_widget","question_answers_widget",
           "hide_write_review_button","per_page_review_widget","send_product_review_invitation","enable_cron",
-          "enable_floating_widget","product_identifier","disable_reviews_per_product","use_parent_product",
+          "enable_floating_widget","product_identifier","disable_reviews_per_product","use_parent_product", "use_parent_product_rich_snippet",
           "custom_reviews_widget_styles","disable_rating_snippet_popup", "disable_rating_snippet_popup_category", "minimum_rating","rating_snippet_text",
           "polaris_lang","disable_rating_snippet_offset","hide_legacy","rating_snippet_no_linebreak","new_variables_set", "product_feed_custom_attributes",
           "widget_custom_header_config", "widget_custom_filtering_config" , "widget_custom_reviews_config", "product_feed_wpseo_global_ids"];
@@ -207,6 +207,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             update_option('REVIEWSio_reviews_tab_name', 'Reviews');
             update_option('REVIEWSio_product_identifier', 'sku');
             update_option('REVIEWSio_use_parent_product', 0);
+            update_option('REVIEWSio_use_parent_product_rich_snippet', 0);
             update_option('REVIEWSio_disable_rating_snippet_popup', 1);
             update_option('REVIEWSio_disable_rating_snippet_popup_category', 1);
             update_option('REVIEWSio_minimum_rating', "1");
@@ -418,7 +419,6 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             wp_register_style( 'reviewsio-rating-snippet-font-style',  false, array(), '', false);
             wp_enqueue_style('reviewsio-rating-snippet-font-style');
-            wp_add_inline_style('reviewsio-rating-snippet-font-style','.ruk_rating_snippet > .ruk-rating-snippet-count { font-family: inherit!important; }');
 
             $writeButton = '';
             if(get_option("REVIEWSio_hide_write_review_button") == "1") {
@@ -627,7 +627,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                 }
             },';
 
-            if(!empty($variants) && !(get_option('REVIEWSio_use_parent_product') == 1)) {
+            if(!empty($variants) && !(get_option('REVIEWSio_use_parent_product_rich_snippet') == 1)) {
               foreach($variants as $variant) {
                 $offer.= ('{
                     "@type": "Offer",
