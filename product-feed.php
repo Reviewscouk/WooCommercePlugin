@@ -136,7 +136,7 @@ foreach ($products as $product)
           //If column already exists check and update existing value else add to end
           $newProductLine = $productArray[count($productArray)-1];
           if(!empty($insertAtColumnIndex)) {
-              if($newProductLine[$insertAtColumnIndex] != $columnValue) {
+              if(!isset($newProductLine[$insertAtColumnIndex]) || $newProductLine[$insertAtColumnIndex] != $columnValue) {
                   $newProductLine[$insertAtColumnIndex] = $columnValue;
                   $productArray[count($productArray)-1] = $newProductLine;
               }
@@ -235,7 +235,7 @@ foreach ($products as $product)
               //If colummn already exists check and update existing value else add to end
               $newProductLine = $productArray[count($productArray)-1];
               if(!empty($insertAtColumnIndex)) {
-                  if($newProductLine[$insertAtColumnIndex] != $columnValue) {
+                  if(!isset($newProductLine[$insertAtColumnIndex]) || $newProductLine[$insertAtColumnIndex] != $columnValue) {
                       $newProductLine[$insertAtColumnIndex] = $columnValue;
                       $productArray[count($productArray)-1] = $newProductLine;
                   }
