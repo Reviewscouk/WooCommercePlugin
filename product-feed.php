@@ -168,14 +168,35 @@ foreach ($products as $product)
 			if(!empty($variant_attributes)){
 				//$variant_title .= ' - '.$variant_attributes;
 			}
+
+            // get variant meta data
+            $_variant = $_pf->get_product($variation['variation_id']);
+            $variant_meta = $_variant->get_meta_data();
+
 			$productArray[] = array( $variant_sku, $variant_title, $image_url, get_permalink($product->ID), $variation['sku'], $variation['sku'], $variation['variation_id'], $barcode, $categories_string, $categories_json);
 
-      $newFields = [];
-      //Append main product attribute fields for variant products
-      foreach ($customProductAttributes as $key) {
-          $key = strtolower($key);
-          $newFields[$key] = !empty($productAttributes[$key]['options'][0]) ? $productAttributes[$key]['options'][0] : ' ';
-      }
+            foreach ($variant_meta as $meta_item) {
+                $attr = $meta_item->get_data();
+                // set variant field attribute (will default to same parent product attribute)
+                if (is_string($attr['value']) && !empty($attr['value'])) {
+                    $productAttributes[strtolower($attr['key'])] = $attr['value'];
+                }
+            }
+
+            $newFields = [];
+
+            //Append main product attribute fields for variant products
+            foreach ($customProductAttributes as $key) {
+                $key = strtolower($key);
+                if (isset($productAttributes[$key]['options'][0])) {
+                    $newFields[$key] = $productAttributes[$key]['options'][0];
+                } elseif (isset($productAttributes[$key]) && is_string($productAttributes[$key])) {
+                    $newFields[$key] = $productAttributes[$key];
+                } else {
+                    $newFields[$key] = ' ';
+                }
+            }
+
       //Overwrite with variant specific values if available
       if(!empty($variation['attributes'])){
           foreach ($variation['attributes'] as $variant_attribute_key => $variant_attribute_value) {
