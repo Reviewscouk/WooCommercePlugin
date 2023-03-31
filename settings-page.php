@@ -27,6 +27,245 @@ if(!defined('ABSPATH')) {
 			$hide_legacy = get_option('REVIEWSio_hide_legacy');
  		?>
 
+		<div class="ContentPanel">
+			<div class="FlexTabs FlexTabs--inPanel">
+				<div id="js-api-tab" class="FlexTabs__item isActive">
+					<div class="TextHeading TextHeading--xxxs u-marginBottom--none">API Settings</div>
+				</div>
+				<div id="js-invitations-tab" class="FlexTabs__item">
+					<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Review Invitations</div>
+				</div>
+				<div id="js-reviews-tab" class="FlexTabs__item">
+					<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Product Reviews</div>
+				</div>
+				<div id="js-qa-tab" class="FlexTabs__item">
+					<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Q&amp;A</div>
+				</div>
+				<div id="js-snippets-tab" class="FlexTabs__item">
+					<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Rich Snippets</div>
+				</div>
+				<div id="js-feeds-tab" class="FlexTabs__item">
+					<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Data Feeds</div>
+				</div>
+				<div id="js-widgets-tab" class="FlexTabs__item">
+					<div class="TextHeading TextHeading--xxxs u-marginBottom--none">REVIEWS.io Widgets</div>
+				</div>
+				<div id="js-advanced-tab" class="FlexTabs__item">
+					<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Advanced</div>
+				</div>
+			</div>
+
+			<div class="tab-contents js-api-tab">Tab 1</div>
+			<div class="tab-contents js-invitations-tab">Tab 2</div>
+			<div class="tab-contents js-reviews-tab">Tab 3</div>
+			<div class="tab-contents js-qa-tab">Tab 4</div>
+			<div class="tab-contents js-snippets-tab">Tab 5</div>
+			<div class="tab-contents js-feeds-tab">Tab 6</div>
+
+			<div class="tab-contents js-widgets-tab">
+				<div class="TextBody TextBody--xxs">
+					<p>
+						Enable and customise how REVIEWS.io widgets on your website. The customisation for the widgets below can be found in the  <a href="https://dash.reviews.co.uk/widgets" target="_blank">REVIEWS.io widget library</a>.
+					</p>
+					<p>
+						Enhance your website with dynamic content and features by making use of shortcodes - small pieces of code enclosed in square brackets. You can easily add these shortcodes using the format [widget name_widget], ie. [nuggets_widget] Our plugin offers several widgets that support shortcodes, including Nuggets, UGC, and Rating Bar.
+					</p>
+					<p>
+						To use our shortcodes, you'll need to add a 'widget_id' - you can find this in our widget editor. The shortcode format is [widget_name widget_id='your widget id']. This is also a great way to add SKUs to your content! Simply separate each SKU with a semi-colon, like this: [widget_name widget_id='your widget id' sku='sku1;sku2;sku3'].
+					</p>
+				</div>
+				<div class="u-hr u-marginTop--md u-marginBottom--lg"></div>
+				
+				<div class="flex-row">
+					<div class="flex-col-xxs-3 u-paddingRight--none">
+	
+						<div id="nuggets-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab isActive" onclick="showWidget('nuggets')">
+							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
+								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-upload-file--md--colour.svg" alt="">
+								<div>
+									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Nuggets Widget</div>
+								</div>
+							</div>
+						</div>
+						<div id="floating-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('floating')">
+							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
+								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-upload-file--md--colour.svg" alt="">
+								<div>
+									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Floating Widget</div>
+								</div>
+							</div>
+						</div>
+						<div id="survey-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('survey')">
+							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
+								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-upload-file--md--colour.svg" alt="">
+								<div>
+									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Survey Widget</div>
+								</div>
+							</div>
+						</div>
+						<div id="carousel-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('carousel')">
+							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
+								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-upload-file--md--colour.svg" alt="">
+								<div>
+									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Carousel Widget</div>
+								</div>
+							</div>
+						</div>
+					</div>
+	
+					<div class="flex-col-xxs-9 u-paddingLeft--none">
+						<div class="ContentPanel u-shadow--none" style="box-shadow: none;">
+							<div class="menu-data">
+								<div id="nuggets" class="form-table js-widget">
+									<h3><strong>Nuggets Widget Settings:</strong></h3>
+	
+									<div>
+										<label for="REVIEWSio_enable_nuggets_widget">Enable Nuggets Widget: </label>
+										<p style="font-size:12px;font-weight:100;">
+											Use the dropdown menu to enable or disable the Nuggets widget. Select 'Yes' to enable the widget, or 'No' to disable.
+										</p>
+		
+										<?php
+											$enable_nuggets_widget = get_option('REVIEWSio_enable_nuggets_widget');
+										?>
+										<select id="js-nuggets" class="widget-active-state" name="REVIEWSio_enable_nuggets_widget">
+											<option <?php echo ($enable_nuggets_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
+											<option <?php echo ($enable_nuggets_widget == 0) ? 'selected' : '' ?> value="0">No</option>
+										</select>
+									</div>
+
+									<div class="u-paddingTop--lg">
+										<label for="REVIEWSio_nuggets_widget_options">Nuggets Widget Styles: </label>
+										<p style="font-size:12px;font-weight:100;">
+											The dropdown menu to the right contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and the corresponding styles will be applied to your widget on saving changes.
+										</p>
+										<?php
+											$nuggets_widget_options = get_option('REVIEWSio_nuggets_widget_options');
+										?>
+										<input id="nuggets-widget-option" type="hidden" value="<?php echo $nuggets_widget_options ?>">
+										<select id="nuggets-widget-options-dropdown" name='REVIEWSio_nuggets_widget_options'></select>
+									</div>
+								</div>
+			
+								<div id="floating" class="form-table js-widget" style="display: none">
+									<div>
+										`<h3><strong>Floating Widget Settings:</strong></h3>
+		
+										<label for="REVIEWSio_enable_floating_react_widget">Enable floating Widget: </label>
+										<p style="font-size:12px;font-weight:100;">
+											Use the dropdown menu to enable or disable the Floating widget. Select 'Yes' to enable the widget, or 'No' to disable.
+										</p>
+										
+										<?php
+											$enable_floating_react_widget = get_option('REVIEWSio_enable_floating_react_widget');
+										?>
+										<select id="js-floating" class="widget-active-state" name="REVIEWSio_enable_floating_react_widget">
+											<option <?php echo ($enable_floating_react_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
+											<option <?php echo ($enable_floating_react_widget == 0) ? 'selected' : '' ?> value="0">No</option>
+										</select>`
+									</div>
+			
+									<div class="u-paddingTop--lg">
+										<label for="REVIEWSio_floating_react_widget_option">Floating Widget Styles: </label>
+										<p style="font-size:12px;font-weight:100;">
+											The dropdown menu to the right contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and the corresponding styles will be applied to your widget on saving changes.
+										</p>
+
+										<?php
+											$floating_react_widget_options = get_option('REVIEWSio_floating_react_widget_options');
+										?>
+										<input id="floating-react-widget-option" type="hidden" value="<?php echo $floating_react_widget_options ?>">
+										<select id="floating-react-widget-options-dropdown" name='REVIEWSio_floating_react_widget_options'></select>
+									</div>
+								</div>
+			
+								<div id="survey" class="form-table js-widget" style="display: none">
+									<div>
+										<h3><strong>Survey Settings:</strong></h3>
+		
+										<label for="REVIEWSio_enable_survey_widget">Enable Survey Widget: </label>
+										<p style="font-size:12px;font-weight:100;">
+											Use the dropdown menu to enable or disable the Survey widget. Select 'Yes' to enable the widget, or 'No' to disable.
+										</p>
+		
+										<?php
+											$enable_survey_widget = get_option('REVIEWSio_enable_survey_widget');
+										?>
+										<select id="js-survey" class="widget-active-state" name="REVIEWSio_enable_survey_widget">
+											<option <?php echo ($enable_survey_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
+											<option <?php echo ($enable_survey_widget == 0) ? 'selected' : '' ?> value="0">No</option>
+										</select>
+									</div>
+			
+									<div class="u-paddingTop--lg">
+										<label for="REVIEWSio_survey_widget_options">Survey Widget Styles: </label>
+										<p style="font-size:12px;font-weight:100;">
+											The dropdown menu to the right contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and the corresponding styles will be applied to your widget on saving changes.
+										</p>
+
+										<?php
+											$survey_widget_options = get_option('REVIEWSio_survey_widget_options');
+										?>
+										<input id="survey-widget-option" type="hidden" value="<?php echo $survey_widget_options ?>">
+										<select id="survey-widget-options-dropdown" name='REVIEWSio_survey_widget_options'></select>
+									</div>
+									
+									<div class="u-paddingTop--lg">
+										<label for="REVIEWSio_survey_widget_campaign">Survey Widget Campaign: </label>
+										<p style="font-size:12px;font-weight:100;">
+											Please select a campaign from the list of available campaigns. This will load the correct survey for the customers based on your selection.
+										</p>
+
+										<?php
+											$survey_widget_campaign = get_option('REVIEWSio_survey_widget_campaign');
+										?>
+										<input name='REVIEWSio_survey_widget_campaign' value='<?php echo (isset($survey_widget_campaign) ? $survey_widget_campaign : ''); ?>'>
+									</div>
+								</div>
+			
+								<div id="carousel" class="form-table js-widget" style="display: none">
+									<div>
+										<h3><strong>Carousel Shortcode Settings:</strong></h3>
+									</div>
+			
+									<div>
+										<label for="REVIEWSio_carousel_type">Carousel Type </label>
+										<p style="font-size:12px;font-weight:100;">Select the type of Carousel widget to display in the page.</p>
+
+										<?php
+											$carousel_type = get_option('REVIEWSio_carousel_type');
+										?>
+										<select name="REVIEWSio_carousel_type">
+											<option <?php echo ($carousel_type == 'card') ? 'selected' : '' ?> value="card">Card Carousel</option>
+											<option <?php echo ($carousel_type == 'carousel') ? 'selected' : '' ?> value="carousel">Carousel</option>
+											<option <?php echo ($carousel_type == 'fullwidth_card') ? 'selected' : '' ?> value="fullwidth_card">Fullwidth Card Carousel</option>
+											<option <?php echo ($carousel_type == 'fullwidth') ? 'selected' : '' ?> value="fullwidth">Fullwidth Carousel</option>
+											<option <?php echo ($carousel_type == 'bulky') ? 'selected' : '' ?> value="bulky">Bulky Carousel</option>
+										</select>
+									</div>
+			
+									<div class="u-paddingTop--lg">
+										<label for="REVIEWSio_carousel_custom_styles">Custom Carousel Styles</label>
+										<p style="font-size:12px;font-weight:100;">
+											Set custom options and styles for the carousel widget such as review types and or minimum number of reviews to display. The options can be edited from the REVIEWS.io widget editor and all the styles from the 'options' object and below can be copied over to the text area. Leaving field blank sets the default styles.
+										</p>
+
+										<?php
+											$carousel_custom_styles = get_option('REVIEWSio_carousel_custom_styles');
+										?>
+										<textarea name="REVIEWSio_carousel_custom_styles" style="width:100%;height:400px;"><?php echo $carousel_custom_styles; ?></textarea>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="tab-contents js-advanced-tab"></div>
+		</div>
+							
+
 		<div id="tabs-container">
 		    <ul class="tabs-menu">
 		        <li class="current"><a href="#tab-1">API Settings</a></li>
@@ -35,6 +274,7 @@ if(!defined('ABSPATH')) {
 		        <li><a href="#tab-qa">Q&A</a></li>
 		        <li><a href="#tab-4">Rich Snippets</a></li>
 		        <li><a href="#tab-5">Data Feeds</a></li>
+		        <li><a href="#tab-widgets">REVIEWS.io Widgets</a></li>
 		        <li><a href="#tab-6">Advanced</a></li>
 		    </ul>
 		    <div class="tab">
@@ -491,8 +731,15 @@ if(!defined('ABSPATH')) {
 						</tr>
 						<tr>
 							<th>
-			                    <label for="REVIEWSio_enable_floating_widget">Enable Floating Widget: </label>
-			                    <p style="font-size:12px;font-weight:100;">A floating reviews tab will be added to the right side of your site.</p>
+			                    <label for="REVIEWSio_enable_floating_widget">Enable Legacy Floating Widget: </label>
+			                    <div>
+									<p style="font-size:12px;font-weight:100;">
+										A floating reviews tab will be added to the right side of your site.
+									</p>
+									<p style="font-size:12px;font-weight:100;">
+										<strong style="font-size:12px;">Note:</strong> This widget is being deprecated and will be removed in future updates, please use main floating widget found under REVIEWS.io Widgets tab to ensure you have the latest updates and features.
+									</p>
+								</div>
 							</th>
 							<td>
 								<?php
@@ -564,6 +811,257 @@ if(!defined('ABSPATH')) {
 							</td>
 						</tr>
 					</table>
+		        </div>
+				<div id="tab-widgets" class="tab-content">
+					<div style="border-bottom: 1px solid #e4e4e4;">
+						<p>
+							Enable and customise how REVIEWS.io widgets on your website. The customisation for the widgets below can be found in the  <a href="https://dash.reviews.co.uk/widgets" target="_blank">REVIEWS.io widget library</a>.
+						</p>
+						<p>
+							Enhance your website with dynamic content and features by making use of shortcodes - small pieces of code enclosed in square brackets. You can easily add these shortcodes using the format [widget name_widget], ie. [nuggets_widget] Our plugin offers several widgets that support shortcodes, including Nuggets, UGC, and Rating Bar.
+						</p>
+						<p>
+							To use our shortcodes, you'll need to add a 'widget_id' - you can find this in our widget editor. The shortcode format is [widget_name widget_id='your widget id']. This is also a great way to add SKUs to your content! Simply separate each SKU with a semi-colon, like this: [widget_name widget_id='your widget id' sku='sku1;sku2;sku3'].
+						</p>
+					</div>
+
+					<div class="menu-container">
+						<div class="side-menu">
+							<ul>
+								<li onclick="showWidget('nuggets')">Nuggets Widget</li>
+								<li onclick="showWidget('floating')">Floating Widget</li>
+								<li onclick="showWidget('survey')">Survey Widget</li>
+								<li onclick="showWidget('carousel')">Carousel Widget</li>
+							</ul>
+						</div>
+	
+						<div class="menu-data">
+							<table id="nuggets" class="form-table js-widget">
+								<tr>
+									<th>
+										<h3><strong>Nuggets Widget Settings:</strong></h3>
+		
+										<label for="REVIEWSio_enable_nuggets_widget">Enable Nuggets Widget: </label>
+										<p style="font-size:12px;font-weight:100;">
+											Use the dropdown menu to enable or disable the Nuggets widget. Select 'Yes' to enable the widget, or 'No' to disable.
+										</p>
+									</th>
+		
+									<td>
+										<?php
+											$enable_nuggets_widget = get_option('REVIEWSio_enable_nuggets_widget');
+										?>
+										<select id="js-nuggets" class="widget-active-state" name="REVIEWSio_enable_nuggets_widget">
+											<option <?php echo ($enable_nuggets_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
+											<option <?php echo ($enable_nuggets_widget == 0) ? 'selected' : '' ?> value="0">No</option>
+										</select>
+									</td>
+								</tr>
+		
+								<tr>
+									<th>
+										<label for="REVIEWSio_nuggets_widget_options">Nuggets Widget Styles: </label>
+										<p style="font-size:12px;font-weight:100;">
+											The dropdown menu to the right contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and the corresponding styles will be applied to your widget on saving changes.
+										</p>
+									</th>
+									<td>
+										<?php
+											$nuggets_widget_options = get_option('REVIEWSio_nuggets_widget_options');
+										?>
+										<input id="nuggets-widget-option" type="hidden" value="<?php echo $nuggets_widget_options ?>">
+										<select id="nuggets-widget-options-dropdown" name='REVIEWSio_nuggets_widget_options'></select>
+									</td>
+								</tr>
+								
+								<?php /* <tr>
+									<th>
+										<label for="REVIEWSio_nuggets_widget_tags">Nuggets Widget Tags: </label>
+										<p style="font-size:12px;font-weight:100;">Tags...</p>
+									</th>
+									<td>
+										<?php
+											$nuggets_widget_tags = get_option('REVIEWSio_nuggets_widget_tags');
+										?>
+										<input name='REVIEWSio_nuggets_widget_tags' value='<?php echo (isset($nuggets_widget_tags) ? $nuggets_widget_tags : ''); ?>'>
+									</td>
+								</tr> */ ?>
+							</table>
+		
+							<?php /* 
+							<table class="form-table">
+								<tr style="border-top: 1px solid #e4e4e4;">
+									<th>
+										<h3><strong>Nuggets Bar Widget Settings:</strong></h3>
+		
+										<label for="REVIEWSio_enable_nuggets_bar_widget">Enable Nuggets Bar Widget: </label>
+										<p style="font-size:12px;font-weight:100;">
+											Review Nuggets Bar...
+										</p>
+									</th>
+		
+									<td>
+										<?php
+											$enable_nuggets_bar_widget = get_option('REVIEWSio_enable_nuggets_bar_widget');
+										?>
+										<select name="REVIEWSio_enable_nuggets_bar_widget">
+											<option <?php echo ($enable_nuggets_bar_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
+											<option <?php echo ($enable_nuggets_bar_widget == 0) ? 'selected' : '' ?> value="0">No</option>
+										</select>
+									</td>
+								</tr>
+		
+								<tr>
+									<th>
+										<label for="REVIEWSio_nuggets_bar_widget_id">Nuggets Bar Widget Id: </label>
+										<p style="font-size:12px;font-weight:100;">Widget Id...</p>
+									</th>
+									<td>
+										<?php
+											$nuggets_bar_widget_id = get_option('REVIEWSio_nuggets_bar_widget_id');
+										?>
+										<input name='REVIEWSio_nuggets_bar_widget_id' value='<?php echo (isset($nuggets_bar_widget_id) ? $nuggets_bar_widget_id : ''); ?>'>
+									</td>
+								</tr>
+							</table>
+							*/ ?>
+		
+							<table id="floating" class="form-table js-widget" style="display: none">
+								<tr style="border-top: 1px solid #e4e4e4;">
+									<th>
+										<h3><strong>Floating Widget Settings:</strong></h3>
+		
+										<label for="REVIEWSio_enable_floating_react_widget">Enable floating Widget: </label>
+										<p style="font-size:12px;font-weight:100;">
+											Use the dropdown menu to enable or disable the Floating widget. Select 'Yes' to enable the widget, or 'No' to disable.
+										</p>
+									</th>
+		
+									<td>
+										<?php
+											$enable_floating_react_widget = get_option('REVIEWSio_enable_floating_react_widget');
+										?>
+										<select id="js-floating" class="widget-active-state" name="REVIEWSio_enable_floating_react_widget">
+											<option <?php echo ($enable_floating_react_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
+											<option <?php echo ($enable_floating_react_widget == 0) ? 'selected' : '' ?> value="0">No</option>
+										</select>
+									</td>
+								</tr>
+		
+								<tr>
+									<th>
+										<label for="REVIEWSio_floating_react_widget_option">Floating Widget Styles: </label>
+										<p style="font-size:12px;font-weight:100;">
+											The dropdown menu to the right contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and the corresponding styles will be applied to your widget on saving changes.
+										</p>
+									</th>
+									<td>
+										<?php
+											$floating_react_widget_options = get_option('REVIEWSio_floating_react_widget_options');
+										?>
+										<input id="floating-react-widget-option" type="hidden" value="<?php echo $floating_react_widget_options ?>">
+										<select id="floating-react-widget-options-dropdown" name='REVIEWSio_floating_react_widget_options'></select>
+									</td>
+								</tr>
+							</table>
+		
+							<table id="survey" class="form-table js-widget" style="display: none">
+								<tr style="border-top: 1px solid #e4e4e4;">
+									<th>
+										<h3><strong>Survey Settings:</strong></h3>
+		
+										<label for="REVIEWSio_enable_survey_widget">Enable Survey Widget: </label>
+										<p style="font-size:12px;font-weight:100;">
+											Use the dropdown menu to enable or disable the Survey widget. Select 'Yes' to enable the widget, or 'No' to disable.
+										</p>
+									</th>
+		
+									<td>
+										<?php
+											$enable_survey_widget = get_option('REVIEWSio_enable_survey_widget');
+										?>
+										<select id="js-survey" class="widget-active-state" name="REVIEWSio_enable_survey_widget">
+											<option <?php echo ($enable_survey_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
+											<option <?php echo ($enable_survey_widget == 0) ? 'selected' : '' ?> value="0">No</option>
+										</select>
+									</td>
+								</tr>
+		
+								<tr>
+									<th>
+										<label for="REVIEWSio_survey_widget_options">Survey Widget Styles: </label>
+										<p style="font-size:12px;font-weight:100;">
+											The dropdown menu to the right contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and the corresponding styles will be applied to your widget on saving changes.
+										</p>
+									</th>
+									<td>
+										<?php
+											$survey_widget_options = get_option('REVIEWSio_survey_widget_options');
+										?>
+										<input id="survey-widget-option" type="hidden" value="<?php echo $survey_widget_options ?>">
+										<select id="survey-widget-options-dropdown" name='REVIEWSio_survey_widget_options'></select>
+									</td>
+								</tr>
+								
+								<tr>
+									<th>
+										<label for="REVIEWSio_survey_widget_campaign">Survey Widget Campaign: </label>
+										<p style="font-size:12px;font-weight:100;">
+											Please select a campaign from the list of available campaigns. This will load the correct survey for the customers based on your selection.
+										</p>
+									</th>
+									<td>
+										<?php
+											$survey_widget_campaign = get_option('REVIEWSio_survey_widget_campaign');
+										?>
+										<input name='REVIEWSio_survey_widget_campaign' value='<?php echo (isset($survey_widget_campaign) ? $survey_widget_campaign : ''); ?>'>
+									</td>
+								</tr>
+							</table>
+		
+							<table id="carousel" class="form-table js-widget" style="display: none">
+								<tr style="border-top: 1px solid #e4e4e4;">
+									<th>
+										<h3><strong>Carousel Shortcode Settings:</strong></h3>
+									</th>
+								</tr>
+		
+								<tr>
+									<th>
+										<label for="REVIEWSio_carousel_type">Carousel Type </label>
+										<p style="font-size:12px;font-weight:100;">Select the type of Carousel widget to display in the page.</p>
+									</th>
+									<td>
+										<?php
+											$carousel_type = get_option('REVIEWSio_carousel_type');
+										?>
+										<select name="REVIEWSio_carousel_type">
+											<option <?php echo ($carousel_type == 'card') ? 'selected' : '' ?> value="card">Card Carousel</option>
+											<option <?php echo ($carousel_type == 'carousel') ? 'selected' : '' ?> value="carousel">Carousel</option>
+											<option <?php echo ($carousel_type == 'fullwidth_card') ? 'selected' : '' ?> value="fullwidth_card">Fullwidth Card Carousel</option>
+											<option <?php echo ($carousel_type == 'fullwidth') ? 'selected' : '' ?> value="fullwidth">Fullwidth Carousel</option>
+											<option <?php echo ($carousel_type == 'bulky') ? 'selected' : '' ?> value="bulky">Bulky Carousel</option>
+										</select>
+									</td>
+								</tr>
+		
+								<tr>
+									<th>
+										<label for="REVIEWSio_carousel_custom_styles">Custom Carousel Styles</label>
+										<p style="font-size:12px;font-weight:100;">
+											Set custom options and styles for the carousel widget such as review types and or minimum number of reviews to display. The options can be edited from the REVIEWS.io widget editor and all the styles from the 'options' object and below can be copied over to the text area. Leaving field blank sets the default styles.
+										</p>
+									</th>
+									<td>
+										<?php
+											$carousel_custom_styles = get_option('REVIEWSio_carousel_custom_styles');
+										?>
+										<textarea name="REVIEWSio_carousel_custom_styles" style="width:300px;height:200px;"><?php echo $carousel_custom_styles; ?></textarea>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>
 		        </div>
 		        <div id="tab-6" class="tab-content">
 					<!-- Advanced -->
