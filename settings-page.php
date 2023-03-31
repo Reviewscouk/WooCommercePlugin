@@ -109,25 +109,19 @@ if(!defined('ABSPATH')) {
 			
 			<div class="tab-contents js-invitations-tab">
 				<!-- Review Collection -->
-				<table class="form-table">
-					<tr>
-						<th>
-							<label for="REVIEWSio_send_product_review_invitation">Queue Invitations: </label>
-							<p style="font-size:12px;font-weight:100;">Invitations will be queued when orders are Completed.</p>
-						</th>
-						<td>
-							<?php
-								$send_product_review_invitation = get_option('REVIEWSio_send_product_review_invitation');
-							?>
-							<select name="REVIEWSio_send_product_review_invitation">
-								<option <?php echo ($send_product_review_invitation == 1) ? 'selected' : '' ?> value="1">Yes</option>
-								<option <?php echo ($send_product_review_invitation == 0) ? 'selected' : '' ?> value="0">No</option>
-							</select>
-						</td>
-					</tr>
-				</table>
+				<div class="form-table">
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_send_product_review_invitation">Queue Invitations: </label>
+					<p class="TextBody TextBody--xxxs u-marginBottom--md"">Invitations will be queued when orders are Completed.</p>
+					<?php
+						$send_product_review_invitation = get_option('REVIEWSio_send_product_review_invitation');
+					?>
+					<select name="REVIEWSio_send_product_review_invitation">
+						<option <?php echo ($send_product_review_invitation == 1) ? 'selected' : '' ?> value="1">Yes</option>
+						<option <?php echo ($send_product_review_invitation == 0) ? 'selected' : '' ?> value="0">No</option>
+					</select>
+				</div>
 
-				<p>The invitation delay can be changed within the REVIEWS.io Dashboard under the <strong>Invitations</strong> menu, or from your <strong>Flow</strong>.
+				<p class="u-marginTop--md TextBody TextBody--xxs">The invitation delay can be changed within the REVIEWS.io Dashboard under the <strong>Invitations</strong> menu, or from your <strong>Flow</strong>.
 			</div>
 
 			<div class="tab-contents js-reviews-tab">
@@ -413,47 +407,37 @@ if(!defined('ABSPATH')) {
 				<?php
 					if(!$hide_legacy) {
 				?>
-				<table class="form-table">
-					<tr>
-						<th>
-							<label for="REVIEWSio_product_review_widget">Show Legacy Question Answers Widget: </label>
-							<p style="font-size:12px;font-weight:100;">The widget will be displayed in a tab on your product pages.</p>
-						</th>
-						<td>
-							<?php
-								$question_answers_widget = get_option('REVIEWSio_question_answers_widget');
-							?>
-							<select name="REVIEWSio_question_answers_widget">
-								<option <?php echo ($question_answers_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Tab</option>
-								<option <?php echo ($question_answers_widget == 'summary') ? 'selected' : '' ?> value="summary">Show Below Product Summary</option>
-								<option <?php echo ($question_answers_widget == 'both') ? 'selected' : '' ?> value="both">Show in Both Places</option>
-								<option <?php echo ($question_answers_widget == '0') ? 'selected' : '' ?> value="0">Dont Display</option>
-							</select>
-						</td>
-					</tr>
-				</table>
+				<div class="form-table">
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_product_review_widget">Show Legacy Question Answers Widget: </label>
+					<p class="TextBody TextBody--xxxs" style="font-size:12px;font-weight:100;">The widget will be displayed in a tab on your product pages.</p>
+
+					<?php
+						$question_answers_widget = get_option('REVIEWSio_question_answers_widget');
+					?>
+					<select name="REVIEWSio_question_answers_widget">
+						<option <?php echo ($question_answers_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Tab</option>
+						<option <?php echo ($question_answers_widget == 'summary') ? 'selected' : '' ?> value="summary">Show Below Product Summary</option>
+						<option <?php echo ($question_answers_widget == 'both') ? 'selected' : '' ?> value="both">Show in Both Places</option>
+						<option <?php echo ($question_answers_widget == '0') ? 'selected' : '' ?> value="0">Dont Display</option>
+					</select>
+				</div>
 
 				<?php
 					} else {
 				?>
 
-				<table class="form-table">
-					<tr>
-						<th>
-							<label for="REVIEWSio_enable_rich_snippet">Enable Q&A: </label>
-							<p style="font-size:12px;font-weight:100;">This will add a Q&A Tab to your Product Review Widget.</p>
-						</th>
-						<td>
-							<?php
-							$polaris_review_widget_questions = get_option('REVIEWSio_polaris_review_widget_questions');
-							?>
-							<select name="REVIEWSio_polaris_review_widget_questions">
-								<option <?php echo ($polaris_review_widget_questions == 1) ? 'selected' : '' ?> value="1">Yes</option>
-								<option <?php echo ($polaris_review_widget_questions == 0) ? 'selected' : '' ?> value="0">No</option>
-							</select>
-						</td>
-					</tr>
-				</table>
+				<div class="form-table">
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_rich_snippet">Enable Q&A: </label>
+					<p class="TextBody TextBody--xxxs">This will add a Q&A Tab to your Product Review Widget.</p>
+
+					<?php
+						$polaris_review_widget_questions = get_option('REVIEWSio_polaris_review_widget_questions');
+					?>
+					<select class="u-marginTop--sm" name="REVIEWSio_polaris_review_widget_questions">
+						<option <?php echo ($polaris_review_widget_questions == 1) ? 'selected' : '' ?> value="1">Yes</option>
+						<option <?php echo ($polaris_review_widget_questions == 0) ? 'selected' : '' ?> value="0">No</option>
+					</select>
+				</div>
 
 				<?php
 					}
@@ -462,146 +446,122 @@ if(!defined('ABSPATH')) {
 			
 			<div class="tab-contents js-snippets-tab">
 				<!-- Rich Snippets -->
-				<table class="form-table">
-					<!-- <tr>
-						<th>
-							<label for="REVIEWSio_enable_rich_snippet">Enable Company Rich Snippet: </label>
-						</th>
-						<td>
-							<?php
-							$enable_rich_snippet = get_option('REVIEWSio_enable_rich_snippet');
-							?>
-							<select name="REVIEWSio_enable_rich_snippet">
-								<option <?php echo ($enable_rich_snippet == 1) ? 'selected' : '' ?> value="1">Yes</option>
-								<option <?php echo ($enable_rich_snippet == 0) ? 'selected' : '' ?> value="0">No</option>
-							</select>
-						</td>
-					</tr> -->
-					<tr>
-						<th>
-							<label for="REVIEWSio_enable_product_rich_snippet">Enable Product Rich Snippet: </label>
-							<p style="font-size:12px;font-weight:100;">The product rich snippet will give you stars on natural search results for your product pages.</p>
-						</th>
-						<td>
-							<?php
-							$enable_product_rich_snippet = get_option('REVIEWSio_enable_product_rich_snippet');
-							?>
-							<select name="REVIEWSio_enable_product_rich_snippet">
-								<option <?php echo ($enable_product_rich_snippet == 1) ? 'selected' : '' ?> value="1">Yes</option>
-								<option <?php echo ($enable_product_rich_snippet == 0) ? 'selected' : '' ?> value="0">No</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<th>
-							<label for="REVIEWSio_enable_product_rich_snippet_server_side">Server Side Rich Snippets: </label>
-							<p style="font-size:12px;font-weight:100;">Add the structured data into the HTML source of your page instead of using a Javascript widget.</p>
-						</th>
-						<td>
-							<?php
-							$enable_product_rich_snippet = get_option('REVIEWSio_enable_product_rich_snippet_server_side');
-							?>
-							<select name="REVIEWSio_enable_product_rich_snippet_server_side">
-								<option <?php echo ($enable_product_rich_snippet == 1) ? 'selected' : '' ?> value="1">Yes</option>
-								<option <?php echo ($enable_product_rich_snippet == 0) ? 'selected' : '' ?> value="0">No</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<th>
-							<label for="REVIEWSio_enable_floating_widget">Enable Legacy Floating Widget: </label>
-							<div>
-								<p style="font-size:12px;font-weight:100;">
-									A floating reviews tab will be added to the right side of your site.
-								</p>
-								<p style="font-size:12px;font-weight:100;">
-									<strong style="font-size:12px;">Note:</strong> This widget is being deprecated and will be removed in future updates, please use main floating widget found under REVIEWS.io Widgets tab to ensure you have the latest updates and features.
-								</p>
-							</div>
-						</th>
-						<td>
-							<?php
-							$enable_floating_widget = get_option('REVIEWSio_enable_floating_widget');
-							?>
-							<select name="REVIEWSio_enable_floating_widget">
-								<option <?php echo ($enable_floating_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
-								<option <?php echo ($enable_floating_widget == 0) ? 'selected' : '' ?> value="0">No</option>
-							</select>
-						</td>
-					</tr>
-				</table>
+				<!-- <tr>
+					<th>
+						<label for="REVIEWSio_enable_rich_snippet">Enable Company Rich Snippet: </label>
+					</th>
+					<td>
+						<?php
+						$enable_rich_snippet = get_option('REVIEWSio_enable_rich_snippet');
+						?>
+						<select name="REVIEWSio_enable_rich_snippet">
+							<option <?php echo ($enable_rich_snippet == 1) ? 'selected' : '' ?> value="1">Yes</option>
+							<option <?php echo ($enable_rich_snippet == 0) ? 'selected' : '' ?> value="0">No</option>
+						</select>
+					</td>
+				</tr> -->
+				<div>
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_product_rich_snippet">Enable Product Rich Snippet: </label>
+					<p class="TextBody TextBody--xxxs">The product rich snippet will give you stars on natural search results for your product pages.</p>
+
+					<?php
+						$enable_product_rich_snippet = get_option('REVIEWSio_enable_product_rich_snippet');
+					?>
+					<select name="REVIEWSio_enable_product_rich_snippet">
+						<option <?php echo ($enable_product_rich_snippet == 1) ? 'selected' : '' ?> value="1">Yes</option>
+						<option <?php echo ($enable_product_rich_snippet == 0) ? 'selected' : '' ?> value="0">No</option>
+					</select>
+				</div>
+				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+				<div>
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_product_rich_snippet_server_side">Server Side Rich Snippets: </label>
+					<p class="TextBody TextBody--xxxs">Add the structured data into the HTML source of your page instead of using a Javascript widget.</p>
+
+					<?php
+						$enable_product_rich_snippet = get_option('REVIEWSio_enable_product_rich_snippet_server_side');
+					?>
+					<select name="REVIEWSio_enable_product_rich_snippet_server_side">
+						<option <?php echo ($enable_product_rich_snippet == 1) ? 'selected' : '' ?> value="1">Yes</option>
+						<option <?php echo ($enable_product_rich_snippet == 0) ? 'selected' : '' ?> value="0">No</option>
+					</select>
+				</div>
+				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+				<div>
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_floating_widget">Enable Legacy Floating Widget: </label>
+					<div>
+						<p class="TextBody TextBody--xxxs">
+							A floating reviews tab will be added to the right side of your site.
+						</p>
+						<p class="TextBody TextBody--xxxs">
+							<strong style="font-size:12px;">Note:</strong> This widget is being deprecated and will be removed in future updates, please use main floating widget found under REVIEWS.io Widgets tab to ensure you have the latest updates and features.
+						</p>
+					</div>
+					<?php
+						$enable_floating_widget = get_option('REVIEWSio_enable_floating_widget');
+					?>
+					<select name="REVIEWSio_enable_floating_widget">
+						<option <?php echo ($enable_floating_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
+						<option <?php echo ($enable_floating_widget == 0) ? 'selected' : '' ?> value="0">No</option>
+					</select>
+				</div>
 			</div>
 
 			<div class="tab-contents js-feeds-tab">
 				<!-- Data Feeds-->
-					<table class="form-table">
-						<tr>
-							<th>
-								<label for="REVIEWSio_product_feed">Enable Product Feed: </label>
-			                    <p style="font-size:12px;font-weight:100;">For Product Invitations to queue correctly, we require access to your Product catalogue via a feed, which we will make available from <b><?php echo get_site_url(); ?>/index.php/reviews/product_feed</b>.</p>
-							</th>
-							<td>
-								<?php
-									$enableProductFeed = get_option('REVIEWSio_product_feed');
-								?>
-								<select name="REVIEWSio_product_feed">
-									<option <?php echo ($enableProductFeed == 1) ? 'selected' : '' ?> value="1">Yes</option>
-									<option <?php echo ($enableProductFeed == 0) ? 'selected' : '' ?> value="0">No</option>
-								</select>
-							</td>
-						</tr>
-						<tr>
-							<th>
-								<label for="REVIEWSio_product_feed_wpseo_global_ids">Include WooCommerce SEO Global Product Identifiers: </label>
-                    <p style="font-size:12px;font-weight:100;">
-                        Add product global identifiers from WooCommece SEO (Yoast) into the product feed.
-                    </p>
-							</th>
-							<td>
-								<?php
-									$enableWpSeoGlobalIds = get_option('REVIEWSio_product_feed_wpseo_global_ids');
-								?>
-								<select name="REVIEWSio_product_feed_wpseo_global_ids">
-									<option <?php echo ($enableWpSeoGlobalIds == 1) ? 'selected' : '' ?> value="1">Yes</option>
-									<option <?php echo ($enableWpSeoGlobalIds == 0) ? 'selected' : '' ?> value="0">No</option>
-								</select>
-							</td>
-						</tr>
-            <tr>
-							<th>
-								<label for="REVIEWSio_product_feed_custom_attributes">Include Product Data Attributes Feed: </label>
-			                    <p style="font-size:12px;font-weight:100;">Add additional product data attributes field to be included as columns in your product feed. The following are always included by default: _barcode, barcode, _gtin, gtin, mpn, _mpn</p>
-							</th>
-              <td>
-                <?php
-                  $product_feed_custom_attributes = get_option('REVIEWSio_product_feed_custom_attributes');
-                ?>
-                <textarea name="REVIEWSio_product_feed_custom_attributes" style="width:300px;height:200px;" placeholder="_barcode, barcode, _gtin, gtin, mpn, _mpn"><?php echo htmlentities($product_feed_custom_attributes); ?></textarea>
-              </td>
-						</tr>
+				<div>
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_product_feed">Enable Product Feed: </label>
+					<p class="TextBody TextBody--xxxs">For Product Invitations to queue correctly, we require access to your Product catalogue via a feed, which we will make available from <b><?php echo get_site_url(); ?>/index.php/reviews/product_feed</b>.</p>
 
-						<tr>
-							<th>
-								<label>Latest Orders CSV:</label>
-			                    <p style="font-size:12px;font-weight:100;">Download this CSV and upload it to the <b>Review Booster</b> section in the REVIEWS.io Dashboard to start collecting reviews.</p>
-							</th>
-							<td>
-								<a class="button" href="<?php echo get_site_url(); ?>/index.php/reviews/order_csv">Download Latest Orders CSV</a>
-							</td>
-						</tr>
-					</table>
+					<?php
+						$enableProductFeed = get_option('REVIEWSio_product_feed');
+					?>
+					<select name="REVIEWSio_product_feed">
+						<option <?php echo ($enableProductFeed == 1) ? 'selected' : '' ?> value="1">Yes</option>
+						<option <?php echo ($enableProductFeed == 0) ? 'selected' : '' ?> value="0">No</option>
+					</select>
+				</div>
+				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+				<div>
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_product_feed_wpseo_global_ids">Include WooCommerce SEO Global Product Identifiers: </label>
+					<p class="TextBody TextBody--xxxs">Add product global identifiers from WooCommece SEO (Yoast) into the product feed.</p>
+
+					<?php
+						$enableWpSeoGlobalIds = get_option('REVIEWSio_product_feed_wpseo_global_ids');
+					?>
+					<select name="REVIEWSio_product_feed_wpseo_global_ids">
+						<option <?php echo ($enableWpSeoGlobalIds == 1) ? 'selected' : '' ?> value="1">Yes</option>
+						<option <?php echo ($enableWpSeoGlobalIds == 0) ? 'selected' : '' ?> value="0">No</option>
+					</select>
+				</div>
+				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+				<div>
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_product_feed_custom_attributes">Include Product Data Attributes Feed: </label>
+					<p class="TextBody TextBody--xxxs">Add additional product data attributes field to be included as columns in your product feed. The following are always included by default: _barcode, barcode, _gtin, gtin, mpn, _mpn</p>
+
+					<?php
+						$product_feed_custom_attributes = get_option('REVIEWSio_product_feed_custom_attributes');
+					?>
+					<textarea name="REVIEWSio_product_feed_custom_attributes" style="width:100%;height:50px;" placeholder="_barcode, barcode, _gtin, gtin, mpn, _mpn"><?php echo htmlentities($product_feed_custom_attributes); ?></textarea>
+				</div>
+				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+				<div>
+					<label class="TextHeading TextHeading--xxxs">Latest Orders CSV:</label>
+					<p class="TextBody TextBody--xxxs">Download this CSV and upload it to the <b>Review Booster</b> section in the REVIEWS.io Dashboard to start collecting reviews.</p>
+					<a class="Button Button--outline Button--xs" href="<?php echo get_site_url(); ?>/index.php/reviews/order_csv">Download Latest Orders CSV</a>
+				</div>
 			</div>
 
 			<div class="tab-contents js-widgets-tab">
+				<!-- Widgets -->
 				<div class="TextBody TextBody--xxs">
 					<p>
 						Enable and customise how REVIEWS.io widgets on your website. The customisation for the widgets below can be found in the  <a href="https://dash.reviews.co.uk/widgets" target="_blank">REVIEWS.io widget library</a>.
 					</p>
 					<p>
-						Enhance your website with dynamic content and features by making use of shortcodes - small pieces of code enclosed in square brackets. You can easily add these shortcodes using the format [widget name_widget], ie. [nuggets_widget] Our plugin offers several widgets that support shortcodes, including Nuggets, UGC, and Rating Bar.
+						Enhance your website with dynamic content and features by making use of shortcodes - small pieces of code enclosed in square brackets. You can easily add these shortcodes using the format <code>[widget_name]</code>, ie. <code>[nuggets_widget]</code> Our plugin offers several widgets that support shortcodes, including <strong>Nuggets</strong>, <strong>UGC</strong>, and <strong>Rating Bar</strong>.
 					</p>
 					<p>
-						To use our shortcodes, you'll need to add a 'widget_id' - you can find this in our widget editor. The shortcode format is [widget_name widget_id='your widget id']. This is also a great way to add SKUs to your content! Simply separate each SKU with a semi-colon, like this: [widget_name widget_id='your widget id' sku='sku1;sku2;sku3'].
+						To use our shortcodes, you'll need to add a 'widget_id' - you can find this in our widget editor. The shortcode format is <code>[widget_name widget_id='your widget id']</code>. This is also a great way to add SKUs to your content! Simply separate each SKU with a semi-colon, like this: <code>[widget_name widget_id='your widget id' sku='sku1;sku2;sku3']</code>.
 					</p>
 				</div>
 				<div class="u-hr u-marginTop--md u-marginBottom--lg"></div>
@@ -794,148 +754,130 @@ if(!defined('ABSPATH')) {
 
 			<div class="tab-contents js-advanced-tab">
 				<!-- Advanced -->
-				<table class="form-table">
-					<tr>
-						<th>
-							<label for="REVIEWSio_disable_reviews_per_product">Disable Reviews Per Product: </label>
-							<p style="font-size:12px;font-weight:100;">If this is enabled then you can use the WooCommerce "Reviews Enabled" setting to disable review collection for certain products.</p>
-						</th>
-						<td>
-							<?php
-								$disable_reviews_per_product = get_option('REVIEWSio_disable_reviews_per_product');
-							?>
-							<select name="REVIEWSio_disable_reviews_per_product">
-								<option <?php echo ($disable_reviews_per_product== 1) ? 'selected' : '' ?> value="1">Yes</option>
-								<option <?php echo ($disable_reviews_per_product== 0) ? 'selected' : '' ?> value="0">No</option>
-							</select>
-						</td>
-					</tr>
 
-					<tr>
-						<th>
-							<label for="REVIEWSio_enable_cron">Enable Cron: </label>
-							<p style="font-size:12px;font-weight:100;">If you use a third party system to mark orders as completed then review invitations may not be triggered. If this setting is enabled a cron will run hourly which queues invitations for recently completed orders. <br /><br /> To prevent the cron running on visitor page loads you should disable WP_CRON and setup a real cron as described <a target='_blank' href='https://easyengine.io/tutorials/wordpress/wp-cron-crontab/'>here</a>.</p>
-						</th>
-						<td>
-							<?php
-								$enableCron = get_option('REVIEWSio_enable_cron');
-							?>
-							<select name="REVIEWSio_enable_cron">
-								<option <?php echo ($enableCron== 1) ? 'selected' : '' ?> value="1">Yes</option>
-								<option <?php echo ($enableCron== 0) ? 'selected' : '' ?> value="0">No</option>
-							</select>
-						</td>
-					</tr>
+				<div>
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_disable_reviews_per_product">Disable Reviews Per Product: </label>
+					<p class="TextBody TextBody--xxxs">If this is enabled then you can use the WooCommerce "Reviews Enabled" setting to disable review collection for certain products.</p>
 
-					<tr>
-						<th>
-							<label for="REVIEWSio_product_identifier">Change Product Identifier</label>
-							<p style="font-size:12px;font-weight:100;">Use a different identifier for your products and variants. This identifier will be used for new invitations and for looking up existing reviews.</p>
-						</th>
-						<td>
-							<?php
-							$product_identifier = get_option('REVIEWSio_product_identifier');
-							?>
-							<select name="REVIEWSio_product_identifier">
-								<option <?php echo ($product_identifier == 'sku') ? 'selected' : '' ?> value="sku">SKU (Recommended)</option>
-								<option <?php echo ($product_identifier == 'id') ? 'selected' : '' ?> value="id">ID</option>
-							</select>
-						</td>
-					</tr>
-					<tr>
-						<th>
-							<label for="REVIEWSio_use_parent_product">Use Parent Product</label>
-							<p style="font-size:12px;font-weight:100;">Enable this if you would like to only collect reviews on a parent product level. This is useful if you have products with many variations and you want to keep the data more manageable. </p>
-						</th>
-						<td>
-							<?php
-							$use_parent_product = get_option('REVIEWSio_use_parent_product');
-							?>
-							<select name="REVIEWSio_use_parent_product">
-								<option <?php echo ($use_parent_product== 0) ? 'selected' : '' ?> value="0">No (Default)</option>
-								<option <?php echo ($use_parent_product== 1) ? 'selected' : '' ?> value="1">Yes</option>
-							</select>
-						</td>
-					</tr>
+					<?php
+						$disable_reviews_per_product = get_option('REVIEWSio_disable_reviews_per_product');
+					?>
+					<select name="REVIEWSio_disable_reviews_per_product">
+						<option <?php echo ($disable_reviews_per_product== 1) ? 'selected' : '' ?> value="1">Yes</option>
+						<option <?php echo ($disable_reviews_per_product== 0) ? 'selected' : '' ?> value="0">No</option>
+					</select>
+				</div>
+				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+				<div>
+					<label class="TextHeading TextHeading--xxxs" class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_cron">Enable Cron: </label>
+					<p class="TextBody TextBody--xxxs">
+						If you use a third party system to mark orders as completed then review invitations may not be triggered. If this setting is enabled a cron will run hourly which queues invitations for recently completed orders. <br /><br /> To prevent the cron running on visitor page loads you should disable WP_CRON and setup a real cron as described <a target='_blank' href='https://easyengine.io/tutorials/wordpress/wp-cron-crontab/'>here</a>.
+					</p>
 
-					<tr>
-						<th>
-							<label for="REVIEWSio_use_parent_product_rich_snippet">Use Parent Product only on Rich Snippets</label>
-							<p style="font-size:12px;font-weight:100;">Enable this if you would like to only show rich snippet data for the parent product, and not any accompanying variants.</p>
-						</th>
-						<td>
-							<?php
-							$use_parent_product_rich = get_option('REVIEWSio_use_parent_product_rich_snippet');
-							?>
-							<select name="REVIEWSio_use_parent_product_rich_snippet">
-								<option <?php echo ($use_parent_product_rich== 0) ? 'selected' : '' ?> value="0">No (Default)</option>
-								<option <?php echo ($use_parent_product_rich== 1) ? 'selected' : '' ?> value="1">Yes</option>
-							</select>
-						</td>
-					</tr>
+					<?php
+						$enableCron = get_option('REVIEWSio_enable_cron');
+					?>
+					<select name="REVIEWSio_enable_cron">
+						<option <?php echo ($enableCron== 1) ? 'selected' : '' ?> value="1">Yes</option>
+						<option <?php echo ($enableCron== 0) ? 'selected' : '' ?> value="0">No</option>
+					</select>
+				</div>
+				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+				<div>
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_product_identifier">Change Product Identifier</label>
+					<p class="TextBody TextBody--xxxs">Use a different identifier for your products and variants. This identifier will be used for new invitations and for looking up existing reviews.</p>
 
-					<tr style="border-top: 1px solid #e4e4e4">
-						<th>
-							<label for="REVIEWSio_widget_custom_header_config">Advanced Product Reviews 'Header' Config</label>
-												<p style="font-size:12px;font-weight:100;">Sets 'header' section config for the Product Reviews Widget. After using the designer tool, copy the "header" block, which begins with "header: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
-						</th>
-						<td>
-							<?php
-								$custom_widget_header_config = get_option('REVIEWSio_widget_custom_header_config');
-							?>
-							<textarea name="REVIEWSio_widget_custom_header_config" style="width:300px;height:200px;"><?php echo htmlentities($custom_widget_header_config); ?></textarea>
-						</td>
-					</tr>
-					<tr>
-						<th>
-							<label for="REVIEWSio_widget_custom_filtering_config">Advanced Product Reviews 'Filtering' Config</label>
-												<p style="font-size:12px;font-weight:100;">Sets 'filtering' section config for the Product Reviews Widget. After using the designer tool, copy the "filtering" block, which begins with "filtering: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
-						</th>
-						<td>
-							<?php
-								$custom_widget_filtering_config = get_option('REVIEWSio_widget_custom_filtering_config');
-							?>
-							<textarea name="REVIEWSio_widget_custom_filtering_config" style="width:300px;height:200px;"><?php echo htmlentities($custom_widget_filtering_config); ?></textarea>
-						</td>
-					</tr>
-					<tr>
-						<th>
-							<label for="REVIEWSio_widget_custom_reviews_config">Advanced Product Reviews 'Reviews' Config</label>
-												<p style="font-size:12px;font-weight:100;">Sets 'reviews' section config for the Product Reviews Widget. After using the designer tool, copy the "reviews" block, which begins with "reviews: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
-						</th>
-						<td>
-							<?php
-								$custom_widget_reviews_config = get_option('REVIEWSio_widget_custom_reviews_config');
-							?>
-							<textarea name="REVIEWSio_widget_custom_reviews_config" style="width:300px;height:200px;"><?php echo htmlentities($custom_widget_reviews_config); ?></textarea>
-						</td>
-					</tr>
-					<tr style="border-bottom: 1px solid #e4e4e4">
-						<th>
-							<label for="REVIEWSio_widget_custom_css">Advanced Product Reviews Widget 'Styles' Config</label>
-												<p style="font-size:12px;font-weight:100;">Sets the 'styles' for the Product Reviews Widget. After using the designer tool, copy the "styles" block, which begins with "styles: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.</p>
-						</th>
-						<td>
-							<?php
-								$custom_reviews_widget_styles = get_option('REVIEWSio_custom_reviews_widget_styles');
-							?>
-							<textarea name="REVIEWSio_custom_reviews_widget_styles" style="width:300px;height:200px;"><?php echo htmlentities($custom_reviews_widget_styles); ?></textarea>
-						</td>
-					</tr>
+					<?php
+						$product_identifier = get_option('REVIEWSio_product_identifier');
+					?>
+					<select name="REVIEWSio_product_identifier">
+						<option <?php echo ($product_identifier == 'sku') ? 'selected' : '' ?> value="sku">SKU (Recommended)</option>
+						<option <?php echo ($product_identifier == 'id') ? 'selected' : '' ?> value="id">ID</option>
+					</select>
+				</div>
+				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+				<div>
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_use_parent_product">Use Parent Product</label>
+					<p class="TextBody TextBody--xxxs">Enable this if you would like to only collect reviews on a parent product level. This is useful if you have products with many variations and you want to keep the data more manageable. </p>
 
-					<tr>
-						<th>
-							<label for="REVIEWSio_hide_legacy">Show Legacy Widget Settings</label>
-							<p style="font-size:12px;font-weight:100;">Enable this if you would like to use the legacy product widget. </p>
-						</th>
-						<td>
-							<select name="REVIEWSio_hide_legacy">
-								<option <?php echo ($hide_legacy== 1) ? 'selected' : '' ?> value="1">No (Recommended)</option>
-								<option <?php echo ($hide_legacy== 0) ? 'selected' : '' ?> value="0">Yes</option>
-							</select>
-						</td>
-					</tr>
-				</table>
+					<?php
+					$use_parent_product = get_option('REVIEWSio_use_parent_product');
+					?>
+					<select name="REVIEWSio_use_parent_product">
+						<option <?php echo ($use_parent_product== 0) ? 'selected' : '' ?> value="0">No (Default)</option>
+						<option <?php echo ($use_parent_product== 1) ? 'selected' : '' ?> value="1">Yes</option>
+					</select>
+				</div>
+				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+				<div>
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_use_parent_product_rich_snippet">Use Parent Product only on Rich Snippets</label>
+					<p class="TextBody TextBody--xxxs">Enable this if you would like to only show rich snippet data for the parent product, and not any accompanying variants.</p>
+
+					<?php
+					$use_parent_product_rich = get_option('REVIEWSio_use_parent_product_rich_snippet');
+					?>
+					<select name="REVIEWSio_use_parent_product_rich_snippet">
+						<option <?php echo ($use_parent_product_rich== 0) ? 'selected' : '' ?> value="0">No (Default)</option>
+						<option <?php echo ($use_parent_product_rich== 1) ? 'selected' : '' ?> value="1">Yes</option>
+					</select>
+				</div>
+				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+				<div>
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_header_config">Advanced Product Reviews 'Header' Config</label>
+					<p class="TextBody TextBody--xxxs">
+						Sets 'header' section config for the Product Reviews Widget. After using the designer tool, copy the "header" block, which begins with "header: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
+					</p>
+
+					<?php
+						$custom_widget_header_config = get_option('REVIEWSio_widget_custom_header_config');
+					?>
+					<textarea name="REVIEWSio_widget_custom_header_config" style="width:100%;height:50px;"><?php echo htmlentities($custom_widget_header_config); ?></textarea>
+				</div>
+				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+				<div>
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_filtering_config">Advanced Product Reviews 'Filtering' Config</label>
+					<p class="TextBody TextBody--xxxs">
+						Sets 'filtering' section config for the Product Reviews Widget. After using the designer tool, copy the "filtering" block, which begins with "filtering: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
+					</p>
+					<?php
+						$custom_widget_filtering_config = get_option('REVIEWSio_widget_custom_filtering_config');
+					?>
+
+					<textarea name="REVIEWSio_widget_custom_filtering_config" style="width:100%;height:50px;"><?php echo htmlentities($custom_widget_filtering_config); ?></textarea>
+				</div>
+				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+				<div>
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_reviews_config">Advanced Product Reviews 'Reviews' Config</label>
+					<p class="TextBody TextBody--xxxs">
+						Sets 'reviews' section config for the Product Reviews Widget. After using the designer tool, copy the "reviews" block, which begins with "reviews: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
+					</p>
+
+					<?php
+						$custom_widget_reviews_config = get_option('REVIEWSio_widget_custom_reviews_config');
+					?>
+					<textarea name="REVIEWSio_widget_custom_reviews_config" style="width:100%;height:50px;"><?php echo htmlentities($custom_widget_reviews_config); ?></textarea>
+				</div>
+				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+				<div>
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_css">Advanced Product Reviews Widget 'Styles' Config</label>
+					<p class="TextBody TextBody--xxxs">
+						Sets the 'styles' for the Product Reviews Widget. After using the designer tool, copy the "styles" block, which begins with "styles: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
+					</p>
+					<?php
+						$custom_reviews_widget_styles = get_option('REVIEWSio_custom_reviews_widget_styles');
+					?>
+
+					<textarea name="REVIEWSio_custom_reviews_widget_styles" style="width:100%;height:50px;"><?php echo htmlentities($custom_reviews_widget_styles); ?></textarea>
+				</div>
+				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+				<div>
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_hide_legacy">Show Legacy Widget Settings</label>
+					<p class="TextBody TextBody--xxxs">Enable this if you would like to use the legacy product widget. </p>
+					<select name="REVIEWSio_hide_legacy">
+						<option <?php echo ($hide_legacy== 1) ? 'selected' : '' ?> value="1">No (Recommended)</option>
+						<option <?php echo ($hide_legacy== 0) ? 'selected' : '' ?> value="0">Yes</option>
+					</select>
+				</div>
 			</div>
 		</div>
 							
