@@ -57,6 +57,22 @@ if(!defined('ABSPATH')) {
 
 			<div class="tab-contents js-api-tab">
 				<!-- API Settings -->
+				<div id="api-notification-danger" class="GlobalNotification GlobalNotification--danger" style="display: none">
+					<div class="flex-row flex-middle-xxs">
+						<div class="flex-col-xxs-1 u-textCenter--all">
+							<img class="GlobalNotification__imageIcon" src="https://assets.reviews.io/img/all-global-assets/icons/icon-warning--md.svg">
+						</div>
+						<div class="flex-col-xxs-11">
+							<div class="TextHeading TextHeading--xxxxs">
+								Authorization Failed
+							</div>
+							<div class="TextBody TextBody--xxxs u-marginBottom--none">
+								The credentials provided do not match with our records. Please try again.
+							</div>
+						</div>
+					</div>
+				</div>
+
 				<p>You can find your API credentials on the REVIEWS.io Dashboard. Click the <b>Integrations</b> menu, and then scroll to <b>WooCommerce</b>.</p>
 
 				<table class="form-table">
@@ -986,6 +1002,56 @@ if(!defined('ABSPATH')) {
 											</div>
 										</div>
 									</div>
+
+									<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+
+									<h3><strong>Nuggets Widget Shortcode Settings:</strong></h3>
+									<div class="flex-row" style="gap: 20px">
+										<div class="flex-col-xs">
+											<label class="TextHeading TextHeading--xxxs">UGC Widget Styles: </label>
+											<p class="TextBody TextBody--xxxs">
+												The dropdown menu contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and copy the shortcode generated below.
+											</p>
+											<div class="Field u-marginTop--md">
+												<select id="nuggets_shortcode-widget-options-dropdown" class="Field__input Field__input--globalSelect" onchange="addWidgetIdToShortcode(this)">
+													<option value="">Please Select</option>
+												</select>
+											</div>
+										</div>
+
+
+										<div class="flex-col-xs">
+											<label class="TextHeading TextHeading--xxxs">UGC SKU's: </label>
+											<p class="TextBody TextBody--xxxs">
+												If you wish to show specific product reviews for this particular shortcode, please type in the required sku's in text field below and copy the shortcode generated below.
+											</p>
+
+
+											<div class="Field u-marginTop--md">
+												<input id="nuggets_shortcode-widget-sku" type="text" class="Field__input" name='REVIEWSio_ugc_widget_sku' placeholder="sku1;sku2" oninput="addSkuToShortcode(this)">
+												<label class="Field__label">
+													SKU's
+												</label>
+											</div>
+
+
+										</div>
+									</div>
+
+									<div class="flex-row flex-center-xs u-marginTop--lg" style="gap: 10px;">
+										<div>
+											<div id="nuggets_shortcode-shortcode" style="padding: 9px; border: 1px solid #d1d8da; border-radius: 2px; display: flex; align-items: center; background-color: #EEEEEE">
+												[nuggets_widget<span></span><span></span>]
+											</div>
+										</div>
+										<div>
+											<div id="nuggets_shortcode-shortcode-copy-button" class="Button Button--primary Button--sm" onclick="copyToClipboard('nuggets_shortcode-shortcode-copy-button', 'nuggets_shortcode-shortcode')">
+												Copy Shortcode
+											</div>
+										</div>
+									</div>
+
+
 								</div>
 			
 								<div id="floating" class="form-table js-widget" style="display: none">
@@ -1049,7 +1115,7 @@ if(!defined('ABSPATH')) {
 			
 								<div id="ugc" class="form-table js-widget" style="display: none">
 									<div>
-										<h3><strong>UGC Widget Settings:</strong></h3>
+										<h3><strong>UGC Widget Shortcode Settings:</strong></h3>
 										<div class="flex-row flex-middle-xxs">
 											<div class="flex-col-xxs-12 flex-col-md-6">
 												<p>
@@ -1090,7 +1156,7 @@ if(!defined('ABSPATH')) {
 
 
 											<div class="flex-col-xs">
-												<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_survey_widget_campaign">UGC SKU's: </label>
+												<label class="TextHeading TextHeading--xxxs">UGC SKU's: </label>
 												<p class="TextBody TextBody--xxxs">
 													If you wish to show specific product reviews for this particular shortcode, please type in the required sku's in text field below and copy the shortcode generated below.
 												</p>
@@ -1126,11 +1192,11 @@ if(!defined('ABSPATH')) {
 			
 								<div id="survey" class="form-table js-widget" style="display: none">
 									<div>
-										<h3><strong>Survey Settings:</strong></h3>
-										<div class="flex-row">
+										<h3><strong>Survey Widget Settings:</strong></h3>
+										<div class="flex-row flex-middle-xxs">
 											<div class="flex-col-xxs-12 flex-col-md-6">
 												<p>
-													Cool survey stuff. 
+													A customisable widget that displays your surveys and allows collecting feedback about your website, features and more.
 												</p>
 											</div>
 											<div class="flex-col-xxs-12 flex-col-md-6 u-textCenter--all">
@@ -1200,7 +1266,7 @@ if(!defined('ABSPATH')) {
 
 								<div id="rating-bar" class="form-table js-widget" style="display: none">
 									<div>
-										<h3><strong>Rating Bar Settings:</strong></h3>
+										<h3><strong>Rating Bar Shortcode Settings:</strong></h3>
 										<div class="flex-row flex-middle-xxs">
 											<div class="flex-col-xxs-12 flex-col-md-6">
 												<p>
@@ -1273,7 +1339,7 @@ if(!defined('ABSPATH')) {
 									<div>
 										<div>
 											<h3><strong>Rating Snippet Settings:</strong></h3>
-											<div class="flex-row ">
+											<div class="flex-row flex-middle-xxs">
 												<div class="flex-col-xxs-12 flex-col-md-6">
 													<p>
 														An ideal way to display a product rating on your category pages.
@@ -1413,7 +1479,7 @@ if(!defined('ABSPATH')) {
 											<div class="flex-col-xs">
 												<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_ugc_widget_option">Carousel Type: </label>
 												<p class="TextBody TextBody--xxxs">
-													Select the type of Carousel widget to display in the page, whhich will be applied to all carousel shortcodes.
+													Select the type of Carousel widget to display in the page, which will be applied to all carousel shortcodes.
 													<br>
 													<strong>Note:</strong> Please save the changes to apply the carousel type.
 												</p>

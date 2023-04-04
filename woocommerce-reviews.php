@@ -56,11 +56,20 @@ function reviewsio_admin_scripts() {
         jQuery.ajax({
             url: "https://api.reviews.co.uk/merchant/latest?store='.get_option("REVIEWSio_store_id").'",
             success: function(data){
-                if(data.stats.total_reviews > 0){
+                jQuery("#api-notification-danger").css("display", "none");
+                jQuery(".FlexTabs__item").removeClass("u-pointerEvents--none Button--disabled");
+
+                if (data.stats.total_reviews > 0){
                     var message = "<p>Rated <strong>" + data.stats.average_rating + " stars (" + data.word + ")</strong> based on <strong>" + data.stats.total_reviews + "</strong> Merchant Reviews.</p>";
                     jQuery("#welcomeText").html(message);
                 }
-            }
+            },
+            error: function(e) {
+                console.log(JSON.parse(e.responseText));
+                jQuery(".FlexTabs__item").addClass("u-pointerEvents--none Button--disabled");
+                jQuery("#api-notification-danger").css("display", "block");
+
+            },
         });
     ');
 
@@ -254,6 +263,7 @@ function getWidgetsData() {
                                 case "nuggets-widget":
                                     dropdown = jQuery("#nuggets-widget-options-dropdown");
                                     selectedField = jQuery("#nuggets-widget-option").val();
+                                    jQuery("#nuggets_shortcode-widget-options-dropdown").append(jQuery("<option />").val(this.widget_id).text(this.name));
                                     break;
                                 case "floating-widget":
                                     dropdown = jQuery("#floating-react-widget-options-dropdown");
