@@ -73,6 +73,15 @@ function reviewsio_admin_scripts() {
     wp_register_style( 'reviewsio-admin-style',  false, array(), '', false);
     wp_enqueue_style('reviewsio-admin-style');
     wp_add_inline_style('reviewsio-admin-style','
+        code {
+            padding: 2px 4px;
+            font-size: 90%;
+            color: #c7254e;
+            white-space: nowrap;
+            background-color: #f9f2f4;
+            border-radius: 4px;
+        }
+        
         .settings_page_reviewscouk .tabs-menu {
           height: 29px;
           clear: both;
@@ -152,6 +161,11 @@ function reviewsio_admin_scripts() {
         .tab-contents {
             display: none;
         }
+
+        .list {
+            list-style: disc;
+            padding-left: 40px;
+        }
     ');
 
 }
@@ -163,7 +177,6 @@ function getWidgetsData() {
         document.addEventListener("DOMContentLoaded", function() {
             jQuery(".widget-active-state").change(function(e) {
                 if (e.target.value != "1") return;
-                // console.log("hello :P", this.id.slice(3));
                 getWidgetOptionsList(this.id.slice(3));
             });
         });
@@ -178,21 +191,59 @@ function getWidgetsData() {
             jQuery(".js-widget").css("display", "none");
             jQuery("#" + divId).fadeIn();
         }
+
+        function addWidgetIdToShortcode(e) {
+            let element = jQuery(e);
+            let elementId =  element.attr("id");
+            let selectedWidget = elementId.substring(0, elementId.indexOf("-"));
+            let shortcodeElement = jQuery(`#${selectedWidget}-shortcode`);
+            let widgetId = jQuery(e).find(":selected").val();
+
+            shortcodeElement.children().eq(0).text("");
+            if (widgetId != "") {
+                shortcodeElement.children().eq(0).append(`\xa0widget_id=\'${widgetId}\'`);
+            }
+        }
+        
+        function addSkuToShortcode(e) {
+            let sku = "";
+            let element = jQuery(e);
+            let elementId =  element.attr("id");
+            let selectedWidget = elementId.substring(0, elementId.indexOf("-"));
+            let shortcodeElement = jQuery(`#${selectedWidget}-shortcode`);
+            sku = jQuery(`#${selectedWidget}-widget-sku`).val();
+        
+            shortcodeElement.children().eq(1).text("");
+            if (sku != "") {
+                shortcodeElement.children().eq(1).append(`\xa0sku=\'${sku}\'`);
+            }
+        }
+
+        function copyToClipboard(buttonId, copyId) {
+            let text = document.getElementById(copyId).textContent.trim();
+			navigator.clipboard.writeText(text);
+
+            let copyButton = document.getElementById(buttonId);
+			copyButton.innerHTML = "Copied!";
+			setTimeout(() => {
+				copyButton.innerHTML = "Copy Shortcode";
+			}, 2000);
+		};
         
         function getWidgetOptionsList (selectedWidget = "") {
             jQuery.ajax({
-                url: `https://api.reviews.local/widget/list-with-key?widget=nuggets,floating,survey&selected_widget=${selectedWidget}&url_key='.get_option("REVIEWSio_store_id").'`,
+                url: `https://api.reviews.local/widget/list-with-key?widget=nuggets,floating,ugc,survey,rating-bar&selected_widget=${selectedWidget}&url_key='.get_option("REVIEWSio_store_id").'`,
                 headers: {
                     "apikey": "' . get_option('REVIEWSio_api_key') . '",
                     "store": "' . get_option("REVIEWSio_store_id") . '",
-                    },
+                },
                 success: function(data) {
                     if (data && data.widget_options_list) {
-                        // console.log(data.widget_options_list);
-                        
                         let dropdown = null;
                         let selectedField = null;
                         let attrValue = null;
+
+                        let ugcCount = 0;
 
                         jQuery("#nuggets-widget-options-dropdown").find("option").remove();
                         jQuery("#floating-react-widget-options-dropdown").find("option").remove();
@@ -208,15 +259,35 @@ function getWidgetsData() {
                                     dropdown = jQuery("#floating-react-widget-options-dropdown");
                                     selectedField = jQuery("#floating-react-widget-option").val();
                                     break;
+                                case "ugc-widget":
+                                    dropdown = jQuery("#ugc-widget-options-dropdown");
+                                    selectedField = jQuery("#ugc-widget-option").val();
+                                    ugcCount++;
+                                    break;
                                 case "survey-widget":
                                     dropdown = jQuery("#survey-widget-options-dropdown");
                                     selectedField = jQuery("#survey-widget-option").val();
+                                    break;
+                                case "rating-bar-widget":
+                                    dropdown = jQuery("#rating_bar-widget-options-dropdown");
+                                    selectedField = jQuery("#rating_bar-widget-option").val();
                                     break;
                             }
                                 
                             attrValue = this.widget_id == selectedField ? "selected" : false
                             dropdown.append(jQuery("<option />").val(this.widget_id).text(this.name).attr("selected", attrValue));
                         });
+
+                        if (ugcCount == 0) {
+                            let parent = jQuery("#ugc-widget-options-dropdown").parent();
+                            parent.empty();
+                            jQuery("<a>", {
+                                id: "some-id",
+                                class: "Button Button--primary Button--xs",
+                                text: "Customise Widget",
+                                href: "#",
+                            }).appendTo(parent);
+                        }                            
     
                     }
                 }
@@ -299,7 +370,7 @@ if (!class_exists('WooCommerce_Reviews')) {
           $optionsPrefix = 'REVIEWSio_';
           $options = ["region","store_id","api_key","product_feed","widget_hex_colour","widget_custom_css",
           "enable_rich_snippet","enable_product_rich_snippet","enable_product_rich_snippet_server_side","enable_product_rating_snippet",
-          "enable_nuggets_widget","nuggets_widget_options","nuggets_widget_tags","enable_nuggets_bar_widget","nuggets_bar_widget_id","nuggets_bar_widget_tags","enable_floating_react_widget","floating_react_widget_options","enable_survey_widget","survey_widget_options","survey_widget_campaign","carousel_type","carousel_custom_styles",
+          "enable_nuggets_widget","nuggets_widget_options","nuggets_widget_tags","enable_nuggets_bar_widget","nuggets_bar_widget_id","nuggets_bar_widget_tags","enable_floating_react_widget","floating_react_widget_options","ugc_widget_options","enable_survey_widget","survey_widget_options","survey_widget_campaign","carousel_type","carousel_custom_styles",
           "polaris_review_widget","reviews_tab_name","polaris_review_widget_questions","product_review_widget","question_answers_widget",
           "hide_write_review_button","per_page_review_widget","send_product_review_invitation","enable_cron",
           "enable_floating_widget","product_identifier","disable_reviews_per_product","use_parent_product", "use_parent_product_rich_snippet",
@@ -894,6 +965,42 @@ if (!class_exists('WooCommerce_Reviews')) {
                         lang="en"
                     ></div>
                 <?php
+            } else {
+                echo '<script>console.log("Missing REVIEWS.io API Credentials for Survey Widget")</script>';
+            }
+        }
+
+        public function survey_widget_shortcode($widget = null)
+        {
+            ?><script>console.log('survey widget shortcode');</script><?php
+            if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != '' && $widget['widget_id'] != '' && $widget['campaign_id'] != '') {
+                ?>
+                    <script>
+                        window.addEventListener('load', function() {
+                            let surveyShortcodeScript = document.createElement('script');
+                            surveyShortcodeScript.src = 'https://widget.reviews.io/modern-widgets/survey.js';
+                            document.getElementsByTagName('head')[0].appendChild(surveyShortcodeScript)
+                        });
+                    </script>
+                <?php               
+                    return '
+                        <div 
+                            class="reviews-io-survey-widget"
+                            widget-id="LfVKWGrkd76SwPz2"
+                            store-name="aj-reviews"
+                            campaign-id="11"
+                            lang="en"
+                        ></div>
+                    ';
+                    return '
+                        <div 
+                            class="reviews-io-survey-widget"
+                            widget-id="' . $widget['widget_id'] . '"
+                            campaign-id="' . $widget['campaign_id'] . '"
+                            store-name="' . get_option('REVIEWSio_store_id') . '"
+                            lang="en"
+                        ></div>
+                    ';
             } else {
                 echo '<script>console.log("Missing REVIEWS.io API Credentials for Survey Widget")</script>';
             }
@@ -1910,10 +2017,11 @@ if (!class_exists('WooCommerce_Reviews')) {
             add_shortcode('rating_bar_widget', array($this, 'rating_bar_widget_shortcode'));
 
             add_shortcode('carousel_widget', array($this, 'carousel_widget_shortcode'));
-
+            
             if (get_option('REVIEWSio_enable_survey_widget')) {
                 add_filter('wp_footer', array($this, 'reviewsio_survey_widget_scripts'));
             }
+            add_shortcode('survey_widget', array($this, 'survey_widget_shortcode'));
 
             add_action('admin_enqueue_scripts', 'reviewsio_admin_scripts');
         }
