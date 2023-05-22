@@ -6,14 +6,14 @@ if(!defined('ABSPATH')) {
 
 <div class="wrap">
 	<img src="https://assets.reviews.io/img/all-global-assets/logo/reviewsio-logo.svg" height="40"  style="margin-top:15px;" />
-	<form method="post" action="options.php" autocomplete="off">
+	<form id="reviewsio-settings" method="post" action="options.php" autocomplete="off">
 		<h2></h2><!-- Alerts Show Here -->
 
 		<?php @settings_fields('woocommerce-reviews'); ?>
 		<?php @do_settings_sections('woocommerce-reviews'); ?>
 
 		<div style="background:#fff; padding:20px; margin:20px 0; box-shadow: 3px 10px -5px rgba(0,0,0,.1); border-radius: 6px;">
-			<h2>Automated Review Collection - Powered by REVIEWS.io</h2>
+			<h2 id="welcomeHeading" class="TextHeading TextHeading--sm">Automated Review Collection - Powered by REVIEWS.io</h2>
 
 			<div id="welcomeText">
 				<p>Enter your API Credentials to Start Collecting Reviews from your Customers.</p>
@@ -38,9 +38,6 @@ if(!defined('ABSPATH')) {
 				<!-- <div id="js-reviews-tab" class="FlexTabs__item">
 					<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Product Reviews</div>
 				</div> -->
-				<div id="js-qa-tab" class="FlexTabs__item">
-					<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Q&amp;A</div>
-				</div>
 				<div id="js-snippets-tab" class="FlexTabs__item">
 					<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Rich Snippets</div>
 				</div>
@@ -57,17 +54,17 @@ if(!defined('ABSPATH')) {
 
 			<div class="tab-contents js-api-tab">
 				<!-- API Settings -->
-				<div id="api-notification-danger" class="GlobalNotification GlobalNotification--danger" style="display: none">
+				<div id="api-notification" class="GlobalNotification GlobalNotification--warning" style="display: none">
 					<div class="flex-row flex-middle-xxs">
 						<div class="flex-col-xxs-1 u-textCenter--all">
-							<img class="GlobalNotification__imageIcon" src="https://assets.reviews.io/img/all-global-assets/icons/icon-warning--md.svg">
+							<img class="GlobalNotification__imageIcon" src="https://assets.reviews.io/img/all-global-assets/icons/icon-api--md--colour.svg">
 						</div>
 						<div class="flex-col-xxs-11">
-							<div class="TextHeading TextHeading--xxxxs">
-								Authorization Failed
+							<div id="api-notification-heading" class="TextHeading TextHeading--xxxxs">
+								Connect with REVIEWS.io
 							</div>
-							<div class="TextBody TextBody--xxxs u-marginBottom--none">
-								The credentials provided do not match with our records. Please try again.
+							<div id="api-notification-text" class="TextBody TextBody--xxxs u-marginBottom--none">
+								Enter your API crendentials found under WooCommerce Integration in the REVIEWS.io dashboard.
 							</div>
 						</div>
 					</div>
@@ -75,51 +72,61 @@ if(!defined('ABSPATH')) {
 
 				<p>You can find your API credentials on the REVIEWS.io Dashboard. Click the <b>Integrations</b> menu, and then scroll to <b>WooCommerce</b>.</p>
 
-				<table class="form-table">
-					<tr>
-						<th>
-							<label for="REVIEWSio_store_id">Store ID: </label>
+				<div class="u-marginTop--lg">
+					<div>
+						<!-- <label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_enable_product_rating_snippet">Rating Snippet Text: </label> -->
+						<!-- <p class="TextBody TextBody--xxxs">Sets the descriptor after the number of reviews on the Rating Snippet.</p> -->
+						<div class="flex-row">
+							<div class="flex-col-xxs-12 flex-col-sm-6">
+								<div class="Field u-marginTop--xxs u-width--100">
+									<?php
+										$store_id = get_option('REVIEWSio_store_id');
+									?>
+									<input class="Field__input" type="text" name="REVIEWSio_store_id" value="<?php  echo $store_id; ?>" />
+									<label class="Field__label">
+										Store ID
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div>
+						<!-- <label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_enable_product_rating_snippet">Rating Snippet Text: </label> -->
+						<!-- <p class="TextBody TextBody--xxxs">Sets the descriptor after the number of reviews on the Rating Snippet.</p> -->
+						<div class="flex-row">
+							<div class="flex-col-xxs-12 flex-col-sm-6">
+								<div class="Field u-marginTop--xxs u-width--100">
+									<?php
+										$api_key = get_option('REVIEWSio_api_key');
+									?>
+									<input class="Field__input" type="text" name="REVIEWSio_api_key" value="<?php  echo $api_key; ?>" />
+									<label class="Field__label">
+										API Key
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
-								</th>
-						<td>
-							<?php
-							$store_id = get_option('REVIEWSio_store_id');
-							?>
-							<input type="text" name="REVIEWSio_store_id" value="<?php  echo $store_id; ?>" />
-						</td>
-					</tr>
-					<tr>
-						<th>
-							<label for="REVIEWSio_api_key">API Key: </label>
-						</th>
-						<td>
-							<?php
-								$api_key = get_option('REVIEWSio_api_key');
-							?>
-							<input type="text" name="REVIEWSio_api_key" value="<?php  echo $api_key; ?>" />
-						</td>
-					</tr>
-					<tr>
-						<th>
-							<label for="REVIEWSio_region">Region: </label>
-						</th>
-						<td>
-							<?php
-							$region = get_option('REVIEWSio_region');
-							?>
-							<select name="REVIEWSio_region">
-								<option <?php echo ($region == 'uk') ? 'selected' : '' ?> value="uk">UK</option>
-								<option <?php echo ($region == 'us') ? 'selected' : '' ?> value="us">US</option>
-							</select>
-						</td>
-					</tr>
-				</table>
+				<p class="u-marginTop--md js-validated-user" style="display: none;">
+					<?php
+						$region = get_option('REVIEWSio_region');
+					?>
+					<strong>Region: </strong>
+					<input class="Field__input" id="REVIEWSio_region" type="hidden" name="REVIEWSio_region" value="<?php echo $region ?>" style="width: 50px;">
+					
+					<span id="REVIEWSio_region_label"><?php echo $region == 'uk' ? 'UK' : 'US' ?></span>
+					
+					
+					<!-- <input class="Field__input" id="REVIEWSio_region_label" type="text" name="REVIEWSio_region_label" value="<?php echo $region == 'uk' ? 'UK' : 'US' ?>" style="width: 50px;" disabled> -->
+				</p>
 
-				<p><strong>Not a REVIEWS.io Customer?</strong></p>
-				<p>
-					You can sign up for a REVIEWS.io plan here:
-					<a href='https://www.reviews.io/business-solutions' target="_blank">UK</a> or
-					<a href='https://www.reviews.io/business-solutions' target="_blank">International</a>
+				<p class="u-marginTop--md js-invalidated-user" style="display: none;">
+					<strong>Not a REVIEWS.io Customer?</strong>
+					<br>
+					You can sign up for a 
+					<a href='https://www.reviews.io/business-solutions' target="_blank">REVIEWS.io plan here</a>:
 				</p>
 			</div>
 			
@@ -132,7 +139,7 @@ if(!defined('ABSPATH')) {
 						$send_product_review_invitation = get_option('REVIEWSio_send_product_review_invitation');
 					?>
 					<div class="flex-row">
-						<div class="flex-col-xxs-12 flex-col-sm-8">
+						<div class="flex-col-xxs-12 flex-col-sm-6">
 							<div class="Field u-marginTop--xxs u-width--100">
 								<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_send_product_review_invitation">
 									<option <?php echo ($send_product_review_invitation == 1) ? 'selected' : '' ?> value="1">Yes</option>
@@ -148,7 +155,7 @@ if(!defined('ABSPATH')) {
 
 			<div class="tab-contents js-reviews-tab">
 				<?php /*
-				<p>Customise how product reviews are published on your website.</p>
+				<p>Customize how product reviews are published on your website.</p>
 
 				<table class="form-table">
 					<?php
@@ -321,7 +328,7 @@ if(!defined('ABSPATH')) {
 
 					<tr style="border-top: 1px solid #e4e4e4;">
 						<th>
-							<h3><strong>Customise Widgets:</strong></h3>
+							<h3><strong>Customize Widgets:</strong></h3>
 
 						<label for="REVIEWSio_minimum_rating">Widget Language</label>
 						<p style="font-size:12px;font-weight:100;">Set the Language of the Product Review Widget and Rating Snippet popup.</p>
@@ -425,61 +432,6 @@ if(!defined('ABSPATH')) {
 				*/ ?>
 			</div>
 			
-			<div class="tab-contents js-qa-tab">
-				<p>Allow your visitors to ask questions about your products. Your answers will be published publicly.</p>
-
-				<?php
-					if(!$hide_legacy) {
-				?>
-				<div class="form-table">
-					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_product_review_widget">Show Legacy Question Answers Widget: </label>
-					<p class="TextBody TextBody--xxxs" style="font-size:12px;font-weight:100;">The widget will be displayed in a tab on your product pages.</p>
-
-					<?php
-						$question_answers_widget = get_option('REVIEWSio_question_answers_widget');
-					?>
-					<div class="flex-row">
-						<div class="flex-col-xxs-12 flex-col-sm-8">
-							<div class="Field u-marginTop--xxs u-width--100">
-								<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_question_answers_widget">
-									<option <?php echo ($question_answers_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Tab</option>
-									<option <?php echo ($question_answers_widget == 'summary') ? 'selected' : '' ?> value="summary">Show Below Product Summary</option>
-									<option <?php echo ($question_answers_widget == 'both') ? 'selected' : '' ?> value="both">Show in Both Places</option>
-									<option <?php echo ($question_answers_widget == '0') ? 'selected' : '' ?> value="0">Dont Display</option>
-								</select>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<?php
-					} else {
-				?>
-
-				<div class="form-table">
-					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_rich_snippet">Enable Q&A: </label>
-					<p class="TextBody TextBody--xxxs">This will add a Q&A Tab to your Product Review Widget.</p>
-
-					<?php
-						$polaris_review_widget_questions = get_option('REVIEWSio_polaris_review_widget_questions');
-					?>
-					<div class="flex-row">
-						<div class="flex-col-xxs-12 flex-col-sm-8">
-							<div class="Field u-marginTop--xxs u-width--100">
-								<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_polaris_review_widget_questions">
-									<option <?php echo ($polaris_review_widget_questions == 1) ? 'selected' : '' ?> value="1">Yes</option>
-									<option <?php echo ($polaris_review_widget_questions == 0) ? 'selected' : '' ?> value="0">No</option>
-								</select>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<?php
-					}
-				?>
-			</div>
-			
 			<div class="tab-contents js-snippets-tab">
 				<!-- Rich Snippets -->
 				<!-- <tr>
@@ -504,7 +456,7 @@ if(!defined('ABSPATH')) {
 						$enable_product_rich_snippet = get_option('REVIEWSio_enable_product_rich_snippet');
 					?>
 					<div class="flex-row">
-						<div class="flex-col-xxs-12 flex-col-sm-8">
+						<div class="flex-col-xxs-12 flex-col-sm-6">
 							<div class="Field u-marginTop--xxs u-width--100">
 								<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_enable_product_rich_snippet">
 									<option <?php echo ($enable_product_rich_snippet == 1) ? 'selected' : '' ?> value="1">Yes</option>
@@ -523,36 +475,11 @@ if(!defined('ABSPATH')) {
 						$enable_product_rich_snippet = get_option('REVIEWSio_enable_product_rich_snippet_server_side');
 					?>
 					<div class="flex-row">
-						<div class="flex-col-xxs-12 flex-col-sm-8">
+						<div class="flex-col-xxs-12 flex-col-sm-6">
 							<div class="Field u-marginTop--xxs u-width--100">
 								<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_enable_product_rich_snippet_server_side">
 									<option <?php echo ($enable_product_rich_snippet == 1) ? 'selected' : '' ?> value="1">Yes</option>
 									<option <?php echo ($enable_product_rich_snippet == 0) ? 'selected' : '' ?> value="0">No</option>
-								</select>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
-				<div>
-					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_floating_widget">Enable Legacy Floating Widget: </label>
-					<div>
-						<p class="TextBody TextBody--xxxs">
-							A floating reviews tab will be added to the right side of your site.
-						</p>
-						<p class="TextBody TextBody--xxxs">
-							<strong style="font-size:12px;">Note:</strong> This widget is being deprecated and will be removed in future updates, please use main floating widget found under REVIEWS.io Widgets tab to ensure you have the latest updates and features.
-						</p>
-					</div>
-					<?php
-						$enable_floating_widget = get_option('REVIEWSio_enable_floating_widget');
-					?>
-					<div class="flex-row">
-						<div class="flex-col-xxs-12 flex-col-sm-8">
-							<div class="Field u-marginTop--xxs u-width--100">
-								<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_enable_floating_widget">
-									<option <?php echo ($enable_floating_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
-									<option <?php echo ($enable_floating_widget == 0) ? 'selected' : '' ?> value="0">No</option>
 								</select>
 							</div>
 						</div>
@@ -564,13 +491,16 @@ if(!defined('ABSPATH')) {
 				<!-- Data Feeds-->
 				<div>
 					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_product_feed">Enable Product Feed: </label>
-					<p class="TextBody TextBody--xxxs">For Product Invitations to queue correctly, we require access to your Product catalogue via a feed, which we will make available from <b><?php echo get_site_url(); ?>/index.php/reviews/product_feed</b>.</p>
+					<p class="TextBody TextBody--xxxs">For Product Invitations to queue correctly, we require access to your Product catalogue via a feed, which we will make available from <a href="<?php echo get_site_url(); ?>/index.php/reviews/product_feed"><?php echo get_site_url(); ?>/index.php/reviews/product_feed</a>.</p>
+					<p class="TextBody TextBody--xxxs">
+						<strong style="font-size:12px;">Note:</strong> There is an issue with data not being added correctly when renaming attributes in WooCommerce, please remove the attribute with changed name and the associated products, and then re-add them to ensure data integrity.
+					</p>
 
 					<?php
 						$enableProductFeed = get_option('REVIEWSio_product_feed');
 					?>
 					<div class="flex-row">
-						<div class="flex-col-xxs-12 flex-col-sm-8">
+						<div class="flex-col-xxs-12 flex-col-sm-6">
 							<div class="Field u-marginTop--xxs u-width--100">
 								<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_product_feed">
 									<option <?php echo ($enableProductFeed == 1) ? 'selected' : '' ?> value="1">Yes</option>
@@ -589,7 +519,7 @@ if(!defined('ABSPATH')) {
 						$enableWpSeoGlobalIds = get_option('REVIEWSio_product_feed_wpseo_global_ids');
 					?>
 					<div class="flex-row">
-						<div class="flex-col-xxs-12 flex-col-sm-8">
+						<div class="flex-col-xxs-12 flex-col-sm-6">
 							<div class="Field u-marginTop--xxs u-width--100">
 								<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_product_feed_wpseo_global_ids">
 									<option <?php echo ($enableWpSeoGlobalIds == 1) ? 'selected' : '' ?> value="1">Yes</option>
@@ -604,13 +534,48 @@ if(!defined('ABSPATH')) {
 					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_product_feed_custom_attributes">Include Product Data Attributes Feed: </label>
 					<p class="TextBody TextBody--xxxs">Add additional product data attributes field to be included as columns in your product feed. The following are always included by default: _barcode, barcode, _gtin, gtin, mpn, _mpn</p>
 
+					<!-- Add new attribute -->
+					<div class="flex-row">
+						<div class="flex-col-xxs-12 flex-col-sm-6" style="display: flex">
+							<div class="Field u-marginTop--xxs u-width--100">
+								<input id="product-feed-custom-attributes-new" type="text" class="Field__input u-width--100" style="max-width: none;" placeholder="Add a new attribute" on="addNewAttribute()" />
+								<div class="Field__feedback">
+									<div class="feedback__inner js-field-feedback">
+										Error
+									</div>
+								</div>
+							</div>
+								<div>
+									<div class="Button Button--sm Button--primary u-marginTop--xs u-marginLeft--sm" onclick="addNewAttribute()">Add</div>
+								</div>
+								
+							</div>
+						</div>
+						
+					<!-- Attribute value -->
 					<?php
 						$product_feed_custom_attributes = get_option('REVIEWSio_product_feed_custom_attributes');
 					?>
-					<div class="flex-row">
-						<div class="flex-col-xxs-12 flex-col-sm-8">
-							<div class="Field u-marginTop--xxs u-width--100">
-								<textarea class="Field__input" name="REVIEWSio_product_feed_custom_attributes" style="width:100%;height:50px;" placeholder="_barcode, barcode, _gtin, gtin, mpn, _mpn"><?php echo htmlentities($product_feed_custom_attributes); ?></textarea>
+
+					<input type="hidden" id="product-feed-custom-attributes" name="REVIEWSio_product_feed_custom_attributes" value="<?php echo htmlentities($product_feed_custom_attributes); ?>">
+
+					<!-- Attribute tags -->
+					<div class="u-marginBottom--sm">
+						<div class="TagsInputElement">
+							<ul id="product_feed_custom_attributes-list" class="flex-row tags feed-list"></ul>
+						</div>
+					</div>
+
+					<!-- Message -->
+					<div class="GlobalNotification GlobalNotification--sm GlobalNotification--coloured-warning u-marginBottom--md js-feed-notification" style="display: none;">
+						<div class="flex-row flex-middle-xxs">
+							<div class="flex-col-xxs-12">
+								<div class="TextHeading TextHeading--xxxxs u-marginBottom--none">
+									Unsaved Changes
+								</div>
+								<div id="js-collector-current-widget-info" class="js-collector-toggle-info TextBody TextBody--xxxs u-marginBottom--none">
+									Please remember to save your changes if you want to apply the above REVIEWS.io settings.
+								</div>
 							</div>
 						</div>
 					</div>
@@ -627,19 +592,35 @@ if(!defined('ABSPATH')) {
 				<!-- Widgets -->
 				<div class="TextBody TextBody--xxs">
 					<p>
-						Enable and customise how REVIEWS.io widgets on your website. Additionally, you can enhance your WordPress site by incorporating our personalised shortcodes, allowing you to display REVIEWS.io widgets seamlessly. The customisation for the widgets below can be found in the  <a href="https://dash.reviews.co.uk/widgets" target="_blank">REVIEWS.io widget library</a>.
+						Enable and customize REVIEWS.io widgets on your website. Additionally, you can enhance your WordPress site by incorporating our shortcodes, allowing you to display REVIEWS.io widgets seamlessly. The customisation for the widgets below can be found in the  
+						<a href="https://dash.reviews.<?php echo $region == 'uk' ? 'co.uk' : 'io' ?>/widgets" target="_blank">REVIEWS.io widget library</a>.
 					</p>
 				</div>
 				<div class="u-hr u-marginTop--md u-marginBottom--lg"></div>
 				
 				<div class="flex-row">
 					<div class="flex-col-xxs-3 u-paddingRight--none">
-	
+						<div id="global-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('global')">
+							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
+								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-star-badge-cog--md--colour.svg" alt="">
+								<div>
+									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Global Customization</div>
+								</div>
+							</div>
+						</div>
 						<div id="product-reviews-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab js-product-reviews-tab isActive" onclick="showWidget('product-reviews')">
 							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
 								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-review-adverts--md--colour.svg" alt="">
 								<div>
 									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Product Reviews Widget</div>
+								</div>
+							</div>
+						</div>
+						<div id="rating-snippet-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('rating-snippet')">
+							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
+								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-three-stars--md--colour.svg" alt="">
+								<div>
+									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Rating Snippet</div>
 								</div>
 							</div>
 						</div>
@@ -683,14 +664,6 @@ if(!defined('ABSPATH')) {
 								</div>
 							</div>
 						</div>
-						<div id="rating-snippet-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('rating-snippet')">
-							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
-								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-three-stars--md--colour.svg" alt="">
-								<div>
-									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Rating Snippet</div>
-								</div>
-							</div>
-						</div>
 						<div id="carousel-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('carousel')">
 							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
 								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-influence-widget-carousel--md--colour.svg" alt="">
@@ -699,654 +672,245 @@ if(!defined('ABSPATH')) {
 								</div>
 							</div>
 						</div>
+						<div id="legacy-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('legacy')">
+							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
+								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-timeline--md--colour.svg" alt="">
+								<div>
+									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Legacy Widgets</div>
+								</div>
+							</div>
+						</div>
 					</div>
 	
 					<div class="flex-col-xxs-9 u-paddingLeft--none">
 						<div class="ContentPanel u-shadow--none u-paddingRight--none" style="box-shadow: none;">
-							<div class="menu-data">
-								<div id="product-reviews" class="form-table js-widget">
+							<div>
+								<div id="global" class="form-table js-widget" style="display: none">
 									<div>
-										<?php
-											$polaris_review_widget = get_option('REVIEWSio_polaris_review_widget');
-										?>
-										<div>
-											<h3><strong>Product Review Widget Settings:</strong></h3>
-											<div class="flex-row">
-												<div class="flex-col-xxs-12 flex-col-md-6">
-													<p>
-														A mobile friendly product reviews widget displaying product & customer attributes, photos, videos as well as questions & answers.
-													</p>
-												</div>
-												<div class="flex-col-xxs-12 flex-col-md-6 u-textCenter--all">
-													<img style="max-width:420px" class="u-width--100" src="https://assets.reviews.io/img/all-global-assets/pages/widgets/thumbnail--elementswidgetv2@2x.png">
-												</div>
+										<div class="flex-row flex-middle-xxs">
+											<div class="flex-col-xxs-12 flex-col-md-6">
+												<h3><strong>Global Widget Styles</strong></h3>
+												<p>
+													The following styles are applied to our <strong>Product Reviews</strong>, <strong>Rating Snippet</strong> and <strong>Legacy Floating</strong> widgets. 
+												</p>
+												<p>
+													Customize different aspects of these widgets globally such as what gets displayed on the page or how it looks.
+												</p>
 											</div>
-
-											<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
-
-											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_polaris_review_widget">Show Product Review Widget: </label>
-											<p class="TextBody TextBody--xxxs">A mobile friendly product reviews widget displaying product & customer attributes, photos and videos.</p>
-
-											<div class="flex-row">
-												<div class="flex-col-xxs-12 flex-col-sm-8">
-													<div class="Field u-marginTop--xxs u-width--100">
-														<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_polaris_review_widget">
-															<option <?php echo ($polaris_review_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Tab</option>
-															<option <?php echo ($polaris_review_widget == 'summary') ? 'selected' : '' ?> value="summary">Show Below Product Summary</option>
-															<option <?php echo ($polaris_review_widget == 'bottom') ? 'selected' : '' ?> value="bottom">Show At Bottom of Page</option>
-															<option <?php echo ($polaris_review_widget == '0') ? 'selected' : '' ?> value="0">Do Not Display</option>
-														</select>
-													</div>
-												</div>
+											<div class="flex-col-xxs-12 flex-col-md-6 u-textCenter--all">
+												<img style="max-width:420px" class="u-width--100" src="https://assets.reviews.io/img/all-global-assets/pages/widgets/reviewsio-widgets@2x.png">
 											</div>
 										</div>
 
-										<?php if($polaris_review_widget == 'tab') { ?>
-											<div>
-												<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_enable_product_rating_snippet">Review Tab Text: </label>
-												<p class="TextBody TextBody--xxxs">Sets the name of the review tab.</p>
-
-												<?php
-													$reviews_tab_name = get_option('REVIEWSio_reviews_tab_name');
-												?>
-											
-												<div class="flex-row">
-													<div class="flex-col-xxs-12 flex-col-sm-8">
-														<div class="Field u-marginTop--xxs u-width--100">
-															<input  class="Field__input" name='REVIEWSio_reviews_tab_name' value='<?php echo (!empty($reviews_tab_name) ? $reviews_tab_name : 'Reviews'); ?>'>
-														</div>
-													</div>
-												</div>
-											</div>
-										<?php } ?>
-
-										<?php
-											$product_review_widget = get_option('REVIEWSio_product_review_widget');
-											if(!$hide_legacy) {
-										?>
-												<div class="u-hr u-marginTop--md u-marginBottom--md"></div>												
-												<div>
-													<h3><strong>Legacy Widget Settings:</strong></h3>
-
-													<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_product_review_widget">Show Legacy Product Review Widget: </label>
-													<p class="TextBody TextBody--xxxs">Please note that to use the Legacy Widget, the "Show Product Review Widget" setting must be set to "Do Not Display".</p>
-
-													<div class="flex-row">
-														<div class="flex-col-xxs-12 flex-col-sm-8">
-															<div class="Field u-marginTop--xxs u-width--100">
-																<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_product_review_widget">
-																	<option <?php echo ($product_review_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Reviews Tab</option>
-																	<option <?php echo ($product_review_widget == 'summary') ? 'selected' : '' ?> value="summary">Show Below Product Summary</option>
-																	<option <?php echo ($product_review_widget == 'both') ? 'selected' : '' ?> value="both">Show in Both Places</option>
-																	<option <?php echo ($product_review_widget == '0') ? 'selected' : '' ?> value="0">Do Not Display</option>
-																</select>
-															</div>
-														</div>
-													</div>
-												</div>
-
-												<div style="border-bottom: 1px solid #e4e4e4">
-													<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_widget_custom_css">Widget Custom CSS: </label>
-													<p class="TextBody TextBody--xxxs">Add custom CSS to the product reviews widget</p>
-													<?php
-														$widget_custom_css = get_option('REVIEWSio_widget_custom_css');
-													?>
-													<div class="flex-row">
-														<div class="flex-col-xxs-12 flex-col-sm-8">
-															<div class="Field u-marginTop--xxs u-width--100">
-																<textarea class="Field__input" name="REVIEWSio_widget_custom_css" style="width:300px;height:200px;"><?php echo htmlentities($widget_custom_css); ?></textarea>
-															</div>
-														</div>
-													</div>
-												</div>
-										<?php
-											}
-										?>
 										<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
-										<div>
-											<h3><strong>Customise Widgets:</strong></h3>
 
+										<div>
 											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_minimum_rating">Widget Language</label>
 											<p class="TextBody TextBody--xxxs">Set the Language of the Product Review Widget and Rating Snippet popup.</p>
 											<?php
 												$polaris_lang = get_option('REVIEWSio_polaris_lang');
 											?>
-											<select name='REVIEWSio_polaris_lang'>
-												<?php
-												foreach(['English (Default)' => 'en', 'Deutsch' => 'de', 'Deutsch (Informal)' => 'de-informal', 'Español' => 'es', 'Français' => 'fr',
-												'Italiano' => 'it', 'Nederlands' => 'nl', 'Suomi' => 'fi'] as $key => $value) {
-												?>
-													<option <?php echo ($value == $polaris_lang ? 'selected' : ''); ?> value='<?php echo $value; ?>'>
-														<?php echo $key; ?>
-													</option>
-												<?php
-													}
-												?>
-											</select>
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-8">
+													<div class="Field u-marginTop--xxs u-width--100">
+														<select name='REVIEWSio_polaris_lang' class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;">
+															<?php
+															foreach(['English (Default)' => 'en', 'Deutsch' => 'de', 'Deutsch (Informal)' => 'de-informal', 'Español' => 'es', 'Français' => 'fr',
+															'Italiano' => 'it', 'Nederlands' => 'nl', 'Suomi' => 'fi'] as $key => $value) {
+															?>
+																<option <?php echo ($value == $polaris_lang ? 'selected' : ''); ?> value='<?php echo $value; ?>'>
+																	<?php echo $key; ?>
+																</option>
+															<?php
+																}
+															?>
+														</select>
+													</div>
+												</div>
+											</div>
 										</div>
-
 										<div>
 											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_minimum_rating">Minimum Review Rating</label>
 											<p class="TextBody TextBody--xxxs">This option sets the minimum star rating of reviews displayed.</p>
 											<?php
 												$minimum_rating = get_option('REVIEWSio_minimum_rating');
 											?>
-											<select name='REVIEWSio_minimum_rating'>
-												<?php
-												foreach(['None (Default)' => 1, '2 Stars' => 2, '3 Stars' => 3, '4 Stars' => 4, '5 Stars' => 5] as $key => $value) {
-												?>
-													<option <?php echo ($value == $minimum_rating ? 'selected' : ''); ?> value='<?php echo $value; ?>'>
-														<?php echo $key; ?>
-													</option>
-												<?php
-													}
-												?>
-											</select>
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-8">
+													<div class="Field u-marginTop--xxs u-width--100">
+														<select name='REVIEWSio_minimum_rating' class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;">
+															<?php
+															foreach(['None (Default)' => 1, '2 Stars' => 2, '3 Stars' => 3, '4 Stars' => 4, '5 Stars' => 5] as $key => $value) {
+															?>
+																<option <?php echo ($value == $minimum_rating ? 'selected' : ''); ?> value='<?php echo $value; ?>'>
+																	<?php echo $key; ?>
+																</option>
+															<?php
+																}
+															?>
+														</select>
+													</div>
+												</div>
+											</div>
 										</div>
-
 										<div>
-											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_disable_rating_snippet_popup">Offset: (Default = 0)</label>
+											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_minimum_rating">Offset: (Default = 0)</label>
 											<p class="TextBody TextBody--xxxs">This option sets the offset to the product widget element (Integer Number).</p>
 											<?php
 												$disable_rating_snippet_offset = get_option('REVIEWSio_disable_rating_snippet_offset');
 											?>
-											<input type="text" name="REVIEWSio_disable_rating_snippet_offset" value="<?php  echo $disable_rating_snippet_offset; ?>" />
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-8">
+													<div class="Field u-marginTop--xxs u-width--100">
+														<input type="text" name="REVIEWSio_disable_rating_snippet_offset" class="Field__input u-width--100" style="max-width: none;" value="<?php  echo $disable_rating_snippet_offset; ?>" />
+													</div>
+												</div>
+											</div>
 										</div>
-
 										<div>
-											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_widget_hex_colour">Star Colour: </label>
+											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_minimum_rating">Star Colour</label>
 											<p class="TextBody TextBody--xxxs">Sets the primary colour for your widgets, including the stars.</p>
 											<?php
 												$widget_hex_colour = get_option('REVIEWSio_widget_hex_colour');
 											?>
-											<input type="text" name="REVIEWSio_widget_hex_colour" value="<?php  echo $widget_hex_colour; ?>" />
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-8">
+													<div class="Field u-marginTop--xxs u-width--100">
+														<input type="text" name="REVIEWSio_widget_hex_colour" class="Field__input u-width--100" style="max-width: none;" value="<?php  echo $widget_hex_colour; ?>" />
+													</div>
+												</div>
+											</div>
 										</div>
-
 										<div>
-										<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_hide_write_review_button">Hide Write Review Button: </label>
-										<p class="TextBody TextBody--xxxs">Write a Review Button will be hidden on your widgets.</p>
+											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_minimum_rating">Hide Write Review Button</label>
+											<p class="TextBody TextBody--xxxs">Write a Review Button will be hidden on your widgets.</p>
 											<?php
 												$hide_write_review_button = get_option('REVIEWSio_hide_write_review_button');
 											?>
-											<select name="REVIEWSio_hide_write_review_button">
-												<option <?php echo ($hide_write_review_button == 1) ? 'selected' : '' ?> value="1">Hide Button</option>
-												<option <?php echo ($hide_write_review_button == 0) ? 'selected' : '' ?> value="0">Show Button</option>
-											</select>
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-8">
+													<div class="Field u-marginTop--xxs u-width--100">
+														<select name="REVIEWSio_hide_write_review_button" class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;">
+															<option <?php echo ($hide_write_review_button == 1) ? 'selected' : '' ?> value="1">Hide Button</option>
+															<option <?php echo ($hide_write_review_button == 0) ? 'selected' : '' ?> value="0">Show Button</option>
+														</select>
+													</div>
+												</div>
+											</div>
 										</div>
-
 										<div>
-											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_per_page_review_widget">Reviews Per Page: </label>
+											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_minimum_rating">Reviews Per Page</label>
 											<p class="TextBody TextBody--xxxs">The amount of reviews displayed per page in the Product Review Widget and Popup Product Review Widget.</p>
 											<?php
 												$per_page_review_widget = get_option('REVIEWSio_per_page_review_widget');
 											?>
-											<input value='<?php echo (!empty($per_page_review_widget) ? $per_page_review_widget : 8); ?>' type='number' min='0' max='30' name="REVIEWSio_per_page_review_widget">
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-8">
+													<div class="Field u-marginTop--xxs u-width--100">
+														<input value='<?php echo (!empty($per_page_review_widget) ? $per_page_review_widget : 8); ?>' type='number' min='0' max='30' name="REVIEWSio_per_page_review_widget" class="Field__input u-width--100" style="max-width: none;">
+													</div>
+												</div>
+											</div>
 										</div>
 									</div>
-	
-									
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 								</div>
 
-								<div id="nuggets" class="form-table js-widget" style="display: none">
-									<h3><strong>Nuggets Widget Settings:</strong></h3>
-									<div class="flex-row flex-middle-xxs">
-										<div class="flex-col-xxs-12 flex-col-md-6">
-											<p>
-												A mobile-friendly Review Nuggets Widget that displays excerpts from company and product reviews. It can be placed close to your call-to-action buttons.
-											</p>
-											<ul class="list">
-												<li>Easy to select review snippets to add to the nugget from already existing reviews.</li>
-												<li>This can be placed next to a product on a product page.</li>
-												<li>Customise the types of reviews shown.</li>
-												<li>Able to style in line with the user's requirements.</li>
-												<li>Minimal design.</li>
-											</ul>
-										</div>
-										<div class="flex-col-xxs-12 flex-col-md-6 u-textCenter--all">
-											<img style="max-width:420px" class="u-width--100" src="https://assets.reviews.io/img/all-global-assets/pages/widgets/thumbnail--nuggets-widget@2x.png">
-										</div>
-									</div>
-
-									<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
-	
+								<div id="product-reviews" class="form-table js-widget">
 									<div>
-										<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_enable_nuggets_widget">Enable Nuggets Widget: </label>
-										<p class="TextBody TextBody--xxxs">
-											Use the dropdown menu to enable or disable the Nuggets widget. Select 'Yes' to enable the widget, or 'No' to disable.
+										<div class="flex-row flex-middle-xxs">
+											<div class="flex-col-xxs-12 flex-col-md-6">
+												<h3><strong>Product Review Widget Settings</strong></h3>
+												<p>
+													A mobile friendly product reviews widget displaying product & customer attributes, photos, videos as well as questions & answers.
+												</p>
+												<ul class="list">
+													<li>Display desired content type e.g. Product, Company, 3rd Party Reviews.</li>
+													<li>Display overall Product Rating and Product Attributes.</li>
+													<li>Customise showing a Photo and Video Gallery</li>
+													<li>Option to hide or show 'Write Review' and 'Ask Question' buttons.</li>
+													<li>Thoroughly customise styling of the widget</li>
+												</ul>
+											</div>
+											<div class="flex-col-xxs-12 flex-col-md-6 u-textCenter--all">
+												<img style="max-width:420px" class="u-width--100" src="https://assets.reviews.io/img/all-global-assets/pages/widgets/thumbnail--elementswidgetv2@2x.png">
+											</div>
+										</div>
+
+										<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+
+										<label class="TextHeading TextHeading--xxxs u-marginTop--xxs">Show Product Review Widget</label>
+										<p class="TextBody TextBody--xxxs u-marginBottom--md">
+											A mobile friendly product reviews widget displaying product & customer attributes, photos and videos.
 										</p>
-		
-										<?php
-											$enable_nuggets_widget = get_option('REVIEWSio_enable_nuggets_widget');
-										?>
 										<div class="flex-row">
-											<div class="flex-col-xxs-12 flex-col-sm-8">
-												<div class="Field u-marginTop--xxs u-width--100">
-													<select id="js-nuggets" class="Field__input Field__input--globalSelect u-width--100 widget-active-state" style="max-width: none;" name="REVIEWSio_enable_nuggets_widget">
-														<option <?php echo ($enable_nuggets_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
-														<option <?php echo ($enable_nuggets_widget == 0) ? 'selected' : '' ?> value="0">No</option>
+											<div class="flex-col-xxs-12 flex-col-sm-6">
+												<div class="Field u-marginTop--xxs u-width--100" tooltip="Use the dropdown menu to choose where to show the widget." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
+													<?php
+														$polaris_review_widget = get_option('REVIEWSio_polaris_review_widget');
+													?>
+													<select id="polaris-widget-location" class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_polaris_review_widget" onchange="polarisTabActiveState()">
+														<option <?php echo ($polaris_review_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Tab</option>
+														<option <?php echo ($polaris_review_widget == 'summary') ? 'selected' : '' ?> value="summary">Show Below Product Summary</option>
+														<option <?php echo ($polaris_review_widget == 'bottom') ? 'selected' : '' ?> value="bottom">Show At Bottom of Page</option>
+														<option <?php echo ($polaris_review_widget == '0') ? 'selected' : '' ?> value="0">Do Not Display</option>
 													</select>
+													<div class="Field__label">
+														Widget Location
+													</div>
 												</div>
 											</div>
-										</div>
-									</div>
 
-									<div>
-										<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_nuggets_widget_options">Nuggets Widget Styles: </label>
-										<p class="TextBody TextBody--xxxs">
-											The dropdown menu to the right contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and the corresponding styles will be applied to your widget on saving changes.
-										</p>
-										<?php
-											$nuggets_widget_options = get_option('REVIEWSio_nuggets_widget_options');
-										?>
+											<?php if($polaris_review_widget == 'tab') { ?>
+												<div class="flex-col-xxs-12 flex-col-sm-6 js-polaris-review-tab-name">
+													<div class="Field u-marginTop--xxs u-width--100" tooltip="Sets the name of the review tab." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
+														<?php
+															$reviews_tab_name = get_option('REVIEWSio_reviews_tab_name');
+														?>
+														<input  class="Field__input" name='REVIEWSio_reviews_tab_name' value='<?php echo (!empty($reviews_tab_name) ? $reviews_tab_name : 'Reviews'); ?>'>
+
+														<div class="Field__label">
+															Review Tab Text
+														</div>
+													</div>
+												</div>
+											<?php } ?>
+										</div>
+
 										<div class="flex-row">
-											<div class="flex-col-xxs-12 flex-col-sm-8">
-												<div class="Field u-marginTop--xxs u-width--100">
-													<input id="nuggets-widget-option" type="hidden" value="<?php echo $nuggets_widget_options ?>">
-													<select id="nuggets-widget-options-dropdown" class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name='REVIEWSio_nuggets_widget_options'></select>
-												</div>
-											</div>
-										</div>
-									</div>
-
-									<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
-
-									<h3><strong>Nuggets Widget Shortcode Settings:</strong></h3>
-									<div class="flex-row" style="gap: 20px">
-										<div class="flex-col-xs">
-											<label class="TextHeading TextHeading--xxxs">UGC Widget Styles: </label>
-											<p class="TextBody TextBody--xxxs">
-												The dropdown menu contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and copy the shortcode generated below.
-											</p>
-											<div class="Field u-marginTop--md">
-												<select id="nuggets_shortcode-widget-options-dropdown" class="Field__input Field__input--globalSelect" onchange="addWidgetIdToShortcode(this)">
-													<option value="">Please Select</option>
-												</select>
-											</div>
-										</div>
-
-
-										<div class="flex-col-xs">
-											<label class="TextHeading TextHeading--xxxs">UGC SKU's: </label>
-											<p class="TextBody TextBody--xxxs">
-												If you wish to show specific product reviews for this particular shortcode, please type in the required sku's in text field below and copy the shortcode generated below.
-											</p>
-
-
-											<div class="Field u-marginTop--md">
-												<input id="nuggets_shortcode-widget-sku" type="text" class="Field__input" name='REVIEWSio_ugc_widget_sku' placeholder="sku1;sku2" oninput="addSkuToShortcode(this)">
-												<label class="Field__label">
-													SKU's
-												</label>
-											</div>
-
-
-										</div>
-									</div>
-
-									<div class="flex-row flex-center-xs u-marginTop--lg" style="gap: 10px;">
-										<div>
-											<div id="nuggets_shortcode-shortcode" style="padding: 9px; border: 1px solid #d1d8da; border-radius: 2px; display: flex; align-items: center; background-color: #EEEEEE">
-												[nuggets_widget<span></span><span></span>]
-											</div>
-										</div>
-										<div>
-											<div id="nuggets_shortcode-shortcode-copy-button" class="Button Button--primary Button--sm" onclick="copyToClipboard('nuggets_shortcode-shortcode-copy-button', 'nuggets_shortcode-shortcode')">
-												Copy Shortcode
-											</div>
-										</div>
-									</div>
-
-
-								</div>
-			
-								<div id="floating" class="form-table js-widget" style="display: none">
-									<div>
-										<h3><strong>Floating Widget Settings:</strong></h3>
-										<div class="flex-row flex-middle-xxs">
-											<div class="flex-col-xxs-12 flex-col-md-6">
-												<p>
-													A customisable floating widget that doesn't affect your website's layout. Shows reviews, merchant metrics, 3rd party feedback & more. The launcher button is positioned at the bottom or side of a screen.
-												</p>
-												<p>
-													The Floating widget is compact and fits in with the layout of your site. When clicked, it expands to reveal review content, containing star ratings and review comments.
-												</p>
-											</div>
-											<div class="flex-col-xxs-12 flex-col-md-6 u-textCenter--all">
-												<img style="max-width:420px" class="u-width--100" src="https://assets.reviews.io/img/all-global-assets/pages/widgets/thumbnail--floating-widget--center--custom@2x.png">
-											</div>
-										</div>
-
-										<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
-		
-										<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_enable_floating_react_widget">Enable floating Widget: </label>
-										<p class="TextBody TextBody--xxxs">
-											Use the dropdown menu to enable or disable the Floating widget. Select 'Yes' to enable the widget, or 'No' to disable.
-										</p>
-										
-										<?php
-											$enable_floating_react_widget = get_option('REVIEWSio_enable_floating_react_widget');
-										?>
-										<div class="flex-row">
-											<div class="flex-col-xxs-12 flex-col-sm-8">
-												<div class="Field u-marginTop--xxs u-width--100">
-													<select id="js-floating" class="Field__input Field__input--globalSelect u-width--100 widget-active-state" style="max-width: none;" name="REVIEWSio_enable_floating_react_widget">
-														<option <?php echo ($enable_floating_react_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
-														<option <?php echo ($enable_floating_react_widget == 0) ? 'selected' : '' ?> value="0">No</option>
-													</select>`
-												</div>
-											</div>
-										</div>
-									</div>
-			
-									<div>
-										<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_floating_react_widget_option">Floating Widget Styles: </label>
-										<p class="TextBody TextBody--xxxs">
-											The dropdown menu to the right contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and the corresponding styles will be applied to your widget on saving changes.
-										</p>
-
-										<?php
-											$floating_react_widget_options = get_option('REVIEWSio_floating_react_widget_options');
-										?>
-										<div class="flex-row">
-											<div class="flex-col-xxs-12 flex-col-sm-8">
-												<div class="Field u-marginTop--xxs u-width--100">
-													<input id="floating-react-widget-option" type="hidden" value="<?php echo $floating_react_widget_options ?>">
-													<select id="floating-react-widget-options-dropdown" class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name='REVIEWSio_floating_react_widget_options'></select>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-			
-								<div id="ugc" class="form-table js-widget" style="display: none">
-									<div>
-										<h3><strong>UGC Widget Shortcode Settings:</strong></h3>
-										<div class="flex-row flex-middle-xxs">
-											<div class="flex-col-xxs-12 flex-col-md-6">
-												<p>
-													Enhance your website with dynamic content and features by making use of shortcodes - small pieces of code enclosed in square brackets. You can easily add these shortcodes using the format <code>[widget_name]</code>. 
-												</p>
-												<p>
-													To use our UGC shortcode, you'll need to add a 'widget_id' - you can find this in our widget editor. The shortcode format is 
-													<br>
-													<code>[ugc_widget widget_id='your widget id']</code>. 
-												</p>
-												<p>
-													Additional information on embedding shortcodes can be found in the <a href="https://wordpress.com/support/wordpress-editor/blocks/shortcode-block/">WordPress Documentation</a>.
-												</p>
-											</div>
-											<div class="flex-col-xxs-12 flex-col-md-6 u-textCenter--all">
-												<img style="max-width:420px" class="u-width--100" src="https://assets.reviews.local/img/all-global-assets/pages/widgets/thumbnail--ugc-widget@2x.png">
-											</div>
-										</div>
-
-										<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
-
-
-										<div class="flex-row" style="gap: 20px">
-											<div class="flex-col-xs">
-												<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_ugc_widget_option">UGC Widget Styles: </label>
+											<div class="flex-col-xxs-12 u-paddingTop--sm">
+												<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_carousel_custom_styles">Custom Product Review Widget Styles</label>
 												<p class="TextBody TextBody--xxxs">
-													The dropdown menu contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and copy the shortcode generated below.
+													Set custom options and styles for the Product Review widget below to thoroughly customize every aspect of the widget. The options can be edited from the <a href="https://dash.reviews.<?php echo $region == 'uk' ? 'co.uk' : 'io' ?>/widgets/editor/product-reviews-widget" target="_blank">REVIEWS.io widget editor</a>
 												</p>
+												<p class="TextBody TextBody--xxxs">
+													<strong>Note:</strong> Adding styles in the field below will overwrite the styles form the Global Customizations tab. Leave the field empty if you wish to use styles from Global Customization and Advanced tab.
+												</p>
+
 												<?php
-													$ugc_widget_options = get_option('REVIEWSio_ugc_widget_options');
+													$polaris_custom_styles = get_option('REVIEWSio_polaris_custom_styles');
 												?>
-												<div class="Field u-marginTop--md">
-													<select id="ugc-widget-options-dropdown" name='REVIEWSio_ugc_widget_options' class="Field__input Field__input--globalSelect" onchange="addWidgetIdToShortcode(this)">
-														<option value="">Please Select</option>
-													</select>
-												</div>
-											</div>
-
-
-											<div class="flex-col-xs">
-												<label class="TextHeading TextHeading--xxxs">UGC SKU's: </label>
-												<p class="TextBody TextBody--xxxs">
-													If you wish to show specific product reviews for this particular shortcode, please type in the required sku's in text field below and copy the shortcode generated below.
-												</p>
-
-
-												<div class="Field u-marginTop--md">
-													<input id="ugc-widget-sku" type="text" class="Field__input" name='REVIEWSio_ugc_widget_sku' placeholder="sku1;sku2" oninput="addSkuToShortcode(this)">
-													<label class="Field__label">
-														SKU's
-													</label>
-												</div>
-
-
-											</div>
-										</div>
-
-										<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
-
-										<div class="flex-row flex-center-xs u-marginTop--lg" style="gap: 10px;">
-											<div>
-												<div id="ugc-shortcode" style="padding: 9px; border: 1px solid #d1d8da; border-radius: 2px; display: flex; align-items: center; background-color: #EEEEEE">
-													[ugc_widget<span></span><span></span>]
-												</div>
-											</div>
-											<div>
-												<div id="ugc-shortcode-copy-button" class="Button Button--primary Button--sm" onclick="copyToClipboard('ugc-shortcode-copy-button', 'ugc-shortcode')">
-													Copy Shortcode
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-			
-								<div id="survey" class="form-table js-widget" style="display: none">
-									<div>
-										<h3><strong>Survey Widget Settings:</strong></h3>
-										<div class="flex-row flex-middle-xxs">
-											<div class="flex-col-xxs-12 flex-col-md-6">
-												<p>
-													A customisable widget that displays your surveys and allows collecting feedback about your website, features and more.
-												</p>
-											</div>
-											<div class="flex-col-xxs-12 flex-col-md-6 u-textCenter--all">
-												<img style="max-width:420px" class="u-width--100" src="https://assets.reviews.io/img/all-global-assets/pages/widgets/thumbnail--survey-widget--center--minimal--thumbs@2x.png">
-											</div>
-										</div>
-
-										<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
-		
-										<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_enable_survey_widget">Enable Survey Widget: </label>
-										<p class="TextBody TextBody--xxxs">
-											Use the dropdown menu to enable or disable the Survey widget. Select 'Yes' to enable the widget, or 'No' to disable.
-										</p>
-		
-										<?php
-											$enable_survey_widget = get_option('REVIEWSio_enable_survey_widget');
-										?>
-										<div class="flex-row">
-											<div class="flex-col-xxs-12 flex-col-sm-8">
-												<div class="Field u-marginTop--xxs u-width--100">
-													<select id="js-survey" class="Field__input Field__input--globalSelect u-width--100 widget-active-state" style="max-width: none;" name="REVIEWSio_enable_survey_widget">
-														<option <?php echo ($enable_survey_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
-														<option <?php echo ($enable_survey_widget == 0) ? 'selected' : '' ?> value="0">No</option>
-													</select>
-												</div>
-											</div>
-										</div>
-									</div>
-			
-									<div>
-										<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_survey_widget_options">Survey Widget Styles: </label>
-										<p class="TextBody TextBody--xxxs">
-											The dropdown menu to the right contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and the corresponding styles will be applied to your widget on saving changes.
-										</p>
-
-										<?php
-											$survey_widget_options = get_option('REVIEWSio_survey_widget_options');
-										?>
-										<div class="flex-row">
-											<div class="flex-col-xxs-12 flex-col-sm-8">
-												<div class="Field u-marginTop--xxs u-width--100">
-													<input id="survey-widget-option" type="hidden" value="<?php echo $survey_widget_options ?>">
-													<select id="survey-widget-options-dropdown" class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name='REVIEWSio_survey_widget_options'></select>
-												</div>
-											</div>
-										</div>
-									</div>
-									
-									<div>
-										<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_survey_widget_campaign">Survey Widget Campaign: </label>
-										<p class="TextBody TextBody--xxxs">
-											Please select a campaign from the list of available campaigns. This will load the correct survey for the customers based on your selection.
-										</p>
-
-										<?php
-											$survey_widget_campaign = get_option('REVIEWSio_survey_widget_campaign');
-										?>
-										<div class="flex-row">
-											<div class="flex-col-xxs-12 flex-col-sm-8">
-												<div class="Field u-marginTop--xxs u-width--100">
-													<input class="Field__input" name='REVIEWSio_survey_widget_campaign' value='<?php echo (isset($survey_widget_campaign) ? $survey_widget_campaign : ''); ?>'>
-												</div>
+												<textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_polaris_custom_styles" style="width:100%;height:400px;border-color:#D1D8DA;border-radius:4px;padding:12px;"><?php echo $polaris_custom_styles; ?></textarea>
 											</div>
 										</div>
 									</div>
 								</div>
 
-								<div id="rating-bar" class="form-table js-widget" style="display: none">
-									<div>
-										<h3><strong>Rating Bar Shortcode Settings:</strong></h3>
-										<div class="flex-row flex-middle-xxs">
-											<div class="flex-col-xxs-12 flex-col-md-6">
-												<p>
-													Enhance your website with dynamic content and features by making use of shortcodes - small pieces of code enclosed in square brackets. You can easily add these shortcodes using the format <code>[widget_name]</code>. 
-												</p>
-												<p>
-													To use our Rating Bar shortcode, you'll need to add a 'widget_id' - you can find this in our widget editor. The shortcode format is 
-													<br>
-													<code>[carousel_widget widget_id='your widget id']</code>. 
-												</p>
-												<p>
-													Additional information on embedding shortcodes can be found in the <a href="https://wordpress.com/support/wordpress-editor/blocks/shortcode-block/">WordPress Documentation</a>.
-												</p>
-											</div>
-											<div class="flex-col-xxs-12 flex-col-md-6 u-textCenter--all">
-												<img style="max-width:420px" class="u-width--100" src="https://assets.reviews.local/img/all-global-assets/pages/widgets/thumbnail--rating-bar-widget--top--1@2x.png">
-											</div>
-										</div>
-
-										<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
-
-										<div class="flex-row" style="gap: 20px">
-											<div class="flex-col-xs">
-												<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_ugc_widget_option">Rating Bar Widget Styles: </label>
-												<p class="TextBody TextBody--xxxs">
-													The dropdown menu contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and copy the shortcode generated below.
-												</p>
-												<div class="Field u-marginTop--md">
-													<select id="rating_bar-widget-options-dropdown" class="Field__input Field__input--globalSelect" onchange="addWidgetIdToShortcode(this)">
-														<option value="">Please Select</option>
-													</select>
-												</div>
-											</div>
-
-
-											<div class="flex-col-xs">
-												<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_survey_widget_campaign">UGC SKU's: </label>
-												<p class="TextBody TextBody--xxxs">
-													If you wish to show specific product reviews for this particular shortcode, please type in the required sku's in text field below and copy the shortcode generated below.
-												</p>
-
-
-												<div class="Field u-marginTop--md">
-													<input id="rating_bar-widget-sku" type="text" class="Field__input" name='REVIEWSio_ugc_widget_sku' placeholder="sku1;sku2" oninput="addSkuToShortcode(this)">
-													<label class="Field__label">
-														SKU's
-													</label>
-												</div>
-											</div>
-										</div>
-
-										<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
-
-										<div class="flex-row flex-center-xs u-marginTop--lg" style="gap: 10px;">
-											<div>
-												<div id="rating_bar-shortcode" style="padding: 9px; border: 1px solid #d1d8da; border-radius: 2px; display: flex; align-items: center; background-color: #EEEEEE">
-													[rating_bar_widget<span></span><span></span>]
-												</div>
-											</div>
-											<div>
-												<div id="rating_bar-shortcode-copy-button" class="Button Button--primary Button--sm" onclick="copyToClipboard('rating_bar-shortcode-copy-button', 'rating_bar-shortcode')">
-													Copy Shortcode
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-
-								<div id="rating-snippet" class="form-table js-widget">
+								<div id="rating-snippet" class="form-table js-widget" style="display: none">
 									<div>
 										<div>
-											<h3><strong>Rating Snippet Settings:</strong></h3>
 											<div class="flex-row flex-middle-xxs">
 												<div class="flex-col-xxs-12 flex-col-md-6">
+													<h3><strong>Rating Snippet Settings</strong></h3>
+													<p>An ideal way to display a product rating on your category pages.</p>
 													<p>
-														An ideal way to display a product rating on your category pages.
+														Quickly evaluate the overall customer sentiment by considering the average rating and review count. This helps customers gauge the satisfaction level of previous buyers for customers to utilize this snippet to make an informed purchasing decision.
+													</p>
+													<p>
+														Access detailed information by clicking on the snippet to open our product reviews widget displaying individual reviews.
 													</p>
 												</div>
 												<div class="flex-col-xxs-12 flex-col-md-6 u-textCenter--all">
-													<img style="max-width:420px" class="u-width--100" src="https://assets.reviews.io/img/all-global-assets/pages/widgets/thumbnail--rating-snippets.png">
+													<img style="max-width:420px" class="u-width--100" src="https://assets.reviews.io/img/all-global-assets/pages/widgets/thumbnail--rating-snippets@2x.png">
 												</div>
 											</div>
 
@@ -1451,21 +1015,465 @@ if(!defined('ABSPATH')) {
 									</div>
 								</div>
 
-								<div id="carousel" class="form-table js-widget" style="display: none">
+								<div id="nuggets" class="form-table js-widget" style="display: none">
+									<div class="flex-row flex-middle-xxs">
+										<div class="flex-col-xxs-12 flex-col-md-6">
+											<h3><strong>Nuggets Widget Settings</strong></h3>
+											<p>
+												A mobile-friendly Review Nuggets Widget that displays excerpts from company and product reviews. It can be placed close to your call-to-action buttons.
+											</p>
+											<ul class="list">
+												<li>Easy to select review snippets to add to the nugget from already existing reviews.</li>
+												<li>This can be placed next to a product on a product page.</li>
+												<li>Customize the types of reviews shown.</li>
+												<li>Able to style in line with the user's requirements.</li>
+												<li>Minimal design.</li>
+											</ul>
+										</div>
+										<div class="flex-col-xxs-12 flex-col-md-6 u-textCenter--all">
+											<img style="max-width:420px" class="u-width--100" src="https://assets.reviews.io/img/all-global-assets/pages/widgets/thumbnail--nuggets-widget@2x.png">
+										</div>
+									</div>
+
+									<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+
+									<h3><strong>Nuggets on Product Page</strong></h3>
 									<div>
-										<h3><strong>Carousel Shortcode Settings:</strong></h3>
+										<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_enable_nuggets_widget">Add Widget Above "Call to Action" Button</label>
+										<p class="TextBody TextBody--xxxs u-marginBottom--md">
+											Use the dropdown menu to enable or disable the Nuggets widget. Select 'Yes' to enable the widget, or 'No' to disable.
+										</p>
+		
+										<div class="flex-row">
+											<div class="flex-col-xxs-12 flex-col-sm-6">
+												<div class="Field u-marginTop--xxs u-width--100" tooltip="Use the dropdown menu to enable or disable the Nuggets widget. Select 'Yes' to enable the widget, or 'No' to disable." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
+													<?php
+														$enable_nuggets_widget = get_option('REVIEWSio_enable_nuggets_widget');
+													?>
+													<select id="js-nuggets" class="Field__input Field__input--globalSelect u-width--100 widget-active-state" style="max-width: none;" name="REVIEWSio_enable_nuggets_widget" onchange="widgetOptionsActiveState(this)">
+														<option <?php echo ($enable_nuggets_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
+														<option <?php echo ($enable_nuggets_widget == 0) ? 'selected' : '' ?> value="0">No</option>
+													</select>
+													<div class="Field__label">
+														Setting
+													</div>
+												</div>
+											</div>
+											<div class="flex-col-xxs-12 flex-col-sm-6 js-nuggets-widget-option-container">
+												<div class="Field u-marginTop--xxs u-width--100" tooltip="The dropdown menu to the contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and the corresponding styles will be applied to your widget on saving changes." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
+													<?php
+														$nuggets_widget_options = get_option('REVIEWSio_nuggets_widget_options');
+													?>
+													<input id="nuggets-widget-option" type="hidden" value="<?php echo $nuggets_widget_options ?>">
+													<select id="nuggets-widget-options-dropdown" class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name='REVIEWSio_nuggets_widget_options'></select>
+													<div class="Field__label">
+														Widget Style
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+
+									<div>
+										<h3><strong>Generate Nuggets Widget Shortcode</strong></h3>
+										<p class="TextBody TextBody--xxxs">
+											Enhance your website with dynamic content and features using shortcodes, which are small pieces of code enclosed in square brackets, using <code>[widget_name]</code>. For our Nuggets shortcode, simply add the 'widget_id' from our widget editor in the format <code>[nuggets_widget widget_id='your widget id']</code>. 
+										</p>
+										<p class="TextBody TextBody--xxxs u-marginBottom--md">
+											Additional information on embedding shortcodes can be found in the <a href="https://wordpress.com/support/wordpress-editor/blocks/shortcode-block/" target="_blank">WordPress Documentation</a>.
+										</p>
+										<p class="TextBody TextBody--xxxs u-marginBottom--md">
+											Generate the widget shortcode using the controls provided and add it to specific template files to incorporate the Nuggets widget on your desired page.
+										</p>
+										<div class="flex-row">
+											<div class="flex-col-xxs-12 flex-col-sm-6">
+												<div class="Field u-marginTop--xxs u-width--100" tooltip="The dropdown menu contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and copy the shortcode generated below." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
+													<select id="nuggets_shortcode-widget-options-dropdown" class="Field__input Field__input--globalSelect" onchange="addWidgetIdToShortcode(this)">
+														<option value="">Please Select</option>
+													</select>
+													<div class="Field__label">
+														Widget Style
+													</div>
+												</div>
+											</div>
+											<div class="flex-col-xxs-12 flex-col-sm-6">
+												<div class="Field u-marginTop--xxs u-width--100" tooltip="If you wish to show specific product reviews for this particular shortcode, please type in the required sku's in text field below and copy the shortcode generated below." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
+													<input id="nuggets_shortcode-widget-sku" type="text" class="Field__input" placeholder="sku1;sku2" oninput="addSkuToShortcode(this)">
+													<div class="Field__label">
+														Sku (Optional)
+													</div>
+												</div>
+											</div>
+										</div>
+	
+	
+										<div class="GlobalNotification GlobalNotification--coloured-success u-marginBottom--lg">
+											<div class="flex-row flex-middle-xxs">
+												<div class="flex-col-xxs-1 u-textCenter--all">
+													<img class="GlobalNotification__imageIcon" src="https://assets.reviews.io/img/all-global-assets/icons/icon-code--md--colour.svg">
+												</div>
+												<div class="flex-col-xxs-9">
+													<div class="TextHeading TextHeading--xxxxs">Use the following shortcode to embed widget on a page:</div>
+													<div id="nuggets_shortcode-shortcode" class="TextBody TextBody--xxxs u-marginBottom--none">
+														[nuggets_widget<span></span><span></span>]
+													</div>
+												</div>
+												<div class="flex-col-xxs-2 u-textRight--all">
+													<div id="nuggets_shortcode-shortcode-copy-button" class="Button Button--xs Button--outline u-marginBottom--none" onclick="copyToClipboard('nuggets_shortcode-shortcode-copy-button', 'nuggets_shortcode-shortcode')">
+														Copy
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+			
+								<div id="floating" class="form-table js-widget" style="display: none">
+									<div>
 										<div class="flex-row flex-middle-xxs">
 											<div class="flex-col-xxs-12 flex-col-md-6">
+												<h3><strong>Floating Widget Settings</strong></h3>
 												<p>
-													Enhance your website with dynamic content and features by making use of shortcodes - small pieces of code enclosed in square brackets. You can easily add these shortcodes using the format <code>[widget_name]</code>. 
+													A customisable floating widget that doesn't affect your website's layout. Shows reviews, merchant metrics, 3rd party feedback & more. The launcher button is positioned at the bottom or side of a screen.
 												</p>
 												<p>
-													To use our Carousel shortcode, simply add a 'carousel_widget' in square brackets - you can find this in our widget editor. The shortcode format is 
-													<br>
-													<code>[carousel_widget]</code>. 
+													The Floating widget is compact and fits in with the layout of your site. When clicked, it expands to reveal review content, containing star ratings and review comments.
+												</p>
+											</div>
+											<div class="flex-col-xxs-12 flex-col-md-6 u-textCenter--all">
+												<img style="max-width:420px" class="u-width--100" src="https://assets.reviews.io/img/all-global-assets/pages/widgets/thumbnail--floating-widget--center--custom@2x.png">
+											</div>
+										</div>
+
+										<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+
+										<div>
+											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_enable_nuggets_widget">Add Widget in the site</label>
+											<p class="TextBody TextBody--xxxs u-marginBottom--md">
+												Use the dropdown menu to enable or disable the Nuggets widget. Select 'Yes' to enable the widget, or 'No' to disable.
+											</p>
+			
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-6">
+													<div class="Field u-marginTop--xxs u-width--100" tooltip="Use the dropdown menu to enable or disable the Floating widget. Select 'Yes' to enable the widget, or 'No' to disable." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
+														<?php
+															$enable_floating_react_widget = get_option('REVIEWSio_enable_floating_react_widget');
+														?>
+														<select id="js-floating" class="Field__input Field__input--globalSelect u-width--100 widget-active-state" style="max-width: none;" name="REVIEWSio_enable_floating_react_widget"  onchange="widgetOptionsActiveState(this)">
+															<option <?php echo ($enable_floating_react_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
+															<option <?php echo ($enable_floating_react_widget == 0) ? 'selected' : '' ?> value="0">No</option>
+														</select>
+														<div class="Field__label">
+															Setting
+														</div>
+													</div>
+												</div>
+												<div class="flex-col-xxs-12 flex-col-sm-6 js-floating-widget-option-container">
+													<div class="Field u-marginTop--xxs u-width--100" tooltip="The dropdown menu to the contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and the corresponding styles will be applied to your widget on saving changes." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
+														<?php
+															$floating_react_widget_options = get_option('REVIEWSio_floating_react_widget_options');
+														?>
+														<input id="floating-react-widget-option" type="hidden" value="<?php echo $floating_react_widget_options ?>">
+														<select id="floating-react-widget-options-dropdown" class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name='REVIEWSio_floating_react_widget_options'></select>
+														<div class="Field__label">
+															Widget Style
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+								<?php /*
+										<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_enable_floating_react_widget">Enable floating Widget: </label>
+										<p class="TextBody TextBody--xxxs">
+											Use the dropdown menu to enable or disable the Floating widget. Select 'Yes' to enable the widget, or 'No' to disable.
+										</p>
+										
+										<?php
+											$enable_floating_react_widget = get_option('REVIEWSio_enable_floating_react_widget');
+										?>
+										<div class="flex-row">
+											<div class="flex-col-xxs-12 flex-col-sm-6">
+												<div class="Field u-marginTop--xxs u-width--100">
+													<select id="js-floating" class="Field__input Field__input--globalSelect u-width--100 widget-active-state" style="max-width: none;" name="REVIEWSio_enable_floating_react_widget">
+														<option <?php echo ($enable_floating_react_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
+														<option <?php echo ($enable_floating_react_widget == 0) ? 'selected' : '' ?> value="0">No</option>
+													</select>`
+												</div>
+											</div>
+										</div>
+									</div>
+			
+									<div>
+										<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_floating_react_widget_option">Floating Widget Styles: </label>
+										<p class="TextBody TextBody--xxxs">
+											The dropdown menu to the right contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and the corresponding styles will be applied to your widget on saving changes.
+										</p>
+
+										<?php
+											$floating_react_widget_options = get_option('REVIEWSio_floating_react_widget_options');
+										?>
+										<div class="flex-row">
+											<div class="flex-col-xxs-12 flex-col-sm-6">
+												<div class="Field u-marginTop--xxs u-width--100">
+													<input id="floating-react-widget-option" type="hidden" value="<?php echo $floating_react_widget_options ?>">
+													<select id="floating-react-widget-options-dropdown" class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name='REVIEWSio_floating_react_widget_options'></select>
+												</div>
+											</div>
+										</div>
+								*/ ?>
+									</div>
+								</div>
+			
+								<div id="ugc" class="form-table js-widget" style="display: none">
+									<div>
+										<div class="flex-row flex-middle-xxs">
+											<div class="flex-col-xxs-12 flex-col-md-6">
+												<h3><strong>UGC Widget Shortcode Settings</strong></h3>
+												<p>
+													Showcase a collection of user-generated content, including engaging reviews and vibrant Instagram photos, creating an immersive visual experience that captivates your audience and highlights the authenticity of your brand
 												</p>
 												<p>
-													Additional information on embedding shortcodes can be found in the <a href="https://wordpress.com/support/wordpress-editor/blocks/shortcode-block/">WordPress Documentation</a>.
+													By incorporating UGC galleries, you can leverage the social proof and credibility of user-generated content to boost customer trust, encourage active engagement, and ultimately drive conversions.
+												</p>
+											</div>
+											<div class="flex-col-xxs-12 flex-col-md-6 u-textCenter--all">
+												<img style="max-width:420px" class="u-width--100" src="https://assets.reviews.local/img/all-global-assets/pages/widgets/thumbnail--ugc-widget@2x.png">
+											</div>
+										</div>
+
+										<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+
+										<div>
+											<h3><strong>Generate UGC Widget Shortcode</strong></h3>
+											<p class="TextBody TextBody--xxxs">
+												Enhance your website with dynamic content and features using shortcodes, which are small pieces of code enclosed in square brackets, using <code>[widget_name]</code>. For our UGC shortcode, simply add the 'widget_id' from our widget editor in the format <code>[ugc_widget widget_id='your widget id']</code>. 
+											</p>
+											<p class="TextBody TextBody--xxxs u-marginBottom--md">
+												Additional information on embedding shortcodes can be found in the <a href="https://wordpress.com/support/wordpress-editor/blocks/shortcode-block/" target="_blank">WordPress Documentation</a>.
+											</p>
+											<p class="TextBody TextBody--xxxs u-marginBottom--md">
+												Generate the widget shortcode using the controls provided and add it to specific template files to incorporate the UGC widget on your desired page.
+											</p>
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-6">
+													<div class="Field u-marginTop--xxs u-width--100" tooltip="The dropdown menu contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and copy the shortcode generated below." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
+														<select id="ugc-widget-options-dropdown" class="Field__input Field__input--globalSelect" onchange="addWidgetIdToShortcode(this)">
+														<option value="">Please Select</option>
+													</select>
+														<div class="Field__label">
+															Widget Style
+														</div>
+													</div>
+												</div>
+												<div class="flex-col-xxs-12 flex-col-sm-6">
+													<div class="Field u-marginTop--xxs u-width--100" tooltip="If you wish to show specific product reviews for this particular shortcode, please type in the required sku's in text field below and copy the shortcode generated below." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
+														<input id="ugc-widget-sku" type="text" class="Field__input" name='REVIEWSio_ugc_widget_sku' placeholder="sku1;sku2" oninput="addSkuToShortcode(this)">
+														<div class="Field__label">
+															Sku (Optional)
+														</div>
+													</div>
+												</div>
+											</div>
+		
+		
+											<div class="GlobalNotification GlobalNotification--coloured-success u-marginBottom--lg">
+												<div class="flex-row flex-middle-xxs">
+													<div class="flex-col-xxs-1 u-textCenter--all">
+														<img class="GlobalNotification__imageIcon" src="https://assets.reviews.io/img/all-global-assets/icons/icon-code--md--colour.svg">
+													</div>
+													<div class="flex-col-xxs-9">
+														<div class="TextHeading TextHeading--xxxxs">Use the following shortcode to embed widget on a page:</div>
+														<div id="ugc-shortcode" class="TextBody TextBody--xxxs u-marginBottom--none">
+															[ugc_widget<span></span><span></span>]
+														</div>
+													</div>
+													<div class="flex-col-xxs-2 u-textRight--all">
+														<div id="ugc-shortcode-copy-button" class="Button Button--xs Button--outline u-marginBottom--none" onclick="copyToClipboard('ugc-shortcode-copy-button', 'ugc-shortcode')">
+															Copy
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+			
+								<div id="survey" class="form-table js-widget" style="display: none">
+									<div>
+										<div class="flex-row flex-middle-xxs">
+											<div class="flex-col-xxs-12 flex-col-md-6">
+												<h3><strong>Survey Widget Settings</strong></h3>
+												<p>
+													A customisable widget that displays your surveys. 
+													<br><br>
+													Integrating the survey widget on your website can help you gather valuable feedback on various aspects of your online presence, such as website functionality, features, user experience, and more. This feedback can inform decision-making and drive improvements to enhance overall customer satisfaction.
+												</p>
+											</div>
+											<div class="flex-col-xxs-12 flex-col-md-6 u-textCenter--all">
+												<img style="max-width:420px" class="u-width--100" src="https://assets.reviews.io/img/all-global-assets/pages/widgets/thumbnail--survey-widget--center--minimal--thumbs@2x.png">
+											</div>
+										</div>
+
+										<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+
+										<div>
+											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_enable_nuggets_widget">Add widget in the site</label>
+											<p class="TextBody TextBody--xxxs u-marginBottom--md">
+												Use the dropdown menu to enable or disable the Survey widget. Select 'Yes' to enable the widget, or 'No' to disable.
+											</p>
+			
+
+
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-6">
+													<div class="Field u-marginTop--xxs u-width--100" tooltip="Use the dropdown menu to enable or disable the Nuggets widget. Select 'Yes' to enable the widget, or 'No' to disable." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
+														<?php
+															$enable_survey_widget = get_option('REVIEWSio_enable_survey_widget');
+														?>
+														<select id="js-survey" class="Field__input Field__input--globalSelect u-width--100 widget-active-state" style="max-width: none;" name="REVIEWSio_enable_survey_widget" onchange="widgetOptionsActiveState(this)">
+															<option <?php echo ($enable_survey_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
+															<option <?php echo ($enable_survey_widget == 0) ? 'selected' : '' ?> value="0">No</option>
+														</select>
+														<div class="Field__label">
+															Setting
+														</div>
+													</div>
+												</div>
+												
+												<div class="flex-col-xxs-12 flex-col-sm-6 js-survey-widget-option-container">
+													<div class="Field u-marginTop--xxs u-width--100" tooltip="The dropdown menu to the contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and the corresponding styles will be applied to your widget on saving changes." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
+														<?php
+															$survey_widget_options = get_option('REVIEWSio_survey_widget_options');
+														?>
+														<input id="survey-widget-option" type="hidden" value="<?php echo $survey_widget_options ?>">
+														<select id="survey-widget-options-dropdown" class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name='REVIEWSio_survey_widget_options'></select>
+														<div class="Field__label">
+															Widget Style
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div>
+
+
+											<div class="flex-row js-survey-widget-option-container">
+												<div class="flex-col-xxs-12">
+													<div class="Field u-marginTop--xxs u-width--100" tooltip="Please select a campaign from the list of available campaigns. This will load the correct survey for the customers based on your selection." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
+														<?php
+															$survey_widget_campaign_options = get_option('REVIEWSio_survey_widget_campaign_options');
+														?>
+														<input id="survey-widget-campaign" type="hidden" value="<?php echo $survey_widget_campaign_options ?>">
+														<select id="survey-widget-campaign-dropdown" class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name='REVIEWSio_survey_widget_campaign_options'>
+															<option value="">Please Select</option>
+														</select>
+														<div class="Field__label">
+															Survey Widget Campaign
+														</div>
+													</div>
+												</div>
+											</div>
+
+
+											
+										</div>
+
+
+
+		
+									</div>
+									
+								</div>
+
+								<div id="rating-bar" class="form-table js-widget" style="display: none">
+									<div>
+										<div class="flex-row flex-middle-xxs">
+											<div class="flex-col-xxs-12 flex-col-md-6">
+												<h3><strong>Rating Bar Shortcode Settings</strong></h3>
+												<p>
+													Elevate your website's appeal and engagement with our versatile and customizable rating bar widget. Seamlessly display your overall rating and review count in a visually appealing format that effortlessly integrates into your website's design. 
+												</p>
+												<p>
+													Whether you choose to incorporate it as an elegant inline element or as a convenient sticky bar positioned at the top or bottom of the page, our rating bar widget empowers you to effortlessly showcase the essence of your customers' experiences, adding a touch of sophistication and credibility to your brand.
+												</p>
+											</div>
+											<div class="flex-col-xxs-12 flex-col-md-6 u-textCenter--all">
+												<img style="max-width:420px" class="u-width--100" src="https://assets.reviews.local/img/all-global-assets/pages/widgets/thumbnail--rating-bar-widget--top--1@2x.png">
+											</div>
+										</div>
+
+										<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+
+										<div>
+											<h3><strong>Generate Rating Bar Shortcode</strong></h3>
+											<p class="TextBody TextBody--xxxs">
+												Enhance your website with dynamic content and features using shortcodes, which are small pieces of code enclosed in square brackets, using <code>[widget_name]</code>. For our Rating Bar shortcode, simply add the 'widget_id' from our widget editor in the format <code>[rating_bar_widget widget_id='your widget id']</code>. 
+											</p>
+											<p class="TextBody TextBody--xxxs u-marginBottom--md">
+												Additional information on embedding shortcodes can be found in the <a href="https://wordpress.com/support/wordpress-editor/blocks/shortcode-block/" target="_blank">WordPress Documentation</a>.
+											</p>
+											<p class="TextBody TextBody--xxxs u-marginBottom--md">
+												Generate the widget shortcode using the controls provided and add it to specific template files to incorporate the Rating Bar widget on your desired page.
+											</p>
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-6">
+													<div class="Field u-marginTop--xxs u-width--100" tooltip="The dropdown menu contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and copy the shortcode generated below." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
+														<select id="rating_bar-widget-options-dropdown" class="Field__input Field__input--globalSelect" onchange="addWidgetIdToShortcode(this)">
+															<option value="">Please Select</option>
+														</select>
+														<div class="Field__label">
+															Widget Style
+														</div>
+													</div>
+												</div>
+												<div class="flex-col-xxs-12 flex-col-sm-6">
+													<div class="Field u-marginTop--xxs u-width--100" tooltip="If you wish to show specific product reviews for this particular shortcode, please type in the required sku's in text field below and copy the shortcode generated below." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
+														<input id="rating_bar-widget-sku" type="text" class="Field__input" placeholder="sku1;sku2" oninput="addSkuToShortcode(this)">
+														<div class="Field__label">
+															Sku (Optional)
+														</div>
+													</div>
+												</div>
+											</div>
+		
+		
+											<div class="GlobalNotification GlobalNotification--coloured-success u-marginBottom--lg">
+												<div class="flex-row flex-middle-xxs">
+													<div class="flex-col-xxs-1 u-textCenter--all">
+														<img class="GlobalNotification__imageIcon" src="https://assets.reviews.io/img/all-global-assets/icons/icon-code--md--colour.svg">
+													</div>
+													<div class="flex-col-xxs-9">
+														<div class="TextHeading TextHeading--xxxxs">Use the following shortcode to embed widget on a page:</div>
+														<div id="rating_bar-shortcode" class="TextBody TextBody--xxxs u-marginBottom--none">
+															[rating_bar_widget<span></span><span></span>]
+														</div>
+													</div>
+													<div class="flex-col-xxs-2 u-textRight--all">
+														<div id="rating_bar-shortcode-copy-button" class="Button Button--xs Button--outline u-marginBottom--none" onclick="copyToClipboard('rating_bar-shortcode-copy-button', 'rating_bar-shortcode')">
+															Copy
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div id="carousel" class="form-table js-widget" style="display: none">
+									<div>
+										<div class="flex-row flex-middle-xxs">
+											<div class="flex-col-xxs-12 flex-col-md-6">
+												<h3><strong>Carousel Shortcode Settings</strong></h3>
+												<p>
+													A minimal carousel widget with a header on the side. Displays reviews, photos, videos & feedback from 3rd party platforms in cards sliding horizontally.
+												</p>
+												<p>
+													Present a diverse range of reviews in a visually appealing and interactive manner, allowing users to explore and engage with a variety of reviews, photos and videos.
 												</p>
 											</div>
 											<div class="flex-col-xxs-12 flex-col-md-6 u-textCenter--all">
@@ -1475,42 +1483,51 @@ if(!defined('ABSPATH')) {
 
 										<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
 
+										<h3><strong>Generate Carousel Shortcode</strong></h3>
+										<p class="TextBody TextBody--xxxs">
+											Enhance your website with dynamic content and features using shortcodes, which are small pieces of code enclosed in square brackets, using <code>[widget_name]</code>. For our Rating Bar shortcode, simply add the 'widget_id' from our widget editor in the format <code>[rating_bar_widget widget_id='your widget id']</code>. 
+										</p>
+										<p class="TextBody TextBody--xxxs u-marginBottom--md">
+											Additional information on embedding shortcodes can be found in the <a href="https://wordpress.com/support/wordpress-editor/blocks/shortcode-block/" target="_blank">WordPress Documentation</a>.
+										</p>
 										<div class="flex-row" style="gap: 20px">
 											<div class="flex-col-xs">
-												<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_ugc_widget_option">Carousel Type: </label>
-												<p class="TextBody TextBody--xxxs">
-													Select the type of Carousel widget to display in the page, which will be applied to all carousel shortcodes.
+												<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_carousel_type">Carousel Type</label>
+												<p class="TextBody TextBody--xxxs u-marginBottom--md">
+													Generate the widget shortcode using the controls provided and add it to specific template files to incorporate the Rating Bar widget on your desired page.
 													<br>
-													<strong>Note:</strong> Please save the changes to apply the carousel type.
+												 	<strong>Note:</strong> Please save any changes you wish to make to the Carousel Type or Custom Carousel Styles field.
 												</p>
-												<?php
-													$carousel_type = get_option('REVIEWSio_carousel_type');
-												?>
-												<div class="Field u-marginTop--md">
-													<select class="Field__input Field__input--globalSelect" name="REVIEWSio_carousel_type">
-														<option <?php echo ($carousel_type == 'card') ? 'selected' : '' ?> value="card">Card Carousel</option>
-														<option <?php echo ($carousel_type == 'carousel') ? 'selected' : '' ?> value="carousel">Carousel</option>
-														<option <?php echo ($carousel_type == 'fullwidth_card') ? 'selected' : '' ?> value="fullwidth_card">Fullwidth Card Carousel</option>
-														<option <?php echo ($carousel_type == 'fullwidth') ? 'selected' : '' ?> value="fullwidth">Fullwidth Carousel</option>
-														<option <?php echo ($carousel_type == 'bulky') ? 'selected' : '' ?> value="bulky">Bulky Carousel</option>
-													</select>
+												<div class="flex-row">
+													<div class="flex-col-xxs-12 flex-col-sm-6">
+														<div class="Field u-marginTop--xxs u-width--100" tooltip="Select the type of Carousel widget to display in the page, which will be applied to all carousel shortcodes. Note: Please save the changes to apply the carousel type." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
+															<?php
+																$carousel_type = get_option('REVIEWSio_carousel_type');
+															?>
+															<select class="Field__input Field__input--globalSelect" name="REVIEWSio_carousel_type">
+																<option <?php echo ($carousel_type == 'card') ? 'selected' : '' ?> value="card">Card Carousel</option>
+																<option <?php echo ($carousel_type == 'carousel') ? 'selected' : '' ?> value="carousel">Carousel</option>
+																<option <?php echo ($carousel_type == 'fullwidth_card') ? 'selected' : '' ?> value="fullwidth_card">Fullwidth Card Carousel</option>
+																<option <?php echo ($carousel_type == 'fullwidth') ? 'selected' : '' ?> value="fullwidth">Fullwidth Carousel</option>
+																<option <?php echo ($carousel_type == 'bulky') ? 'selected' : '' ?> value="bulky">Bulky Carousel</option>
+															</select>
+															<div class="Field__label">
+																Carousel Type
+															</div>
+														</div>
+													</div>
+													<div class="flex-col-xxs-12 flex-col-sm-6">
+														<div class="Field u-marginTop--xxs u-width--100" tooltip="If you wish to show specific product reviews for this particular shortcode, please type in the required sku's in text field below and copy the shortcode generated below." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
+															<input id="carousel-widget-sku" type="text" class="Field__input" placeholder="sku1;sku2" oninput="addSkuToShortcode(this)">
+															<div class="Field__label">
+																Sku (Optional)
+															</div>
+														</div>
+													</div>
 												</div>
+
 											</div>
 
-											<div class="flex-col-xs">
-												<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_survey_widget_campaign">UGC SKU's: </label>
-												<p class="TextBody TextBody--xxxs">
-													If you wish to show specific product reviews for this particular shortcode, please type in the required sku's in text field below and copy the shortcode generated below.
-												</p>
-
-
-												<div class="Field u-marginTop--md">
-													<input id="carousel-widget-sku" type="text" class="Field__input" name='REVIEWSio_ugc_widget_sku' placeholder="sku1;sku2" oninput="addSkuToShortcode(this)">
-													<label class="Field__label">
-														SKU's
-													</label>
-												</div>
-											</div>
 										</div>
 				
 										<div class="u-paddingTop--sm">
@@ -1524,25 +1541,250 @@ if(!defined('ABSPATH')) {
 											<?php
 												$carousel_custom_styles = get_option('REVIEWSio_carousel_custom_styles');
 											?>
-											<textarea name="REVIEWSio_carousel_custom_styles" style="width:100%;height:400px;"><?php echo $carousel_custom_styles; ?></textarea>
+											<textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_carousel_custom_styles" style="width:100%;height:400px;border-color:#D1D8DA;border-radius:4px;padding:12px;"><?php echo $carousel_custom_styles; ?></textarea>
 										</div>
 
-										<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
-
-										<div class="flex-row flex-center-xs u-marginTop--lg" style="gap: 10px;">
-											<div>
-												<div id="carousel-shortcode" style="padding: 9px; border: 1px solid #d1d8da; border-radius: 2px; display: flex; align-items: center; background-color: #EEEEEE">
-													[carousel_widget<span></span><span></span>]
+										<div class="GlobalNotification GlobalNotification--coloured-success u-marginBottom--lg u-marginTop--lg">
+											<div class="flex-row flex-middle-xxs">
+												<div class="flex-col-xxs-1 u-textCenter--all">
+													<img class="GlobalNotification__imageIcon" src="https://assets.reviews.io/img/all-global-assets/icons/icon-code--md--colour.svg">
 												</div>
-											</div>
-											<div>
-												<div id="carousel-shortcode-copy-button" class="Button Button--primary Button--sm" onclick="copyToClipboard('carousel-shortcode-copy-button', 'carousel-shortcode')">
-													Copy Shortcode
+												<div class="flex-col-xxs-9">
+													<div class="TextHeading TextHeading--xxxxs">Use the following shortcode to embed widget on a page:</div>
+													<div id="carousel-shortcode" class="TextBody TextBody--xxxs u-marginBottom--none">
+														[carousel_widget<span></span><span></span>]
+													</div>
+												</div>
+												<div class="flex-col-xxs-2 u-textRight--all">
+													<div id="carousel-shortcode-copy-button" class="Button Button--xs Button--outline u-marginBottom--none" onclick="copyToClipboard('carousel-shortcode-copy-button', 'carousel-shortcode')">
+														Copy
+													</div>
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
+
+								<div id="legacy" class="form-table js-widget" style="display: none">
+									<div class="GlobalNotification GlobalNotification--sm GlobalNotification--coloured-warning u-marginBottom--md js-feed-notification" style="display: block;">
+										<div class="flex-row flex-middle-xxs">
+											<div class="flex-col-xxs-12">
+												<div class="TextHeading TextHeading--xxxxs u-marginBottom--none">
+													Please Note
+												</div>
+												<div id="js-collector-current-widget-info" class="js-collector-toggle-info TextBody TextBody--xxxs u-marginBottom--none">
+													The widgets and options below are being deprecated and will be removed in future updates, please use the main widgets found under the REVIEWS.io Widgets tab to ensure you have the latest updates and features.
+												</div>
+											</div>
+										</div>
+									</div>
+									<div>
+										<h3><strong>Floating Widget Settings</strong></h3>
+										<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_floating_widget">Enable Legacy Floating Widget: </label>
+										<div>
+											<p class="TextBody TextBody--xxxs">
+												A floating reviews tab will be added to the right side of your site.
+											</p>
+										</div>
+										<?php
+											$enable_floating_widget = get_option('REVIEWSio_enable_floating_widget');
+										?>
+										<div class="flex-row">
+											<div class="flex-col-xxs-12 flex-col-sm-6">
+												<div class="Field u-marginTop--xxs u-width--100">
+													<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_enable_floating_widget">
+														<option <?php echo ($enable_floating_widget == 1) ? 'selected' : '' ?> value="1">Yes</option>
+														<option <?php echo ($enable_floating_widget == 0) ? 'selected' : '' ?> value="0">No</option>
+													</select>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+									<div>
+										<h3><strong>Product Reviews Settings</strong></h3>
+										<div>
+											<p>Allow your visitors to ask questions about your products. Your answers will be published publicly.</p>
+
+											<?php
+												if(!$hide_legacy) {
+											?>
+											<div class="form-table">
+												<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_product_review_widget">Show Legacy Question Answers Widget: </label>
+												<p class="TextBody TextBody--xxxs" style="font-size:12px;font-weight:100;">The widget will be displayed in a tab on your product pages.</p>
+
+												<?php
+													$question_answers_widget = get_option('REVIEWSio_question_answers_widget');
+												?>
+												<div class="flex-row">
+													<div class="flex-col-xxs-12 flex-col-sm-6">
+														<div class="Field u-marginTop--xxs u-width--100">
+															<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_question_answers_widget">
+																<option <?php echo ($question_answers_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Tab</option>
+																<option <?php echo ($question_answers_widget == 'summary') ? 'selected' : '' ?> value="summary">Show Below Product Summary</option>
+																<option <?php echo ($question_answers_widget == 'both') ? 'selected' : '' ?> value="both">Show in Both Places</option>
+																<option <?php echo ($question_answers_widget == '0') ? 'selected' : '' ?> value="0">Dont Display</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<?php
+												} else {
+											?>
+
+											<div class="form-table">
+												<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_rich_snippet">Enable Q&A: </label>
+												<p class="TextBody TextBody--xxxs">This will add a Q&A Tab to your Product Review Widget.</p>
+
+												<?php
+													$polaris_review_widget_questions = get_option('REVIEWSio_polaris_review_widget_questions');
+												?>
+												<div class="flex-row">
+													<div class="flex-col-xxs-12 flex-col-sm-6">
+														<div class="Field u-marginTop--xxs u-width--100">
+															<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_polaris_review_widget_questions">
+																<option <?php echo ($polaris_review_widget_questions == 1) ? 'selected' : '' ?> value="1">Yes</option>
+																<option <?php echo ($polaris_review_widget_questions == 0) ? 'selected' : '' ?> value="0">No</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>
+
+											<?php
+												}
+											?>
+										</div>
+										<div>
+											<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_header_config">Advanced Product Reviews 'Header' Config</label>
+											<p class="TextBody TextBody--xxxs">
+												Sets 'header' section config for the Product Reviews Widget. After using the designer tool, copy the "header" block, which begins with "header: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
+											</p>
+	
+											<?php
+												$custom_widget_header_config = get_option('REVIEWSio_widget_custom_header_config');
+											?>
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-6">
+													<div class="Field u-marginTop--xxs u-width--100">
+														<textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_header_config" style="width:100%;height:50px;"><?php echo htmlentities($custom_widget_header_config); ?></textarea>
+													</div>
+												</div>
+											</div>			
+										</div>
+										<div>
+											<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_filtering_config">Advanced Product Reviews 'Filtering' Config</label>
+											<p class="TextBody TextBody--xxxs">
+												Sets 'filtering' section config for the Product Reviews Widget. After using the designer tool, copy the "filtering" block, which begins with "filtering: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
+											</p>
+											<?php
+												$custom_widget_filtering_config = get_option('REVIEWSio_widget_custom_filtering_config');
+											?>
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-6">
+													<div class="Field u-marginTop--xxs u-width--100">
+														<textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_filtering_config" style="width:100%;height:50px;"><?php echo htmlentities($custom_widget_filtering_config); ?></textarea>
+													</div>
+												</div>
+											</div>								
+										</div>
+										<div>
+											<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_reviews_config">Advanced Product Reviews 'Reviews' Config</label>
+											<p class="TextBody TextBody--xxxs">
+												Sets 'reviews' section config for the Product Reviews Widget. After using the designer tool, copy the "reviews" block, which begins with "reviews: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
+											</p>
+	
+											<?php
+												$custom_widget_reviews_config = get_option('REVIEWSio_widget_custom_reviews_config');
+											?>
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-6">
+													<div class="Field u-marginTop--xxs u-width--100">
+														<textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_reviews_config" style="width:100%;height:50px;"><?php echo htmlentities($custom_widget_reviews_config); ?></textarea>
+													</div>
+												</div>
+											</div>			
+										</div>
+										<div>
+											<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_css">Advanced Product Reviews Widget 'Styles' Config</label>
+											<p class="TextBody TextBody--xxxs">
+												Sets the 'styles' for the Product Reviews Widget. After using the designer tool, copy the "styles" block, which begins with "styles: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
+											</p>
+											<?php
+												$custom_reviews_widget_styles = get_option('REVIEWSio_custom_reviews_widget_styles');
+											?>
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-6">
+													<div class="Field u-marginTop--xxs u-width--100">
+														<textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_custom_reviews_widget_styles" style="width:100%;height:50px;"><?php echo htmlentities($custom_reviews_widget_styles); ?></textarea>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+										<div>
+											<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_hide_legacy">Show Legacy Widget Settings</label>
+											<p class="TextBody TextBody--xxxs">Enable this if you would like to use the legacy product widget.</p>
+											<p class="TextBody TextBody--xxxs"><strong>Note:</strong> Save changes to show/hide additional settings for the legacy widget.</p>
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-6">
+													<div class="Field u-marginTop--xxs u-width--100">
+														<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_hide_legacy">
+															<option <?php echo ($hide_legacy== 1) ? 'selected' : '' ?> value="1">No (Recommended)</option>
+															<option <?php echo ($hide_legacy== 0) ? 'selected' : '' ?> value="0">Yes</option>
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
+										<?php
+											$product_review_widget = get_option('REVIEWSio_product_review_widget');
+											if(!$hide_legacy) {
+										?>
+												<div>
+													<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_product_review_widget">Show Legacy Product Review Widget: </label>
+													<p class="TextBody TextBody--xxxs">Please note that to use the Legacy Widget, the "Show Product Review Widget" setting in the Product Reviews Widget tab must be set to "Do Not Display".</p>
+
+													<div class="flex-row">
+														<div class="flex-col-xxs-12 flex-col-sm-6">
+															<div class="Field u-marginTop--xxs u-width--100">
+																<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_product_review_widget">
+																	<option <?php echo ($product_review_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Reviews Tab</option>
+																	<option <?php echo ($product_review_widget == 'summary') ? 'selected' : '' ?> value="summary">Show Below Product Summary</option>
+																	<option <?php echo ($product_review_widget == 'both') ? 'selected' : '' ?> value="both">Show in Both Places</option>
+																	<option <?php echo ($product_review_widget == '0') ? 'selected' : '' ?> value="0">Do Not Display</option>
+																</select>
+															</div>
+														</div>
+													</div>
+												</div>
+
+												<div>
+													<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_widget_custom_css">Widget Custom CSS: </label>
+													<p class="TextBody TextBody--xxxs">Add custom CSS to the legacy product reviews widget</p>
+													<?php
+														$widget_custom_css = get_option('REVIEWSio_widget_custom_css');
+													?>
+													<div class="flex-row">
+														<div class="flex-col-xxs-12 flex-col-sm-6">
+															<div class="Field u-marginTop--xxs u-width--100">
+																<textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_css"><?php echo htmlentities($widget_custom_css); ?></textarea>
+															</div>
+														</div>
+													</div>
+												</div>
+										<?php
+											}
+										?>
+
+									</div>
+
+
+								</div>
+								
+
 							</div>
 						</div>
 					</div>
@@ -1560,7 +1802,7 @@ if(!defined('ABSPATH')) {
 						$disable_reviews_per_product = get_option('REVIEWSio_disable_reviews_per_product');
 					?>
 					<div class="flex-row">
-						<div class="flex-col-xxs-12 flex-col-sm-8">
+						<div class="flex-col-xxs-12 flex-col-sm-6">
 							<div class="Field u-marginTop--xxs u-width--100">
 								<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_disable_reviews_per_product">
 									<option <?php echo ($disable_reviews_per_product== 1) ? 'selected' : '' ?> value="1">Yes</option>
@@ -1581,7 +1823,7 @@ if(!defined('ABSPATH')) {
 						$enableCron = get_option('REVIEWSio_enable_cron');
 					?>
 					<div class="flex-row">
-						<div class="flex-col-xxs-12 flex-col-sm-8">
+						<div class="flex-col-xxs-12 flex-col-sm-6">
 							<div class="Field u-marginTop--xxs u-width--100">
 								<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_enable_cron">
 									<option <?php echo ($enableCron== 1) ? 'selected' : '' ?> value="1">Yes</option>
@@ -1600,7 +1842,7 @@ if(!defined('ABSPATH')) {
 						$product_identifier = get_option('REVIEWSio_product_identifier');
 					?>
 					<div class="flex-row">
-						<div class="flex-col-xxs-12 flex-col-sm-8">
+						<div class="flex-col-xxs-12 flex-col-sm-6">
 							<div class="Field u-marginTop--xxs u-width--100">
 								<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_product_identifier">
 									<option <?php echo ($product_identifier == 'sku') ? 'selected' : '' ?> value="sku">SKU (Recommended)</option>
@@ -1619,7 +1861,7 @@ if(!defined('ABSPATH')) {
 					$use_parent_product = get_option('REVIEWSio_use_parent_product');
 					?>
 					<div class="flex-row">
-						<div class="flex-col-xxs-12 flex-col-sm-8">
+						<div class="flex-col-xxs-12 flex-col-sm-6">
 							<div class="Field u-marginTop--xxs u-width--100">
 								<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_use_parent_product">
 									<option <?php echo ($use_parent_product== 0) ? 'selected' : '' ?> value="0">No (Default)</option>
@@ -1638,7 +1880,7 @@ if(!defined('ABSPATH')) {
 					$use_parent_product_rich = get_option('REVIEWSio_use_parent_product_rich_snippet');
 					?>
 					<div class="flex-row">
-						<div class="flex-col-xxs-12 flex-col-sm-8">
+						<div class="flex-col-xxs-12 flex-col-sm-6">
 							<div class="Field u-marginTop--xxs u-width--100">
 								<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_use_parent_product_rich_snippet">
 									<option <?php echo ($use_parent_product_rich== 0) ? 'selected' : '' ?> value="0">No (Default)</option>
@@ -1648,98 +1890,13 @@ if(!defined('ABSPATH')) {
 						</div>
 					</div>
 				</div>
-				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
-				<div>
-					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_header_config">Advanced Product Reviews 'Header' Config</label>
-					<p class="TextBody TextBody--xxxs">
-						Sets 'header' section config for the Product Reviews Widget. After using the designer tool, copy the "header" block, which begins with "header: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
-					</p>
-
-					<?php
-						$custom_widget_header_config = get_option('REVIEWSio_widget_custom_header_config');
-					?>
-					<div class="flex-row">
-						<div class="flex-col-xxs-12 flex-col-sm-8">
-							<div class="Field u-marginTop--xxs u-width--100">
-								<textarea class="Field__input" name="REVIEWSio_widget_custom_header_config" style="width:100%;height:50px;"><?php echo htmlentities($custom_widget_header_config); ?></textarea>
-							</div>
-						</div>
-					</div>			
-				</div>
-				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
-				<div>
-					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_filtering_config">Advanced Product Reviews 'Filtering' Config</label>
-					<p class="TextBody TextBody--xxxs">
-						Sets 'filtering' section config for the Product Reviews Widget. After using the designer tool, copy the "filtering" block, which begins with "filtering: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
-					</p>
-					<?php
-						$custom_widget_filtering_config = get_option('REVIEWSio_widget_custom_filtering_config');
-					?>
-					<div class="flex-row">
-						<div class="flex-col-xxs-12 flex-col-sm-8">
-							<div class="Field u-marginTop--xxs u-width--100">
-								<textarea class="Field__input" name="REVIEWSio_widget_custom_filtering_config" style="width:100%;height:50px;"><?php echo htmlentities($custom_widget_filtering_config); ?></textarea>
-							</div>
-						</div>
-					</div>								
-				</div>
-				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
-				<div>
-					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_reviews_config">Advanced Product Reviews 'Reviews' Config</label>
-					<p class="TextBody TextBody--xxxs">
-						Sets 'reviews' section config for the Product Reviews Widget. After using the designer tool, copy the "reviews" block, which begins with "reviews: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
-					</p>
-
-					<?php
-						$custom_widget_reviews_config = get_option('REVIEWSio_widget_custom_reviews_config');
-					?>
-					<div class="flex-row">
-						<div class="flex-col-xxs-12 flex-col-sm-8">
-							<div class="Field u-marginTop--xxs u-width--100">
-								<textarea class="Field__input" name="REVIEWSio_widget_custom_reviews_config" style="width:100%;height:50px;"><?php echo htmlentities($custom_widget_reviews_config); ?></textarea>
-							</div>
-						</div>
-					</div>			
-				</div>
-				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
-				<div>
-					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_css">Advanced Product Reviews Widget 'Styles' Config</label>
-					<p class="TextBody TextBody--xxxs">
-						Sets the 'styles' for the Product Reviews Widget. After using the designer tool, copy the "styles" block, which begins with "styles: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
-					</p>
-					<?php
-						$custom_reviews_widget_styles = get_option('REVIEWSio_custom_reviews_widget_styles');
-					?>
-					<div class="flex-row">
-						<div class="flex-col-xxs-12 flex-col-sm-8">
-							<div class="Field u-marginTop--xxs u-width--100">
-								<textarea class="Field__input" name="REVIEWSio_custom_reviews_widget_styles" style="width:100%;height:50px;"><?php echo htmlentities($custom_reviews_widget_styles); ?></textarea>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
-				<div>
-					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_hide_legacy">Show Legacy Widget Settings</label>
-					<p class="TextBody TextBody--xxxs">Enable this if you would like to use the legacy product widget. </p>
-					<div class="flex-row">
-						<div class="flex-col-xxs-12 flex-col-sm-8">
-							<div class="Field u-marginTop--xxs u-width--100">
-								<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_hide_legacy">
-									<option <?php echo ($hide_legacy== 1) ? 'selected' : '' ?> value="1">No (Recommended)</option>
-									<option <?php echo ($hide_legacy== 0) ? 'selected' : '' ?> value="0">Yes</option>
-								</select>
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
 		</div>
-							
-
+		
+		
 		<!-- <div id="tabs-container">
-		    <ul class="tabs-menu">
-		        <li class="current"><a href="#tab-1">API Settings</a></li>
+			<ul class="tabs-menu">
+				<li class="current"><a href="#tab-1">API Settings</a></li>
 		        <li><a href="#tab-2">Review Invitations</a></li>
 		        <li><a href="#tab-3">Product Reviews</a></li>
 		        <li><a href="#tab-qa">Q&A</a></li>
@@ -1749,7 +1906,7 @@ if(!defined('ABSPATH')) {
 		        <li><a href="#tab-6">Advanced</a></li>
 		    </ul>
 		    <div class="tab">
-		        <div id="tab-1" class="tab-content"></div>
+				<div id="tab-1" class="tab-content"></div>
 		        <div id="tab-2" class="tab-content"></div>
 		        <div id="tab-3" class="tab-content"></div>
 		        <div id="tab-qa" class="tab-content"></div>
@@ -1759,8 +1916,10 @@ if(!defined('ABSPATH')) {
 		        <div id="tab-6" class="tab-content"></div>
 		    </div>
 		</div> -->
-
+		
 		<?php add_action('admin_enqueue_scripts','reviewsio_admin_scripts'); ?>
-		<?php @submit_button(); ?>
+		<div class="u-textRight--all">
+            <input type="submit" name="submit" id="submit" class="Button Button--primary Button--sm" value="Save Changes">
+        </div>
 	</form>
 </div>
