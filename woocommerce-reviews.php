@@ -50,6 +50,13 @@ function reviewsio_admin_scripts() {
             jQuery("#reviewsio-settings").keydown(function(event) {
                 event.which === 13 && event.preventDefault();
             });
+
+            // Color picker selector
+            let inputs = jQuery(`#reviewsio-settings [id*="color"]`).filter(".colour-picker");
+            let colorSelectorIds = getInputIds(inputs);
+            for (i = 0; i < colorSelectorIds.length; i++) {
+                initEditorColorPickr(colorSelectorIds[i]);
+            }
         });
 
         jQuery.ajax({
@@ -251,6 +258,41 @@ function reviewsio_admin_scripts() {
                 listItem.parent().remove();
             });
         });
+
+        function getInputIds(inputs) {
+            let ids = [];
+            inputs.each(function (index) {
+                ids.push(jQuery(this).attr("id"));
+            });
+            return ids;
+        }
+
+        let editorColorPickers = {};
+        function initEditorColorPickr(id) {
+            editorColorPickers[id] = Pickr.create({
+                el: "#"+id,
+                theme: "nano",
+                default: jQuery("#input-"+id).val(),
+                components: {
+                    preview: true,
+                    opacity: true,
+                    hue: true,
+                    interaction: {
+                        hex: true,
+                        rgba: true,
+                        input: true,
+                        save: true
+                    }
+                }
+            });
+
+            editorColorPickers[id].on("save", function(color, instance) {
+                let colorString = editorColorPickers[id].getColor().toHEXA().toString();
+                document.querySelector("#input-"+id).value = colorString;
+                editorColorPickers[id].setColor(colorString, true);
+                editorColorPickers[id].hide();
+            });
+        }
     ');
 
     // Get widget options list
@@ -377,6 +419,10 @@ function reviewsio_admin_scripts() {
             text-align: center !important;
             padding: 5px 15px !important;
             gap: 5px;
+        }
+
+        .Field--colourPicker .colourPicker__indicator .pickr .pcr-button {
+            transform: scale(2);
         }
     ');
 

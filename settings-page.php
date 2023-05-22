@@ -4,6 +4,11 @@ if(!defined('ABSPATH')) {
 }
 ?>
 
+
+<!-- Color Picker Script -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css"/> <!-- 'nano' theme -->
+<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+
 <div class="wrap">
 	<img src="https://assets.reviews.io/img/all-global-assets/logo/reviewsio-logo.svg" height="40"  style="margin-top:15px;" />
 	<form id="reviewsio-settings" method="post" action="options.php" autocomplete="off">
@@ -405,9 +410,6 @@ if(!defined('ABSPATH')) {
 											<div class="flex-col-xxs-12 flex-col-md-6">
 												<h3><strong>Global Widget Styles</strong></h3>
 												<p>
-													The following styles are applied to our <strong>Product Reviews</strong>, <strong>Rating Snippet</strong> and <strong>Legacy Floating</strong> widgets. 
-												</p>
-												<p>
 													Customize different aspects of these widgets globally such as what gets displayed on the page or how it looks.
 												</p>
 											</div>
@@ -417,6 +419,19 @@ if(!defined('ABSPATH')) {
 										</div>
 
 										<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+
+										<div class="GlobalNotification GlobalNotification--sm GlobalNotification--coloured-warning u-marginBottom--md js-feed-notification" style="display: block;">
+											<div class="flex-row flex-middle-xxs">
+												<div class="flex-col-xxs-12">
+													<div class="TextHeading TextHeading--xxxxs u-marginBottom--none">
+														Please Note
+													</div>
+													<div id="js-collector-current-widget-info" class="js-collector-toggle-info TextBody TextBody--xxxs u-marginBottom--none">
+														The following styles are only applied to our <strong>Product Reviews</strong>, <strong>Rating Snippet</strong> and <strong>Legacy Floating</strong> widgets. 
+													</div>
+												</div>
+											</div>
+										</div>
 
 										<div>
 											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_minimum_rating">Widget Language</label>
@@ -489,8 +504,16 @@ if(!defined('ABSPATH')) {
 											?>
 											<div class="flex-row">
 												<div class="flex-col-xxs-12 flex-col-sm-8">
-													<div class="Field u-marginTop--xxs u-width--100">
-														<input type="text" name="REVIEWSio_widget_hex_colour" class="Field__input u-width--100" style="max-width: none;" value="<?php  echo $widget_hex_colour; ?>" />
+													<div class="Field Field--colourPicker u-marginTop--xxs u-width--100" >
+														<input id="input-global-star-color" class="Field__input" type="text" name="REVIEWSio_widget_hex_colour" value="<?php echo $widget_hex_colour; ?>">
+														<div class="colourPicker__indicator">
+															<span id="global-star-color" class="colour-picker"></span>
+														</div>
+		
+														<div class="Field__feedback">
+															<div class="feedback__inner js-field-feedback">
+															</div>
+														</div>
 													</div>
 												</div>
 											</div>
