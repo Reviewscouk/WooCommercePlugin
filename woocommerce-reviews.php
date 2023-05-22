@@ -11,10 +11,10 @@ if(!defined('ABSPATH')) {
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.4.6
+ * Version: 0.5
  *
  * WC requires at least: 3.0.0
- * WC tested up to: 6.5.1
+ * WC tested up to: 7.7
  */
 
 function reviewsio_admin_scripts() {
