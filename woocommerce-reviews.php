@@ -47,7 +47,6 @@ function reviewsio_admin_scripts() {
                 })
             });
 
-            // Prevent saving the form on enter
             jQuery("#reviewsio-settings").keydown(function(event) {
                 event.which === 13 && event.preventDefault();
             });
@@ -395,12 +394,10 @@ function getWidgetsData() {
         });
 
         function showWidget(divId) {
-            // Active class for widgets tabs
             jQuery(".js-widget-tab").removeClass("isActive");
             const tabName = "#" + divId + "-tab";
             jQuery(tabName).addClass("isActive");
 
-            // Show active tab
             jQuery(".js-widget").css("display", "none");
             jQuery("#" + divId).fadeIn();
         }
@@ -956,7 +953,6 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function reviewsio_nuggets_widget_scripts($skus = null)
         {
-            ?><script>console.log('nuggets widget');</script><?php
             wp_register_script('reviewsio-nuggets-widget-script', 'https://widget.reviews.io/modern-widgets/nuggets.js', array(),false, false);
             wp_register_style( 'reviewsio-nuggets-widget-style',  'https://assets.reviews.io/css/widgets/nuggets-widget.css', array(), false, false);
 
@@ -991,7 +987,6 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function nuggets_widget_shortcode($widget = null)
         {
-            ?><script>console.log('nuggets shortcode');</script><?php
             $widget_id = get_option('REVIEWSio_nuggets_widget_options');
             $skus = $this->getProductSkus();
 
@@ -1004,11 +999,11 @@ if (!class_exists('WooCommerce_Reviews')) {
                 $skus .= $widget['sku'];
             }
 
-            // wp_register_script('reviewsio-nuggets-widget-script', 'https://widget.reviews.io/modern-widgets/nuggets.js', array(),false, false);
-            // wp_register_style( 'reviewsio-nuggets-widget-style',  'https://assets.reviews.io/css/widgets/nuggets-widget.css', array(), false, false);
+            wp_register_script('reviewsio-nuggets-widget-script', 'https://widget.reviews.io/modern-widgets/nuggets.js', array(),false, false);
+            wp_register_style( 'reviewsio-nuggets-widget-style',  'https://assets.reviews.io/css/widgets/nuggets-widget.css', array(), false, false);
 
-            // wp_enqueue_script('reviewsio-nuggets-widget-script');
-            // wp_enqueue_style('reviewsio-nuggets-widget-style');
+            wp_enqueue_script('reviewsio-nuggets-widget-script');
+            wp_enqueue_style('reviewsio-nuggets-widget-style');
 
 
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id')) {
@@ -1039,7 +1034,6 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function reviewsio_nuggets_bar_widget_scripts($skus = null)
         {
-            // ?><script>console.log('nuggets bar widget');</script><?php
             // wp_register_script('reviewsio-nuggets-bar-widget-script', 'https://widget.reviews.io/modern-widgets/nuggets.js', array(),false, false);
             // wp_register_style( 'reviewsio-nuggets-bar-widget-style',  'https://assets.reviews.io/css/widgets/nuggets-widget.css', array(), false, false);
 
@@ -1080,7 +1074,6 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             $skus = implode(';', $skus) . ';';
             if (!empty($widget) && !empty($widget['sku'])) {
-                echo '<script>console.log("sku")</script>';
                 $skus .= $widget['sku'];
             }
 
@@ -1138,13 +1131,12 @@ if (!class_exists('WooCommerce_Reviews')) {
                     ></div>
                 <?php
             } else {
-                    echo '<script>console.log("Missing REVIEWS.io Nuggets API Credentials")</script>';
+                    echo '<script>console.log("Missing REVIEWS.io Floating Widget API Credentials")</script>';
             }
         }
 
         public function ugc_widget_shortcode($widget = null)
         {
-            ?><script>console.log('ugc widget shortcode');</script><?php
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != '' && $widget['widget_id'] != '') {
                 ?>
                     <script>
@@ -1170,7 +1162,6 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function rating_bar_widget_shortcode($widget = null)
         {
-            ?><script>console.log('rating bar shortcode');</script><?php
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != '' && $widget['widget_id'] != '') {
                 ?>
                     <script>
@@ -1196,8 +1187,6 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function reviewsio_survey_widget_scripts($skus = null)
         {
-            ?><script>console.log('survey widget');</script><?php
-
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != ''  && get_option('REVIEWSio_survey_widget_options') != '') {
                 $skus = $this->getProductSkus();
                 ?>
@@ -1223,7 +1212,6 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function survey_widget_shortcode($widget = null)
         {
-            ?><script>console.log('survey widget shortcode');</script><?php
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != '' && $widget['widget_id'] != '' && $widget['campaign_id'] != '') {
                 ?>
                     <script>
@@ -1294,7 +1282,6 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function carousel_widget_shortcode($widget = null)
         {
-            ?><script>console.log('carousel shortcode')</script><?php
             $this->numWidgets++;
             if (get_option('REVIEWSio_api_key') == '' && get_option('REVIEWSio_store_id') == '') {
                 echo 'Missing REVIEWS.io API Credentials';

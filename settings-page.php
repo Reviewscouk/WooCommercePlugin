@@ -35,9 +35,6 @@ if(!defined('ABSPATH')) {
 				<div id="js-invitations-tab" class="FlexTabs__item">
 					<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Review Invitations</div>
 				</div>
-				<!-- <div id="js-reviews-tab" class="FlexTabs__item">
-					<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Product Reviews</div>
-				</div> -->
 				<div id="js-snippets-tab" class="FlexTabs__item">
 					<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Rich Snippets</div>
 				</div>
@@ -74,8 +71,6 @@ if(!defined('ABSPATH')) {
 
 				<div class="u-marginTop--lg">
 					<div>
-						<!-- <label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_enable_product_rating_snippet">Rating Snippet Text: </label> -->
-						<!-- <p class="TextBody TextBody--xxxs">Sets the descriptor after the number of reviews on the Rating Snippet.</p> -->
 						<div class="flex-row">
 							<div class="flex-col-xxs-12 flex-col-sm-6">
 								<div class="Field u-marginTop--xxs u-width--100">
@@ -91,8 +86,6 @@ if(!defined('ABSPATH')) {
 						</div>
 					</div>
 					<div>
-						<!-- <label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_enable_product_rating_snippet">Rating Snippet Text: </label> -->
-						<!-- <p class="TextBody TextBody--xxxs">Sets the descriptor after the number of reviews on the Rating Snippet.</p> -->
 						<div class="flex-row">
 							<div class="flex-col-xxs-12 flex-col-sm-6">
 								<div class="Field u-marginTop--xxs u-width--100">
@@ -151,285 +144,6 @@ if(!defined('ABSPATH')) {
 				</div>
 
 				<p class="u-marginTop--md TextBody TextBody--xxs">The invitation delay can be changed within the REVIEWS.io Dashboard under the <strong>Invitations</strong> menu, or from your <strong>Flow</strong>.
-			</div>
-
-			<div class="tab-contents js-reviews-tab">
-				<?php /*
-				<p>Customize how product reviews are published on your website.</p>
-
-				<table class="form-table">
-					<?php
-						$polaris_review_widget = get_option('REVIEWSio_polaris_review_widget');
-					?>
-					<tr>
-							<th>
-								<h3><strong>Product Review Widget Settings:</strong></h3>
-
-							<label for="REVIEWSio_polaris_review_widget">Show Product Review Widget: </label>
-								<p style="font-size:12px;font-weight:100;">
-														A mobile friendly product reviews widget displaying product & customer attributes, photos and videos.</p>
-						</th>
-						<td>
-
-							<select name="REVIEWSio_polaris_review_widget">
-								<option <?php echo ($polaris_review_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Tab</option>
-								<option <?php echo ($polaris_review_widget == 'summary') ? 'selected' : '' ?> value="summary">Show Below Product Summary</option>
-								<option <?php echo ($polaris_review_widget == 'bottom') ? 'selected' : '' ?> value="bottom">Show At Bottom of Page</option>
-								<option <?php echo ($polaris_review_widget == '0') ? 'selected' : '' ?> value="0">Do Not Display</option>
-							</select>
-						</td>
-					</tr>
-
-					<?php if($polaris_review_widget == 'tab') { ?>
-						<tr>
-							<th>
-									<label for="REVIEWSio_enable_product_rating_snippet">Review Tab Text: </label>
-									<p style="font-size:12px;font-weight:100;">Sets the name of the review tab.</p>
-							</th>
-							<td>
-								<?php
-								$reviews_tab_name = get_option('REVIEWSio_reviews_tab_name');
-								?>
-								<input name='REVIEWSio_reviews_tab_name' value='<?php echo (!empty($reviews_tab_name) ? $reviews_tab_name : 'Reviews'); ?>'>
-								</td>
-						</tr>
-
-					<?php } ?>
-
-
-
-
-
-					<?php
-						$product_review_widget = get_option('REVIEWSio_product_review_widget');
-						if(!$hide_legacy) {
-					?>
-					<tr style="border-top: 1px solid #e4e4e4;">
-
-							<th>
-								<h3><strong>Legacy Widget Settings:</strong></h3>
-
-							<label for="REVIEWSio_product_review_widget">Show Legacy Product Review Widget: </label>
-							<p style="font-size:12px;font-weight:100;">Please note that to use the Legacy Widget, the "Show Product Review Widget" setting must be set to "Do Not Display".</p>
-						</th>
-						<td>
-
-							<select name="REVIEWSio_product_review_widget">
-								<option <?php echo ($product_review_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Reviews Tab</option>
-								<option <?php echo ($product_review_widget == 'summary') ? 'selected' : '' ?> value="summary">Show Below Product Summary</option>
-								<option <?php echo ($product_review_widget == 'both') ? 'selected' : '' ?> value="both">Show in Both Places</option>
-								<option <?php echo ($product_review_widget == '0') ? 'selected' : '' ?> value="0">Do Not Display</option>
-							</select>
-						</td>
-					</tr>
-
-					<tr style="border-bottom: 1px solid #e4e4e4">
-						<th>
-							<label for="REVIEWSio_widget_custom_css">Widget Custom CSS: </label>
-												<p style="font-size:12px;font-weight:100;">Add custom CSS to the product reviews widget</p>
-						</th>
-						<td>
-							<?php
-								$widget_custom_css = get_option('REVIEWSio_widget_custom_css');
-							?>
-							<textarea name="REVIEWSio_widget_custom_css" style="width:300px;height:200px;"><?php echo htmlentities($widget_custom_css); ?></textarea>
-						</td>
-					</tr>
-
-
-					<?php
-					}
-					?>
-
-
-
-
-
-					<tr style="border-top: 1px solid #e4e4e4;">
-						<th>
-							<h3><strong>Rating Snippet Settings:</strong></h3>
-
-							<label for="REVIEWSio_enable_product_rating_snippet">Enable Product Rating Snippet: </label>
-							<p style="font-size:12px;font-weight:100;">When enabled a star rating will be displayed below the product title providing the product has reviews.<br /><br />If you would like to change how the rating is displaying you can choose the manual setting and use shortcode [rating_snippet] to display the rating.</p>
-						</th>
-						<td>
-							<?php
-							$enable_product_rating_snippet = get_option('REVIEWSio_enable_product_rating_snippet');
-							?>
-							<select name="REVIEWSio_enable_product_rating_snippet">
-								<option <?php echo ($enable_product_rating_snippet == 1) ? 'selected' : '' ?> value="1">Enabled</option>
-								<option <?php echo ($enable_product_rating_snippet == 0) ? 'selected' : '' ?> value="0">Disabled</option>
-								<option <?php echo ($enable_product_rating_snippet == 'manual') ? 'selected' : '' ?> value="manual">Manual</option>
-							</select>
-						</td>
-					</tr>
-
-					<tr>
-						<th>
-												<label for="REVIEWSio_enable_product_rating_snippet">Rating Snippet Linebreak: </label>
-												<p style="font-size:12px;font-weight:100;">Adds a line break between rating stars and text.</p>
-						</th>
-						<td>
-							<?php
-							$rating_snippet_no_linebreak = get_option('REVIEWSio_rating_snippet_no_linebreak');
-							?>
-							<select name="REVIEWSio_rating_snippet_no_linebreak">
-								<option <?php echo ($rating_snippet_no_linebreak == 0) ? 'selected' : '' ?> value="0">Enabled (Default)</option>
-								<option <?php echo ($rating_snippet_no_linebreak == 1) ? 'selected' : '' ?> value="1">Disabled</option>
-							</select>
-						</td>
-					</tr>
-
-					<tr>
-						<th>
-								<label for="REVIEWSio_enable_product_rating_snippet">Rating Snippet Text: </label>
-								<p style="font-size:12px;font-weight:100;">Sets the descriptor after the number of reviews on the Rating Snippet.</p>
-						</th>
-						<td>
-							<?php
-							$rating_snippet_text = get_option('REVIEWSio_rating_snippet_text');
-							?>
-							<input name='REVIEWSio_rating_snippet_text' value='<?php echo (isset($rating_snippet_text) ? $rating_snippet_text : 'Reviews'); ?>'>
-							</td>
-					</tr>
-
-					<tr>
-						<th>
-							<label for="REVIEWSio_disable_rating_snippet_popup">Rating Snippet Popup: </label>
-							<p style="font-size:12px;font-weight:100;">Disable or Enable the Rating Snippet Popup on product pages.</p>
-						</th>
-						<td>
-							<?php
-								$disable_rating_snippet_popup = get_option('REVIEWSio_disable_rating_snippet_popup');
-							?>
-							<select name="REVIEWSio_disable_rating_snippet_popup">
-								<option <?php echo ($disable_rating_snippet_popup == '0') ? 'selected' : '' ?> value="0">Disabled (Anchor to Product Review Widget)</option>
-								<option <?php echo ($disable_rating_snippet_popup == '1') ? 'selected' : '' ?> value="1">Enabled</option>
-							</select>
-						</td>
-					</tr>
-
-					<tr>
-						<th>
-							<label for="REVIEWSio_disable_rating_snippet_popup_category">Rating Snippet Popup on Category Pages: </label>
-							<p style="font-size:12px;font-weight:100;">Disable or Enable the Rating Snippet Popup on homepage and category pages.</p>
-						</th>
-						<td>
-							<?php
-								$disable_rating_snippet_popup_category = get_option('REVIEWSio_disable_rating_snippet_popup_category');
-							?>
-							<select name="REVIEWSio_disable_rating_snippet_popup_category">
-								<option <?php echo ($disable_rating_snippet_popup_category == '0') ? 'selected' : '' ?> value="0">Disabled</option>
-								<option <?php echo ($disable_rating_snippet_popup_category == '1') ? 'selected' : '' ?> value="1">Enabled</option>
-							</select>
-						</td>
-					</tr>
-
-
-					<tr style="border-top: 1px solid #e4e4e4;">
-						<th>
-							<h3><strong>Customize Widgets:</strong></h3>
-
-						<label for="REVIEWSio_minimum_rating">Widget Language</label>
-						<p style="font-size:12px;font-weight:100;">Set the Language of the Product Review Widget and Rating Snippet popup.</p>
-						</th>
-						<td>
-						<?php
-							$polaris_lang = get_option('REVIEWSio_polaris_lang');
-						?>
-						<select name='REVIEWSio_polaris_lang'>
-							<?php
-							foreach(['English (Default)' => 'en', 'Deutsch' => 'de', 'Deutsch (Informal)' => 'de-informal', 'Español' => 'es', 'Français' => 'fr',
-							'Italiano' => 'it', 'Nederlands' => 'nl', 'Suomi' => 'fi'] as $key => $value) {
-							?>
-							<option <?php echo ($value == $polaris_lang ? 'selected' : ''); ?> value='<?php echo $value; ?>'>
-								<?php echo $key; ?>
-							</option>
-							<?php
-								}
-								?>
-						</select>
-						</td>
-					</tr>
-					<tr>
-						<th>
-						<label for="REVIEWSio_minimum_rating">Minimum Review Rating</label>
-									<p style="font-size:12px;font-weight:100;">This option sets the minimum star rating of reviews displayed.</p>
-						</th>
-						<td>
-						<?php
-							$minimum_rating = get_option('REVIEWSio_minimum_rating');
-						?>
-						<select name='REVIEWSio_minimum_rating'>
-							<?php
-							foreach(['None (Default)' => 1, '2 Stars' => 2, '3 Stars' => 3, '4 Stars' => 4, '5 Stars' => 5] as $key => $value) {
-							?>
-							<option <?php echo ($value == $minimum_rating ? 'selected' : ''); ?> value='<?php echo $value; ?>'>
-								<?php echo $key; ?>
-							</option>
-							<?php
-								}
-								?>
-						</select>
-						</td>
-					</tr>
-
-					<tr>
-						<th>
-						<label for="REVIEWSio_disable_rating_snippet_popup">Offset: (Default = 0)</label>
-									<p style="font-size:12px;font-weight:100;">This option sets the offset to the product widget element (Integer Number).</p>
-						</th>
-						<td>
-						<?php
-							$disable_rating_snippet_offset = get_option('REVIEWSio_disable_rating_snippet_offset');
-						?>
-						<input type="text" name="REVIEWSio_disable_rating_snippet_offset" value="<?php  echo $disable_rating_snippet_offset; ?>" />
-						</td>
-					</tr>
-
-					<tr>
-						<th>
-						<label for="REVIEWSio_widget_hex_colour">Star Colour: </label>
-									<p style="font-size:12px;font-weight:100;">Sets the primary colour for your widgets, including the stars.</p>
-						</th>
-						<td>
-						<?php
-							$widget_hex_colour = get_option('REVIEWSio_widget_hex_colour');
-						?>
-						<input type="text" name="REVIEWSio_widget_hex_colour" value="<?php  echo $widget_hex_colour; ?>" />
-						</td>
-					</tr>
-
-					<tr>
-						<th>
-					<label for="REVIEWSio_hide_write_review_button">Hide Write Review Button: </label>
-					<p style="font-size:12px;font-weight:100;">Write a Review Button will be hidden on your widgets.</p>
-						</th>
-						<td>
-						<?php
-						$hide_write_review_button = get_option('REVIEWSio_hide_write_review_button');
-						?>
-						<select name="REVIEWSio_hide_write_review_button">
-							<option <?php echo ($hide_write_review_button == 1) ? 'selected' : '' ?> value="1">Hide Button</option>
-							<option <?php echo ($hide_write_review_button == 0) ? 'selected' : '' ?> value="0">Show Button</option>
-						</select>
-						</td>
-					</tr>
-
-					<tr>
-						<th>
-					<label for="REVIEWSio_per_page_review_widget">Reviews Per Page: </label>
-					<p style="font-size:12px;font-weight:100;">The amount of reviews displayed per page in the Product Review Widget and Popup Product Review Widget.</p>
-						</th>
-						<td>
-						<?php
-						$per_page_review_widget = get_option('REVIEWSio_per_page_review_widget');
-						?>
-						<input value='<?php echo (!empty($per_page_review_widget) ? $per_page_review_widget : 8); ?>' type='number' min='0' max='30' name="REVIEWSio_per_page_review_widget">
-						</td>
-					</tr>
-				</table>
-				*/ ?>
 			</div>
 			
 			<div class="tab-contents js-snippets-tab">
@@ -1778,13 +1492,8 @@ if(!defined('ABSPATH')) {
 										<?php
 											}
 										?>
-
 									</div>
-
-
 								</div>
-								
-
 							</div>
 						</div>
 					</div>
@@ -1892,30 +1601,6 @@ if(!defined('ABSPATH')) {
 				</div>
 			</div>
 		</div>
-		
-		
-		<!-- <div id="tabs-container">
-			<ul class="tabs-menu">
-				<li class="current"><a href="#tab-1">API Settings</a></li>
-		        <li><a href="#tab-2">Review Invitations</a></li>
-		        <li><a href="#tab-3">Product Reviews</a></li>
-		        <li><a href="#tab-qa">Q&A</a></li>
-		        <li><a href="#tab-4">Rich Snippets</a></li>
-		        <li><a href="#tab-5">Data Feeds</a></li>
-		        <li><a href="#tab-widgets">REVIEWS.io Widgets</a></li>
-		        <li><a href="#tab-6">Advanced</a></li>
-		    </ul>
-		    <div class="tab">
-				<div id="tab-1" class="tab-content"></div>
-		        <div id="tab-2" class="tab-content"></div>
-		        <div id="tab-3" class="tab-content"></div>
-		        <div id="tab-qa" class="tab-content"></div>
-		        <div id="tab-4" class="tab-content"></div>
-		        <div id="tab-5" class="tab-content"></div>
-				<div id="tab-widgets" class="tab-content"></div>
-		        <div id="tab-6" class="tab-content"></div>
-		    </div>
-		</div> -->
 		
 		<?php add_action('admin_enqueue_scripts','reviewsio_admin_scripts'); ?>
 		<div class="u-textRight--all">
