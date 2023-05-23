@@ -62,10 +62,6 @@ function reviewsio_admin_scripts() {
         jQuery.ajax({
             url: "https://api.reviews.io/woocommerce/info?store=' . get_option("REVIEWSio_store_id") . '",
             method: "GET",
-            headers: {
-                // "store": "' . get_option("REVIEWSio_store_id") . '",
-                // "apikey": "' . get_option('REVIEWSio_api_key') . '",
-            },
             success: function(res) {
                 jQuery("#api-notification").css("display", "none");
                 jQuery(".FlexTabs__item").removeClass("u-pointerEvents--none Button--disabled");
