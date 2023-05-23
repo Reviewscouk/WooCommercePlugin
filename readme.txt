@@ -2,7 +2,8 @@
 Contributors: Reviewscouk
 Tags: Reviews, Seller Ratings, Google Reviews, Company Reviews, Business Reviews, Product Reviews, Facebook Reviews, Amazon Reviews, Google Partner, Google Seller Ratings, Google Stars, Stars in Adwords
 Author URI: https://www.reviews.io
-Tested up to: 5.9
+Tested up to: 6.2
+Requires PHP: 7.4
 
 Get Stars and Seller Ratings in Google and across the web by collecting genuine, verified reviews with a Google-licensed Reviews Partner.
 
@@ -135,6 +136,9 @@ Our customer service team is the largest team at REVIEWS.io, we are passionate t
 
 
 == Changelog ==
+
+= 0.5 =
+* Added new widgets to the plugin. Tested for compatibility.
 
 = 0.3 =
 * Option names updated to prevent conflict with other plugins

@@ -40,8 +40,6 @@ foreach ($products as $product)
 		}
 	}
 	$categories_json = json_encode($categories_string);
-
-
 	$categories_string = implode(', ', $categories_string);
 
 	// Try to get barcode from meta, if nothing found, will return empty string
@@ -54,8 +52,7 @@ foreach ($products as $product)
 		if(!empty($barcode)) break;
 
 		$barcode = get_post_meta($product->ID, $t, true);
-
-	}
+    }
 
 	// Always add the parent product
 	$productArray[] = array($sku, $product->post_title, $image_url, get_permalink($product->ID), $sku, $woocommerce_sku, $woocommerce_id, $barcode, $categories_string, $categories_json);
@@ -133,15 +130,16 @@ foreach ($products as $product)
           } else {
               $insertAtColumnIndex = array_search($columnName, $productArray[0]);
           }
+
           //If column already exists check and update existing value else add to end
           $newProductLine = $productArray[count($productArray)-1];
           if(!empty($insertAtColumnIndex)) {
-              if($newProductLine[$insertAtColumnIndex] != $columnValue) {
+              if(!isset($newProductLine[$insertAtColumnIndex]) || $newProductLine[$insertAtColumnIndex] != $columnValue) {
                   $newProductLine[$insertAtColumnIndex] = $columnValue;
                   $productArray[count($productArray)-1] = $newProductLine;
               }
           } else {
-              $productArray[count($productArray)-1][] = $columnValue;
+            $productArray[count($productArray)-1][] = $columnValue;
           }
       }
   }
@@ -154,6 +152,7 @@ foreach ($products as $product)
           $productArray[count($productArray)-1] = $newProductLine;
       }
   }
+
 	// Add variants as additional products
 	if ($_pf->get_product_type($product->ID) == 'variable' && get_option('REVIEWSio_use_parent_product') != 1)
 	{
@@ -214,7 +213,7 @@ foreach ($products as $product)
               //If colummn already exists check and update existing value else add to end
               $newProductLine = $productArray[count($productArray)-1];
               if(!empty($insertAtColumnIndex)) {
-                  if($newProductLine[$insertAtColumnIndex] != $columnValue) {
+                  if(!isset($newProductLine[$insertAtColumnIndex]) || $newProductLine[$insertAtColumnIndex] != $columnValue) {
                       $newProductLine[$insertAtColumnIndex] = $columnValue;
                       $productArray[count($productArray)-1] = $newProductLine;
                   }
