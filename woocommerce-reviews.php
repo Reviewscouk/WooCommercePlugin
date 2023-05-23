@@ -11,7 +11,7 @@ if(!defined('ABSPATH')) {
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 0.5.1
+ * Version: 0.5.2
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 7.7
@@ -60,11 +60,8 @@ function reviewsio_admin_scripts() {
         });
 
         jQuery.ajax({
-            url: "https://api.reviews.io/woocommerce/info",
-            headers: {
-                "store": "' . get_option("REVIEWSio_store_id") . '",
-                "apikey": "' . get_option('REVIEWSio_api_key') . '",
-            },
+            url: "https://api.reviews.io/woocommerce/info?store=' . get_option("REVIEWSio_store_id") . '",
+            method: "GET",
             success: function(res) {
                 jQuery("#api-notification").css("display", "none");
                 jQuery(".FlexTabs__item").removeClass("u-pointerEvents--none Button--disabled");
@@ -110,11 +107,7 @@ function reviewsio_admin_scripts() {
         });
 
         jQuery.ajax({
-            url: "https://api.reviews.io/widget/survey-campaigns",
-            headers: {
-                "store": "' . get_option("REVIEWSio_store_id") . '",
-                "apikey": "' . get_option('REVIEWSio_api_key') . '",
-            },
+            url: "https://api.reviews.io/widget/survey-campaigns?store=' . get_option("REVIEWSio_store_id") . '",
             success: function(data) {
                 if (data && data.survey_campaigns) {
                     let dropdown = null;
@@ -488,11 +481,8 @@ function getWidgetsData() {
         
         function getWidgetOptionsList (selectedWidget = "") {
             jQuery.ajax({
-                url: `https://api.reviews.io/widget/list-with-key?widget=nuggets,floating,ugc,survey,rating-bar&selected_widget=${selectedWidget}&url_key='.get_option("REVIEWSio_store_id").'`,
-                headers: {
-                    "apikey": "' . get_option('REVIEWSio_api_key') . '",
-                    "store": "' . get_option("REVIEWSio_store_id") . '",
-                },
+                url: `https://api.reviews.io/widget/list-with-key?store=' . get_option("REVIEWSio_store_id") . '&widget=nuggets,floating,ugc,survey,rating-bar&selected_widget=${selectedWidget}&url_key='.get_option("REVIEWSio_store_id").'`,
+                method: "GET",
                 success: function(data) {
                     if (data && data.widget_options_list) {
                         let dropdown = null;
