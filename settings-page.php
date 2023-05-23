@@ -321,7 +321,7 @@ if(!defined('ABSPATH')) {
 					<div class="flex-col-xxs-3 u-paddingRight--none">
 						<div id="global-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('global')">
 							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
-								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-star-badge-cog--md--colour.svg" alt="">
+								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.io/img/all-global-assets/icons/icon-star-badge-cog--md--colour.svg" alt="">
 								<div>
 									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Global Customization</div>
 								</div>
@@ -329,7 +329,7 @@ if(!defined('ABSPATH')) {
 						</div>
 						<div id="product-reviews-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab js-product-reviews-tab isActive" onclick="showWidget('product-reviews')">
 							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
-								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-review-adverts--md--colour.svg" alt="">
+								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.io/img/all-global-assets/icons/icon-review-adverts--md--colour.svg" alt="">
 								<div>
 									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Product Reviews Widget</div>
 								</div>
@@ -337,7 +337,7 @@ if(!defined('ABSPATH')) {
 						</div>
 						<div id="rating-snippet-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('rating-snippet')">
 							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
-								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-three-stars--md--colour.svg" alt="">
+								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.io/img/all-global-assets/icons/icon-three-stars--md--colour.svg" alt="">
 								<div>
 									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Rating Snippet</div>
 								</div>
@@ -345,7 +345,7 @@ if(!defined('ABSPATH')) {
 						</div>
 						<div id="nuggets-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('nuggets')">
 							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
-								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-trophy--md--colour.svg" alt="">
+								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.io/img/all-global-assets/icons/icon-trophy--md--colour.svg" alt="">
 								<div>
 									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Nuggets Widget</div>
 								</div>
@@ -353,7 +353,7 @@ if(!defined('ABSPATH')) {
 						</div>
 						<div id="floating-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('floating')">
 							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
-								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-floating-widget--md--colour.svg" alt="">
+								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.io/img/all-global-assets/icons/icon-floating-widget--md--colour.svg" alt="">
 								<div>
 									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Floating Widget</div>
 								</div>
@@ -361,7 +361,7 @@ if(!defined('ABSPATH')) {
 						</div>
 						<div id="ugc-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('ugc')">
 							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
-								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-influence-widget-fullpage--md--colour.svg" alt="">
+								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.io/img/all-global-assets/icons/icon-influence-widget-fullpage--md--colour.svg" alt="">
 								<div>
 									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">UGC Widget</div>
 								</div>
@@ -369,7 +369,7 @@ if(!defined('ABSPATH')) {
 						</div>
 						<div id="survey-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('survey')">
 							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
-								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-notebook-pen--md--colour.svg" alt="">
+								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.io/img/all-global-assets/icons/icon-notebook-pen--md--colour.svg" alt="">
 								<div>
 									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Survey Widget</div>
 								</div>
@@ -377,7 +377,7 @@ if(!defined('ABSPATH')) {
 						</div>
 						<div id="rating-bar-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('rating-bar')">
 							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
-								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-rating-box--md--colour.svg" alt="">
+								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.io/img/all-global-assets/icons/icon-rating-box--md--colour.svg" alt="">
 								<div>
 									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Rating Bar</div>
 								</div>
@@ -385,7 +385,7 @@ if(!defined('ABSPATH')) {
 						</div>
 						<div id="carousel-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('carousel')">
 							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
-								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-influence-widget-carousel--md--colour.svg" alt="">
+								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.io/img/all-global-assets/icons/icon-influence-widget-carousel--md--colour.svg" alt="">
 								<div>
 									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Carousel Widget</div>
 								</div>
@@ -393,7 +393,7 @@ if(!defined('ABSPATH')) {
 						</div>
 						<div id="legacy-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('legacy')">
 							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
-								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.local/img/all-global-assets/icons/icon-timeline--md--colour.svg" alt="">
+								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.io/img/all-global-assets/icons/icon-timeline--md--colour.svg" alt="">
 								<div>
 									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Legacy Widgets</div>
 								</div>
@@ -978,7 +978,7 @@ if(!defined('ABSPATH')) {
 												</p>
 											</div>
 											<div class="flex-col-xxs-12 flex-col-md-6 u-textCenter--all">
-												<img style="max-width:420px" class="u-width--100" src="https://assets.reviews.local/img/all-global-assets/pages/widgets/thumbnail--ugc-widget@2x.png">
+												<img style="max-width:420px" class="u-width--100" src="https://assets.reviews.io/img/all-global-assets/pages/widgets/thumbnail--ugc-widget@2x.png">
 											</div>
 										</div>
 
@@ -1140,7 +1140,7 @@ if(!defined('ABSPATH')) {
 												</p>
 											</div>
 											<div class="flex-col-xxs-12 flex-col-md-6 u-textCenter--all">
-												<img style="max-width:420px" class="u-width--100" src="https://assets.reviews.local/img/all-global-assets/pages/widgets/thumbnail--rating-bar-widget--top--1@2x.png">
+												<img style="max-width:420px" class="u-width--100" src="https://assets.reviews.io/img/all-global-assets/pages/widgets/thumbnail--rating-bar-widget--top--1@2x.png">
 											</div>
 										</div>
 
