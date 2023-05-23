@@ -60,7 +60,7 @@ function reviewsio_admin_scripts() {
         });
 
         jQuery.ajax({
-            url: "https://api.reviews.local/woocommerce/info",
+            url: "https://api.reviews.io/woocommerce/info",
             headers: {
                 "store": "' . get_option("REVIEWSio_store_id") . '",
                 "apikey": "' . get_option('REVIEWSio_api_key') . '",
@@ -110,7 +110,7 @@ function reviewsio_admin_scripts() {
         });
 
         jQuery.ajax({
-            url: "https://api.reviews.local/widget/survey-campaigns",
+            url: "https://api.reviews.io/widget/survey-campaigns",
             headers: {
                 "store": "' . get_option("REVIEWSio_store_id") . '",
                 "apikey": "' . get_option('REVIEWSio_api_key') . '",
@@ -488,7 +488,7 @@ function getWidgetsData() {
         
         function getWidgetOptionsList (selectedWidget = "") {
             jQuery.ajax({
-                url: `https://api.reviews.local/widget/list-with-key?widget=nuggets,floating,ugc,survey,rating-bar&selected_widget=${selectedWidget}&url_key='.get_option("REVIEWSio_store_id").'`,
+                url: `https://api.reviews.io/widget/list-with-key?widget=nuggets,floating,ugc,survey,rating-bar&selected_widget=${selectedWidget}&url_key='.get_option("REVIEWSio_store_id").'`,
                 headers: {
                     "apikey": "' . get_option('REVIEWSio_api_key') . '",
                     "store": "' . get_option("REVIEWSio_store_id") . '",
