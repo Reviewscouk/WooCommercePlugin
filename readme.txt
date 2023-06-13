@@ -46,17 +46,25 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 1. Google Seller Ratings
 2. Google Shopping
 3. Reputation Manager
-4. Review Attributes
+4. Product Reviews
 5. Shoppable UGC
-6. Widget Editor
-7. REVIEWS.io Widgets
-8. REVIEWS.io Plugin
+6. Review Attributes
+7. Widget Editor
+8. REVIEWS.io Widgets
+9. REVIEWS.io Integration
 
 
 == Changelog ==
 
+= 1.0.0 =
+* Refreshed the plugin with a visually enhanced and user-friendly interface in this update. The UI has been revamped to match our branding, providing a seamless and cohesive experience for users.
+
+* New Widgets Added: Implmented our latest widgets to the plugin, offering enhanced functionality and customization options for users to enrich their websites with a wide range of widgets available. Easily switch between saved widgets from our REVIEWS.io editor directly in the plugin.
+
+* Bug Fixes and Enhancements: Addressed known issues and made various enhancements to further refine the plugin's functionality.
+
 = 0.5 =
-* Added new widgets to the plugin. Tested for compatibility.
+* Tested for compatibility with WordPress and WooCommerce.
 
 = 0.3 =
 * Option names updated to prevent conflict with other plugins
