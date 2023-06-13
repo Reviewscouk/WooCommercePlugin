@@ -13,6 +13,11 @@ They [integrate with 1000s of tech & eCommerce platforms](https://www.reviews.io
 
 The REVIEWS.io WooCommerce plugin seamlessly integrates reviews into WordPress online stores. Our user-centric approach enables merchants to add their product catalog to REVIEWS.io Data Feeds and conveniently access REVIEWS.io widgets within their WordPress accounts.
 
+[youtube https://www.youtube.com/watch?v=lRwHFJ8rXi8]
+
+**Watch Platform Demonstration**
+<a href="https://www.youtube.com/watch?v=lRwHFJ8rXi8" target="_blank">https://www.youtube.com/watch?v=lRwHFJ8rXi8</a>
+
 ### REVIEWS.io: A Feature-rich Review Solution: 
 
 **User-Generated Content (UGC) -** Enhance your UGC collection by requesting photo or video reviews in your review invites. [Make your UGC Shoppable](https://blog.reviews.io/post/combine-manage-ugc-into-shoppable-galleries) by adding your Product Catalog to the DataFeed within the WooCommerce Plugin. This allows your review content to convert by tagging the product mentioned in the review to direct them to the Product Page.   
@@ -32,6 +37,9 @@ Our contracts are on a monthly basis meaning you are not tied into any long-term
 ### INSTALLATION
 
 [youtube https://www.youtube.com/watch?v=e0zNrqDQRC8]
+
+**Watch Installation Demonstration**
+<a href="https://www.youtube.com/watch?v=e0zNrqDQRC8" target="_blank">https://www.youtube.com/watch?v=e0zNrqDQRC8</a>
 
 Need more support? Our article outlines how simple it is to install the WooCommerce X REVIEWS.io plugin.
 
