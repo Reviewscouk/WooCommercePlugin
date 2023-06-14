@@ -13,6 +13,11 @@ They [integrate with 1000s of tech & eCommerce platforms](https://www.reviews.io
 
 The REVIEWS.io WooCommerce plugin seamlessly integrates reviews into WordPress online stores. Our user-centric approach enables merchants to add their product catalog to REVIEWS.io Data Feeds and conveniently access REVIEWS.io widgets within their WordPress accounts.
 
+[youtube https://www.youtube.com/watch?v=lRwHFJ8rXi8]
+
+**Watch Platform Demonstration**
+<a href="https://www.youtube.com/watch?v=lRwHFJ8rXi8" target="_blank">https://www.youtube.com/watch?v=lRwHFJ8rXi8</a>
+
 ### REVIEWS.io: A Feature-rich Review Solution: 
 
 **User-Generated Content (UGC) -** Enhance your UGC collection by requesting photo or video reviews in your review invites. [Make your UGC Shoppable](https://blog.reviews.io/post/combine-manage-ugc-into-shoppable-galleries) by adding your Product Catalog to the DataFeed within the WooCommerce Plugin. This allows your review content to convert by tagging the product mentioned in the review to direct them to the Product Page.   
@@ -33,6 +38,9 @@ Our contracts are on a monthly basis meaning you are not tied into any long-term
 
 [youtube https://www.youtube.com/watch?v=e0zNrqDQRC8]
 
+**Watch Installation Demonstration**
+<a href="https://www.youtube.com/watch?v=e0zNrqDQRC8" target="_blank">https://www.youtube.com/watch?v=e0zNrqDQRC8</a>
+
 Need more support? Our article outlines how simple it is to install the WooCommerce X REVIEWS.io plugin.
 
 Read more about our WooCommerce Plugin here: [https://support.reviews.io/en/articles/3203716-woocommerce-plugin](https://support.reviews.io/en/articles/3203716-woocommerce-plugin)
@@ -46,17 +54,25 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 1. Google Seller Ratings
 2. Google Shopping
 3. Reputation Manager
-4. Review Attributes
+4. Product Reviews
 5. Shoppable UGC
-6. Widget Editor
-7. REVIEWS.io Widgets
-8. REVIEWS.io Plugin
+6. Review Attributes
+7. Widget Editor
+8. REVIEWS.io Widgets
+9. REVIEWS.io Integration
 
 
 == Changelog ==
 
+= 1.0.0 =
+* Refreshed the plugin with a visually enhanced and user-friendly interface in this update. The UI has been revamped to match our branding, providing a seamless and cohesive experience for users.
+
+* New Widgets Added: Implmented our latest widgets to the plugin, offering enhanced functionality and customization options for users to enrich their websites with a wide range of widgets available. Easily switch between saved widgets from our REVIEWS.io editor directly in the plugin.
+
+* Bug Fixes and Enhancements: Addressed known issues and made various enhancements to further refine the plugin's functionality.
+
 = 0.5 =
-* Added new widgets to the plugin. Tested for compatibility.
+* Tested for compatibility with WordPress and WooCommerce.
 
 = 0.3 =
 * Option names updated to prevent conflict with other plugins
