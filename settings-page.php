@@ -749,6 +749,25 @@ if(!defined('ABSPATH')) {
 												</div>
 											</div>
 										</div>
+
+										<div>
+											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_disable_rating_snippet_popup_category">Listen for Changes: </label>
+											<p class="TextBody TextBody--xxxs">Enable this option to listen for page changes.</p>
+											<?php
+												$enable_rating_snippet_listen_for_changes = get_option('REVIEWSio_enable_rating_snippet_listen_for_changes');
+											?>
+
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-8">
+													<div class="Field u-marginTop--xxs u-width--100">
+														<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_enable_rating_snippet_listen_for_changes">
+															<option <?php echo ($enable_rating_snippet_listen_for_changes == 0) ? 'selected' : '' ?> value="0">Disabled (Default)</option>
+															<option <?php echo ($enable_rating_snippet_listen_for_changes == 1) ? 'selected' : '' ?> value="1">Enabled</option>
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 
