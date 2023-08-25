@@ -64,6 +64,9 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 
 == Changelog ==
 
+= 1.0.2 =
+* Add "Header and Footer" scripts section in REVIEWS.io Widgets tab
+
 = 1.0.1 =
 * Add "Listen for Changes" option in the Rating Snippet widget.
 
