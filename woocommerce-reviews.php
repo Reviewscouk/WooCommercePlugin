@@ -293,8 +293,10 @@ function reviewsio_admin_scripts() {
 
     
     wp_register_style( 'reviewsio-dashboard-style',  'https://assets.reviews.io/css/dashboard.css', array(), '', false);
-    wp_enqueue_style('reviewsio-dashboard-style');
+    wp_register_style( 'reviewsio-icons-style',  'https://assets.reviews.io/iconfont/reviewsio-icons/style.css', array(), '', false);
     wp_register_style( 'reviewsio-admin-style',  false, array(), '', false);
+    wp_enqueue_style('reviewsio-dashboard-style');
+    wp_enqueue_style('reviewsio-icons-style');
     wp_enqueue_style('reviewsio-admin-style');
     wp_add_inline_style('reviewsio-admin-style','
         code {
@@ -666,8 +668,8 @@ if (!class_exists('WooCommerce_Reviews')) {
           "polaris_review_widget","reviews_tab_name","polaris_review_widget_questions","polaris_custom_styles","product_review_widget","question_answers_widget",
           "hide_write_review_button","per_page_review_widget","send_product_review_invitation","enable_cron",
           "enable_floating_widget","product_identifier","disable_reviews_per_product","use_parent_product", "use_parent_product_rich_snippet",
-          "custom_reviews_widget_styles","disable_rating_snippet_popup", "disable_rating_snippet_popup_category", "minimum_rating","rating_snippet_text", "enable_rating_snippet_listen_for_changes",
-          "polaris_lang","disable_rating_snippet_offset","hide_legacy","rating_snippet_no_linebreak","new_variables_set", "product_feed_custom_attributes",
+          "custom_reviews_widget_styles","disable_rating_snippet_popup", "disable_rating_snippet_popup_category", "minimum_rating","rating_snippet_text", "enable_rating_snippet_listen_for_changes","polaris_lang","disable_rating_snippet_offset","hide_legacy","rating_snippet_no_linebreak","enable_footer_scripts","restrict_footer_script","footer_custom_script",
+          "new_variables_set", "product_feed_custom_attributes",
           "widget_custom_header_config", "widget_custom_filtering_config" , "widget_custom_reviews_config", "product_feed_wpseo_global_ids"];
 
           foreach($options as $o) {
@@ -2232,6 +2234,18 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
         }
 
+        // Footer scripts
+        function insert_scripts_before_footer() {
+            $restrict_to_frontpage = get_option('REVIEWSio_restrict_footer_script');
+            $footer_script = get_option('REVIEWSio_footer_custom_script');
+            
+            if ($restrict_to_frontpage && is_front_page()) {
+                echo $footer_script;
+            } elseif (!$restrict_to_frontpage) {
+                echo $footer_script;
+            }
+        }
+
         public function init()
         {
             add_action('woocommerce_order_status_completed', array($this, 'processCompletedOrder'));
@@ -2297,6 +2311,10 @@ if (!class_exists('WooCommerce_Reviews')) {
                 add_filter('wp_footer', array($this, 'reviewsio_survey_widget_scripts'));
             }
             add_shortcode('survey_widget', array($this, 'survey_widget_shortcode'));
+
+            if(get_option('REVIEWSio_enable_footer_scripts')) {
+                add_action('storefront_before_footer', array($this, 'insert_scripts_before_footer'));
+            }
 
             if (isset($_GET["page"]) && trim($_GET["page"]) == 'reviewscouk') {
                 add_action('admin_enqueue_scripts', 'reviewsio_admin_scripts');
