@@ -1368,16 +1368,30 @@ if(!defined('ABSPATH')) {
 											<div style="display: flex;">
 												<label class="CheckSelection u-marginBottom--none">
 													<?php
-														$restrict_footer_script = get_option('REVIEWSio_restrict_footer_script');
+														$footer_show_on_homepage = get_option('REVIEWSio_footer_show_on_homepage');
 													?>
-													<input class="CS__field" type="checkbox" name="REVIEWSio_restrict_footer_script" <?php echo $restrict_footer_script ? 'checked' : ''; ?>>
+													<input class="CS__field" type="checkbox" name="REVIEWSio_footer_show_on_homepage" <?php echo $footer_show_on_homepage ? 'checked' : ''; ?>>
 													<div class="CS__check">
 														<i class="ricon-checkmark"></i>
 													</div>
 												</label>
-												<p class="TextBody TextBody--xxxs u-marginBottom--none">Show only on homepage</p>
+												<p class="TextBody TextBody--xxxs u-marginBottom--none">Show on homepage</p>
 											</div>
-											
+										</div>
+
+										<div class="TextBody TextBody--xxxs u-marginBottom--md">
+											<div style="display: flex;">
+												<label class="CheckSelection u-marginBottom--none">
+													<?php
+														$footer_show_on_collection_pages = get_option('REVIEWSio_footer_show_on_collection_pages');
+													?>
+													<input class="CS__field" type="checkbox" name="REVIEWSio_footer_show_on_collection_pages" <?php echo $footer_show_on_collection_pages ? 'checked' : ''; ?>>
+													<div class="CS__check">
+														<i class="ricon-checkmark"></i>
+													</div>
+												</label>
+												<p class="TextBody TextBody--xxxs u-marginBottom--none">Show on collection pages</p>
+											</div>
 										</div>
 										
 										<div class="flex-row">
