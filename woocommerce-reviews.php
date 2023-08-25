@@ -11,7 +11,7 @@ if(!defined('ABSPATH')) {
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 1.0.2
+ * Version: 1.0.3
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.2
@@ -668,7 +668,7 @@ if (!class_exists('WooCommerce_Reviews')) {
           "polaris_review_widget","reviews_tab_name","polaris_review_widget_questions","polaris_custom_styles","product_review_widget","question_answers_widget",
           "hide_write_review_button","per_page_review_widget","send_product_review_invitation","enable_cron",
           "enable_floating_widget","product_identifier","disable_reviews_per_product","use_parent_product", "use_parent_product_rich_snippet",
-          "custom_reviews_widget_styles","disable_rating_snippet_popup", "disable_rating_snippet_popup_category", "minimum_rating","rating_snippet_text", "enable_rating_snippet_listen_for_changes","polaris_lang","disable_rating_snippet_offset","hide_legacy","rating_snippet_no_linebreak","enable_footer_scripts","restrict_footer_script","footer_custom_script",
+          "custom_reviews_widget_styles","disable_rating_snippet_popup", "disable_rating_snippet_popup_category", "minimum_rating","rating_snippet_text", "enable_rating_snippet_listen_for_changes","polaris_lang","disable_rating_snippet_offset","hide_legacy","rating_snippet_no_linebreak","enable_footer_scripts","footer_show_on_homepage","footer_show_on_collection_pages","footer_custom_script",
           "new_variables_set", "product_feed_custom_attributes",
           "widget_custom_header_config", "widget_custom_filtering_config" , "widget_custom_reviews_config", "product_feed_wpseo_global_ids"];
 
@@ -2236,12 +2236,18 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         // Footer scripts
         function insert_scripts_before_footer() {
-            $restrict_to_frontpage = get_option('REVIEWSio_restrict_footer_script');
+            $show_on_front_page = get_option('REVIEWSio_footer_show_on_homepage');
+            $show_on_collection_pages = get_option('REVIEWSio_footer_show_on_collection_pages');
             $footer_script = get_option('REVIEWSio_footer_custom_script');
             
-            if ($restrict_to_frontpage && is_front_page()) {
+            if(!$show_on_front_page && !$show_on_collection_pages) {
+                //show all pages
                 echo $footer_script;
-            } elseif (!$restrict_to_frontpage) {
+            } else if ($show_on_front_page && is_front_page()) {
+                // show on front page
+                echo $footer_script;
+            } else if ($show_on_collection_pages && (is_shop() || is_product_category())) {
+                //show on collection pages
                 echo $footer_script;
             }
         }
