@@ -391,6 +391,14 @@ if(!defined('ABSPATH')) {
 								</div>
 							</div>
 						</div>
+						<div id="custom-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('custom')">
+							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
+								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.io/img/all-global-assets/icons/icon-modules--md--colour.svg" alt="">
+								<div>
+									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Header & Footer</div>
+								</div>
+							</div>
+						</div>
 						<div id="legacy-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('legacy')">
 							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
 								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.io/img/all-global-assets/icons/icon-timeline--md--colour.svg" alt="">
@@ -1318,6 +1326,69 @@ if(!defined('ABSPATH')) {
 												</div>
 											</div>
 										</div>
+									</div>
+								</div>
+
+								<div id="custom" class="form-table js-widget" style="display: none">
+									<div class="GlobalNotification GlobalNotification--sm GlobalNotification--coloured-warning u-marginBottom--md js-feed-notification" style="display: block;">
+										<div class="flex-row flex-middle-xxs">
+											<div class="flex-col-xxs-12">
+												<div class="TextHeading TextHeading--xxxxs u-marginBottom--none">
+													Please Note
+												</div>
+												<div id="js-collector-current-widget-info" class="js-collector-toggle-info TextBody TextBody--xxxs u-marginBottom--none">
+													This section is used to add code before the footer, which can help widgets to be displayed just above the footer, in the homepage or all pages. Please ensure there is a <code>storefront_before_footer</code> hook for the active theme.
+												</div>
+											</div>
+										</div>
+									</div>
+									<div>
+										<h3><strong>Footer Scripts</strong></h3>
+										<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_footer_scripts">Add script before the footer:</label>
+										<div>
+											<!-- <p class="TextBody TextBody--xxxs">
+												Script will be added just before the footer.
+											</p> -->
+										</div>
+										<?php
+											$enable_footer_scripts = get_option('REVIEWSio_enable_footer_scripts');
+										?>
+										<div class="flex-row">
+											<div class="flex-col-xxs-12">
+												<div class="Field u-marginTop--xxs">
+													<select class="Field__input Field__input--globalSelect" style="max-width: none" name="REVIEWSio_enable_footer_scripts">
+														<option <?php echo ($enable_footer_scripts == 1) ? 'selected' : '' ?> value="1">Yes</option>
+														<option <?php echo ($enable_footer_scripts == 0) ? 'selected' : '' ?> value="0">No</option>
+													</select>
+												</div>
+											</div>
+										</div>
+
+										<div class="TextBody TextBody--xxxs u-marginBottom--md">
+											<div style="display: flex;">
+												<label class="CheckSelection u-marginBottom--none">
+													<?php
+														$restrict_footer_script = get_option('REVIEWSio_restrict_footer_script');
+													?>
+													<input class="CS__field" type="checkbox" name="REVIEWSio_restrict_footer_script" <?php echo $restrict_footer_script ? 'checked' : ''; ?>>
+													<div class="CS__check">
+														<i class="ricon-checkmark"></i>
+													</div>
+												</label>
+												<p class="TextBody TextBody--xxxs u-marginBottom--none">Show only on homepage</p>
+											</div>
+											
+										</div>
+										
+										<div class="flex-row">
+											<div class="flex-col-xxs-12">
+												<?php
+													$footer_custom_script = get_option('REVIEWSio_footer_custom_script');
+												?>
+												<textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_footer_custom_script" placeholder="Place footer code here." style="width:100%;height:200px;border-color:#D1D8DA;border-radius:4px;padding:12px;"><?php echo $footer_custom_script; ?></textarea>
+											</div>
+										</div>
+
 									</div>
 								</div>
 
