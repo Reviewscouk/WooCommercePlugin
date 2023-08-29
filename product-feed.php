@@ -97,9 +97,9 @@ foreach ($products as $product)
 
   foreach ($customProductAttributes as $key) {
       $key = strtolower($key);
-      if (isset($productAttributes[$key] && $productAttributes[$key]['is_taxonomy'])) {
+      if (isset($productAttributes[$key]) && $productAttributes[$key]['is_taxonomy']) {
         // pull in product terms if key provided
-        $terms = wc_get_product_terms($product->ID. $key, ['fields' => 'names']);
+        $terms = wc_get_product_terms($product->ID . $key, ['fields' => 'names']);
         $value = array_shift($terms);
         $newFields[$key] = $value;
       } elseif(isset($productAttributes[$key]['options'][0])) {
