@@ -2,7 +2,7 @@
 Contributors: Reviewscouk
 Tags: Reviews, Seller Ratings, Google Reviews, Company Reviews, Business Reviews, Product Reviews, Facebook Reviews, Amazon Reviews, Google Partner, Google Seller Ratings, Google Stars, Stars in Adwords
 Author URI: https://www.reviews.io
-Tested up to: 6.2
+Tested up to: 6.3
 Requires PHP: 7.4
 
 == Description ==
@@ -63,6 +63,15 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 
 
 == Changelog ==
+
+= 1.0.3 =
+* Add an option to show custom script in WooCommerce collection pages in the Header and Footer scripts section
+
+= 1.0.2 =
+* Add "Header and Footer" scripts section in REVIEWS.io Widgets tab
+
+= 1.0.1 =
+* Add "Listen for Changes" option in the Rating Snippet widget.
 
 = 1.0.0 =
 * Refreshed the plugin with a visually enhanced and user-friendly interface in this update. The UI has been revamped to match our branding, providing a seamless and cohesive experience for users.
