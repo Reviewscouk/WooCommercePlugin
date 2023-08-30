@@ -64,6 +64,9 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 
 == Changelog ==
 
+= 1.0.4 =
+* Add support for managed product attributes in the product feed
+
 = 1.0.3 =
 * Add an option to show custom script in WooCommerce collection pages in the Header and Footer scripts section
 
