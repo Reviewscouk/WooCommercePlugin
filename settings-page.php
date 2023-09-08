@@ -393,7 +393,7 @@ if(!defined('ABSPATH')) {
 						</div>
 						<div id="custom-tab" class="ContentPanelTab ContentPanelTab--vertical ContentPanelTab--gradient-bg--yellow u-paddingTop--sm u-paddingBottom--sm js-widget-tab" onclick="showWidget('custom')">
 							<div class="flex-row flex-row--noMargin flex-middle-xxs u-flexWrap--nowrap">
-								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.io/img/all-global-assets/icons/icon-modules--md--colour.svg" alt="">
+								<img class="ContentPanelTab__icon ContentPanelTab__icon--sm u-marginRight--sm" src="https://assets.reviews.io/img/all-global-assets/icons/icon-code--md--colour.svg" alt="">
 								<div>
 									<div class="TextHeading TextHeading--xxxs u-marginBottom--none">Header & Footer</div>
 								</div>

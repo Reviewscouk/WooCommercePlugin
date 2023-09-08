@@ -64,6 +64,9 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 
 == Changelog ==
 
+= 1.0.5 =
+* Add support for WooCommerce High-Performance Order Storage (HPOS) tables
+
 = 1.0.4 =
 * Add support for managed product attributes in the product feed
 
