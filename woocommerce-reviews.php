@@ -11,11 +11,25 @@ if(!defined('ABSPATH')) {
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 1.0.4
+ * Version: 1.0.5
  *
  * WC requires at least: 3.0.0
- * WC tested up to: 8.0.2
+ * WC tested up to: 8.0.3
+*/
+
+use Automattic\WooCommerce\Utilities\FeaturesUtil;
+use Automattic\WooCommerce\Utilities\OrderUtil;
+
+/**
+ * Declare compatibility with WC features.
+ *
  */
+function declare_wc_compatibility() {
+    if (class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil')) {
+        FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+    }
+}
+add_action( 'before_woocommerce_init', 'declare_wc_compatibility');
 
 function reviewsio_admin_scripts() {
     wp_register_script('reviewsio-admin-script',false, array(),false, false);
@@ -626,6 +640,15 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
         }
 
+        public function is_hpos_enabled() {
+            if ( OrderUtil::custom_orders_table_usage_is_enabled() ) {
+                // HPOS usage is enabled.
+                return true;
+            }
+
+            return false;
+        }
+
         public function getSubDomain($sub)
         {
             if ($this->env == 'dev') {
@@ -789,16 +812,26 @@ if (!class_exists('WooCommerce_Reviews')) {
         {
             wp_reset_query();
             if (get_option('REVIEWSio_enable_cron')) {
-                $orders = get_posts(array(
-                    'numberposts'  => 30,
-                    'meta_key'     => '_reviewscouk_status',
-                    'meta_compare' => 'NOT EXISTS',
-                    'post_type'    => wc_get_order_types(),
-                    'post_status'  => array('wc-completed'),
-                    'date_query'   => array(
-                        'after' => date('Y-m-d', strtotime('-5 days')),
-                    ),
-                ));
+                if ($this->is_hpos_enabled()) {
+                    $orders = wc_get_orders(array(
+                        'limit'        => 30,
+                        'meta_key'     => '_reviewscouk_status',
+                        'meta_compare' => 'NOT EXISTS',
+                        'type'         => wc_get_order_types(),
+                        'status'       => array('wc-completed'),
+                    ));
+                } else {
+                    $orders = get_posts(array(
+                        'numberposts'  => 30,
+                        'meta_key'     => '_reviewscouk_status',
+                        'meta_compare' => 'NOT EXISTS',
+                        'post_type'    => wc_get_order_types(),
+                        'post_status'  => array('wc-completed'),
+                        'date_query'   => array(
+                            'after' => date('Y-m-d', strtotime('-5 days')),
+                        ),
+                    ));
+                }
 
                 foreach ($orders as $order) {
                     $this->processCompletedOrder($order->ID);
@@ -820,20 +853,25 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function processCompletedOrder($order_id)
         {
-            update_post_meta($order_id, '_reviewscouk_status', 'processed');
-
             $api_url = $this->getApiDomain();
             $order   = new WC_Order($order_id);
             $items   = $order->get_items();
 
+            if ($this->is_hpos_enabled()) {
+                $order->update_meta_data( '_reviewscouk_status', 'processed' );
+                $order->save();
+            } else {
+                update_post_meta($order_id, '_reviewscouk_status', 'processed');
+            }
+            
             $p = array();
             foreach ($items as $row) {
                 $productmeta = wc_get_product($row['product_id']);
-
+                
                 if(!$productmeta) continue;
-
-                $sku         = get_option('REVIEWSio_product_identifier') == 'id' ? $row['product_id'] : $productmeta->get_sku();
-
+                
+                $sku = get_option('REVIEWSio_product_identifier') == 'id' ? $row['product_id'] : $productmeta->get_sku();
+                
                 if ($productmeta->get_type() == 'variable' && get_option('REVIEWSio_use_parent_product') != 1) {
                     $available_variations = $productmeta->get_available_variations();
                     foreach ($available_variations as $variation) {
@@ -842,11 +880,11 @@ if (!class_exists('WooCommerce_Reviews')) {
                         }
                     }
                 }
-
+                
                 $url = get_permalink($row['product_id']);
-
+                
                 $attachment_url = wp_get_attachment_url(get_post_thumbnail_id($row['product_id']));
-
+                
                 if (!empty($sku) && !(get_option('REVIEWSio_disable_reviews_per_product') == '1' && $productmeta->post->comment_status == 'closed')) {
                     $p[] = array(
                         'sku'     => $sku,
@@ -856,24 +894,47 @@ if (!class_exists('WooCommerce_Reviews')) {
                     );
                 }
             }
-
-            $country_code = 'GB';
-            if (isset($order->get_address()['country'])) {
-                $country_code = $order->get_address()['country'];
+            
+            if ($this->is_hpos_enabled()) {
+                $orderData = $order->get_data();
+                
+                $country_code = 'GB';
+                if (isset($orderData['billing']['country'])) {
+                    $country_code = $orderData['billing']['country'];
+                }
+                
+                $data = array(
+                    'order_id' => $orderData['id'],
+                    'email'    => $orderData['billing']['email'],
+                    'name'     => $orderData['billing']['first_name'] . ' ' . $orderData['billing']['last_name'],
+                    'source'   => 'woocom',
+                    'products' => $p,
+                    'country_code' => $country_code,
+                );
+                
+                // Get phone number
+                $phone = $orderData['billing']['phone'];
+            } else {
+                $country_code = 'GB';
+                if (isset($order->get_address()['country'])) {
+                    $country_code = $order->get_address()['country'];
+                }
+    
+                $data = array(
+                    'order_id' => $order->get_order_number(),
+                    'email'    => $order->get_billing_email(),
+                    'name'     => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
+                    'source'   => 'woocom',
+                    'products' => $p,
+                    'country_code' => $country_code,
+                );
+    
+                // Get phone number
+                $phone = $order->get_billing_phone();
             }
 
-            $data = array(
-                'order_id' => $order->get_order_number(),
-                'email'    => $order->get_billing_email(),
-                'name'     => $order->get_billing_first_name() . ' ' . $order->get_billing_last_name(),
-                'source'   => 'woocom',
-                'products' => $p,
-                'country_code' => $country_code,
-            );
-
-            // Get phone number, format, and send
-            $phone = $order->get_billing_phone();
-            if(!empty($phone)) {
+            // format phone number and send
+            if (!empty($phone)) {
               $dialing_code = WC()->countries->get_country_calling_code($country_code);
               if(!empty($dialing_code) && is_string($dialing_code) && isset($phone[0])) {
                 if ($phone[0] == '0') {
@@ -886,6 +947,7 @@ if (!class_exists('WooCommerce_Reviews')) {
               }
             }
 
+            // Send order data
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != '' && get_option('REVIEWSio_send_product_review_invitation') == '1') {
                 $this->apiPost('invitation', $data);
             }
@@ -2253,7 +2315,7 @@ if (!class_exists('WooCommerce_Reviews')) {
         }
 
         public function init()
-        {
+        {            
             add_action('woocommerce_order_status_completed', array($this, 'processCompletedOrder'));
             add_filter('template_redirect', array($this, 'redirect_hook'));
             add_filter('woocommerce_product_tabs', array($this, 'product_review_tab'));
