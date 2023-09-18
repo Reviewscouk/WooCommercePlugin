@@ -11,7 +11,7 @@ if(!defined('ABSPATH')) {
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 1.0.5
+ * Version: 1.1.0
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -32,584 +32,31 @@ function declare_wc_compatibility() {
 add_action( 'before_woocommerce_init', 'declare_wc_compatibility');
 
 function reviewsio_admin_scripts() {
-    wp_register_script('reviewsio-admin-script',false, array(),false, false);
-    wp_enqueue_script('reviewsio-admin-script');
-    wp_add_inline_script('reviewsio-admin-script','
-        document.addEventListener("DOMContentLoaded", function() {
-            formatDataFeed();
-            jQuery(".widget-active-state").each(function() {
-                widgetOptionsActiveState(jQuery(this));
-            })
-            let domain = "";
-
-            jQuery(".js-api-tab").css("display", "block");
-            jQuery(".FlexTabs__item").click(function(e) {
-                e.preventDefault();
-                jQuery(this).addClass("isActive");
-                jQuery(this).siblings().removeClass("isActive");
-                
-                let tab = jQuery(this).attr("id");
-                let tabContent = jQuery("." + tab)
-
-                jQuery(".tab-contents").each(function() {
-                    const tabContent = jQuery(this);
-                    tabContent.css("display", "none");
-                    
-                    if (tabContent.hasClass(tab)) {
-                        tabContent.fadeIn();
-                    }
-                })
-            });
-
-            jQuery("#reviewsio-settings").keydown(function(event) {
-                event.which === 13 && event.preventDefault();
-            });
-
-            // Color picker selector
-            let inputs = jQuery(`#reviewsio-settings [id*="color"]`).filter(".colour-picker");
-            let colorSelectorIds = getInputIds(inputs);
-            for (i = 0; i < colorSelectorIds.length; i++) {
-                initEditorColorPickr(colorSelectorIds[i]);
-            }
-        });
-
-        jQuery.ajax({
-            url: `https://api.reviews.io/woocommerce/info?store=' . get_option("REVIEWSio_store_id") . '&${Date.now()}`,
-            method: "GET",
-            success: function(res) {
-                jQuery("#api-notification").css("display", "none");
-                jQuery(".FlexTabs__item").removeClass("u-pointerEvents--none Button--disabled");
-                
-                if (res && res.data) {
-                    let data = res.data;
-                    domain = res.data.domain;
-                    let region = data.domain == "co.uk" ? "uk" : "us";
-
-                    let regionInput = jQuery("#REVIEWSio_region");
-                    let params = new Proxy(new URLSearchParams(window.location.search), {
-                        get: (searchParams, prop) => searchParams.get(prop),
-                    });
-                    let value = params.page;
-                    
-                    if ((value === "reviewscouk") && ((regionInput.val() == "") || (regionInput.val() != region))) {
-                        jQuery("#api-notification-heading").text("Please Wait");
-                        jQuery("#api-notification-text").text("Configuring store domain.");
-                        jQuery("#api-notification").css("display", "block");
-                        regionInput.val(region);
-                        jQuery("#submit").click();
-                    }
-
-                    jQuery(".js-validated-user").css("display", "block");
-                    jQuery(".js-invalidated-user").css("display", "none");
-                    
-                    if ((data.stats.store_total_reviews > 0) || (data.stats.product_total_reviews > 0)) {
-                        const stats = data.stats;
-                        let heading = "Overall Statistics";
-                        let message = `<p><span style="white-space: nowrap">Average Company Rating: <strong>${stats.store_average_rating}</strong></span> &nbsp;|&nbsp; <span style="white-space: nowrap">Company Reviews: <strong>${stats.store_total_reviews}</strong></strong></span> &nbsp;|&nbsp; <span style="white-space: nowrap"></strong>Average Product Rating: <strong>${stats.product_average_rating}</strong></span> &nbsp;|&nbsp; <span style="white-space: nowrap"></strong>Product Reviews: <strong>${stats.product_total_reviews}</span></p>`;
-                        
-                        jQuery("#welcomeHeading").html(heading);
-                        jQuery("#welcomeText").html(message);
-                    }
-                }
-            },
-            error: function(e) {
-                jQuery(".FlexTabs__item").addClass("u-pointerEvents--none Button--disabled");
-                jQuery(".js-validated-user").css("display", "none");
-                jQuery(".js-invalidated-user").css("display", "block");
-                jQuery("#api-notification").css("display", "block");
-            },
-        });
-
-        jQuery.ajax({
-            url: `https://api.reviews.io/widget/survey-campaigns?store=' . get_option("REVIEWSio_store_id") . '&${Date.now()}`,
-            success: function(data) {
-                if (data && data.survey_campaigns) {
-                    let dropdown = null;
-                    let selectedField = null;
-                    let attrValue = null;
-
-                    selectedField = jQuery("#survey-widget-campaign").val();
-                    dropdown = jQuery("#survey-widget-campaign-dropdown");
-                    dropdown.find("option").remove();
-                    
-                    data.survey_campaigns.forEach(function(item) {
-                        attrValue = this.widget_id == selectedField ? "selected" : false
-                        dropdown.append(jQuery("<option />").val(item.id).text(item.title).attr("selected", attrValue));
-                    });
-                }
-            },
-            error: function(e) {
-            },
-        });
-
-        function widgetOptionsActiveState(e) {
-            let optionId = jQuery(e).attr("id");
-            let optionName = optionId.substring(3);
-            let option = jQuery(e).find(":selected").val();
-            
-            if (option == 1) {
-                jQuery(`.js-${optionName}-widget-option-container`).css("display", "block");
-            } else {
-                jQuery(`.js-${optionName}-widget-option-container`).css("display", "none");
-            }
-        }
-        
-        function polarisTabActiveState() {
-            let el = jQuery("#polaris-widget-location")
-            let val = el.find(":selected").val();
-
-            if (val == "tab") {
-                jQuery(".js-polaris-review-tab-name").css("display", "block");
-            } else {
-                jQuery(".js-polaris-review-tab-name").css("display", "none");
-            }
-        }
-
-        function toggleFeedNotification() {
-            jQuery(".js-feed-notification").css("display", "block");
-        }
-        
-        function toggleFeedFeedback(type) {
-            let newFeedAttrInput = jQuery("#product-feed-custom-attributes-new");
-            let feedback = newFeedAttrInput.siblings().filter(".Field__feedback").children();
-
-            switch (type) {
-                case "empty":
-                    feedback.text("Please fill in this field");
-                    break;
-                case "exists":
-                    feedback.text("This attribute has already been added");
-                    break;
-            }
-
-            newFeedAttrInput.parent().addClass("isFailure");
-        }
-
-        function removeDataFeed(buttonId) {
-            let selectedItem = buttonId.replace("feed-button-", "");
-            let feedAttrInput = jQuery("#product-feed-custom-attributes");
-
-            let feed = feedAttrInput.val().split(", ");
-            feed = feed.filter(item => item !== selectedItem);
-            let newFeed = feed.join(", ");
-            feedAttrInput.val(newFeed);
-            toggleFeedNotification();
-        }
-
-        function formatDataFeed() {
-            if (!jQuery("#product-feed-custom-attributes").length) return;
-            let feedAttrInput = jQuery("#product-feed-custom-attributes");
-            let feedListElement = jQuery("#product_feed_custom_attributes-list");
-            let feed = feedAttrInput.val().split(", ");
-            if ((!feed) || (feed[0] === "")) return;
-
-            feedListElement.empty();
-            feed.forEach(function(item, idx) {
-                jQuery("<li>", {
-                    id: `feed-${item}`,
-                    text: item,
-                }).appendTo(feedListElement);
-                
-                jQuery("<span>", {
-                    id: `feed-button-${item}`,
-                    class: "remove-button",
-                    text: "x",
-                }).appendTo(jQuery(`#feed-${item}`));
-            });
-        }
-
-        function addNewAttribute() {
-            let newFeedAttrInput = jQuery("#product-feed-custom-attributes-new");
-            let feedAttrInput = jQuery("#product-feed-custom-attributes");
-
-            newFeedAttrInput.parent().removeClass("isFailure");
-            let feed = feedAttrInput.val().split(", ")
-
-            if (newFeedAttrInput.val() == "") {
-                toggleFeedFeedback("empty")
-                return;
-            }
-            if (feed.includes(newFeedAttrInput.val())) {
-                toggleFeedFeedback("exists")
-                return;
-            }
-
-            if (feed.length === 1 && feed[0] === "") feed = [];
-            feed.push(newFeedAttrInput.val());
-            let newFeed = feed.join(", ");
-            
-            feedAttrInput.val(newFeed);
-            newFeedAttrInput.val("").focus();
-            toggleFeedNotification();
-            formatDataFeed();
-
-            jQuery(".feed-list li span").click(function() {
-                removeDataFeed(jQuery(this).attr("id"));
-                jQuery(this).parent().remove();
-            });
-        }
-
-        jQuery(document).ready(function() {
-            let inputField = jQuery("#product-feed-custom-attributes-new");
-            inputField.keyup(function(event) {
-                if (jQuery(this).is(":focus")) {
-                    if (event.keyCode === 13) {
-                        addNewAttribute();
-                    }
-                }
-            });
-
-            jQuery(".feed-list li span").click(function() {
-                let listItem = jQuery(this);
-                removeDataFeed(listItem.attr("id"));
-                listItem.parent().remove();
-            });
-        });
-
-        function getInputIds(inputs) {
-            let ids = [];
-            inputs.each(function (index) {
-                ids.push(jQuery(this).attr("id"));
-            });
-            return ids;
-        }
-
-        let editorColorPickers = {};
-        function initEditorColorPickr(id) {
-            editorColorPickers[id] = Pickr.create({
-                el: "#"+id,
-                theme: "nano",
-                default: jQuery("#input-"+id).val(),
-                components: {
-                    preview: true,
-                    opacity: true,
-                    hue: true,
-                    interaction: {
-                        hex: true,
-                        rgba: true,
-                        input: true,
-                        save: true
-                    }
-                }
-            });
-
-            editorColorPickers[id].on("save", function(color, instance) {
-                let colorString = editorColorPickers[id].getColor().toHEXA().toString();
-                document.querySelector("#input-"+id).value = colorString;
-                editorColorPickers[id].setColor(colorString, true);
-                editorColorPickers[id].hide();
-            });
-        }
-    ');
-
-    // Get widget options list
-    getWidgetsData();
-
+    // Register scripts
+    wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__));
+    wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__));
     
+    // Pass PHP options to JS
+    $js_scripts = ['reviewsio-admin-script', 'reviewsio-widget-options-script'];
+    $store_id = get_option('REVIEWSio_store_id');
+
+    foreach ($js_scripts as $script) {
+        wp_localize_script($script, 'reviewsio_data', array(
+            'store_id' => $store_id
+        ));
+    }
+
+    // Register styles
     wp_register_style( 'reviewsio-dashboard-style',  'https://assets.reviews.io/css/dashboard.css', array(), '', false);
     wp_register_style( 'reviewsio-icons-style',  'https://assets.reviews.io/iconfont/reviewsio-icons/style.css', array(), '', false);
-    wp_register_style( 'reviewsio-admin-style',  false, array(), '', false);
     wp_enqueue_style('reviewsio-dashboard-style');
     wp_enqueue_style('reviewsio-icons-style');
-    wp_enqueue_style('reviewsio-admin-style');
-    wp_add_inline_style('reviewsio-admin-style','
-        code {
-            padding: 2px 4px;
-            font-size: 90%;
-            color: #c7254e;
-            white-space: nowrap;
-            background-color: #f9f2f4;
-            border-radius: 4px;
-        }
-
-        label {
-            cursor: default;
-        }
-        
-        .settings_page_reviewscouk .tabs-menu {
-          height: 29px;
-          clear: both;
-          margin: 0;
-          margin-bottom: 10px;
-        }
-
-        .settings_page_reviewscouk .tabs-menu li {
-            height: 30px;
-            line-height: 30px;
-            float: left;
-            margin-bottom:-2px;
-            margin-right: 10px;
-            border-width: 1px;
-            border-radius: 4px;
-            background: #fff;
-            border-color: rgba(35,36,53,.1);
-            box-shadow: 0 2px 10px -2px rgb(0 0 0 / 7%);
-        }
-
-        .settings_page_reviewscouk .tabs-menu li.current {
-            position: relative;
-            background-color: #fff;
-            border-bottom: 1px solid #fff;
-            z-index: 5;
-        }
-
-        .settings_page_reviewscouk .tabs-menu li a {
-            padding: 10px;
-            color: #000;
-            text-decoration: none;
-            box-shadow:none;
-            outline:0;
-        }
-
-        .settings_page_reviewscouk .tabs-menu .current a {
-            color: #000;
-            font-weight: 600;
-        }
-
-        .settings_page_reviewscouk .tab {
-            clear: both;
-            box-shadow: 0 2px 10px -2px rgb(0 0 0 / 7%);
-            border-radius: 4px;
-            background-color: #fff;
-            margin-bottom: 20px;
-            width: auto;
-        }
-
-        .settings_page_reviewscouk .tab-content {
-            // width: 660px;
-            padding: 20px;
-            display: none;
-        }
-
-        .settings_page_reviewscouk #tab-1 {
-         display: block;
-        }
-
-        .menu-container {
-            display: flex;
-        }
-
-        .side-menu {
-            width: 200px;
-        }
-        
-        .side-menu ul {
-            width: 200px;
-        }
-
-        .side-menu ul li {
-            padding: 10px 5px;
-            cursor: pointer;
-        }
-
-        .tab-contents {
-            display: none;
-        }
-
-        .list {
-            list-style: disc;
-            padding-left: 40px;
-        }
-
-        .remove-button {
-            margin: 0 0 0 5px;
-            padding: 0;
-            border: none;
-            background: 0 0;
-            cursor: pointer;
-            vertical-align: middle;
-            font: 700 16px Arial,sans-serif;
-        }
-
-        .TagsInputElement .feed-list li {
-            display: flex !important;
-            justify-content: space-between !important;
-            align-items: center !important;
-            text-align: center !important;
-            padding: 5px 15px !important;
-            gap: 5px;
-        }
-
-        .Field--colourPicker .colourPicker__indicator .pickr .pcr-button {
-            transform: scale(2);
-        }
-    ');
-
-}
-
-function getWidgetsData() {
-    wp_register_script('reviewsio-widget-options-script',false, array(),false, false);
-    wp_enqueue_script('reviewsio-widget-options-script');
-    wp_add_inline_script('reviewsio-widget-options-script','
-        document.addEventListener("DOMContentLoaded", function() {
-            jQuery(".widget-active-state").change(function(e) {
-                if (e.target.value != "1") return;
-                getWidgetOptionsList(this.id.slice(3));
-            });
-        });
-
-        function showWidget(divId) {
-            jQuery(".js-widget-tab").removeClass("isActive");
-            const tabName = "#" + divId + "-tab";
-            jQuery(tabName).addClass("isActive");
-
-            jQuery(".js-widget").css("display", "none");
-            jQuery("#" + divId).fadeIn();
-        }
-
-        function addWidgetIdToShortcode(e) {
-            let element = jQuery(e);
-            let elementId =  element.attr("id");
-            let selectedWidget = elementId.substring(0, elementId.indexOf("-"));
-            let shortcodeElement = jQuery(`#${selectedWidget}-shortcode`);
-            let widgetId = jQuery(e).find(":selected").val();
-
-            shortcodeElement.children().eq(0).text("");
-            if (widgetId != "") {
-                shortcodeElement.children().eq(0).append(`\&#32;widget_id=\'${widgetId}\'`);
-            }
-        }
-        
-        function addSkuToShortcode(e) {
-            let sku = "";
-            let element = jQuery(e);
-            let elementId =  element.attr("id");
-            let selectedWidget = elementId.substring(0, elementId.indexOf("-"));
-            let shortcodeElement = jQuery(`#${selectedWidget}-shortcode`);
-            sku = jQuery(`#${selectedWidget}-widget-sku`).val();
-        
-            shortcodeElement.children().eq(1).text("");
-            if (sku != "") {
-                shortcodeElement.children().eq(1).append(`\&#32;sku=\'${sku}\'`);
-            }
-        }
-
-        function copyToClipboard(buttonId, copyId) {
-            let text = document.getElementById(copyId).textContent.trim();
-			navigator.clipboard.writeText(text);
-
-            let copyButton = document.getElementById(buttonId);
-			copyButton.innerHTML = "Copied!";
-			setTimeout(() => {
-				copyButton.innerHTML = "Copy";
-			}, 2000);
-		};
-        
-        function getWidgetOptionsList (selectedWidget = "") {
-            jQuery.ajax({
-                url: `https://api.reviews.io/widget/list-with-key?store=' . get_option("REVIEWSio_store_id") . '&widget=nuggets,floating,ugc,survey,rating-bar&selected_widget=${selectedWidget}&url_key='.get_option("REVIEWSio_store_id").'&${Date.now()}`,
-                method: "GET",
-                success: function(data) {
-                    if (data && data.widget_options_list) {
-                        let dropdown = null;
-                        let selectedField = null;
-                        let attrValue = null;
-
-                        let optionsCount = [
-                            {
-                                name: "nuggets",
-                                editor: "nuggets",
-                                count: 0
-                            },
-                            {
-                                name: "ugc",
-                                editor: "ugc",
-                                count: 0
-                            },
-                            {
-                                name: "rating_bar",
-                                editor: "rating-bar",
-                                count: 0
-                            },
-                        ]
-
-                        jQuery("#nuggets-widget-options-dropdown").find("option").not(":first").remove();
-                        jQuery("#nuggets_shortcode-widget-options-dropdown").find("option").not(":first").remove();
-                        jQuery("#floating-react-widget-options-dropdown").find("option").not(":first").remove();
-                        jQuery("#ugc-widget-options-dropdown").find("option").not(":first").remove();
-                        jQuery("#survey-widget-options-dropdown").find("option").not(":first").remove();
-                        jQuery("#rating_bar-widget-options-dropdown").find("option").not(":first").remove();
-                        
-                        jQuery.each(data.widget_options_list, function() {
-                            switch (this.widget_name) {
-                                case "nuggets-widget":
-                                    let reviewType = "";
-                                    let widgetOptions = JSON.parse(this.widget_options);
-                                    dropdown = jQuery("#nuggets-widget-options-dropdown");
-                                    let shortcodeDropdown = jQuery("#nuggets_shortcode-widget-options-dropdown");
-                                    selectedField = jQuery("#nuggets-widget-option").val();
-
-                                    switch (widgetOptions.types) {
-                                        case "product_review":
-                                            reviewType = "(Product Nuggets)";
-                                            break;
-                                        case "store_review":
-                                            reviewType = "(Company Nuggets)";
-                                            break;
-                                        case "store_review,product_review":
-                                            reviewType = "(All Nuggets)";
-                                            break;
-                                    }
-
-                                    attrValue = this.widget_id == selectedField ? "selected" : false
-                                    dropdown.append(jQuery("<option />").val(this.widget_id).text(this.name + " " + reviewType).attr("selected", attrValue));
-                                    shortcodeDropdown.append(jQuery("<option />").val(this.widget_id).text(this.name + " " + reviewType));
-                                    optionsCount[0].count++;
-                                    return;
-                                case "floating-widget":
-                                    dropdown = jQuery("#floating-react-widget-options-dropdown");
-                                    selectedField = jQuery("#floating-react-widget-option").val();
-                                    break;
-                                case "ugc-widget":
-                                    dropdown = jQuery("#ugc-widget-options-dropdown");
-                                    selectedField = jQuery("#ugc-widget-option").val();
-                                    optionsCount[1].count++;
-                                    break;
-                                case "survey-widget":
-                                    dropdown = jQuery("#survey-widget-options-dropdown");
-                                    selectedField = jQuery("#survey-widget-option").val();
-                                    break;
-                                case "rating-bar-widget":
-                                    dropdown = jQuery("#rating_bar-widget-options-dropdown");
-                                    selectedField = jQuery("#rating_bar-widget-option").val();
-                                    optionsCount[2].count++;
-                                    break;
-                            }
-                                
-                            attrValue = this.widget_id == selectedField ? "selected" : false
-                            dropdown.append(jQuery("<option />").val(this.widget_id).text(this.name).attr("selected", attrValue));
-                        });
-
-                        optionsCount.forEach(function(item) {
-                            if (item.count == 0) {
-                                let parent = jQuery(`#${item.name}-widget-options-dropdown`).parent();
-                                
-                                parent.parent().parent().siblings().prevAll().eq(1).text("Personalize widget styles to create a more engaging and cohesive design that aligns with your preferences and needs. The styles can be edited in the REVIEWS.io widget editor.");
-                                
-                                parent.parent().parent().siblings().nextAll().eq(1).remove();
-                                parent.parent().siblings().empty();
-                                parent.empty();
-                                jQuery("<a>", {
-                                    class: "Button Button--primary Button--sm",
-                                    text: "Customise Widget",
-                                    target: "_blank",
-                                    href: `https://dash.reviews.${domain}/widgets/editor/${item.editor}`,
-                                }).appendTo(parent);
-                            }
-                        })
-                    }
-                }
-            });
-        }
-
-        getWidgetOptionsList();
-    ');
+    wp_enqueue_style('reviewsio-admin-style', plugins_url('/css/admin-style.css', __FILE__));
 }
 
 if (!class_exists('WooCommerce_Reviews')) {
     class WooCommerce_Reviews
     {
-
         /**
          * Used for local testing
          *
@@ -686,12 +133,12 @@ if (!class_exists('WooCommerce_Reviews')) {
         {
           $optionsPrefix = 'REVIEWSio_';
           $options = ["region","domain","store_id","api_key","product_feed","widget_hex_colour","widget_custom_css",
-          "enable_rich_snippet","enable_product_rich_snippet","enable_product_rich_snippet_server_side","enable_product_rating_snippet",
+          "enable_rich_snippet","enable_product_rich_snippet","enable_product_rich_snippet_server_side","enable_product_rating_snippet","enable_rating_snippet_custom_collection_location","custom_rating_snippet_collection_hook",
           "enable_nuggets_widget","nuggets_widget_options","nuggets_widget_tags","enable_nuggets_bar_widget","nuggets_bar_widget_id","nuggets_bar_widget_tags","enable_floating_react_widget","floating_react_widget_options","ugc_widget_options","enable_survey_widget","survey_widget_options","survey_widget_campaign_options","carousel_type","carousel_custom_styles",
           "polaris_review_widget","reviews_tab_name","polaris_review_widget_questions","polaris_custom_styles","product_review_widget","question_answers_widget",
           "hide_write_review_button","per_page_review_widget","send_product_review_invitation","enable_cron",
           "enable_floating_widget","product_identifier","disable_reviews_per_product","use_parent_product", "use_parent_product_rich_snippet",
-          "custom_reviews_widget_styles","disable_rating_snippet_popup", "disable_rating_snippet_popup_category", "minimum_rating","rating_snippet_text", "enable_rating_snippet_listen_for_changes","polaris_lang","disable_rating_snippet_offset","hide_legacy","rating_snippet_no_linebreak","enable_footer_scripts","footer_show_on_homepage","footer_show_on_collection_pages","footer_custom_script",
+          "custom_reviews_widget_styles","disable_rating_snippet_popup", "disable_rating_snippet_popup_category", "minimum_rating","rating_snippet_text", "enable_rating_snippet_listen_for_changes","polaris_lang","disable_rating_snippet_offset","hide_legacy","rating_snippet_no_linebreak","enable_footer_scripts","custom_footer_hooks","footer_show_on_homepage","footer_show_on_collection_pages","footer_custom_script",
           "new_variables_set", "product_feed_custom_attributes",
           "widget_custom_header_config", "widget_custom_filtering_config" , "widget_custom_reviews_config", "product_feed_wpseo_global_ids"];
 
@@ -802,7 +249,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                 wp_die(__('You do not have sufficient permissions to access this page.'));
             }
 
-            include sprintf("%s/settings-page.php", dirname(__FILE__));
+            include sprintf("%s/includes/settings-page.php", dirname(__FILE__));
         }
 
         /*
@@ -1919,7 +1366,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     global $wp_query;
                     status_header(200);
                     $wp_query->is_404 = false;
-                    include dirname(__FILE__) . '/product-feed.php';
+                    include dirname(__FILE__) . '/includes/product-feed.php';
                     exit();
                 }
             }
@@ -1929,7 +1376,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     global $wp_query;
                     status_header(200);
                     $wp_query->is_404 = false;
-                    include dirname(__FILE__) . '/order_csv.php';
+                    include dirname(__FILE__) . '/includes/order_csv.php';
                     exit();
                 } else {
                     auth_redirect();
@@ -2314,8 +1761,24 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
         }
 
+        public function insert_custom_scripts_before_footer()
+        {
+            $customHooks = explode (", ", get_option('REVIEWSio_custom_footer_hooks'));
+            foreach ($customHooks as $hook) {
+                add_action($hook, array($this, 'insert_scripts_before_footer'));
+            }
+        }
+
+        public function custom_rating_snippet_hooks()
+        {
+            $customHooks = explode (", ", get_option('REVIEWSio_custom_rating_snippet_collection_hook'));
+            foreach ($customHooks as $hook) {
+                add_action($hook, array($this, 'product_rating_snippet_markup'), 5);
+            }
+        }
+
         public function init()
-        {            
+        {
             add_action('woocommerce_order_status_completed', array($this, 'processCompletedOrder'));
             add_filter('template_redirect', array($this, 'redirect_hook'));
             add_filter('woocommerce_product_tabs', array($this, 'product_review_tab'));
@@ -2326,8 +1789,12 @@ if (!class_exists('WooCommerce_Reviews')) {
               add_filter('woocommerce_after_single_product_summary', array($this, 'productPage'));
             }
 
+            if (get_option('REVIEWSio_enable_rating_snippet_custom_collection_location') && !empty(get_option('REVIEWSio_custom_rating_snippet_collection_hook'))) {
+                $this->custom_rating_snippet_hooks();
+            } else {
+                add_action('woocommerce_after_shop_loop_item', array($this, 'product_rating_snippet_markup'), 5);
+            }
             add_action('woocommerce_single_product_summary', array($this, 'product_rating_snippet_markup'), 5);
-            add_action('woocommerce_after_shop_loop_item', array($this, 'product_rating_snippet_markup'), 5);
             add_shortcode('rating_snippet', array($this, 'product_rating_snippet_shortcode'));
             add_shortcode('richsnippet', array($this, 'richsnippet_widget'));
 
@@ -2380,7 +1847,9 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
             add_shortcode('survey_widget', array($this, 'survey_widget_shortcode'));
 
-            if(get_option('REVIEWSio_enable_footer_scripts')) {
+            if (get_option('REVIEWSio_enable_footer_scripts') && !empty(get_option('REVIEWSio_custom_footer_hooks'))) {
+                $this->insert_custom_scripts_before_footer();
+            } else if (get_option('REVIEWSio_enable_footer_scripts')) {
                 add_action('storefront_before_footer', array($this, 'insert_scripts_before_footer'));
             }
 
