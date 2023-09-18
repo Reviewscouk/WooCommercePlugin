@@ -64,6 +64,10 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 
 == Changelog ==
 
+= 1.1.0 =
+* Update - Add options to add custom hooks for Rating Snippet widget and footer scripts.
+* Dev - Modularise plugin directory structure.
+
 = 1.0.5 =
 * Add support for WooCommerce High-Performance Order Storage (HPOS) tables
 

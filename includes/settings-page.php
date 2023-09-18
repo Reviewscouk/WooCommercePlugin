@@ -32,6 +32,20 @@ if(!defined('ABSPATH')) {
 			$hide_legacy = get_option('REVIEWSio_hide_legacy');
  		?>
 
+		<!-- Unsaved changes message -->
+		<div class="GlobalNotification GlobalNotification--sm GlobalNotification--coloured-warning u-marginBottom--md js-unsaved-notification" style="display: none;">
+			<div class="flex-row flex-middle-xxs">
+				<div class="flex-col-xxs-12">
+					<div class="TextHeading TextHeading--xxxxs u-marginBottom--none">
+						Unsaved Changes
+					</div>
+					<div id="js-collector-current-widget-info" class="js-collector-toggle-info TextBody TextBody--xxxs u-marginBottom--none">
+						Please remember to save your changes if you want to apply the below settings.
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div class="ContentPanel">
 			<div class="FlexTabs FlexTabs--inPanel">
 				<div id="js-api-tab" class="FlexTabs__item isActive">
@@ -249,6 +263,7 @@ if(!defined('ABSPATH')) {
 					</div>
 				</div>
 				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+				
 				<div>
 					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_product_feed_custom_attributes">Include Product Data Attributes Feed: </label>
 					<p class="TextBody TextBody--xxxs">Add additional product data attributes field to be included as columns in your product feed. The following are always included by default: _barcode, barcode, _gtin, gtin, mpn, _mpn</p>
@@ -265,7 +280,7 @@ if(!defined('ABSPATH')) {
 								</div>
 							</div>
 								<div>
-									<div class="Button Button--sm Button--primary u-marginTop--xs u-marginLeft--sm" onclick="addNewAttribute()">Add</div>
+									<div class="Button Button--sm Button--primary u-marginTop--xs u-marginLeft--sm" onclick="addNewAttribute('product-feed-custom-attributes-new', 'product-feed-custom-attributes', 'product_feed_custom_attributes-list')">Add</div>
 								</div>
 								
 							</div>
@@ -276,29 +291,16 @@ if(!defined('ABSPATH')) {
 						$product_feed_custom_attributes = get_option('REVIEWSio_product_feed_custom_attributes');
 					?>
 
-					<input type="hidden" id="product-feed-custom-attributes" name="REVIEWSio_product_feed_custom_attributes" value="<?php echo htmlentities($product_feed_custom_attributes); ?>">
+					<input type="hidden" id="product-feed-custom-attributes" class="js-tags-list" name="REVIEWSio_product_feed_custom_attributes" value="<?php echo htmlentities($product_feed_custom_attributes); ?>">
 
 					<!-- Attribute tags -->
 					<div class="u-marginBottom--sm">
 						<div class="TagsInputElement">
-							<ul id="product_feed_custom_attributes-list" class="flex-row tags feed-list"></ul>
-						</div>
-					</div>
-
-					<!-- Message -->
-					<div class="GlobalNotification GlobalNotification--sm GlobalNotification--coloured-warning u-marginBottom--md js-feed-notification" style="display: none;">
-						<div class="flex-row flex-middle-xxs">
-							<div class="flex-col-xxs-12">
-								<div class="TextHeading TextHeading--xxxxs u-marginBottom--none">
-									Unsaved Changes
-								</div>
-								<div id="js-collector-current-widget-info" class="js-collector-toggle-info TextBody TextBody--xxxs u-marginBottom--none">
-									Please remember to save your changes if you want to apply the above REVIEWS.io settings.
-								</div>
-							</div>
+							<ul id="product_feed_custom_attributes-list" class="flex-row tags"></ul>
 						</div>
 					</div>
 				</div>
+
 				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
 				<div>
 					<label class="TextHeading TextHeading--xxxs">Latest Orders CSV:</label>
@@ -414,7 +416,7 @@ if(!defined('ABSPATH')) {
 							<div>
 								<div id="global" class="form-table js-widget" style="display: none">
 									<div>
-										<div class="flex-row flex-middle-xxs">
+										<div class="flex-row">
 											<div class="flex-col-xxs-12 flex-col-md-6">
 												<h3><strong>Global Widget Styles</strong></h3>
 												<p>
@@ -428,7 +430,7 @@ if(!defined('ABSPATH')) {
 
 										<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
 
-										<div class="GlobalNotification GlobalNotification--sm GlobalNotification--coloured-warning u-marginBottom--md js-feed-notification" style="display: block;">
+										<div class="GlobalNotification GlobalNotification--sm GlobalNotification--coloured-warning u-marginBottom--md" style="display: block;">
 											<div class="flex-row flex-middle-xxs">
 												<div class="flex-col-xxs-12">
 													<div class="TextHeading TextHeading--xxxxs u-marginBottom--none">
@@ -562,7 +564,7 @@ if(!defined('ABSPATH')) {
 
 								<div id="product-reviews" class="form-table js-widget">
 									<div>
-										<div class="flex-row flex-middle-xxs">
+										<div class="flex-row">
 											<div class="flex-col-xxs-12 flex-col-md-6">
 												<h3><strong>Product Review Widget Settings</strong></h3>
 												<p>
@@ -643,7 +645,7 @@ if(!defined('ABSPATH')) {
 								<div id="rating-snippet" class="form-table js-widget" style="display: none">
 									<div>
 										<div>
-											<div class="flex-row flex-middle-xxs">
+											<div class="flex-row">
 												<div class="flex-col-xxs-12 flex-col-md-6">
 													<h3><strong>Rating Snippet Settings</strong></h3>
 													<p>An ideal way to display a product rating on your category pages.</p>
@@ -738,6 +740,25 @@ if(!defined('ABSPATH')) {
 												</div>
 											</div>
 										</div>
+										
+										<div>
+											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_disable_rating_snippet_popup_category">Listen for Changes: </label>
+											<p class="TextBody TextBody--xxxs">Enable this option to listen for page changes.</p>
+											<?php
+												$enable_rating_snippet_listen_for_changes = get_option('REVIEWSio_enable_rating_snippet_listen_for_changes');
+											?>
+										
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-8">
+													<div class="Field u-marginTop--xxs u-width--100">
+														<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_enable_rating_snippet_listen_for_changes">
+															<option <?php echo ($enable_rating_snippet_listen_for_changes == 0) ? 'selected' : '' ?> value="0">Disabled (Default)</option>
+															<option <?php echo ($enable_rating_snippet_listen_for_changes == 1) ? 'selected' : '' ?> value="1">Enabled</option>
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
 
 										<div>
 											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_disable_rating_snippet_popup_category">Rating Snippet Popup on Category Pages: </label>
@@ -759,20 +780,49 @@ if(!defined('ABSPATH')) {
 										</div>
 
 										<div>
-											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_disable_rating_snippet_popup_category">Listen for Changes: </label>
-											<p class="TextBody TextBody--xxxs">Enable this option to listen for page changes.</p>
+											<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_rating_snippet_custom_collection_location">Custom Category Pages Location:</label>
+											<p class="TextBody TextBody--xxxs">Enable this option to set a custom hook to be added to a product card.</p>
 											<?php
-												$enable_rating_snippet_listen_for_changes = get_option('REVIEWSio_enable_rating_snippet_listen_for_changes');
+												$enable_rating_snippet_custom_collection_location = get_option('REVIEWSio_enable_rating_snippet_custom_collection_location');
+												$custom_rating_snippet_collection_hook = get_option('REVIEWSio_custom_rating_snippet_collection_hook');
 											?>
 
 											<div class="flex-row">
 												<div class="flex-col-xxs-12 flex-col-sm-8">
 													<div class="Field u-marginTop--xxs u-width--100">
-														<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_enable_rating_snippet_listen_for_changes">
-															<option <?php echo ($enable_rating_snippet_listen_for_changes == 0) ? 'selected' : '' ?> value="0">Disabled (Default)</option>
-															<option <?php echo ($enable_rating_snippet_listen_for_changes == 1) ? 'selected' : '' ?> value="1">Enabled</option>
+														<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_enable_rating_snippet_custom_collection_location">
+															<option <?php echo ($enable_rating_snippet_custom_collection_location == 0) ? 'selected' : '' ?> value="0">Disabled (Default)</option>
+															<option <?php echo ($enable_rating_snippet_custom_collection_location == 1) ? 'selected' : '' ?> value="1">Enabled</option>
 														</select>
 													</div>
+												</div>
+											</div>
+
+											<!-- Add new tag -->
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-8" style="display: flex">
+													<div class="Field u-marginTop--xxs u-width--100">
+														<input id="rating-snippet-new-hook" type="text" class="Field__input u-width--100" style="max-width: none;" placeholder="Add a new attribute" on="addNewAttribute()" />
+														<div class="Field__feedback">
+															<div class="feedback__inner js-field-feedback">
+																Error
+															</div>
+														</div>
+													</div>
+													<div>
+														<div class="Button Button--sm Button--primary u-marginTop--xs u-marginLeft--sm" style="height: 46px; margin-top: 2px !important" onclick="addNewAttribute('rating-snippet-new-hook', 'rating-snippet-hooks', 'rating-snippet-hooks-tags')">Add</div>
+													</div>
+													
+												</div>
+											</div>
+												
+											<!-- Tag value list -->
+											<input type="hidden" id="rating-snippet-hooks" class="js-tags-list" name="REVIEWSio_custom_rating_snippet_collection_hook" value="<?php echo htmlentities($custom_rating_snippet_collection_hook); ?>">
+
+											<!-- Tags list -->
+											<div class="u-marginBottom--sm">
+												<div class="TagsInputElement">
+													<ul id="rating-snippet-hooks-tags" class="flex-row tags"></ul>
 												</div>
 											</div>
 										</div>
@@ -780,7 +830,7 @@ if(!defined('ABSPATH')) {
 								</div>
 
 								<div id="nuggets" class="form-table js-widget" style="display: none">
-									<div class="flex-row flex-middle-xxs">
+									<div class="flex-row">
 										<div class="flex-col-xxs-12 flex-col-md-6">
 											<h3><strong>Nuggets Widget Settings</strong></h3>
 											<p>
@@ -897,7 +947,7 @@ if(!defined('ABSPATH')) {
 			
 								<div id="floating" class="form-table js-widget" style="display: none">
 									<div>
-										<div class="flex-row flex-middle-xxs">
+										<div class="flex-row">
 											<div class="flex-col-xxs-12 flex-col-md-6">
 												<h3><strong>Floating Widget Settings</strong></h3>
 												<p>
@@ -994,7 +1044,7 @@ if(!defined('ABSPATH')) {
 			
 								<div id="ugc" class="form-table js-widget" style="display: none">
 									<div>
-										<div class="flex-row flex-middle-xxs">
+										<div class="flex-row">
 											<div class="flex-col-xxs-12 flex-col-md-6">
 												<h3><strong>UGC Widget Shortcode Settings</strong></h3>
 												<p>
@@ -1068,7 +1118,7 @@ if(!defined('ABSPATH')) {
 			
 								<div id="survey" class="form-table js-widget" style="display: none">
 									<div>
-										<div class="flex-row flex-middle-xxs">
+										<div class="flex-row">
 											<div class="flex-col-xxs-12 flex-col-md-6">
 												<h3><strong>Survey Widget Settings</strong></h3>
 												<p>
@@ -1156,7 +1206,7 @@ if(!defined('ABSPATH')) {
 
 								<div id="rating-bar" class="form-table js-widget" style="display: none">
 									<div>
-										<div class="flex-row flex-middle-xxs">
+										<div class="flex-row">
 											<div class="flex-col-xxs-12 flex-col-md-6">
 												<h3><strong>Rating Bar Shortcode Settings</strong></h3>
 												<p>
@@ -1230,7 +1280,7 @@ if(!defined('ABSPATH')) {
 
 								<div id="carousel" class="form-table js-widget" style="display: none">
 									<div>
-										<div class="flex-row flex-middle-xxs">
+										<div class="flex-row">
 											<div class="flex-col-xxs-12 flex-col-md-6">
 												<h3><strong>Carousel Shortcode Settings</strong></h3>
 												<p>
@@ -1330,25 +1380,26 @@ if(!defined('ABSPATH')) {
 								</div>
 
 								<div id="custom" class="form-table js-widget" style="display: none">
-									<div class="GlobalNotification GlobalNotification--sm GlobalNotification--coloured-warning u-marginBottom--md js-feed-notification" style="display: block;">
-										<div class="flex-row flex-middle-xxs">
-											<div class="flex-col-xxs-12">
-												<div class="TextHeading TextHeading--xxxxs u-marginBottom--none">
-													Please Note
-												</div>
-												<div id="js-collector-current-widget-info" class="js-collector-toggle-info TextBody TextBody--xxxs u-marginBottom--none">
-													This section is used to add code before the footer, which can help widgets to be displayed just above the footer, in the homepage or all pages. Please ensure there is a <code>storefront_before_footer</code> hook for the active theme.
-												</div>
-											</div>
+									<div class="flex-row">
+										<div class="flex-col-xxs-12 flex-col-md-6">
+											<h3><strong>Header and Footer Scripts</strong></h3>
+											<p>
+												Add custom code before the footer, which can help widgets to be displayed on all pages at the bottom, in the homepage or all pages.
+											</p>
+										</div>
+										<div class="flex-col-xxs-12 flex-col-md-6 u-textCenter--all">
+											<!-- <img style="max-width:420px" class="u-width--100" src="https://assets.reviews.io/img/all-global-assets/pages/widgets/reviewsio-widgets@2x.png"> -->
 										</div>
 									</div>
+									<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+
 									<div>
 										<h3><strong>Footer Scripts</strong></h3>
-										<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_footer_scripts">Add script before the footer:</label>
+										<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_footer_scripts">Add script before the footer</label>
 										<div>
-											<!-- <p class="TextBody TextBody--xxxs">
-												Script will be added just before the footer.
-											</p> -->
+											<p class="TextBody TextBody--xxxs">
+												Enable or disable execution of footer scripts using the dropdown below.
+											</p>
 										</div>
 										<?php
 											$enable_footer_scripts = get_option('REVIEWSio_enable_footer_scripts');
@@ -1364,6 +1415,49 @@ if(!defined('ABSPATH')) {
 											</div>
 										</div>
 
+										<div>
+											<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_custom_footer_hooks">Hook Name </label>
+											<p class="TextBody TextBody--xxxs">The <code>storefront_before_footer</code> hook from the WooCommerce Storefront theme is used by default. This can be customised by setting the field to a hook of your choice.</p>
+
+											<!-- Add new attribute -->
+											<div class="flex-row">
+												<div class="flex-col-xxs-12" style="display: flex">
+													<div class="Field u-marginTop--xxs u-width--100">
+														<input id="custom-footer-hook-new" type="text" class="Field__input u-width--100" style="max-width: none;" placeholder="Add a new attribute" on="addNewAttribute()" />
+														<div class="Field__feedback">
+															<div class="feedback__inner js-field-feedback">
+																Error
+															</div>
+														</div>
+													</div>
+														<div>
+															<div class="Button Button--sm Button--primary u-marginTop--xs u-marginLeft--sm" onclick="addNewAttribute('custom-footer-hook-new', 'custom-footer-hooks-list', 'custom-footer-hooks-tags')">Add</div>
+														</div>
+														
+													</div>
+												</div>
+												
+											<!-- Attribute value -->
+											<?php
+												$custom_footer_hooks = get_option('REVIEWSio_custom_footer_hooks');
+											?>
+
+											<input type="hidden" id="custom-footer-hooks-list" class="js-tags-list" name="REVIEWSio_custom_footer_hooks" value="<?php echo htmlentities($custom_footer_hooks); ?>">
+
+											<!-- Attribute tags -->
+											<div class="u-marginBottom--sm">
+												<div class="TagsInputElement">
+													<ul id="custom-footer-hooks-tags" class="flex-row tags"></ul>
+												</div>
+											</div>
+										</div>
+
+										<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_footer_scripts">Footer Configuration Options</label>
+										<div>
+											<p class="TextBody TextBody--xxxs u-marginBottom--sm">
+												Customise options related to displaying content above the footer
+											</p>
+										</div>
 										<div class="TextBody TextBody--xxxs u-marginBottom--md">
 											<div style="display: flex;">
 												<label class="CheckSelection u-marginBottom--none">
@@ -1407,7 +1501,7 @@ if(!defined('ABSPATH')) {
 								</div>
 
 								<div id="legacy" class="form-table js-widget" style="display: none">
-									<div class="GlobalNotification GlobalNotification--sm GlobalNotification--coloured-warning u-marginBottom--md js-feed-notification" style="display: block;">
+									<div class="GlobalNotification GlobalNotification--sm GlobalNotification--coloured-warning u-marginBottom--md" style="display: block;">
 										<div class="flex-row flex-middle-xxs">
 											<div class="flex-col-xxs-12">
 												<div class="TextHeading TextHeading--xxxxs u-marginBottom--none">
