@@ -599,6 +599,7 @@ if(!defined('ABSPATH')) {
 														<option <?php echo ($polaris_review_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Tab</option>
 														<option <?php echo ($polaris_review_widget == 'summary') ? 'selected' : '' ?> value="summary">Show Below Product Summary</option>
 														<option <?php echo ($polaris_review_widget == 'bottom') ? 'selected' : '' ?> value="bottom">Show At Bottom of Page</option>
+														<option <?php echo ($polaris_review_widget == 'manual') ? 'selected' : '' ?> value="manual">Manual</option>
 														<option <?php echo ($polaris_review_widget == '0') ? 'selected' : '' ?> value="0">Do Not Display</option>
 													</select>
 													<div class="Field__label">
@@ -781,7 +782,7 @@ if(!defined('ABSPATH')) {
 
 										<div>
 											<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_rating_snippet_custom_collection_location">Custom Category Pages Location:</label>
-											<p class="TextBody TextBody--xxxs">Enable this option to set a custom hook to be added to a product card.</p>
+											<p class="TextBody TextBody--xxxs">Enable this option to set custom hook locations to add the rating to specific locations in your theme. The default hook used is <code>woocommerce_after_shop_loop_item</code> which is located on the category page.</p>
 											<?php
 												$enable_rating_snippet_custom_collection_location = get_option('REVIEWSio_enable_rating_snippet_custom_collection_location');
 												$custom_rating_snippet_collection_hook = get_option('REVIEWSio_custom_rating_snippet_collection_hook');
@@ -802,7 +803,7 @@ if(!defined('ABSPATH')) {
 											<div class="flex-row">
 												<div class="flex-col-xxs-12 flex-col-sm-8" style="display: flex">
 													<div class="Field u-marginTop--xxs u-width--100">
-														<input id="rating-snippet-new-hook" type="text" class="Field__input u-width--100" style="max-width: none;" placeholder="Add a new attribute" on="addNewAttribute()" />
+														<input id="rating-snippet-new-hook" type="text" class="Field__input u-width--100" style="max-width: none;" placeholder="Add a template hook" on="addNewAttribute()" />
 														<div class="Field__feedback">
 															<div class="feedback__inner js-field-feedback">
 																Error
@@ -904,7 +905,7 @@ if(!defined('ABSPATH')) {
 										<div class="flex-row">
 											<div class="flex-col-xxs-12 flex-col-sm-6">
 												<div class="Field u-marginTop--xxs u-width--100" tooltip="The dropdown menu contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and copy the shortcode generated below." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
-													<select id="nuggets_shortcode-widget-options-dropdown" class="Field__input Field__input--globalSelect" onchange="addWidgetIdToShortcode(this)">
+													<select id="nuggets_shortcode-widget-options-dropdown" class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" onchange="addWidgetIdToShortcode(this)">
 														<option value="">Please Select</option>
 													</select>
 													<div class="Field__label">
@@ -1075,7 +1076,7 @@ if(!defined('ABSPATH')) {
 											<div class="flex-row">
 												<div class="flex-col-xxs-12 flex-col-sm-6">
 													<div class="Field u-marginTop--xxs u-width--100" tooltip="The dropdown menu contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and copy the shortcode generated below." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
-														<select id="ugc-widget-options-dropdown" class="Field__input Field__input--globalSelect" onchange="addWidgetIdToShortcode(this)">
+														<select id="ugc-widget-options-dropdown" class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" onchange="addWidgetIdToShortcode(this)">
 														<option value="">Please Select</option>
 													</select>
 														<div class="Field__label">
@@ -1237,7 +1238,7 @@ if(!defined('ABSPATH')) {
 											<div class="flex-row">
 												<div class="flex-col-xxs-12 flex-col-sm-6">
 													<div class="Field u-marginTop--xxs u-width--100" tooltip="The dropdown menu contains a list of your personalised styles made in the REVIEWS.io widget editor. Simply select the option you want from the list, and copy the shortcode generated below." tooltip-size="180" tooltip-fontsize="xxxxs" tooltip-position="top" tooltip-enable="false">
-														<select id="rating_bar-widget-options-dropdown" class="Field__input Field__input--globalSelect" onchange="addWidgetIdToShortcode(this)">
+														<select id="rating_bar-widget-options-dropdown" class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" onchange="addWidgetIdToShortcode(this)">
 															<option value="">Please Select</option>
 														</select>
 														<div class="Field__label">
@@ -1299,7 +1300,7 @@ if(!defined('ABSPATH')) {
 
 										<h3><strong>Generate Carousel Shortcode</strong></h3>
 										<p class="TextBody TextBody--xxxs">
-											Enhance your website with dynamic content and features using shortcodes, which are small pieces of code enclosed in square brackets, using <code>[widget_name]</code>. For our Rating Bar shortcode, simply add the 'widget_id' from our widget editor in the format <code>[rating_bar_widget widget_id='your widget id']</code>. 
+											Enhance your website with dynamic content and features using shortcodes, which are small pieces of code enclosed in square brackets, using <code>[widget_name]</code>. For our Rating Bar shortcode, simply add the 'widget_id' from our widget editor in the format <code>[carousel_widget]</code>.
 										</p>
 										<p class="TextBody TextBody--xxxs u-marginBottom--md">
 											Additional information on embedding shortcodes can be found in the <a href="https://wordpress.com/support/wordpress-editor/blocks/shortcode-block/" target="_blank">WordPress Documentation</a>.
@@ -1423,7 +1424,7 @@ if(!defined('ABSPATH')) {
 											<div class="flex-row">
 												<div class="flex-col-xxs-12" style="display: flex">
 													<div class="Field u-marginTop--xxs u-width--100">
-														<input id="custom-footer-hook-new" type="text" class="Field__input u-width--100" style="max-width: none;" placeholder="Add a new attribute" on="addNewAttribute()" />
+														<input id="custom-footer-hook-new" type="text" class="Field__input u-width--100" style="max-width: none;" placeholder="Add a template hook" on="addNewAttribute()" />
 														<div class="Field__feedback">
 															<div class="feedback__inner js-field-feedback">
 																Error
@@ -1724,6 +1725,25 @@ if(!defined('ABSPATH')) {
 			<div class="tab-contents js-advanced-tab">
 				<!-- Advanced -->
 
+				<div>
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_disable_elementor_blocks">Disable Elementor Widget Blocks: </label>
+					<p class="TextBody TextBody--xxxs">If enabled, all REVIEWSio widget blocks in the Elementor editor and blocks placed on Elementor pages will be removed.</p>
+
+					<?php
+						$disable_elementor_blocks = get_option('REVIEWSio_disable_elementor_blocks');
+					?>
+					<div class="flex-row">
+						<div class="flex-col-xxs-12 flex-col-sm-6">
+							<div class="Field u-marginTop--xxs u-width--100">
+								<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_disable_elementor_blocks">
+									<option <?php echo ($disable_elementor_blocks== 1) ? 'selected' : '' ?> value="1">Yes</option>
+									<option <?php echo ($disable_elementor_blocks== 0) ? 'selected' : '' ?> value="0">No</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
 				<div>
 					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_disable_reviews_per_product">Disable Reviews Per Product: </label>
 					<p class="TextBody TextBody--xxxs">If this is enabled then you can use the WooCommerce "Reviews Enabled" setting to disable review collection for certain products.</p>
