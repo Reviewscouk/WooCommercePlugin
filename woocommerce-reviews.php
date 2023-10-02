@@ -11,12 +11,13 @@ if(!defined('ABSPATH')) {
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 1.1.0
+ * Version: 1.2.0
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
 */
 
+require_once( __DIR__ . '/includes/elementor-functions.php' );
 use Automattic\WooCommerce\Utilities\FeaturesUtil;
 use Automattic\WooCommerce\Utilities\OrderUtil;
 
@@ -31,6 +32,10 @@ function declare_wc_compatibility() {
 }
 add_action( 'before_woocommerce_init', 'declare_wc_compatibility');
 
+/**
+ * Initialise plugin
+ *
+ */
 function reviewsio_admin_scripts() {
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__));
@@ -132,15 +137,17 @@ if (!class_exists('WooCommerce_Reviews')) {
         public function init_settings()
         {
           $optionsPrefix = 'REVIEWSio_';
-          $options = ["region","domain","store_id","api_key","product_feed","widget_hex_colour","widget_custom_css",
-          "enable_rich_snippet","enable_product_rich_snippet","enable_product_rich_snippet_server_side","enable_product_rating_snippet","enable_rating_snippet_custom_collection_location","custom_rating_snippet_collection_hook",
-          "enable_nuggets_widget","nuggets_widget_options","nuggets_widget_tags","enable_nuggets_bar_widget","nuggets_bar_widget_id","nuggets_bar_widget_tags","enable_floating_react_widget","floating_react_widget_options","ugc_widget_options","enable_survey_widget","survey_widget_options","survey_widget_campaign_options","carousel_type","carousel_custom_styles",
-          "polaris_review_widget","reviews_tab_name","polaris_review_widget_questions","polaris_custom_styles","product_review_widget","question_answers_widget",
-          "hide_write_review_button","per_page_review_widget","send_product_review_invitation","enable_cron",
-          "enable_floating_widget","product_identifier","disable_reviews_per_product","use_parent_product", "use_parent_product_rich_snippet",
-          "custom_reviews_widget_styles","disable_rating_snippet_popup", "disable_rating_snippet_popup_category", "minimum_rating","rating_snippet_text", "enable_rating_snippet_listen_for_changes","polaris_lang","disable_rating_snippet_offset","hide_legacy","rating_snippet_no_linebreak","enable_footer_scripts","custom_footer_hooks","footer_show_on_homepage","footer_show_on_collection_pages","footer_custom_script",
-          "new_variables_set", "product_feed_custom_attributes",
-          "widget_custom_header_config", "widget_custom_filtering_config" , "widget_custom_reviews_config", "product_feed_wpseo_global_ids"];
+          $options = [
+            "region","domain","store_id","api_key","product_feed","widget_hex_colour","widget_custom_css",
+            "enable_rich_snippet","enable_product_rich_snippet","enable_product_rich_snippet_server_side","enable_product_rating_snippet","enable_rating_snippet_custom_collection_location","custom_rating_snippet_collection_hook",
+            "enable_nuggets_widget","nuggets_widget_options","nuggets_widget_tags","enable_nuggets_bar_widget","nuggets_bar_widget_id","nuggets_bar_widget_tags","enable_floating_react_widget","floating_react_widget_options","ugc_widget_options","enable_survey_widget","survey_widget_options","survey_widget_campaign_options","carousel_type","carousel_custom_styles",
+            "polaris_review_widget","reviews_tab_name","polaris_review_widget_questions","polaris_custom_styles","product_review_widget","question_answers_widget",
+            "hide_write_review_button","per_page_review_widget","send_product_review_invitation","enable_cron",
+            "enable_floating_widget","product_identifier","disable_elementor_blocks","disable_reviews_per_product","use_parent_product", "use_parent_product_rich_snippet",
+            "custom_reviews_widget_styles","disable_rating_snippet_popup", "disable_rating_snippet_popup_category", "minimum_rating","rating_snippet_text", "enable_rating_snippet_listen_for_changes","polaris_lang","disable_rating_snippet_offset","hide_legacy","rating_snippet_no_linebreak","enable_footer_scripts","custom_footer_hooks","footer_show_on_homepage","footer_show_on_collection_pages","footer_custom_script",
+            "new_variables_set", "product_feed_custom_attributes",
+            "widget_custom_header_config", "widget_custom_filtering_config" , "widget_custom_reviews_config", "product_feed_wpseo_global_ids"
+        ];
 
           foreach($options as $o) {
             register_setting('woocommerce-reviews', $optionsPrefix . $o);
@@ -173,6 +180,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             update_option('REVIEWSio_disable_rating_snippet_offset', 0);
             update_option('REVIEWSio_rating_snippet_no_linebreak', 0);
             update_option('REVIEWSio_enable_rating_snippet_listen_for_changes', 0);
+            update_option('REVIEWSio_disable_elementor_blocks', 0);
         }
 
         public function add_menu()
@@ -787,8 +795,10 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function reviewsio_carousel_widget_scripts() {
             wp_register_script('reviewsio-carousel-script', $this->getWidgetDomain().'carousel-inline-iframeless/dist.js?_t=2023032710', array(),false, false);
+            wp_register_style( 'reviewsio-carousel-style',  'https://assets.reviews.io/iconfont/reviewsio-icons/style.css?_t=2023100210', array(), false, false);
 
-              wp_enqueue_script('reviewsio-carousel-script');
+            wp_enqueue_script('reviewsio-carousel-script');
+            wp_enqueue_style('reviewsio-carousel-style');
         }
 
         public function getCarouselType($option, $type)
@@ -1492,6 +1502,21 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
         }
 
+        public function product_reviews_widget_shortcode($params)
+        {
+            if (get_option('REVIEWSio_polaris_review_widget') !== 'manual') return;
+            
+            $skus = $this->getProductSkus();
+            if (!empty($params) && !empty($params['sku'])) {                
+                $skuParam = trim($params['sku'], ';');
+                $skus = explode(';', $skuParam);
+            }
+
+            if(!empty($skus)) {
+                return $this->polarisReviewWidget($skus);
+            }
+        }
+
         public function polarisReviewWidget($skus = null)
         {
           $this->numWidgets++;
@@ -1499,8 +1524,10 @@ if (!class_exists('WooCommerce_Reviews')) {
               ?>
                   <?php add_action('wp_footer', array($this, 'reviewsio_polaris_review_scripts')); ?>
                   <?php
-                    $skus = $this->getProductSkus();
                     $color = $this->getHexColor();
+                    if (empty($skus)) {
+                        $skus = $this->getProductSkus();
+                    }
                   ?>
 
                   <script>
@@ -1788,6 +1815,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             } else {
               add_filter('woocommerce_after_single_product_summary', array($this, 'productPage'));
             }
+            add_shortcode('product_reviews_widget', array($this, 'product_reviews_widget_shortcode'));
 
             if (get_option('REVIEWSio_enable_rating_snippet_custom_collection_location') && !empty(get_option('REVIEWSio_custom_rating_snippet_collection_hook'))) {
                 $this->custom_rating_snippet_hooks();
@@ -1851,6 +1879,13 @@ if (!class_exists('WooCommerce_Reviews')) {
                 $this->insert_custom_scripts_before_footer();
             } else if (get_option('REVIEWSio_enable_footer_scripts')) {
                 add_action('storefront_before_footer', array($this, 'insert_scripts_before_footer'));
+            }
+
+            if (!get_option('REVIEWSio_disable_elementor_blocks')) {
+                add_action( 'elementor/elements/categories_registered', array( 'ElementorFunctions', 'add_elementor_widget_categories' ) );
+                add_action( 'elementor/widgets/register', array( 'ElementorFunctions', 'register_widgets' ) );
+            } else {
+                add_action( 'elementor/widgets/register', array( 'ElementorFunctions', 'unregister_widgets' ) );
             }
 
             if (isset($_GET["page"]) && trim($_GET["page"]) == 'reviewscouk') {
