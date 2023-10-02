@@ -64,6 +64,9 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 
 == Changelog ==
 
+= 1.2.0 =
+* Update - Drag and drop REVIEWS.io widgets directly into Elementor built pages, using the Elementor editor.
+
 = 1.1.0 =
 * Update - Add options to add custom hooks for Rating Snippet widget and footer scripts.
 * Dev - Modularise plugin directory structure.
