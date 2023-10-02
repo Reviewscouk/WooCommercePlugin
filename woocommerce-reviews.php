@@ -795,8 +795,10 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function reviewsio_carousel_widget_scripts() {
             wp_register_script('reviewsio-carousel-script', $this->getWidgetDomain().'carousel-inline-iframeless/dist.js?_t=2023032710', array(),false, false);
+            wp_register_style( 'reviewsio-carousel-style',  'https://assets.reviews.io/iconfont/reviewsio-icons/style.css?_t=2023100210', array(), false, false);
 
-              wp_enqueue_script('reviewsio-carousel-script');
+            wp_enqueue_script('reviewsio-carousel-script');
+            wp_enqueue_style('reviewsio-carousel-style');
         }
 
         public function getCarouselType($option, $type)
