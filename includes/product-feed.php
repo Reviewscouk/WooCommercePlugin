@@ -7,7 +7,46 @@ $fp = fopen('php://temp', 'w+');
 
 $batch_size = 100;
 $offset = 0;
-$headerArray = ['sku', 'name', 'image_url', 'link', 'mpn', 'woocommerce_product_sku', 'woocommerce_product_id', 'barcode', 'category', 'categories'];
+$headerArray = [
+    'sku',
+    'name',
+    'image_url',
+    'link',
+    'mpn',
+    'woocommerce_product_sku',
+    'woocommerce_product_id',
+    'barcode',
+    'category',
+    'categories'
+];
+//Yoast Global Identifiers
+if (get_option('REVIEWSio_product_feed_wpseo_global_ids')) {
+    $headerArray[] = 'wpseo_gtin';
+    $headerArray[] = 'wpseo_mpn';
+}
+$customProductAttributes = [
+    '_barcode',
+    'barcode',
+    '_gtin',
+    'gtin',
+    'mpn',
+    '_mpn'
+];
+if (!empty(get_option('REVIEWSio_product_feed_custom_attributes'))) {
+    $additionalCustomProductAttributes = get_option('REVIEWSio_product_feed_custom_attributes');
+    $additionalCustomProductAttributes = explode(',', $additionalCustomProductAttributes);
+    if (!empty($additionalCustomProductAttributes)) {
+        foreach ($additionalCustomProductAttributes as $additionalCustomProductAttribute) {
+            if (!in_array(strtolower($additionalCustomProductAttribute), $customProductAttributes)) {
+                $customProductAttributes[] = trim(strtolower($additionalCustomProductAttribute));
+            }
+        }
+    }
+}
+foreach ($customProductAttributes as $columnName) {
+    $headerArray[] = $columnName;
+}
+
 fputcsv($fp, $headerArray);
 
 while (true) {
@@ -26,7 +65,7 @@ while (true) {
 
     // Add product rows
     $productArray = [];
-    processProducts($productArray, $products);
+    processProducts($productArray, $products, $headerArray, $customProductAttributes);
     foreach ($productArray as $fields) {
         fputcsv($fp, $fields);
     }
@@ -45,11 +84,9 @@ echo $csv_contents;
 
 
 
-function processProducts(&$productArray, $products)
+function processProducts(&$productArray, $products, $headerArray, $customProductAttributes)
 {
-
     foreach ($products as $product) {
-
         $_pf      = new WC_Product_Factory();
         $_product = $_pf->get_product($product->ID);
 
@@ -57,7 +94,6 @@ function processProducts(&$productArray, $products)
         $woocommerce_id = $product->ID;
 
         $sku    = get_option('REVIEWSio_product_identifier') == 'id' ? $woocommerce_id : $woocommerce_sku;
-        $image_link = '';
 
         $image_id = $_product->get_image_id();
         $image_url = '';
@@ -78,39 +114,33 @@ function processProducts(&$productArray, $products)
         $categories_string = implode(', ', $categories_string);
 
         // Try to get barcode from meta, if nothing found, will return empty string
-        $try = array('_barcode', 'barcode', '_gtin', 'gtin');
-
+        $gtinFields = [
+            '_barcode',
+            'barcode',
+            '_gtin',
+            'gtin'
+        ];
         $barcode = '';
-
-        foreach ($try as $t) {
-
-            if (!empty($barcode)) break;
-
-            $barcode = get_post_meta($product->ID, $t, true);
+        foreach ($gtinFields as $gtinField) {
+            if (!empty($barcode)) {
+                break;
+            }
+            $barcode = get_post_meta($product->ID, $gtinField, true);
         }
 
         // Always add the parent product
-        $productArray[] = array($sku, $product->post_title, $image_url, get_permalink($product->ID), $sku, $woocommerce_sku, $woocommerce_id, $barcode, $categories_string, $categories_json);
-
-        $newFields = [];
-        $customProductAttributes = array('_barcode', 'barcode', '_gtin', 'gtin', 'mpn', '_mpn');
-        if (!empty(get_option('REVIEWSio_product_feed_custom_attributes'))) {
-            $additionalCustomProductAttributes = get_option('REVIEWSio_product_feed_custom_attributes');
-            $additionalCustomProductAttributes = explode(',', $additionalCustomProductAttributes);
-            if (!empty($additionalCustomProductAttributes)) {
-                foreach ($additionalCustomProductAttributes as $additionalCustomProductAttribute) {
-                    if (!in_array(strtolower($additionalCustomProductAttribute), $customProductAttributes)) {
-                        $customProductAttributes[] = trim(strtolower($additionalCustomProductAttribute));
-                    }
-                }
-            }
-        }
-
-        //Yoast Global Identifiers
-        if (get_option('REVIEWSio_product_feed_wpseo_global_ids')) {
-            $customProductAttributes[] = 'wpseo_gtin';
-            $customProductAttributes[] = 'wpseo_mpn';
-        }
+        $productArray[] = [
+            $sku,
+            $product->post_title,
+            $image_url,
+            get_permalink($product->ID),
+            $sku,
+            $woocommerce_sku,
+            $woocommerce_id,
+            $barcode,
+            $categories_string,
+            $categories_json
+        ];
 
         $attributes = $_product->get_attributes();
         $meta = get_post_meta($product->ID);
@@ -130,6 +160,7 @@ function processProducts(&$productArray, $products)
             }
         }
 
+        $newFields = [];
         foreach ($customProductAttributes as $key) {
             $key = strtolower($key);
             if (isset($productAttributes[$key]) && $productAttributes[$key]['is_taxonomy']) {
@@ -164,13 +195,8 @@ function processProducts(&$productArray, $products)
             foreach ($newFields as $columnName => $columnValue) {
                 $insertAtColumnIndex = false;
                 $columnName = strtolower($columnName);
-                //Insert column name if does not exist or get the column index
-                if (!in_array($columnName, $productArray[0])) {
-                    $productArray[0][] = $columnName;
-                } else {
-                    $insertAtColumnIndex = array_search($columnName, $productArray[0]);
-                }
-
+                //If column does not exist, this might break - might need a check
+                $insertAtColumnIndex = array_search($columnName, $headerArray);
                 //If column already exists check and update existing value else add to end
                 $newProductLine = $productArray[count($productArray) - 1];
                 if (!empty($insertAtColumnIndex)) {
@@ -242,12 +268,8 @@ function processProducts(&$productArray, $products)
                     foreach ($newFields as $columnName => $columnValue) {
                         $insertAtColumnIndex = false;
                         $columnName = strtolower($columnName);
-                        //Insert column name if does not exist or get the column index
-                        if (!in_array($columnName, $productArray[0])) {
-                            $productArray[0][] = $columnName;
-                        } else {
-                            $insertAtColumnIndex = array_search($columnName, $productArray[0]);
-                        }
+                        //If column does not exist then it might break
+                        $insertAtColumnIndex = array_search($columnName, $headerArray);
                         //If colummn already exists check and update existing value else add to end
                         $newProductLine = $productArray[count($productArray) - 1];
                         if (!empty($insertAtColumnIndex)) {
