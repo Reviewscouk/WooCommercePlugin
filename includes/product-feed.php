@@ -7,6 +7,7 @@ $fp = fopen('php://temp', 'w+');
 
 $batch_size = 100;
 $offset = 0;
+
 $headerArray = [
     'sku',
     'name',
@@ -19,19 +20,15 @@ $headerArray = [
     'category',
     'categories'
 ];
-//Yoast Global Identifiers
-if (get_option('REVIEWSio_product_feed_wpseo_global_ids')) {
-    $headerArray[] = 'wpseo_gtin';
-    $headerArray[] = 'wpseo_mpn';
-}
+
 $customProductAttributes = [
     '_barcode',
-    'barcode',
     '_gtin',
     'gtin',
-    'mpn',
     '_mpn'
 ];
+
+// Add additional columns to an array
 if (!empty(get_option('REVIEWSio_product_feed_custom_attributes'))) {
     $additionalCustomProductAttributes = get_option('REVIEWSio_product_feed_custom_attributes');
     $additionalCustomProductAttributes = explode(',', $additionalCustomProductAttributes);
@@ -43,6 +40,14 @@ if (!empty(get_option('REVIEWSio_product_feed_custom_attributes'))) {
         }
     }
 }
+
+//Yoast Global Identifiers
+if (get_option('REVIEWSio_product_feed_wpseo_global_ids')) {
+    $customProductAttributes[] = 'wpseo_gtin';
+    $customProductAttributes[] = 'wpseo_mpn';
+}
+
+// Append addtional columns to the header array
 foreach ($customProductAttributes as $columnName) {
     $headerArray[] = $columnName;
 }
@@ -176,6 +181,7 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
                 $newFields[$key] = ' ';
             }
         }
+
         //Yoast Global Identifiers
         if (get_option('REVIEWSio_product_feed_wpseo_global_ids')) {
             $productMetaGlobalIds = get_post_meta($_product->get_id(), 'wpseo_global_identifier_values', true);
@@ -190,6 +196,7 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
                 }
             }
         }
+
         //Add any matching attributes to product feeds and update existing columns
         if (!empty($newFields)) {
             foreach ($newFields as $columnName => $columnValue) {
@@ -204,11 +211,10 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
                         $newProductLine[$insertAtColumnIndex] = $columnValue;
                         $productArray[count($productArray) - 1] = $newProductLine;
                     }
-                } else {
-                    $productArray[count($productArray) - 1][] = $columnValue;
                 }
             }
         }
+
         //Set MPN to SKU value if was converted to blank
         if (!empty($productArray[count($productArray) - 1])) {
             $mpn = $productArray[count($productArray) - 1][4];
@@ -222,6 +228,7 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
         // Add variants as additional products
         if ($_pf->get_product_type($product->ID) == 'variable' && get_option('REVIEWSio_use_parent_product') != 1) {
             $available_variations = $_product->get_available_variations();
+
 
             foreach ($available_variations as $variation) {
                 $variant_sku = get_option('REVIEWSio_product_identifier') == 'id' ? $variation['variation_id'] : $variation['sku'];
@@ -249,6 +256,7 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
                         }
                     }
                 }
+
                 //Yoast Global Identifiers
                 if (get_option('REVIEWSio_product_feed_wpseo_global_ids')) {
                     if (!empty($productMetaGlobalIds)) {
@@ -277,11 +285,10 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
                                 $newProductLine[$insertAtColumnIndex] = $columnValue;
                                 $productArray[count($productArray) - 1] = $newProductLine;
                             }
-                        } else {
-                            $productArray[count($productArray) - 1][] = $columnValue;
                         }
                     }
                 }
+
                 //Set MPN to SKU value if was converted to blank
                 if (!empty($productArray[count($productArray) - 1])) {
                     $mpn = $productArray[count($productArray) - 1][4];
@@ -296,5 +303,6 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
 
         // Clear product memory
         unset($product);
+        unset($_pf);
     }
 }
