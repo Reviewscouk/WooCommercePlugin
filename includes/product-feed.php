@@ -41,7 +41,7 @@ if (!empty(get_option('REVIEWSio_product_feed_custom_attributes'))) {
     }
 }
 
-//Yoast Global Identifiers
+// Yoast Global Identifiers
 if (get_option('REVIEWSio_product_feed_wpseo_global_ids')) {
     $customProductAttributes[] = 'wpseo_gtin';
     $customProductAttributes[] = 'wpseo_mpn';
@@ -118,6 +118,9 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
         $categories_json = json_encode($categories_string);
         $categories_string = implode(', ', $categories_string);
 
+        $attributes = $_product->get_attributes();
+        $meta = get_post_meta($product->ID);
+
         // Try to get barcode from meta, if nothing found, will return empty string
         $gtinFields = [
             '_barcode',
@@ -130,7 +133,9 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
             if (!empty($barcode)) {
                 break;
             }
-            $barcode = get_post_meta($product->ID, $gtinField, true);
+
+            // $barcode = get_post_meta($product->ID, 'attribute_' . $gtinField, true);
+            $barcode = $attributes[$gtinField]['options'][0];
         }
 
         // Always add the parent product
@@ -146,9 +151,6 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
             $categories_string,
             $categories_json
         ];
-
-        $attributes = $_product->get_attributes();
-        $meta = get_post_meta($product->ID);
 
         $productAttributes = [];
         foreach ($attributes as $p) {
