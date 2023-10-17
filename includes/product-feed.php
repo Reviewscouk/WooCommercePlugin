@@ -243,16 +243,27 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
                 $productArray[] = array($variant_sku, $variant_title, $image_url, get_permalink($product->ID), $variation['sku'], $variation['sku'], $variation['variation_id'], $barcode, $categories_string, $categories_json);
 
                 $newFields = [];
+                
                 //Append main product attribute fields for variant products
                 foreach ($customProductAttributes as $key) {
                     $key = strtolower($key);
                     $newFields[$key] = !empty($productAttributes[$key]['options'][0]) ? $productAttributes[$key]['options'][0] : ' ';
                 }
+
                 //Overwrite with variant specific values if available
                 if (!empty($variation['attributes'])) {
                     foreach ($variation['attributes'] as $variant_attribute_key => $variant_attribute_value) {
                         $variantAttributeColumnName = str_replace('attribute_', '', $variant_attribute_key);
-                        $variantAttributeColumnValue = !empty($variant_attribute_value) ? $variant_attribute_value : ' ';
+                        if (!empty($variant_attribute_value)) {
+                            // Add variant meta values if available
+                            $variantAttributeColumnValue = $variant_attribute_value;
+                        } else if (!empty($attributes[$variantAttributeColumnName]['options'][0])) {
+                            // Add parent meto values if available
+                            $variantAttributeColumnValue = $attributes[$variantAttributeColumnName]['options'][0];
+                        } else {
+                            $variantAttributeColumnValue = ' ';
+                        }
+
                         if (!empty($newFields[strtolower($variantAttributeColumnName)])) {
                             $newFields[strtolower($variantAttributeColumnName)] = $variantAttributeColumnValue;
                         }
