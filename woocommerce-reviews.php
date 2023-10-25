@@ -90,6 +90,12 @@ if (!class_exists('WooCommerce_Reviews')) {
             if (get_option('REVIEWSio_enable_product_rich_snippet')) {
                 add_filter( 'wpseo_schema_product', '__return_false');
             }
+
+            // Cron Test
+            error_log('1: CRON Test');
+            add_filter('cron_schedules', array($this, 'custom_cron_intervals'));
+            add_action('init', array($this, 'schedule_product_feed_event'));
+            add_action('process_product_feed_event', array($this, 'process_product_feed_callback'));
         }
 
         public function is_hpos_enabled() {
@@ -99,6 +105,37 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             return false;
+        }
+
+        // Register a custom 60 second interval to cron schedules
+        public function custom_cron_intervals($schedules) {
+            error_log('2: custom_cron_intervals()');
+
+            $schedules['minute'] = array(
+                'interval' => 60,
+                'display' => esc_html__('Every minute'),
+            );
+            return $schedules;
+        }
+
+        // Schedule an event to run every 60 seconds
+        public function schedule_product_feed_event() {
+            error_log('3: schedule_product_feed_event()');
+            if (!wp_next_scheduled('process_product_feed_event')) {
+                wp_schedule_event(time(), 'minute', 'process_product_feed_event');
+            }
+        }
+
+        function process_product_feed_callback() {
+            error_log('4: process_product_feed_callback');
+            // Run every 60 seconds
+            $this->process_product_feed();
+        }
+
+        public function process_product_feed()
+        {
+            error_log('Location: ' . get_site_url() . '/index.php/reviews/product_feed');
+            header('Location: ' . get_site_url() . '/index.php/reviews/product_feed');
         }
 
         public function getSubDomain($sub)
@@ -303,6 +340,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function run_on_deactivate()
         {
+            wp_clear_scheduled_hook('process_product_feed_event');
             wp_clear_scheduled_hook('hourly_order_process_event');
         }
 
