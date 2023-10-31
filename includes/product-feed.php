@@ -3,6 +3,33 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// Define file directory for CSV Cron to save in
+$parentDirectory = dirname(__DIR__);
+$filesDirectory = $parentDirectory . '/files/';
+if (!file_exists($filesDirectory)) {
+    mkdir($filesDirectory, 0777, true);
+}
+$url = $_SERVER['REQUEST_URI'];
+$refreshFeed = explode('?', $url);
+$csvFilePath = $filesDirectory . 'product_feed.csv';
+
+
+// Download from plugin directory if file exists
+if (file_exists($csvFilePath) && !in_array('refresh', $refreshFeed)) {
+    header('Content-Description: File Transfer');
+    header('Content-Type: application/octet-stream');
+    header('Content-Disposition: attachment; filename=' . basename($csvFilePath));
+    header('Expires: 0');
+    header('Cache-Control: must-revalidate');
+    header('Pragma: public');
+    header('Content-Length: ' . filesize($csvFilePath));
+    ob_clean();
+    flush();
+    readfile($csvFilePath);
+    exit;
+}
+
+// Generate product feed CSV
 $fp = fopen('php://temp', 'w+');
 
 $batch_size = 100;
@@ -54,6 +81,7 @@ foreach ($customProductAttributes as $columnName) {
 
 fputcsv($fp, $headerArray);
 
+// Loop through records in batches and append to csv file
 while (true) {
     $args = array(
         'post_type' => 'product',
@@ -83,9 +111,15 @@ rewind($fp);
 $csv_contents = stream_get_contents($fp);
 fclose($fp);
 
-// Handle/Output your final sanitised CSV contents
+// Handle/Output your final sanitised CSV contents for download
 header('Content-Type: text/csv; charset=UTF-8');
 echo $csv_contents;
+
+// Save generated file to plugin directory if product feed cron is enabled
+if (get_option('REVIEWSio_enable_product_feed_cron')) {
+    file_put_contents($csvFilePath, $csv_contents);
+}
+
 
 
 
@@ -243,19 +277,17 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
                 $productArray[] = array($variant_sku, $variant_title, $image_url, get_permalink($product->ID), $variation['sku'], $variation['sku'], $variation['variation_id'], $barcode, $categories_string, $categories_json);
 
                 $newFields = [];
-                
                 //Append main product attribute fields for variant products
                 foreach ($customProductAttributes as $key) {
                     $key = strtolower($key);
                     $newFields[$key] = !empty($productAttributes[$key]['options'][0]) ? $productAttributes[$key]['options'][0] : ' ';
                 }
-
                 //Overwrite with variant specific values if available
                 if (!empty($variation['attributes'])) {
                     foreach ($variation['attributes'] as $variant_attribute_key => $variant_attribute_value) {
                         $variantAttributeColumnName = str_replace('attribute_', '', $variant_attribute_key);
                         if (!empty($variant_attribute_value)) {
-                            // Add variant meta values if available
+                            // Add variant meta value if available
                             $variantAttributeColumnValue = $variant_attribute_value;
                         } else if (!empty($attributes[$variantAttributeColumnName]['options'][0])) {
                             // Add parent meto values if available

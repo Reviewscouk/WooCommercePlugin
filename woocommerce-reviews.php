@@ -11,7 +11,7 @@ if(!defined('ABSPATH')) {
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 1.2.1
+ * Version: 1.2.2
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -91,11 +91,12 @@ if (!class_exists('WooCommerce_Reviews')) {
                 add_filter( 'wpseo_schema_product', '__return_false');
             }
 
-            // Cron Test
-            error_log('1: CRON Test');
-            add_filter('cron_schedules', array($this, 'custom_cron_intervals'));
-            add_action('init', array($this, 'schedule_product_feed_event'));
-            add_action('process_product_feed_event', array($this, 'process_product_feed_callback'));
+            // Product Feed Cron
+            if (get_option('REVIEWSio_enable_product_feed_cron')) {
+                add_filter('cron_schedules', array($this, 'custom_cron_intervals'));
+                add_action('init', array($this, 'schedule_product_feed_event'));
+                add_action('reviewsio_process_product_feed_event', array($this, 'process_product_feed_callback'));
+            }
         }
 
         public function is_hpos_enabled() {
@@ -105,37 +106,6 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             return false;
-        }
-
-        // Register a custom 60 second interval to cron schedules
-        public function custom_cron_intervals($schedules) {
-            error_log('2: custom_cron_intervals()');
-
-            $schedules['minute'] = array(
-                'interval' => 60,
-                'display' => esc_html__('Every minute'),
-            );
-            return $schedules;
-        }
-
-        // Schedule an event to run every 60 seconds
-        public function schedule_product_feed_event() {
-            error_log('3: schedule_product_feed_event()');
-            if (!wp_next_scheduled('process_product_feed_event')) {
-                wp_schedule_event(time(), 'minute', 'process_product_feed_event');
-            }
-        }
-
-        function process_product_feed_callback() {
-            error_log('4: process_product_feed_callback');
-            // Run every 60 seconds
-            $this->process_product_feed();
-        }
-
-        public function process_product_feed()
-        {
-            error_log('Location: ' . get_site_url() . '/index.php/reviews/product_feed');
-            header('Location: ' . get_site_url() . '/index.php/reviews/product_feed');
         }
 
         public function getSubDomain($sub)
@@ -175,16 +145,16 @@ if (!class_exists('WooCommerce_Reviews')) {
         {
           $optionsPrefix = 'REVIEWSio_';
           $options = [
-            "region","domain","store_id","api_key","product_feed","widget_hex_colour","widget_custom_css",
-            "enable_rich_snippet","enable_product_rich_snippet","enable_product_rich_snippet_server_side","enable_product_rating_snippet","enable_rating_snippet_custom_collection_location","custom_rating_snippet_collection_hook",
-            "enable_nuggets_widget","nuggets_widget_options","nuggets_widget_tags","enable_nuggets_bar_widget","nuggets_bar_widget_id","nuggets_bar_widget_tags","enable_floating_react_widget","floating_react_widget_options","ugc_widget_options","enable_survey_widget","survey_widget_options","survey_widget_campaign_options","carousel_type","carousel_custom_styles",
-            "polaris_review_widget","reviews_tab_name","polaris_review_widget_questions","polaris_custom_styles","product_review_widget","question_answers_widget",
-            "hide_write_review_button","per_page_review_widget","send_product_review_invitation","enable_cron",
-            "enable_floating_widget","product_identifier","disable_elementor_blocks","disable_reviews_per_product","use_parent_product", "use_parent_product_rich_snippet",
-            "custom_reviews_widget_styles","disable_rating_snippet_popup", "disable_rating_snippet_popup_category", "minimum_rating","rating_snippet_text", "enable_rating_snippet_listen_for_changes","polaris_lang","disable_rating_snippet_offset","hide_legacy","rating_snippet_no_linebreak","enable_footer_scripts","custom_footer_hooks","footer_show_on_homepage","footer_show_on_collection_pages","footer_custom_script",
+            "region", "domain", "store_id", "api_key", "product_feed", "widget_hex_colour", "widget_custom_css",
+            "enable_rich_snippet", "enable_product_rich_snippet", "enable_product_rich_snippet_server_side", "enable_product_rating_snippet", "enable_rating_snippet_custom_collection_location", "custom_rating_snippet_collection_hook",
+            "enable_nuggets_widget", "nuggets_widget_options", "nuggets_widget_tags", "enable_nuggets_bar_widget", "nuggets_bar_widget_id", "nuggets_bar_widget_tags", "enable_floating_react_widget", "floating_react_widget_options", "ugc_widget_options", "enable_survey_widget", "survey_widget_options", "survey_widget_campaign_options", "carousel_type", "carousel_custom_styles",
+            "polaris_review_widget", "reviews_tab_name", "polaris_review_widget_questions", "polaris_custom_styles", "product_review_widget", "question_answers_widget",
+            "hide_write_review_button", "per_page_review_widget", "send_product_review_invitation", "enable_cron", "enable_product_feed_cron", "product_feed_cron_frequency", "current_product_feed_cron_frequency",
+            "enable_floating_widget", "product_identifier", "disable_elementor_blocks", "disable_reviews_per_product", "use_parent_product", "use_parent_product_rich_snippet",
+            "custom_reviews_widget_styles", "disable_rating_snippet_popup", "disable_rating_snippet_popup_category", "minimum_rating", "rating_snippet_text", "enable_rating_snippet_listen_for_changes", "polaris_lang", "disable_rating_snippet_offset", "hide_legacy", "rating_snippet_no_linebreak", "enable_footer_scripts", "custom_footer_hooks", "footer_show_on_homepage", "footer_show_on_collection_pages", "footer_custom_script",
             "new_variables_set", "product_feed_custom_attributes",
-            "widget_custom_header_config", "widget_custom_filtering_config" , "widget_custom_reviews_config", "product_feed_wpseo_global_ids"
-        ];
+            "widget_custom_header_config", "widget_custom_filtering_config", "widget_custom_reviews_config", "product_feed_wpseo_global_ids"
+            ];
 
           foreach($options as $o) {
             register_setting('woocommerce-reviews', $optionsPrefix . $o);
@@ -218,6 +188,8 @@ if (!class_exists('WooCommerce_Reviews')) {
             update_option('REVIEWSio_rating_snippet_no_linebreak', 0);
             update_option('REVIEWSio_enable_rating_snippet_listen_for_changes', 0);
             update_option('REVIEWSio_disable_elementor_blocks', 0);
+            update_option('REVIEWSio_product_feed_cron_frequency', 'daily');
+            update_option('REVIEWSio_current_product_feed_cron_frequency', 'daily');
         }
 
         public function add_menu()
@@ -297,6 +269,46 @@ if (!class_exists('WooCommerce_Reviews')) {
             include sprintf("%s/includes/settings-page.php", dirname(__FILE__));
         }
 
+        // Register a custom 60 second interval to cron schedules
+        public function custom_cron_intervals($schedules)
+        {
+            $schedules['minute'] = array(
+                'interval' => 60,
+                'display' => esc_html__('Every minute'),
+            );
+            return $schedules;
+        }
+
+        // Schedule a cron event for product feed
+        public function schedule_product_feed_event()
+        {
+            $cron_frequency = get_option('REVIEWSio_product_feed_cron_frequency');
+            $current_cron_frequency = get_option('REVIEWSio_current_product_feed_cron_frequency');
+
+            if ($cron_frequency !== $current_cron_frequency) {
+                wp_clear_scheduled_hook('reviewsio_process_product_feed_event');
+            }
+
+            if (!wp_next_scheduled('reviewsio_process_product_feed_event')) {
+                wp_schedule_event(time(), $cron_frequency, 'reviewsio_process_product_feed_event');
+            }
+        }
+
+        function process_product_feed_callback()
+        {
+            // Cron log file
+            // $log_file = __DIR__ . '/cron_test_log.txt';
+            // $message = "Cron job executed at: " . date("Y-m-d H:i:s") . "\n";
+            // file_put_contents($log_file, $message, FILE_APPEND);
+
+            $this->process_product_feed();
+        }
+
+        public function process_product_feed()
+        {
+            include dirname(__FILE__) . '/includes/product-feed.php';
+        }
+
         /*
          * This runs hourly and runs processCompletedOrder if it hasn't already been run. This solves problems for clients using solutions like Veeqo to complete orders.
          */
@@ -340,7 +352,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function run_on_deactivate()
         {
-            wp_clear_scheduled_hook('process_product_feed_event');
+            wp_clear_scheduled_hook('reviewsio_process_product_feed_event');
             wp_clear_scheduled_hook('hourly_order_process_event');
         }
 
