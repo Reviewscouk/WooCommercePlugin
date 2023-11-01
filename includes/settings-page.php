@@ -793,6 +793,25 @@ if(!defined('ABSPATH')) {
 										</div>
 
 										<div>
+											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_enable_rating_snippet_show_empty_stars">Show Empty Stars: </label>
+											<p class="TextBody TextBody--xxxs">Enable this option to show stars on products with no reviews.</p>
+											<?php
+											$enable_rating_snippet_show_empty_stars = get_option('REVIEWSio_enable_rating_snippet_show_empty_stars');
+											?>
+
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-8">
+													<div class="Field u-marginTop--xxs u-width--100">
+														<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_enable_rating_snippet_show_empty_stars">
+															<option <?php echo ($enable_rating_snippet_show_empty_stars == 0) ? 'selected' : '' ?> value="0">Disabled (Default)</option>
+															<option <?php echo ($enable_rating_snippet_show_empty_stars == 1) ? 'selected' : '' ?> value="1">Enabled</option>
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div>
 											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_disable_rating_snippet_popup_category">Rating Snippet Popup on Category Pages: </label>
 											<p class="TextBody TextBody--xxxs">Disable or Enable the Rating Snippet Popup on homepage and category pages.</p>
 											<?php

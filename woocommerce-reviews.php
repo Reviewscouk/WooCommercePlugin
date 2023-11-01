@@ -151,7 +151,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             "polaris_review_widget", "reviews_tab_name", "polaris_review_widget_questions", "polaris_custom_styles", "product_review_widget", "question_answers_widget",
             "hide_write_review_button", "per_page_review_widget", "send_product_review_invitation", "enable_cron", "enable_product_feed_cron", "product_feed_cron_frequency", "current_product_feed_cron_frequency",
             "enable_floating_widget", "product_identifier", "disable_elementor_blocks", "disable_reviews_per_product", "use_parent_product", "use_parent_product_rich_snippet",
-            "custom_reviews_widget_styles", "disable_rating_snippet_popup", "disable_rating_snippet_popup_category", "minimum_rating", "rating_snippet_text", "enable_rating_snippet_listen_for_changes", "polaris_lang", "disable_rating_snippet_offset", "hide_legacy", "rating_snippet_no_linebreak", "enable_footer_scripts", "custom_footer_hooks", "footer_show_on_homepage", "footer_show_on_collection_pages", "footer_custom_script",
+            "custom_reviews_widget_styles", "disable_rating_snippet_popup", "disable_rating_snippet_popup_category", "minimum_rating", "rating_snippet_text", "enable_rating_snippet_listen_for_changes", "enable_rating_snippet_show_empty_stars", "polaris_lang", "disable_rating_snippet_offset", "hide_legacy", "rating_snippet_no_linebreak", "enable_footer_scripts", "custom_footer_hooks", "footer_show_on_homepage", "footer_show_on_collection_pages", "footer_custom_script",
             "new_variables_set", "product_feed_custom_attributes",
             "widget_custom_header_config", "widget_custom_filtering_config", "widget_custom_reviews_config", "product_feed_wpseo_global_ids"
             ];
@@ -187,6 +187,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             update_option('REVIEWSio_disable_rating_snippet_offset', 0);
             update_option('REVIEWSio_rating_snippet_no_linebreak', 0);
             update_option('REVIEWSio_enable_rating_snippet_listen_for_changes', 0);
+            update_option('REVIEWSio_enable_rating_snippet_show_empty_stars', 0);
             update_option('REVIEWSio_disable_elementor_blocks', 0);
             update_option('REVIEWSio_product_feed_cron_frequency', 'daily');
             update_option('REVIEWSio_current_product_feed_cron_frequency', 'daily');
@@ -547,7 +548,8 @@ if (!class_exists('WooCommerce_Reviews')) {
                       linebreak: "' . (get_option('REVIEWSio_rating_snippet_no_linebreak') == 1 ? false : true).'",
                       minRating: "' . (get_option('REVIEWSio_minimum_rating') ? get_option('REVIEWSio_minimum_rating') : 1).'",
                       text: "' . (get_option('REVIEWSio_rating_snippet_text') ? get_option('REVIEWSio_rating_snippet_text') : 'Reviews').'",
-                      listenForChanges: ' . (get_option('REVIEWSio_enable_rating_snippet_listen_for_changes') == 1 ? 'true' : 'false').',
+                      listenForChanges: ' . (get_option('REVIEWSio_enable_rating_snippet_listen_for_changes') == 1 ? 'true' : 'false'). ',
+                      showEmptyStars: ' . (get_option('REVIEWSio_enable_rating_snippet_show_empty_stars') == 1 ? true : false) . ',
                       '. $writeButton . '
                       '. (!empty(get_option('REVIEWSio_per_page_review_widget')) && is_int((int)get_option('REVIEWSio_per_page_review_widget')) ? 'polarisPerPage:' .get_option('REVIEWSio_per_page_review_widget').',' : '') .'
                       '. (!empty(get_option('REVIEWSio_widget_custom_header_config')) ? 'polarisHeader: {' .get_option('REVIEWSio_widget_custom_header_config').'},' : '') .'
