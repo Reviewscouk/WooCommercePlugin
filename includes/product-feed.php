@@ -3,6 +3,8 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+global $refresh_cron_feed;
+
 // Define file directory for CSV Cron to save in
 $parentDirectory = dirname(__DIR__);
 $filesDirectory = $parentDirectory . '/files/';
@@ -15,7 +17,7 @@ $csvFilePath = $filesDirectory . 'product_feed.csv';
 
 
 // Download from plugin directory if file exists
-if (file_exists($csvFilePath) && !in_array('refresh', $refreshFeed)) {
+if (file_exists($csvFilePath) && !in_array('refresh', $refreshFeed) && !$refresh_cron_feed) {
     header('Content-Description: File Transfer');
     header('Content-Type: application/octet-stream');
     header('Content-Disposition: attachment; filename=' . basename($csvFilePath));
