@@ -531,7 +531,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                         class="reviews-io-nuggets-widget"
                         data-widget-id="<?php echo get_option('REVIEWSio_nuggets_widget_options') ?>"
                         data-store-name="<?php echo get_option('REVIEWSio_store_id') ?>"
-                        lang="en"
+                        lang="<?php echo (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en') ?>"
                         data-sku="<?php echo implode(';', $skus) ?>"
                         tags="<?php echo get_option('REVIEWSio_nuggets_widget_tags') ?>"
                         branch=""
@@ -578,7 +578,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             class="reviews-io-nuggets-widget"
                             data-widget-id="' . $widget_id . '"
                             data-store-name="' . get_option('REVIEWSio_store_id') . '"
-                            lang="en"
+                            lang="' . (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en') . '"
                             data-sku="' . $skus . '"
                             tags="' . get_option('REVIEWSio_nuggets_widget_tags') . '"
                             branch=""
@@ -650,7 +650,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             class="reviews-io-nuggets-bar-widget"
                             data-widget-id="' . $widget_id . '"
                             data-store-name="' . get_option('REVIEWSio_store_id') . '"
-                            lang="en"
+                            lang="' . (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en') . '"
                             data-sku="' . $skus . '"
                         ></div>
                     ';
@@ -684,7 +684,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                         class="reviews-io-floating-widget"
                         data-widget-id="<?php echo get_option('REVIEWSio_floating_react_widget_options') ?>"
                         data-store-name="<?php echo get_option('REVIEWSio_store_id') ?>"
-                        lang="en"
+                        lang="<?php echo (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en') ?>"
                     ></div>
                 <?php
             } else {
@@ -709,7 +709,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             class="reviews-io-ugc-widget"
                             data-widget-id="' . $widget['widget_id'] . '"
                             data-store-name="' . get_option('REVIEWSio_store_id') . '"
-                            lang="en"
+                            lang="' . (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en') . '"
                         ></div>
                     ';
             } else {
@@ -734,7 +734,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             class="reviews-io-rating-bar-widget"
                             data-widget-id="' . $widget['widget_id'] . '"
                             data-store-name="' . get_option('REVIEWSio_store_id') . '"
-                            lang="en"
+                            lang="' . (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en') . '"
                         ></div>
                     ';
             } else {
@@ -759,7 +759,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                         store-name="<?php echo get_option('REVIEWSio_store_id') ?>"
                         widget-id="<?php echo get_option('REVIEWSio_survey_widget_options') ?>"
                         campaign-id="<?php echo get_option('REVIEWSio_survey_widget_campaign_options') ?>"
-                        lang="en"
+                        lang="<?php echo (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en') ?>"
                     ></div>
                 <?php
             } else {
@@ -785,7 +785,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             widget-id="' . $widget['widget_id'] . '"
                             campaign-id="' . $widget['campaign_id'] . '"
                             store-name="' . get_option('REVIEWSio_store_id') . '"
-                            lang="en"
+                            lang="' . (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en') . '"
                         ></div>
                     ';
             } else {
