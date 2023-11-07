@@ -445,7 +445,7 @@ if(!defined('ABSPATH')) {
 
 										<div>
 											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_minimum_rating">Widget Language</label>
-											<p class="TextBody TextBody--xxxs">Set the Language of the Product Review Widget and Rating Snippet popup.</p>
+											<p class="TextBody TextBody--xxxs">Set the Language of the widgets.</p>
 											<?php
 												$polaris_lang = get_option('REVIEWSio_polaris_lang');
 											?>
