@@ -868,7 +868,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             //Your REVIEWS.io account ID and widget type:
                             store: '<?php echo get_option('REVIEWSio_store_id') ?>',
                             sku: '<?php echo $skus ?>',
-                            lang: 'en',
+                            lang: '<?php echo (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en') ?>',
                             carousel_type: '<?php echo $this->getCarouselType('option', $carouselType); ?>',
                             styles_carousel: '<?php echo $this->getCarouselType('styles', $carouselType); ?>',
 
