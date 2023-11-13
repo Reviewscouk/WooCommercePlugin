@@ -569,16 +569,24 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != ''  && get_option('REVIEWSio_nuggets_widget_options') != '') {
                 $skus = $this->getProductSkus();
-?>
-                <script>
-                    window.addEventListener('load', function() {
-                        let nuggetScript = document.createElement('script');
-                        nuggetScript.src = 'https://widget.reviews.io/modern-widgets/nuggets.js';
-                        document.getElementsByTagName('head')[0].appendChild(nuggetScript)
-                    });
-                </script>
-                <div class="reviews-io-nuggets-widget" data-widget-id="<?php echo get_option('REVIEWSio_nuggets_widget_options') ?>" data-store-name="<?php echo get_option('REVIEWSio_store_id') ?>" lang="en" data-sku="<?php echo implode(';', $skus) ?>" tags="<?php echo get_option('REVIEWSio_nuggets_widget_tags') ?>" branch=""></div>
-            <?php
+                ?>
+                    <script>
+                        window.addEventListener('load', function() {
+                            let nuggetScript = document.createElement('script');
+                            nuggetScript.src = 'https://widget.reviews.io/modern-widgets/nuggets.js';
+                            document.getElementsByTagName('head')[0].appendChild(nuggetScript)
+                        });
+                    </script>
+                    <div 
+                        class="reviews-io-nuggets-widget"
+                        data-widget-id="<?php echo get_option('REVIEWSio_nuggets_widget_options') ?>"
+                        data-store-name="<?php echo get_option('REVIEWSio_store_id') ?>"
+                        lang="<?php echo (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en') ?>"
+                        data-sku="<?php echo implode(';', $skus) ?>"
+                        tags="<?php echo get_option('REVIEWSio_nuggets_widget_tags') ?>"
+                        branch=""
+                    ></div>
+                <?php
             } else {
                 echo '<script>console.log("Missing REVIEWS.io API Credentials for Nuggets Widget")</script>';
             }
@@ -620,7 +628,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             class="reviews-io-nuggets-widget"
                             data-widget-id="' . $widget_id . '"
                             data-store-name="' . get_option('REVIEWSio_store_id') . '"
-                            lang="en"
+                            lang="' . (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en') . '"
                             data-sku="' . $skus . '"
                             tags="' . get_option('REVIEWSio_nuggets_widget_tags') . '"
                             branch=""
@@ -692,7 +700,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             class="reviews-io-nuggets-bar-widget"
                             data-widget-id="' . $widget_id . '"
                             data-store-name="' . get_option('REVIEWSio_store_id') . '"
-                            lang="en"
+                            lang="' . (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en') . '"
                             data-sku="' . $skus . '"
                         ></div>
                     ';
@@ -711,7 +719,23 @@ if (!class_exists('WooCommerce_Reviews')) {
 
 
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != '' && get_option('REVIEWSio_floating_react_widget_options') != '') {
-            ?>
+                ?>
+                    <?php
+                        $skus = $this->getProductSkus();
+                    ?>
+                    <script>
+                        window.addEventListener('load', function() {
+                            let floatingcript = document.createElement('script');
+                            floatingcript.src = 'https://widget.reviews.io/modern-widgets/floating.js';
+                            document.getElementsByTagName('head')[0].appendChild(floatingcript)
+                        });
+                    </script>
+                    <div 
+                        class="reviews-io-floating-widget"
+                        data-widget-id="<?php echo get_option('REVIEWSio_floating_react_widget_options') ?>"
+                        data-store-name="<?php echo get_option('REVIEWSio_store_id') ?>"
+                        lang="<?php echo (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en') ?>"
+                    ></div>
                 <?php
                 $skus = $this->getProductSkus();
                 ?>
@@ -746,7 +770,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             class="reviews-io-ugc-widget"
                             data-widget-id="' . $widget['widget_id'] . '"
                             data-store-name="' . get_option('REVIEWSio_store_id') . '"
-                            lang="en"
+                            lang="' . (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en') . '"
                         ></div>
                     ';
             } else {
@@ -771,7 +795,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             class="reviews-io-rating-bar-widget"
                             data-widget-id="' . $widget['widget_id'] . '"
                             data-store-name="' . get_option('REVIEWSio_store_id') . '"
-                            lang="en"
+                            lang="' . (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en') . '"
                         ></div>
                     ';
             } else {
@@ -783,16 +807,22 @@ if (!class_exists('WooCommerce_Reviews')) {
         {
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != ''  && get_option('REVIEWSio_survey_widget_options') != '') {
                 $skus = $this->getProductSkus();
-            ?>
-                <script>
-                    window.addEventListener('load', function() {
-                        let surveyScript = document.createElement('script');
-                        surveyScript.src = 'https://widget.reviews.io/modern-widgets/survey.js';
-                        document.getElementsByTagName('head')[0].appendChild(surveyScript)
-                    });
-                </script>
-                <div class="reviews-io-survey-widget" store-name="<?php echo get_option('REVIEWSio_store_id') ?>" widget-id="<?php echo get_option('REVIEWSio_survey_widget_options') ?>" campaign-id="<?php echo get_option('REVIEWSio_survey_widget_campaign_options') ?>" lang="en"></div>
-            <?php
+                ?>
+                    <script>
+                        window.addEventListener('load', function() {
+                            let surveyScript = document.createElement('script');
+                            surveyScript.src = 'https://widget.reviews.io/modern-widgets/survey.js';
+                            document.getElementsByTagName('head')[0].appendChild(surveyScript)
+                        });
+                    </script>
+                    <div 
+                        class="reviews-io-survey-widget"
+                        store-name="<?php echo get_option('REVIEWSio_store_id') ?>"
+                        widget-id="<?php echo get_option('REVIEWSio_survey_widget_options') ?>"
+                        campaign-id="<?php echo get_option('REVIEWSio_survey_widget_campaign_options') ?>"
+                        lang="<?php echo (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en') ?>"
+                    ></div>
+                <?php
             } else {
                 echo '<script>console.log("Missing REVIEWS.io API Credentials for Survey Widget")</script>';
             }
@@ -816,7 +846,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             widget-id="' . $widget['widget_id'] . '"
                             campaign-id="' . $widget['campaign_id'] . '"
                             store-name="' . get_option('REVIEWSio_store_id') . '"
-                            lang="en"
+                            lang="' . (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en') . '"
                         ></div>
                     ';
             } else {
@@ -880,43 +910,92 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             ?>
-            <?php add_action('wp_footer', array($this, 'reviewsio_carousel_widget_scripts')); ?>
-            <?php
-            $skus = '';
-            $color = $this->getHexColor();
-            $carouselType = get_option('REVIEWSio_carousel_type');
-            if ($carouselType == '') $carouselType = 'card';
-            if (!empty($widget) && !empty($widget['sku'])) $skus = $widget['sku'];
-            ?>
-            <script>
-                window.addEventListener('load', function() {
-                    let carouselStylesheet = document.createElement('link');
-                    carouselStylesheet.type = 'text/css'
-                    carouselStylesheet.rel = 'stylesheet'
-                    carouselStylesheet.href = 'https://assets.reviews.io/css/widgets/carousel-widget.css?_t=2023032710';
-                    document.getElementsByTagName('head')[0].appendChild(carouselStylesheet)
+                <?php add_action('wp_footer', array($this, 'reviewsio_carousel_widget_scripts')); ?>
+                <?php
+                    $skus = '';
+                    $color = $this->getHexColor();
+                    $carouselType = get_option('REVIEWSio_carousel_type');
+                    if ($carouselType == '') $carouselType = 'card';
+                    if (!empty($widget) && !empty($widget['sku'])) $skus = $widget['sku'];
+                ?>
+                <script>
+                    window.addEventListener('load', function() {
+                        let carouselStylesheet = document.createElement('link');
+                        carouselStylesheet.type = 'text/css'
+                        carouselStylesheet.rel = 'stylesheet'
+                        carouselStylesheet.href = 'https://assets.reviews.io/css/widgets/carousel-widget.css?_t=2023032710';
+                        document.getElementsByTagName('head')[0].appendChild(carouselStylesheet)
 
-                    new carouselInlineWidget(('carousel-widget-<?php echo $this->numWidgets ?>'), {
-                        //Your REVIEWS.io account ID and widget type:
-                        store: '<?php echo get_option('REVIEWSio_store_id') ?>',
-                        sku: '<?php echo $skus ?>',
-                        lang: 'en',
-                        carousel_type: '<?php echo $this->getCarouselType('option', $carouselType); ?>',
-                        styles_carousel: '<?php echo $this->getCarouselType('styles', $carouselType); ?>',
+                        new carouselInlineWidget(('carousel-widget-<?php echo $this->numWidgets ?>'), {
+                            //Your REVIEWS.io account ID and widget type:
+                            store: '<?php echo get_option('REVIEWSio_store_id') ?>',
+                            sku: '<?php echo $skus ?>',
+                            lang: '<?php echo (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en') ?>',
+                            carousel_type: '<?php echo $this->getCarouselType('option', $carouselType); ?>',
+                            styles_carousel: '<?php echo $this->getCarouselType('styles', $carouselType); ?>',
 
-                        <?php if (empty(get_option('REVIEWSio_carousel_custom_styles'))) { ?>
-                            /* Widget settings: */
-                            options: {
-                                general: {
-                                    /*What reviews should the widget display? Available options: company, product, third_party. You can choose one type or multiple separated by comma.*/
-                                    review_type: 'company, product',
-                                    /*Minimum number of reviews required for widget to be displayed*/
-                                    min_reviews: '1',
-                                    /*Maximum number of reviews to include in the carousel widget.*/
-                                    max_reviews: '20',
-                                    address_format: 'CITY, COUNTRY',
-                                    /*Carousel auto-scrolling speed. 3000 = 3 seconds. If you want to disable auto-scroll, set this value to false.*/
-                                    enable_auto_scroll: 10000,
+                            <?php if (empty(get_option('REVIEWSio_carousel_custom_styles'))) { ?>
+                                /* Widget settings: */
+                                options:{
+                                    general:{
+                                        /*What reviews should the widget display? Available options: company, product, third_party. You can choose one type or multiple separated by comma.*/
+                                        review_type: 'company, product',
+                                        /*Minimum number of reviews required for widget to be displayed*/
+                                        min_reviews: '1',
+                                        /*Maximum number of reviews to include in the carousel widget.*/
+                                        max_reviews: '20',
+                                        address_format: 'CITY, COUNTRY',
+                                        /*Carousel auto-scrolling speed. 3000 = 3 seconds. If you want to disable auto-scroll, set this value to false.*/
+                                        enable_auto_scroll: 10000,
+                                    },
+                                    header:{
+                                        /*Show overall rating stars*/
+                                        enable_overall_stars: true,
+                                        rating_decimal_places: 2,
+                                    },
+                                    reviews: {
+                                        /*Show customer name*/
+                                        enable_customer_name: true,
+                                        /*Show customer location*/
+                                        enable_customer_location: true,
+                                        /*Show "verified review" badge*/
+                                        enable_verified_badge: true,
+                                        /*Show "verified subscriber" badge*/
+                                        enable_subscriber_badge: true,
+                                        /*Show "I recommend this product" badge (Only for product reviews)*/
+                                        enable_recommends_badge: true,
+                                        /*Show photos attached to reviews*/
+                                        enable_photos: true,
+                                        /*Show videos attached to reviews*/
+                                        enable_videos: true,
+                                        /*Show when review was written*/
+                                        enable_review_date: true,
+                                        /*Hide reviews written by the same customer (This may occur when customer reviews multiple products)*/
+                                        disable_same_customer: true,
+                                        /*Minimum star rating*/
+                                        min_review_percent: 4,
+                                        /*Show 3rd party review source*/
+                                        third_party_source: true,
+                                        /*Hide reviews without comments (still shows if review has a photo)*/
+                                        hide_empty_reviews: true,
+                                        /*Show product name*/
+                                        enable_product_name: true,
+                                        /*Show only reviews which have specific tags (multiple semicolon separated tags allowed i.e tag1;tag2)*/
+                                        tags: "",
+                                        /*Show branch, only one input*/
+                                        branch: "",
+                                        enable_branch_name: false,
+                                    },
+                                    popups: {
+                                        /*Make review items clickable (When they are clicked, a popup appears with more information about a customer and review)*/
+                                        enable_review_popups:  true,
+                                        /*Show "was this review helpful" buttons*/
+                                        enable_helpful_buttons: true,
+                                        /*Show how many times review was upvoted as helpful*/
+                                        enable_helpful_count: true,
+                                        /*Show share buttons*/
+                                        enable_share_buttons: true,
+                                    },
                                 },
                                 header: {
                                     /*Show overall rating stars*/
