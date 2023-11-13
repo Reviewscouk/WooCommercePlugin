@@ -302,11 +302,42 @@ if(!defined('ABSPATH')) {
 				</div>
 
 				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+
 				<div>
 					<label class="TextHeading TextHeading--xxxs">Latest Orders CSV:</label>
 					<p class="TextBody TextBody--xxxs">Download this CSV and upload it to the <b>Review Booster</b> section in the REVIEWS.io Dashboard to start collecting reviews.</p>
 					<a class="Button Button--outline Button--xs" href="<?php echo get_site_url(); ?>/index.php/reviews/order_csv">Download Latest Orders CSV</a>
 				</div>
+
+				<?php if (get_option('REVIEWSio_enable_product_feed_cron')) : ?>
+					<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+					<div>
+						<div>
+							<label class="TextHeading TextHeading--xxxs">Set Cron Interval:</label>
+							<p class="TextBody TextBody--xxxs">Choose to update product feed hourly, twice a day, daily or weekly.</p>
+							<?php
+								$productFeedCronFrequency = get_option('REVIEWSio_product_feed_cron_frequency');
+							?>
+							<div class="flex-row">
+								<div class="flex-col-xxs-12 flex-col-sm-6">
+									<div class="Field u-marginTop--xxs u-width--100">
+										<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_product_feed_cron_frequency">
+											<option <?php echo ($productFeedCronFrequency == 'hourly') ? 'selected' : '' ?> value="hourly">Hourly (60 Minutes)</option>
+											<option <?php echo ($productFeedCronFrequency == 'twicedaily') ? 'selected' : '' ?> value="twicedaily">Twice a Day (12 Hours)</option>
+											<option <?php echo ($productFeedCronFrequency == 'daily') ? 'selected' : '' ?> value="daily">Daily (24 Hours)</option>
+											<option <?php echo ($productFeedCronFrequency == 'weekly') ? 'selected' : '' ?> value="weekly">Weekly (7 Days)</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="u-marginBottom--md">
+							<label class="TextHeading TextHeading--xxxs">Refresh Product Feed:</label>
+							<p class="TextBody TextBody--xxxs">Sync latest feed from WooCommerce.</p>
+							<a class="Button Button--outline Button--xs" href="<?php echo get_site_url(); ?>/index.php/reviews/product_feed?refresh">Refresh and Download Feed</a>
+						</div>
+					</div>
+				<?php endif; ?>
 			</div>
 
 			<div class="tab-contents js-widgets-tab">
@@ -755,6 +786,25 @@ if(!defined('ABSPATH')) {
 														<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_enable_rating_snippet_listen_for_changes">
 															<option <?php echo ($enable_rating_snippet_listen_for_changes == 0) ? 'selected' : '' ?> value="0">Disabled (Default)</option>
 															<option <?php echo ($enable_rating_snippet_listen_for_changes == 1) ? 'selected' : '' ?> value="1">Enabled</option>
+														</select>
+													</div>
+												</div>
+											</div>
+										</div>
+
+										<div>
+											<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_enable_rating_snippet_show_empty_stars">Show Empty Stars: </label>
+											<p class="TextBody TextBody--xxxs">Enable this option to show stars on products with no reviews.</p>
+											<?php
+											$enable_rating_snippet_show_empty_stars = get_option('REVIEWSio_enable_rating_snippet_show_empty_stars');
+											?>
+
+											<div class="flex-row">
+												<div class="flex-col-xxs-12 flex-col-sm-8">
+													<div class="Field u-marginTop--xxs u-width--100">
+														<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_enable_rating_snippet_show_empty_stars">
+															<option <?php echo ($enable_rating_snippet_show_empty_stars == 0) ? 'selected' : '' ?> value="0">Disabled (Default)</option>
+															<option <?php echo ($enable_rating_snippet_show_empty_stars == 1) ? 'selected' : '' ?> value="1">Enabled</option>
 														</select>
 													</div>
 												</div>
@@ -1764,7 +1814,7 @@ if(!defined('ABSPATH')) {
 				</div>
 				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
 				<div>
-					<label class="TextHeading TextHeading--xxxs" class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_cron">Enable Cron: </label>
+					<label class="TextHeading TextHeading--xxxs" class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_cron">Enable Cron For Review Invitations: </label>
 					<p class="TextBody TextBody--xxxs">
 						If you use a third party system to mark orders as completed then review invitations may not be triggered. If this setting is enabled a cron will run hourly which queues invitations for recently completed orders. <br /><br /> To prevent the cron running on visitor page loads you should disable WP_CRON and setup a real cron as described <a target='_blank' href='https://easyengine.io/tutorials/wordpress/wp-cron-crontab/'>here</a>.
 					</p>
@@ -1784,6 +1834,26 @@ if(!defined('ABSPATH')) {
 					</div>
 				</div>
 				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+				<div>
+					<label class="TextHeading TextHeading--xxxs" class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_cron">Enable Cron For Product Feed: </label>
+					<p class="TextBody TextBody--xxxs">
+						Enable this option to generate a product feed updated daily to the server.
+					</p>
+
+					<?php
+					$enableProductFeedCron = get_option('REVIEWSio_enable_product_feed_cron');
+					?>
+					<div class="flex-row">
+						<div class="flex-col-xxs-12 flex-col-sm-6">
+							<div class="Field u-marginTop--xxs u-width--100">
+								<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_enable_product_feed_cron">
+									<option <?php echo ($enableProductFeedCron == 1) ? 'selected' : '' ?> value="1">Yes</option>
+									<option <?php echo ($enableProductFeedCron == 0) ? 'selected' : '' ?> value="0">No</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div>
 					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_product_identifier">Change Product Identifier</label>
 					<p class="TextBody TextBody--xxxs">Use a different identifier for your products and variants. This identifier will be used for new invitations and for looking up existing reviews.</p>
