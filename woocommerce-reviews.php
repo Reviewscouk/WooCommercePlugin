@@ -543,11 +543,11 @@ if (!class_exists('WooCommerce_Reviews')) {
                       lang: "' . (get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en') . '",
                       usePolaris: ' . ($load_polaris ? "true" : "false") . ',
                       color: "' . $this->getHexColor() . '",
-                      linebreak: "' . (get_option('REVIEWSio_rating_snippet_no_linebreak') == 1 ? false : true) . '",
+                      linebreak: "' . (get_option('REVIEWSio_rating_snippet_no_linebreak') == 1 ? 'false' : 'true') . '",
                       minRating: "' . (get_option('REVIEWSio_minimum_rating') ? get_option('REVIEWSio_minimum_rating') : 1) . '",
                       text: "' . (get_option('REVIEWSio_rating_snippet_text') ? get_option('REVIEWSio_rating_snippet_text') : 'Reviews') . '",
                       listenForChanges: ' . (get_option('REVIEWSio_enable_rating_snippet_listen_for_changes') == 1 ? 'true' : 'false') . ',
-                      showEmptyStars: ' . (get_option('REVIEWSio_enable_rating_snippet_show_empty_stars') == 1 ? true : false) . ',
+                      showEmptyStars: ' . (get_option('REVIEWSio_enable_rating_snippet_show_empty_stars') == 1 ? 'true' : 'false') . ',
                       ' . $writeButton . '
                       ' . (!empty(get_option('REVIEWSio_per_page_review_widget')) && is_int((int)get_option('REVIEWSio_per_page_review_widget')) ? 'polarisPerPage:' . get_option('REVIEWSio_per_page_review_widget') . ',' : '') . '
                       ' . (!empty(get_option('REVIEWSio_widget_custom_header_config')) ? 'polarisHeader: {' . get_option('REVIEWSio_widget_custom_header_config') . '},' : '') . '
