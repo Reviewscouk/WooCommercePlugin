@@ -2,7 +2,7 @@
 Contributors: Reviewscouk
 Tags: Reviews, Seller Ratings, Google Reviews, Company Reviews, Business Reviews, Product Reviews, Facebook Reviews, Amazon Reviews, Google Partner, Google Seller Ratings, Google Stars, Stars in Adwords
 Author URI: https://www.reviews.io
-Tested up to: 6.3
+Tested up to: 6.4.1
 Requires PHP: 7.4
 
 == Description ==
@@ -63,6 +63,12 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 
 
 == Changelog ==
+
+= 1.2.3 =
+* Fix - Hotfix for hide empty stars option on rating snippet.
+
+= 1.2.2 =
+* Fix - Product feed refactoring which includes ability to process via cron job, unify multi-language settings and added option to hide empty stars on rating snippet. 
 
 = 1.2.1 =
 * Fix - Product reviews widget bug fixes.
