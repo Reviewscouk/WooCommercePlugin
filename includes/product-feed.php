@@ -171,7 +171,9 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
             }
 
             // $barcode = get_post_meta($product->ID, 'attribute_' . $gtinField, true);
-            $barcode = $attributes[$gtinField]['options'][0];
+            if (!empty($attributes[$gtinField]) && !empty($attributes[$gtinField]['options'])) {
+                $barcode = $attributes[$gtinField]['options'][0];
+            }
         }
 
         // Always add the parent product
@@ -206,7 +208,7 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
         $newFields = [];
         foreach ($customProductAttributes as $key) {
             $key = strtolower($key);
-            if (isset($productAttributes[$key]) && $productAttributes[$key]['is_taxonomy']) {
+            if (!empty($productAttributes[$key]) && !empty($productAttributes[$key]['is_taxonomy'])) {
                 // pull in product terms if key provided
                 $terms = wc_get_product_terms($product->ID, $key, ['fields' => 'names']);
                 $value = array_shift($terms);

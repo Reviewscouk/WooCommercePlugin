@@ -64,6 +64,9 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 
 == Changelog ==
 
+= 1.2.4 =
+* Fix - Hotfix for product feed custom attributes undefined indexes.
+
 = 1.2.3 =
 * Fix - Hotfix for hide empty stars option on rating snippet.
 
