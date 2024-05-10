@@ -156,11 +156,9 @@ function toggleFeedFeedback(type, newValue) {
 }
 
 function removeDataFeed(button, list) {
-	let selectedItem = button.replace("tag-button-", "");
 	let feedAttrInput = jQuery(`#${list}`);
-	
-	let	feed = feedAttrInput.val().split(", ");
-	feed = feed.filter((item) => item !== selectedItem);
+	let feed = feedAttrInput.val().split(", ");
+	feed = feed.filter((item) => item !== button);
 	let newFeed = feed.join(", ");
 	feedAttrInput.val(newFeed);
 	toggleNotification();
@@ -175,16 +173,16 @@ function formatDataFeed(list, tags) {
 
 	feedListElement.empty();
 	feed.forEach(function (item, idx) {
-		jQuery("<li>", {
-			id: `tag-${item}`,
+		var listItem = jQuery("<li>", {
 			text: item,
+			"data-title": item,
 		}).appendTo(feedListElement);
 
 		jQuery("<span>", {
-			id: `tag-button-${item}`,
 			class: "remove-button",
 			text: "x",
-		}).appendTo(jQuery(`#tag-${item}`));
+			"data-title": item,
+		}).appendTo(listItem);
 	});
 }
 
@@ -214,7 +212,7 @@ function addNewAttribute(newValue, list, tags) {
 	formatDataFeed(list, tags);
 
 	jQuery(`#${tags} li span`).click(function () {
-		removeDataFeed(jQuery(this).attr("id"), list);
+		removeDataFeed(jQuery(this).attr("data-title"), list);
 		jQuery(this).parent().remove();
 	});
 }
@@ -224,7 +222,7 @@ jQuery(document).ready(function () {
 		let list = jQuery(this).parent().parent().parent().parent().prev().attr('id');
 		let listItem = jQuery(this);
 
-		removeDataFeed(listItem.attr("id"), list);
+		removeDataFeed(listItem.attr("data-title"), list);
 		listItem.parent().remove();
 	});
 });
