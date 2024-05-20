@@ -64,6 +64,12 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 
 == Changelog ==
 
+= 1.2.6 =
+* Update - Add support for WooCommerce Google Product Feed plugin GTIN attribute in the product feed.
+
+= 1.2.5 =
+* Fix - Fix pill buttons causing JavaScript errors.
+
 = 1.2.4 =
 * Fix - Hotfix for product feed custom attributes undefined indexes.
 

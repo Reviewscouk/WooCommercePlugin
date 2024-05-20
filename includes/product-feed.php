@@ -76,6 +76,11 @@ if (get_option('REVIEWSio_product_feed_wpseo_global_ids')) {
     $customProductAttributes[] = 'wpseo_mpn';
 }
 
+// WooCommerce Google Product Feed Attributes
+if (get_option('REVIEWSio_enable_gpf_data')) {
+    $customProductAttributes[] = 'gpf_gtin';
+}
+
 // Append addtional columns to the header array
 foreach ($customProductAttributes as $columnName) {
     $headerArray[] = $columnName;
@@ -134,7 +139,7 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
         $woocommerce_sku = $_product->get_sku();
         $woocommerce_id = $product->ID;
 
-        $sku    = get_option('REVIEWSio_product_identifier') == 'id' ? $woocommerce_id : $woocommerce_sku;
+        $sku = get_option('REVIEWSio_product_identifier') == 'id' ? $woocommerce_id : $woocommerce_sku;
 
         $image_id = $_product->get_image_id();
         $image_url = '';
@@ -237,6 +242,18 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
             }
         }
 
+        //WooCommerce Google Product Feed Attributes
+        if (get_option('REVIEWSio_enable_gpf_data')) {
+            $gpfData = get_post_meta($_product->get_id(), '_woocommerce_gpf_data', true);
+            if (!empty($gpfData)) {
+                foreach ($gpfData as $columnName => $columnValue) {
+                    if (strpos($columnName, 'gtin') !== false && !empty($columnValue)) {
+                        $newFields['gpf_gtin'] = $columnValue;
+                    }
+                }
+            }
+        }
+
         //Add any matching attributes to product feeds and update existing columns
         if (!empty($newFields)) {
             foreach ($newFields as $columnName => $columnValue) {
@@ -315,6 +332,18 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
                             }
                             if (strpos($columnName, 'mpn') !== false && !empty($columnValue)) {
                                 $newFields['wpseo_mpn'] = $columnValue;
+                            }
+                        }
+                    }
+                }
+
+                //WooCommerce Google Product Feed Attributes
+                if (get_option('REVIEWSio_enable_gpf_data')) {
+                    $gpfVariantData = get_post_meta($variation['variation_id'], '_woocommerce_gpf_data', true);
+                    if (!empty($gpfVariantData)) {
+                        foreach ($gpfVariantData as $columnName => $columnValue) {
+                            if (strpos($columnName, 'gtin') !== false && !empty($columnValue)) {
+                                $newFields['gpf_gtin'] = $columnValue;
                             }
                         }
                     }

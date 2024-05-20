@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
  * Description: REVIEWS.io is an all-in-one solution for your review strategy. Collect company, product, video, and photo reviews to increase your conversation rate both in your store and on Google.
  * Author: Reviews.co.uk
  * License: GPL
- * Version: 1.2.5
+ * Version: 1.2.6
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -155,7 +155,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                 "enable_floating_widget", "product_identifier", "disable_elementor_blocks", "disable_reviews_per_product", "use_parent_product", "use_parent_product_rich_snippet",
                 "custom_reviews_widget_styles", "disable_rating_snippet_popup", "disable_rating_snippet_popup_category", "minimum_rating", "rating_snippet_text", "enable_rating_snippet_listen_for_changes", "enable_rating_snippet_show_empty_stars", "polaris_lang", "disable_rating_snippet_offset", "hide_legacy", "rating_snippet_no_linebreak", "enable_footer_scripts", "custom_footer_hooks", "footer_show_on_homepage", "footer_show_on_collection_pages", "footer_custom_script",
                 "new_variables_set", "product_feed_custom_attributes",
-                "widget_custom_header_config", "widget_custom_filtering_config", "widget_custom_reviews_config", "product_feed_wpseo_global_ids"
+                "widget_custom_header_config", "widget_custom_filtering_config", "widget_custom_reviews_config", "product_feed_wpseo_global_ids", "enable_gpf_data"
             ];
 
             foreach ($options as $o) {

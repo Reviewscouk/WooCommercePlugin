@@ -262,6 +262,24 @@ if(!defined('ABSPATH')) {
 						</div>
 					</div>
 				</div>
+				<div>
+					<label class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_gpf_data">Include WooCommerce Google Product Feed Attributes: </label>
+					<p class="TextBody TextBody--xxxs">Add attributes from WooCommerce Google Product Feed plugin into the product feed.</p>
+
+					<?php
+						$enableGpfAttributes = get_option('REVIEWSio_enable_gpf_data');
+					?>
+					<div class="flex-row">
+						<div class="flex-col-xxs-12 flex-col-sm-6">
+							<div class="Field u-marginTop--xxs u-width--100">
+								<select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_enable_gpf_data">
+									<option <?php echo ($enableGpfAttributes == 1) ? 'selected' : '' ?> value="1">Yes</option>
+									<option <?php echo ($enableGpfAttributes == 0) ? 'selected' : '' ?> value="0">No</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
 				<div class="u-hr u-marginTop--md u-marginBottom--md"></div>
 				
 				<div>
