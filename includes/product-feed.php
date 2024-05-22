@@ -228,9 +228,9 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
 
         //Get any matching Metadata 
         foreach ($customProductAttributes as $metaFieldKey) {
-            $variantMeta = get_post_meta($product->ID, $metaFieldKey);
-            if (!empty($variantMeta)) {
-                foreach ($variantMeta as $metaValue) {
+            $productMetaData = get_post_meta($product->ID, $metaFieldKey);
+            if (!empty($productMetaData)) {
+                foreach ($productMetaData as $metaValue) {
                     if (!empty($metaValue)) {
                         if (!is_array($metaValue)) {
                             $newFields[$metaFieldKey] = $metaValue;
@@ -340,7 +340,7 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
 
                 //Get any matching Metadata 
                 foreach ($customProductAttributes as $metaFieldKey) {
-                    $variantMeta = get_post_meta($product->ID, $metaFieldKey);
+                    $variantMeta = get_post_meta($variation['variation_id'], $metaFieldKey);
                     if (!empty($variantMeta)) {
                         foreach ($variantMeta as $metaValue) {
                             if (!empty($metaValue)) {
