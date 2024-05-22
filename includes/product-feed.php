@@ -113,7 +113,6 @@ while (true) {
     $offset += $batch_size;
 }
 
-
 rewind($fp);
 $csv_contents = stream_get_contents($fp);
 fclose($fp);
@@ -227,6 +226,23 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
             }
         }
 
+        //Get any matching Metadata 
+        foreach ($customProductAttributes as $metaFieldKey) {
+            $variantMeta = get_post_meta($product->ID, $metaFieldKey);
+            if (!empty($variantMeta)) {
+                foreach ($variantMeta as $metaValue) {
+                    if (!empty($metaValue)) {
+                        if (!is_array($metaValue)) {
+                            $newFields[$metaFieldKey] = $metaValue;
+                        } else {
+                            foreach ($metaValue as $mk => $mv) {
+                                $newFields[$mk] = $mv;
+                            }
+                        }
+                    }
+                }
+            }
+        }
         //Yoast Global Identifiers
         if (get_option('REVIEWSio_product_feed_wpseo_global_ids')) {
             $productMetaGlobalIds = get_post_meta($_product->get_id(), 'wpseo_global_identifier_values', true);
@@ -286,7 +302,6 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
         if ($_pf->get_product_type($product->ID) == 'variable' && get_option('REVIEWSio_use_parent_product') != 1) {
             $available_variations = $_product->get_available_variations();
 
-
             foreach ($available_variations as $variation) {
                 $variant_sku = get_option('REVIEWSio_product_identifier') == 'id' ? $variation['variation_id'] : $variation['sku'];
                 $variant_attributes = is_array($variation['attributes']) ? implode(' ',  array_filter(array_values($variation['attributes']))) : '';
@@ -323,6 +338,23 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
                     }
                 }
 
+                //Get any matching Metadata 
+                foreach ($customProductAttributes as $metaFieldKey) {
+                    $variantMeta = get_post_meta($product->ID, $metaFieldKey);
+                    if (!empty($variantMeta)) {
+                        foreach ($variantMeta as $metaValue) {
+                            if (!empty($metaValue)) {
+                                if (!is_array($metaValue)) {
+                                    $newFields[$metaFieldKey] = $metaValue;
+                                } else {
+                                    foreach ($metaValue as $mk => $mv) {
+                                        $newFields[$mk] = $mv;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 //Yoast Global Identifiers
                 if (get_option('REVIEWSio_product_feed_wpseo_global_ids')) {
                     if (!empty($productMetaGlobalIds)) {
