@@ -64,6 +64,9 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 
 == Changelog ==
 
+= 1.2.7 =
+* Fix - Match custom attribute headers to columns.
+
 = 1.2.6 =
 * Update - Add support for WooCommerce Google Product Feed plugin GTIN attribute in the product feed.
 
