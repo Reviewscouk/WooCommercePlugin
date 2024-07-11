@@ -119,7 +119,7 @@ fclose($fp);
 
 // Handle/Output your final sanitised CSV contents for download
 header('Content-Type: text/csv; charset=UTF-8');
-echo $csv_contents;
+echo wp_kses_post($csv_contents);
 
 // Save generated file to plugin directory if product feed cron is enabled
 if (get_option('REVIEWSio_enable_product_feed_cron')) {
