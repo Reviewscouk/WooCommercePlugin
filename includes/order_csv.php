@@ -1,6 +1,6 @@
 <?php
-if(!defined('ABSPATH')) {
-  exit;
+if (!defined('ABSPATH')) {
+    exit;
 }
 
 header('Content-Type: text/csv; charset=UTF-8');
@@ -11,12 +11,9 @@ use Automattic\WooCommerce\Utilities\OrderUtil;
  * Check WooCommerce HPOS option is enabled
  *
  */
-function is_hpos_enabled() {
-    if ( OrderUtil::custom_orders_table_usage_is_enabled() ) {
-        return true;
-    }
-
-    return false;
+function is_hpos_enabled()
+{
+    return OrderUtil::custom_orders_table_usage_is_enabled();
 }
 
 function get_order_details($o)
@@ -42,13 +39,12 @@ function get_order_details($o)
         'order_id' => $order_id,
         'firstname' => $firstname,
         'email' => $email,
-
     ];
 }
 
 $args = array(
     'post_type'      => 'shop_order',
-    'post_status'    => array( 'wc-processing', 'wc-completed' ),
+    'post_status'    => array('wc-processing', 'wc-completed'),
     'posts_per_page' => 300,
     'orderby'        => 'id',
     'order'          => 'desc'
@@ -56,7 +52,7 @@ $args = array(
 
 $hpos_args = array(
     'type'    => 'shop_order',
-    'status'  => array( 'wc-processing', 'wc-completed' ),
+    'status'  => array('wc-processing', 'wc-completed'),
     'orderby' => 'id',
     'order'   => 'desc'
 );
@@ -71,67 +67,70 @@ if ($using_hpos) {
     $orders = get_posts($args);
 }
 
-foreach ($orders as $o)
-{
+foreach ($orders as $o) {
     $order_details = get_order_details($o);
 
     $order = $order_details->order;
     $order_id = $order_details->order_id;
     $firstname = $order_details->firstname;
     $email = $order_details->email;
-    
+
     $addedItems = false;
-    
-    foreach ($order->get_items() as $item)
-    {
+
+    foreach ($order->get_items() as $item) {
         $product = wc_get_product($item['product_id']);
-        
-        if($product){
+
+        if ($product) {
             $sku = $product->get_sku();
-            
-            if($product->get_type() == 'variant')
-            {
+
+            if ($product->get_type() == 'variant') {
                 $available_variations = $product->get_available_variations();
-                
-                foreach ($available_variations as $variation)
-                {
-                    
-                    if ($variation['variation_id'] == $item['variation_id'])
-                    {
+
+                foreach ($available_variations as $variation) {
+                    if ($variation['variation_id'] == $item['variation_id']) {
                         $sku = $variation['sku'];
                     }
                 }
-                
             }
-            
+
             $productArray[] = [$order_id, $firstname, $email, $sku, get_the_date('d/m/Y', $order_details->order_id)];
             $addedItems = true;
-        }
-        else
-        {
+        } else {
             $productArray[] = [$order_id, $firstname, $email, '', get_the_date('d/m/Y', $order_details->order_id)];
             $addedItems = true;
         }
-
     }
 
-    if(!$addedItems){
+    if (!$addedItems) {
         $productArray[] = [$order_id, $firstname, $email, '', get_the_date('d/m/Y', $order_details->order_id)];
     }
 }
 
-$fp = fopen('php://temp', 'w+');
-foreach ($productArray as $fields)
-{
-    fputcsv($fp, $fields);
+// Initialize the WordPress File System API
+if (!function_exists('request_filesystem_credentials')) {
+    require_once ABSPATH . 'wp-admin/includes/file.php';
 }
 
-rewind($fp);
-$csv_contents = stream_get_contents($fp);
-fclose($fp);
+if (WP_Filesystem()) {
+    global $wp_filesystem;
 
-// Handle/Output your final sanitised CSV contents
-echo $csv_contents;
+    // Create CSV content as a string
+    $csv_content = '';
 
-exit();
-?>
+    // Convert the product array to CSV formatted string
+    foreach ($productArray as $fields) {
+        $csv_content .= implode(',', array_map('esc_csv', $fields)) . "\n";
+    }
+
+    // Output your final sanitized CSV contents
+    echo wp_kses_post($csv_content);
+
+    exit();
+} else {
+    wp_die('Failed to initialize the WordPress File System API.');
+}
+
+function esc_csv($field)
+{
+    return '"' . str_replace('"', '""', $field) . '"';
+}

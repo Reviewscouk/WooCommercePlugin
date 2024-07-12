@@ -1,9 +1,14 @@
-=== REVIEWS.io WooCommerce Plugin ===
+=== REVIEWS.io for WooCommerce ===
 Contributors: Reviewscouk
-Tags: Reviews, Seller Ratings, Google Reviews, Company Reviews, Business Reviews, Product Reviews, Facebook Reviews, Amazon Reviews, Google Partner, Google Seller Ratings, Google Stars, Stars in Adwords
+Tags: Reviews, Seller Ratings, Google Reviews, Company Reviews, Stars in Adwords
 Author URI: https://www.reviews.io
-Tested up to: 6.4.1
+Tested up to: 6.5.5
 Requires PHP: 7.4
+Stable tag: 1.2.8
+License: GPLv3 or later
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
+
+REVIEWS.io, helps eCommerce merchants to collect & display verified product and company reviews. A Google Licensed partner.
 
 == Description ==
 
@@ -63,6 +68,9 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 
 
 == Changelog ==
+
+= 1.2.8 =
+* Fix - Security updates
 
 = 1.2.7 =
 * Fix - Match custom attribute headers to columns.
