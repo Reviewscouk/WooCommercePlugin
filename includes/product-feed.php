@@ -5,129 +5,140 @@ if (!defined('ABSPATH')) {
 
 global $refresh_cron_feed;
 
-// Define file directory for CSV Cron to save in
-$parentDirectory = dirname(__DIR__);
-$filesDirectory = $parentDirectory . '/files/';
-if (!file_exists($filesDirectory)) {
-    mkdir($filesDirectory, 0777, true);
-}
-$url = $_SERVER['REQUEST_URI'];
-$refreshFeed = explode('?', $url);
-$csvFilePath = $filesDirectory . 'product_feed.csv';
-
-
-// Download from plugin directory if file exists
-if (file_exists($csvFilePath) && !in_array('refresh', $refreshFeed) && !$refresh_cron_feed) {
-    header('Content-Description: File Transfer');
-    header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename=' . basename($csvFilePath));
-    header('Expires: 0');
-    header('Cache-Control: must-revalidate');
-    header('Pragma: public');
-    header('Content-Length: ' . filesize($csvFilePath));
-    ob_clean();
-    flush();
-    readfile($csvFilePath);
-    exit;
+// Initialize the WordPress File System API
+if (!function_exists('request_filesystem_credentials')) {
+    require_once ABSPATH . 'wp-admin/includes/file.php';
 }
 
-// Generate product feed CSV
-$fp = fopen('php://temp', 'w+');
+if (WP_Filesystem()) {
+    global $wp_filesystem;
 
-$batch_size = 100;
-$offset = 0;
+    // Define file directory for CSV Cron to save in
+    $parentDirectory = dirname(__DIR__);
+    $filesDirectory = $parentDirectory . '/files/';
+    if (!$wp_filesystem->exists($filesDirectory)) {
+        $wp_filesystem->mkdir($filesDirectory, 0777, true);
+    }
+    $url = $_SERVER['REQUEST_URI'];
+    $refreshFeed = explode('?', $url);
+    $csvFilePath = $filesDirectory . 'product_feed.csv';
 
-$headerArray = [
-    'sku',
-    'name',
-    'image_url',
-    'link',
-    'mpn',
-    'woocommerce_product_sku',
-    'woocommerce_product_id',
-    'barcode',
-    'category',
-    'categories'
-];
+    // Download from plugin directory if file exists
+    if ($wp_filesystem->exists($csvFilePath) && !in_array('refresh', $refreshFeed) && !$refresh_cron_feed) {
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename=' . basename($csvFilePath));
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . $wp_filesystem->size($csvFilePath));
+        ob_clean();
+        flush();
+        echo wp_kses_post($wp_filesystem->get_contents($csvFilePath));
+        exit;
+    }
 
-$customProductAttributes = [
-    '_barcode',
-    '_gtin',
-    'gtin',
-    '_mpn'
-];
+    // Generate product feed CSV
+    $csv_contents = '';
 
-// Add additional columns to an array
-if (!empty(get_option('REVIEWSio_product_feed_custom_attributes'))) {
-    $additionalCustomProductAttributes = get_option('REVIEWSio_product_feed_custom_attributes');
-    $additionalCustomProductAttributes = explode(',', $additionalCustomProductAttributes);
-    if (!empty($additionalCustomProductAttributes)) {
-        foreach ($additionalCustomProductAttributes as $additionalCustomProductAttribute) {
-            if (!in_array(strtolower($additionalCustomProductAttribute), $customProductAttributes)) {
-                $customProductAttributes[] = trim(strtolower($additionalCustomProductAttribute));
+    $batch_size = 100;
+    $offset = 0;
+
+    $headerArray = [
+        'sku',
+        'name',
+        'image_url',
+        'link',
+        'mpn',
+        'woocommerce_product_sku',
+        'woocommerce_product_id',
+        'barcode',
+        'category',
+        'categories'
+    ];
+
+    $customProductAttributes = [
+        '_barcode',
+        '_gtin',
+        'gtin',
+        '_mpn'
+    ];
+
+    // Add additional columns to an array
+    if (!empty(get_option('REVIEWSio_product_feed_custom_attributes'))) {
+        $additionalCustomProductAttributes = get_option('REVIEWSio_product_feed_custom_attributes');
+        $additionalCustomProductAttributes = explode(',', $additionalCustomProductAttributes);
+        if (!empty($additionalCustomProductAttributes)) {
+            foreach ($additionalCustomProductAttributes as $additionalCustomProductAttribute) {
+                if (!in_array(strtolower($additionalCustomProductAttribute), $customProductAttributes)) {
+                    $customProductAttributes[] = trim(strtolower($additionalCustomProductAttribute));
+                }
             }
         }
     }
-}
 
-// Yoast Global Identifiers
-if (get_option('REVIEWSio_product_feed_wpseo_global_ids')) {
-    $customProductAttributes[] = 'wpseo_gtin';
-    $customProductAttributes[] = 'wpseo_mpn';
-}
-
-// WooCommerce Google Product Feed Attributes
-if (get_option('REVIEWSio_enable_gpf_data')) {
-    $customProductAttributes[] = 'gpf_gtin';
-}
-
-// Append addtional columns to the header array
-foreach ($customProductAttributes as $columnName) {
-    $headerArray[] = $columnName;
-}
-
-fputcsv($fp, $headerArray);
-
-// Loop through records in batches and append to csv file
-while (true) {
-    $args = array(
-        'post_type' => 'product',
-        'offset' => $offset,
-        'posts_per_page' => $batch_size
-    );
-
-    $products = get_posts($args);
-
-    // No more products to process
-    if (empty($products)) {
-        break;
+    // Yoast Global Identifiers
+    if (get_option('REVIEWSio_product_feed_wpseo_global_ids')) {
+        $customProductAttributes[] = 'wpseo_gtin';
+        $customProductAttributes[] = 'wpseo_mpn';
     }
 
-    // Add product rows
-    $productArray = [];
-    processProducts($productArray, $products, $headerArray, $customProductAttributes);
-    foreach ($productArray as $fields) {
-        fputcsv($fp, $fields);
+    // WooCommerce Google Product Feed Attributes
+    if (get_option('REVIEWSio_enable_gpf_data')) {
+        $customProductAttributes[] = 'gpf_gtin';
     }
 
-    $offset += $batch_size;
+    // Append additional columns to the header array
+    foreach ($customProductAttributes as $columnName) {
+        $headerArray[] = $columnName;
+    }
+
+    // Add header row to CSV content
+    $csv_contents .= implode(',', array_map('esc_csv', $headerArray)) . "\n";
+
+    // Loop through records in batches and append to csv file
+    while (true) {
+        $args = array(
+            'post_type' => 'product',
+            'offset' => $offset,
+            'posts_per_page' => $batch_size
+        );
+
+        $products = get_posts($args);
+
+        // No more products to process
+        if (empty($products)) {
+            break;
+        }
+
+        // Add product rows
+        $productArray = [];
+        processProducts($productArray, $products, $headerArray, $customProductAttributes);
+        foreach ($productArray as $fields) {
+            $csv_contents .= implode(',', array_map('esc_csv', $fields)) . "\n";
+        }
+
+        $offset += $batch_size;
+    }
+
+    // Output your final sanitized CSV contents
+    header('Content-Type: text/csv; charset=UTF-8');
+    echo wp_kses_post($csv_contents);
+
+    // Save generated file to plugin directory if product feed cron is enabled
+    if (get_option('REVIEWSio_enable_product_feed_cron')) {
+        $wp_filesystem->put_contents($csvFilePath, $csv_contents, FS_CHMOD_FILE);
+    }
+
+    exit();
+} else {
+    wp_die('Failed to initialize the WordPress File System API.');
 }
 
-rewind($fp);
-$csv_contents = stream_get_contents($fp);
-fclose($fp);
-
-// Handle/Output your final sanitised CSV contents for download
-header('Content-Type: text/csv; charset=UTF-8');
-echo wp_kses_post($csv_contents);
-
-// Save generated file to plugin directory if product feed cron is enabled
-if (get_option('REVIEWSio_enable_product_feed_cron')) {
-    file_put_contents($csvFilePath, $csv_contents);
+function esc_csv($field)
+{
+    return '"' . str_replace('"', '""', $field) . '"';
 }
-
-
-
 
 function processProducts(&$productArray, $products, $headerArray, $customProductAttributes)
 {
@@ -155,7 +166,7 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
                 $categories_string[] = $cat->name;
             }
         }
-        $categories_json = json_encode($categories_string);
+        $categories_json = wp_json_encode($categories_string);
         $categories_string = implode(', ', $categories_string);
 
         $attributes = $_product->get_attributes();
@@ -174,7 +185,6 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
                 break;
             }
 
-            // $barcode = get_post_meta($product->ID, 'attribute_' . $gtinField, true);
             if (!empty($attributes[$gtinField]) && !empty($attributes[$gtinField]['options'])) {
                 $barcode = $attributes[$gtinField]['options'][0];
             }
@@ -213,7 +223,6 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
         foreach ($customProductAttributes as $key) {
             $key = strtolower($key);
             if (!empty($productAttributes[$key]) && !empty($productAttributes[$key]['is_taxonomy'])) {
-                // pull in product terms if key provided
                 $terms = wc_get_product_terms($product->ID, $key, ['fields' => 'names']);
                 $value = array_shift($terms);
                 $newFields[$key] = $value;
@@ -226,7 +235,6 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
             }
         }
 
-        //Get any matching Metadata 
         foreach ($customProductAttributes as $metaFieldKey) {
             $productMetaData = get_post_meta($product->ID, $metaFieldKey);
             if (!empty($productMetaData)) {
@@ -243,7 +251,8 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
                 }
             }
         }
-        //Yoast Global Identifiers
+
+        // Yoast Global Identifiers
         if (get_option('REVIEWSio_product_feed_wpseo_global_ids')) {
             $productMetaGlobalIds = get_post_meta($_product->get_id(), 'wpseo_global_identifier_values', true);
             if (!empty($productMetaGlobalIds)) {
@@ -258,7 +267,7 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
             }
         }
 
-        //WooCommerce Google Product Feed Attributes
+        // WooCommerce Google Product Feed Attributes
         if (get_option('REVIEWSio_enable_gpf_data')) {
             $gpfData = get_post_meta($_product->get_id(), '_woocommerce_gpf_data', true);
             if (!empty($gpfData)) {
@@ -270,16 +279,13 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
             }
         }
 
-        //Add any matching attributes to product feeds and update existing columns
         if (!empty($newFields)) {
             foreach ($newFields as $columnName => $columnValue) {
                 $insertAtColumnIndex = false;
                 $columnName = strtolower($columnName);
-                //If column does not exist, this might break - might need a check
-                $insertAtColumnIndex = array_search($columnName, $headerArray);
-                //If column already exists check and update existing value else add to end
-                $newProductLine = $productArray[count($productArray) - 1];
+                $insertAtColumnIndex = array_search($columnName, array_map('strtolower', $headerArray));
                 if (!empty($insertAtColumnIndex)) {
+                    $newProductLine = $productArray[count($productArray) - 1];
                     if (!isset($newProductLine[$insertAtColumnIndex]) || $newProductLine[$insertAtColumnIndex] != $columnValue) {
                         $newProductLine[$insertAtColumnIndex] = $columnValue;
                         $productArray[count($productArray) - 1] = $newProductLine;
@@ -288,7 +294,6 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
             }
         }
 
-        //Set MPN to SKU value if was converted to blank
         if (!empty($productArray[count($productArray) - 1])) {
             $mpn = $productArray[count($productArray) - 1][4];
             if (empty($mpn) || $mpn == ' ') {
@@ -298,35 +303,28 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
             }
         }
 
-        // Add variants as additional products
         if ($_pf->get_product_type($product->ID) == 'variable' && get_option('REVIEWSio_use_parent_product') != 1) {
             $available_variations = $_product->get_available_variations();
 
             foreach ($available_variations as $variation) {
                 $variant_sku = get_option('REVIEWSio_product_identifier') == 'id' ? $variation['variation_id'] : $variation['sku'];
-                $variant_attributes = is_array($variation['attributes']) ? implode(' ',  array_filter(array_values($variation['attributes']))) : '';
+                $variant_attributes = is_array($variation['attributes']) ? implode(' ', array_filter(array_values($variation['attributes']))) : '';
                 $variant_title = $product->post_title;
 
-                if (!empty($variant_attributes)) {
-                    //$variant_title .= ' - '.$variant_attributes;
-                }
                 $productArray[] = array($variant_sku, $variant_title, $image_url, get_permalink($product->ID), $variation['sku'], $variation['sku'], $variation['variation_id'], $barcode, $categories_string, $categories_json);
 
                 $newFields = [];
-                //Append main product attribute fields for variant products
                 foreach ($customProductAttributes as $key) {
                     $key = strtolower($key);
                     $newFields[$key] = !empty($productAttributes[$key]['options'][0]) ? $productAttributes[$key]['options'][0] : ' ';
                 }
-                //Overwrite with variant specific values if available
+
                 if (!empty($variation['attributes'])) {
                     foreach ($variation['attributes'] as $variant_attribute_key => $variant_attribute_value) {
                         $variantAttributeColumnName = str_replace('attribute_', '', $variant_attribute_key);
                         if (!empty($variant_attribute_value)) {
-                            // Add variant meta value if available
                             $variantAttributeColumnValue = $variant_attribute_value;
                         } else if (!empty($attributes[$variantAttributeColumnName]['options'][0])) {
-                            // Add parent meto values if available
                             $variantAttributeColumnValue = $attributes[$variantAttributeColumnName]['options'][0];
                         } else {
                             $variantAttributeColumnValue = ' ';
@@ -338,7 +336,6 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
                     }
                 }
 
-                //Get any matching Metadata 
                 foreach ($customProductAttributes as $metaFieldKey) {
                     $variantMeta = get_post_meta($variation['variation_id'], $metaFieldKey);
                     if (!empty($variantMeta)) {
@@ -355,6 +352,7 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
                         }
                     }
                 }
+
                 //Yoast Global Identifiers
                 if (get_option('REVIEWSio_product_feed_wpseo_global_ids')) {
                     if (!empty($productMetaGlobalIds)) {
@@ -381,16 +379,13 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
                     }
                 }
 
-                //insert additional
                 if (!empty($newFields)) {
                     foreach ($newFields as $columnName => $columnValue) {
                         $insertAtColumnIndex = false;
                         $columnName = strtolower($columnName);
-                        //If column does not exist then it might break
-                        $insertAtColumnIndex = array_search($columnName, $headerArray);
-                        //If colummn already exists check and update existing value else add to end
-                        $newProductLine = $productArray[count($productArray) - 1];
+                        $insertAtColumnIndex = array_search($columnName, array_map('strtolower', $headerArray));
                         if (!empty($insertAtColumnIndex)) {
+                            $newProductLine = $productArray[count($productArray) - 1];
                             if (!isset($newProductLine[$insertAtColumnIndex]) || $newProductLine[$insertAtColumnIndex] != $columnValue) {
                                 $newProductLine[$insertAtColumnIndex] = $columnValue;
                                 $productArray[count($productArray) - 1] = $newProductLine;
@@ -399,7 +394,6 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
                     }
                 }
 
-                //Set MPN to SKU value if was converted to blank
                 if (!empty($productArray[count($productArray) - 1])) {
                     $mpn = $productArray[count($productArray) - 1][4];
                     if (empty($mpn) || $mpn == ' ') {
@@ -411,7 +405,6 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
             }
         }
 
-        // Clear product memory
         unset($product);
         unset($_pf);
     }

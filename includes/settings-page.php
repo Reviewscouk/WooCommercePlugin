@@ -4,11 +4,6 @@ if (!defined('ABSPATH')) {
 }
 ?>
 
-
-<!-- Color Picker Script -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css" /> <!-- 'nano' theme -->
-<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
-
 <div class="wrap">
     <img src="https://assets.reviews.io/img/all-global-assets/logo/reviewsio-logo.svg" height="40" style="margin-top:15px;" />
     <form id="reviewsio-settings" method="post" action="options.php" autocomplete="off">

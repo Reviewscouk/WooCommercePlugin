@@ -13,11 +13,7 @@ use Automattic\WooCommerce\Utilities\OrderUtil;
  */
 function is_hpos_enabled()
 {
-    if (OrderUtil::custom_orders_table_usage_is_enabled()) {
-        return true;
-    }
-
-    return false;
+    return OrderUtil::custom_orders_table_usage_is_enabled();
 }
 
 function get_order_details($o)
@@ -43,7 +39,6 @@ function get_order_details($o)
         'order_id' => $order_id,
         'firstname' => $firstname,
         'email' => $email,
-
     ];
 }
 
@@ -92,7 +87,6 @@ foreach ($orders as $o) {
                 $available_variations = $product->get_available_variations();
 
                 foreach ($available_variations as $variation) {
-
                     if ($variation['variation_id'] == $item['variation_id']) {
                         $sku = $variation['sku'];
                     }
@@ -112,16 +106,31 @@ foreach ($orders as $o) {
     }
 }
 
-$fp = fopen('php://temp', 'w+');
-foreach ($productArray as $fields) {
-    fputcsv($fp, $fields);
+// Initialize the WordPress File System API
+if (!function_exists('request_filesystem_credentials')) {
+    require_once ABSPATH . 'wp-admin/includes/file.php';
 }
 
-rewind($fp);
-$csv_contents = stream_get_contents($fp);
-fclose($fp);
+if (WP_Filesystem()) {
+    global $wp_filesystem;
 
-// Handle/Output your final sanitised CSV contents
-echo wp_kses_post($csv_contents);
+    // Create CSV content as a string
+    $csv_content = '';
 
-exit();
+    // Convert the product array to CSV formatted string
+    foreach ($productArray as $fields) {
+        $csv_content .= implode(',', array_map('esc_csv', $fields)) . "\n";
+    }
+
+    // Output your final sanitized CSV contents
+    echo wp_kses_post($csv_content);
+
+    exit();
+} else {
+    wp_die('Failed to initialize the WordPress File System API.');
+}
+
+function esc_csv($field)
+{
+    return '"' . str_replace('"', '""', $field) . '"';
+}
