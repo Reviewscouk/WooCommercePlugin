@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.2.8
+ * Version: 1.2.9
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -41,7 +41,7 @@ add_action('before_woocommerce_init', 'declare_wc_compatibility');
  */
 function reviewsio_admin_scripts()
 {
-    $appVersion = '1.2.8';
+    $appVersion = '1.2.9';
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__), [], $appVersion, false);
     wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__), [], $appVersion, false);
@@ -84,7 +84,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         protected $numWidgets = 0;
         protected $richsnippet_shortcode_url = '';
-        protected $appVersion = '1.2.8';
+        protected $appVersion = '1.2.9';
 
 
         public function __construct()
@@ -205,12 +205,14 @@ if (!class_exists('WooCommerce_Reviews')) {
         public function add_menu()
         {
             $page = add_options_page('REVIEWS.io Settings', 'REVIEWS.io', 'manage_options', 'reviewscouk', array(&$this, 'reviews_settings_page'));
-
             add_action('load-' . $page, array($this, 'load_page'));
         }
 
         public function load_page()
         {
+            if (!isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'reviewscouk_menu_nonce')) {
+                wp_die('Nonce verification failed.');
+            }
             if (isset($_GET['settings-updated']) && $_GET['settings-updated']) {
                 try {
                     $this->afterSettingsUpdated();
@@ -1993,8 +1995,12 @@ if (!class_exists('WooCommerce_Reviews')) {
                 add_action('elementor/widgets/register', array('ElementorFunctions', 'unregister_widgets'));
             }
 
-            if (isset($_GET["page"]) && trim($_GET["page"]) == 'reviewscouk') {
-                add_action('admin_enqueue_scripts', 'reviewsio_admin_scripts');
+            if ($_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'reviewscouk_menu_nonce'))) {
+                wp_die('Nonce verification failed.');
+            } else {
+                if (isset($_GET["page"]) && trim($_GET["page"]) == 'reviewscouk') {
+                    add_action('admin_enqueue_scripts', 'reviewsio_admin_scripts');
+                }
             }
         }
 
@@ -2087,7 +2093,8 @@ if (class_exists('WooCommerce_Reviews')) {
     if (isset($woocommercereviews)) {
         function woocommercereviews_settings_link($links)
         {
-            $settings_link = '<a href="options-general.php?page=reviewscouk">' . __('Settings', 'woocommercereviews') . '</a>';
+            $nonce = wp_create_nonce('reviewscouk_menu_nonce');
+            $settings_link = '<a href="options-general.php?page=reviewscouk&_wpnonce=' . $nonce . '">' . __('Settings', 'woocommercereviews') . '</a>';
             array_unshift($links, $settings_link);
             return $links;
         }
