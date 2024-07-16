@@ -4,7 +4,7 @@ Tags: Reviews, Seller Ratings, Google Reviews, Company Reviews, Stars in Adwords
 Author URI: https://www.reviews.io
 Tested up to: 6.5.5
 Requires PHP: 7.4
-Stable tag: 1.2.8
+Stable Tag: 1.2.9
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -69,8 +69,11 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 
 == Changelog ==
 
+= 1.2.9 =
+* Fix - Add nonce for options page and clean SVN tags.
+
 = 1.2.8 =
-* Fix - Security updates
+* Fix - Security updates.
 
 = 1.2.7 =
 * Fix - Match custom attribute headers to columns.
