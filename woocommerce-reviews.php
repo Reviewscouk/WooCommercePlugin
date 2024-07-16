@@ -211,7 +211,7 @@ if (!class_exists('WooCommerce_Reviews')) {
         public function load_page()
         {
             if (!isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'reviewscouk_menu_nonce')) {
-                wp_die('Nonce verification failed.');
+                //wp_die('Nonce verification failed.');
             }
             if (isset($_GET['settings-updated']) && $_GET['settings-updated']) {
                 try {
@@ -1996,7 +1996,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             if ($_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'reviewscouk_menu_nonce'))) {
-                wp_die('Nonce verification failed.');
+                //wp_die('Nonce verification failed.');
             } else {
                 if (isset($_GET["page"]) && trim($_GET["page"]) == 'reviewscouk') {
                     add_action('admin_enqueue_scripts', 'reviewsio_admin_scripts');
