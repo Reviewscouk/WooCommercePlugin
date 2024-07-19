@@ -1998,7 +1998,7 @@ if (class_exists('WooCommerce_Reviews')) {
         function woocommercereviews_settings_link($links)
         {
             $nonce = wp_create_nonce('reviewscouk_menu_nonce');
-            $settings_link = '<a href="options-general.php?page=reviewscouk&_wpnonce=' . $nonce . '">' . __('Settings', 'woocommercereviews') . '</a>';
+            $settings_link = '<a href="options-general.php?page=reviewscouk&_wpnonce=' . esc_attr($nonce) . '">' . __('Settings', 'woocommercereviews') . '</a>';
             array_unshift($links, $settings_link);
             return $links;
         }

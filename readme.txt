@@ -2,7 +2,7 @@
 Contributors: Reviewscouk
 Tags: Reviews, Seller Ratings, Google Reviews, Company Reviews, Stars in Adwords
 Author URI: https://www.reviews.io
-Tested up to: 6.5.5
+Tested up to: 6.6
 Requires PHP: 7.4
 Stable Tag: 1.2.9
 License: GPLv3 or later
