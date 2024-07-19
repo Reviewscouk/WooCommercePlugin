@@ -277,7 +277,6 @@ if (!class_exists('WooCommerce_Reviews')) {
             if (!current_user_can('manage_options')) {
                 wp_die(esc_html(__('You do not have sufficient permissions to access this page.')));
             }
-
             include sprintf("%s/includes/settings-page.php", dirname(__FILE__));
         }
 
@@ -579,13 +578,6 @@ if (!class_exists('WooCommerce_Reviews')) {
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != ''  && get_option('REVIEWSio_nuggets_widget_options') != '') {
                 $skus = $this->getProductSkus();
 ?>
-                <script>
-                    window.addEventListener('load', function() {
-                        let nuggetScript = document.createElement('script');
-                        nuggetScript.src = 'https://widget.reviews.io/modern-widgets/nuggets.js';
-                        document.getElementsByTagName('head')[0].appendChild(nuggetScript)
-                    });
-                </script>
                 <div class="reviews-io-nuggets-widget" data-widget-id="<?php echo esc_attr(get_option('REVIEWSio_nuggets_widget_options')) ?>" data-store-name="<?php echo esc_attr(get_option('REVIEWSio_store_id')) ?>" lang="<?php echo (get_option('REVIEWSio_polaris_lang') ? esc_attr(get_option('REVIEWSio_polaris_lang')) : esc_attr('en')) ?>" data-sku="<?php echo esc_attr(implode(';', $skus)) ?>" tags="<?php echo esc_attr(get_option('REVIEWSio_nuggets_widget_tags')) ?>" branch=""></div>
             <?php
             } else {
@@ -616,13 +608,6 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id')) {
             ?>
-                <script>
-                    window.addEventListener('load', function() {
-                        let nuggetScript = document.createElement('script');
-                        nuggetScript.src = 'https://widget.reviews.io/modern-widgets/nuggets.js';
-                        document.getElementsByTagName('head')[0].appendChild(nuggetScript)
-                    });
-                </script>
             <?php
                 return '
                         <div 
@@ -674,37 +659,16 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function reviewsio_floating_react_widget_scripts($skus = null)
         {
-            wp_register_script('reviewsio-floating-react-widget-script', 'https://widget.reviews.io/modern-widgets/floating.js', array(), $this->appVersion, false);
-            wp_register_style('reviewsio-floating-react-widget-style',  'https://assets.reviews.io/css/widgets/floating-widget.css', array(), $this->appVersion, false);
+            wp_register_script('reviewsio-floating-react-widget-script', 'https://widget.reviews.io/modern-widgets/floating.js', array(), $this->appVersion, true);
+            wp_register_style('reviewsio-floating-react-widget-style',  'https://assets.reviews.io/css/widgets/floating-widget.css', array(), $this->appVersion, true);
 
-            wp_enqueue_script('reviewsio-floating-reactwidget-script');
-            wp_enqueue_style('reviewsio-floating-reactwidget-style');
+            wp_enqueue_script('reviewsio-floating-react-widget-script');
+            wp_enqueue_style('reviewsio-floating-react-widget-style');
 
 
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != '' && get_option('REVIEWSio_floating_react_widget_options') != '') {
             ?>
-                <?php
-                $skus = $this->getProductSkus();
-                ?>
-                <script>
-                    window.addEventListener('load', function() {
-                        let floatingcript = document.createElement('script');
-                        floatingcript.src = 'https://widget.reviews.io/modern-widgets/floating.js';
-                        document.getElementsByTagName('head')[0].appendChild(floatingcript)
-                    });
-                </script>
                 <div class="reviews-io-floating-widget" data-widget-id="<?php echo esc_attr(get_option('REVIEWSio_floating_react_widget_options')) ?>" data-store-name="<?php echo esc_attr(get_option('REVIEWSio_store_id')) ?>" lang="<?php echo (get_option('REVIEWSio_polaris_lang') ? esc_attr(get_option('REVIEWSio_polaris_lang')) : esc_attr('en')) ?>"></div>
-                <?php
-                $skus = $this->getProductSkus();
-                ?>
-                <script>
-                    window.addEventListener('load', function() {
-                        let floatingcript = document.createElement('script');
-                        floatingcript.src = 'https://widget.reviews.io/modern-widgets/floating.js';
-                        document.getElementsByTagName('head')[0].appendChild(floatingcript)
-                    });
-                </script>
-                <div class="reviews-io-floating-widget" data-widget-id="<?php echo esc_attr(get_option('REVIEWSio_floating_react_widget_options')) ?>" data-store-name="<?php echo esc_attr(get_option('REVIEWSio_store_id')) ?>" lang="en"></div>
             <?php
             } else {
                 echo '<script>console.log("Missing REVIEWS.io Floating Widget API Credentials")</script>';
@@ -713,16 +677,10 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function ugc_widget_shortcode($widget = null)
         {
+            wp_register_script('reviewsio-floating-react-widget-script', 'https://widget.reviews.io/modern-widgets/ugc.js', array(), $this->appVersion, true);
+            wp_enqueue_script('reviewsio-floating-react-widget-script');
+
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != '' && $widget['widget_id'] != '') {
-            ?>
-                <script>
-                    window.addEventListener('load', function() {
-                        let ugcScript = document.createElement('script');
-                        ugcScript.src = 'https://widget.reviews.io/modern-widgets/ugc.js';
-                        document.getElementsByTagName('head')[0].appendChild(ugcScript);
-                    });
-                </script>
-            <?php
                 return '
                         <div 
                             class="reviews-io-ugc-widget"
@@ -738,16 +696,9 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function rating_bar_widget_shortcode($widget = null)
         {
+            wp_register_script('reviewsio-ratingbar-react-widget-script', 'https://widget.reviews.io/modern-widgets/rating-bar.js', array(), $this->appVersion, true);
+            wp_enqueue_script('reviewsio-ratingbar-react-widget-script');
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != '' && $widget['widget_id'] != '') {
-            ?>
-                <script>
-                    window.addEventListener('load', function() {
-                        let ratingBarScript = document.createElement('script');
-                        ratingBarScript.src = 'https://widget.reviews.io/modern-widgets/rating-bar.js';
-                        document.getElementsByTagName('head')[0].appendChild(ratingBarScript)
-                    });
-                </script>
-            <?php
                 return '
                         <div 
                             class="reviews-io-rating-bar-widget"
@@ -763,16 +714,12 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function reviewsio_survey_widget_scripts($skus = null)
         {
+            wp_register_script('reviewsio-survey-react-widget-script', 'https://widget.reviews.io/modern-widgets/survey.js', array(), $this->appVersion, true);
+            wp_enqueue_script('reviewsio-survey-react-widget-script');
+
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != ''  && get_option('REVIEWSio_survey_widget_options') != '') {
                 $skus = $this->getProductSkus();
             ?>
-                <script>
-                    window.addEventListener('load', function() {
-                        let surveyScript = document.createElement('script');
-                        surveyScript.src = 'https://widget.reviews.io/modern-widgets/survey.js';
-                        document.getElementsByTagName('head')[0].appendChild(surveyScript)
-                    });
-                </script>
                 <div class="reviews-io-survey-widget" store-name="<?php echo esc_attr(get_option('REVIEWSio_store_id')) ?>" widget-id="<?php echo esc_attr(get_option('REVIEWSio_survey_widget_options')) ?>" campaign-id="<?php echo esc_attr(get_option('REVIEWSio_survey_widget_campaign_options')) ?>" lang="<?php echo (get_option('REVIEWSio_polaris_lang') ? esc_attr(get_option('REVIEWSio_polaris_lang')) : esc_attr('en')) ?>"></div>
             <?php
             } else {
@@ -782,16 +729,10 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function survey_widget_shortcode($widget = null)
         {
+            wp_register_script('reviewsio-survey-react-widget-script', 'https://widget.reviews.io/modern-widgets/survey.js', array(), $this->appVersion, true);
+            wp_enqueue_script('reviewsio-survey-react-widget-script');
+
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != '' && $widget['widget_id'] != '' && $widget['campaign_id'] != '') {
-            ?>
-                <script>
-                    window.addEventListener('load', function() {
-                        let surveyShortcodeScript = document.createElement('script');
-                        surveyShortcodeScript.src = 'https://widget.reviews.io/modern-widgets/survey.js';
-                        document.getElementsByTagName('head')[0].appendChild(surveyShortcodeScript)
-                    });
-                </script>
-            <?php
                 return '
                         <div 
                             class="reviews-io-survey-widget"
@@ -1154,7 +1095,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             wp_add_inline_script('reviewsio-product-review', '
                 window.addEventListener("load", function() {
                     productWidget("widget-' . esc_js($this->numWidgets) . '",{
-                        store: "' . get_option('REVIEWSio_store_id') . '",
+                        store: "' . esc_js(get_option('REVIEWSio_store_id')) . '",
                         sku: "' . esc_js(implode(';', $skus)) . '",
                         minRating: "' . (get_option('REVIEWSio_minimum_rating') ? esc_js(get_option('REVIEWSio_minimum_rating')) : esc_js(1)) . '",
                         primaryClr: "' . esc_js($color) . '",
@@ -1178,13 +1119,13 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function reviewsio_polaris_review_scripts()
         {
-            wp_register_script('reviewsio-polaris-review', $this->getWidgetDomain() . 'polaris/build.js', array(), $this->appVersion, false);
+            wp_register_script('reviewsio-polaris-review', esc_url($this->getWidgetDomain()) . 'polaris/build.js', array(), $this->appVersion, false);
             wp_enqueue_script('reviewsio-polaris-review');
         }
 
         public function reviewsio_qa_scripts()
         {
-            wp_register_script('reviewsio-qa', $this->getWidgetDomain() . 'questions-answers/dist.js', array(), $this->appVersion, false);
+            wp_register_script('reviewsio-qa', esc_url($this->getWidgetDomain()) . 'questions-answers/dist.js', array(), $this->appVersion, false);
             wp_enqueue_script('reviewsio-qa');
             wp_add_inline_script('reviewsio-qa', '
                 document.addEventListener("load", function() {
@@ -1277,7 +1218,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             "sku": "' . esc_js($variant['sku']) . '",
                             "priceValidUntil": "' . esc_js($validUntil) . '",
                             "url": "' . esc_url(get_permalink($product->get_id())) . '",
-                            ' . apply_filters(('REVIEWSio_snippet-' . $variant['variation_id']), "", $product, $variant) . '
+                            ' . wp_kses(apply_filters(('REVIEWSio_snippet-' . $variant['variation_id']), "", $product, $variant), []) . '
                             "seller" : {
                                 "@type": "Organization",
                                 "name": "' . esc_js(htmlspecialchars(get_bloginfo("name"))) . '",
@@ -1321,9 +1262,9 @@ if (!class_exists('WooCommerce_Reviews')) {
                             description: ' . wp_json_encode(apply_filters('REVIEWSio_description', htmlspecialchars(wp_strip_all_tags($product->get_description())), $product)) . ',
                             brand: {
                             "@type": "Brand",
-                            name: "' . apply_filters('REVIEWSio_brand', (htmlspecialchars(!empty($brand) ? esc_js($brand) : esc_js(get_bloginfo("name")))), $product) . '"
+                            name: "' . wp_kses(apply_filters('REVIEWSio_brand', (htmlspecialchars(!empty($brand) ? esc_js($brand) : esc_js(get_bloginfo("name")))), $product), []) . '"
                             },
-                            ' . apply_filters('REVIEWSio_snippet', "", $product) . '
+                            ' . wp_kses(apply_filters('REVIEWSio_snippet', "", $product), []) . '
                             offers: [' . ($offer) . ']
                         }
                     });
@@ -1472,7 +1413,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             // if (empty(get_option('REVIEWSio_reviews_tab_name'))) return;
             if (in_array(get_option('REVIEWSio_polaris_review_widget'), array('tab'))) {
                 $tabs['reviews'] = array(
-                    'title'    => !empty(get_option('REVIEWSio_reviews_tab_name')) ? get_option('REVIEWSio_reviews_tab_name') : 'Reviews',
+                    'title'    => !empty(get_option('REVIEWSio_reviews_tab_name')) ? esc_html(get_option('REVIEWSio_reviews_tab_name')) : 'Reviews',
                     'callback' => array($this, 'polarisReviewWidget'),
                     'priority' => 50,
                 );
@@ -1482,7 +1423,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                 }
             } else if (in_array(get_option('REVIEWSio_product_review_widget'), array('tab', 'both'))) {
                 $tabs['reviews'] = array(
-                    'title'    => !empty(get_option('REVIEWSio_reviews_tab_name')) ? get_option('REVIEWSio_reviews_tab_name') : 'Reviews',
+                    'title'    => !empty(get_option('REVIEWSio_reviews_tab_name')) ? esc_html(get_option('REVIEWSio_reviews_tab_name'))  : 'Reviews',
                     'callback' => array($this, 'productReviewWidget'),
                     'priority' => 50,
                 );
@@ -1609,17 +1550,17 @@ if (!class_exists('WooCommerce_Reviews')) {
                         <?php if (empty(get_option('REVIEWSio_polaris_custom_styles'))) { ?>
                             /* Widget Settings */
                             options: {
-                                types: 'product_review<?php echo (get_option('REVIEWSio_polaris_review_widget_questions') ? ', questions' : '') ?>',
+                                types: 'product_review<?php echo (get_option('REVIEWSio_polaris_review_widget_questions') ? esc_js(', questions') : '') ?>',
                                 lang: '<?php echo (get_option('REVIEWSio_polaris_lang') ? esc_js(get_option('REVIEWSio_polaris_lang')) : 'en') ?>',
                                 //Possible layout options: bordered, large and reverse.
                                 layout: '',
                                 //How many reviews & questions to show per page?
-                                per_page: <?php echo !empty(get_option('REVIEWSio_per_page_review_widget')) && is_int((int)get_option('REVIEWSio_per_page_review_widget')) ? esc_js(get_option('REVIEWSio_per_page_review_widget')) : 8 ?>,
+                                per_page: <?php echo !empty(get_option('REVIEWSio_per_page_review_widget')) && is_int((int)get_option('REVIEWSio_per_page_review_widget')) ? esc_js(get_option('REVIEWSio_per_page_review_widget')) : esc_js(8) ?>,
                                 //Product specific settings. Provide product SKU for which reviews should be displayed:
                                 product_review: {
                                     //Display product reviews - include multiple product SKUs seperated by Semi-Colons (Main Indentifer in your product catalog )
                                     sku: '<?php echo esc_js(implode(';', $skus)) ?>',
-                                    min_rating: '<?php echo (get_option('REVIEWSio_minimum_rating') wax ? esc_js(get_option('REVIEWSio_minimum_rating')) : 1) ?>',
+                                    min_rating: '<?php echo (get_option('REVIEWSio_minimum_rating') ? esc_js(get_option('REVIEWSio_minimum_rating')) : 1) ?>',
                                     hide_if_no_results: false,
                                     enable_rich_snippets: false,
                                 },
@@ -1862,7 +1803,7 @@ if (!class_exists('WooCommerce_Reviews')) {
         {
             $customHooks = explode(", ", get_option('REVIEWSio_custom_footer_hooks'));
             foreach ($customHooks as $hook) {
-                add_action(wp_kses($hook, array($this, 'insert_scripts_before_footer'));
+                add_action(wp_kses($hook, array($this, 'insert_scripts_before_footer'), []));
             }
         }
 
@@ -1870,23 +1811,20 @@ if (!class_exists('WooCommerce_Reviews')) {
         {
             $customHooks = explode(", ", get_option('REVIEWSio_custom_rating_snippet_collection_hook'));
             foreach ($customHooks as $hook) {
-                add_action($hook, array($this, 'product_rating_snippet_markup'), 5);
+                add_action(wp_kses($hook, array($this, 'product_rating_snippet_markup'), 5, []));
             }
-
         }
 
         public function init()
         {
-            add_action('woocommerce_order_status_completed', array($this, 'processCompletedOrder'));
-            add_filter('template_redirect', array($this, 'redirect_hook'));
-            add_filter('woocommerce_product_tabs', array($this, 'product_review_tab'));
+            $this->initReviewsActions();
+            $this->initReviewsFilters();
+            $this->initReviewsShortCodes();
+        }
 
-            if (get_option('REVIEWSio_polaris_review_widget') == 'bottom') {
-                add_filter('woocommerce_after_single_product', array($this, 'productPage'));
-            } else {
-                add_filter('woocommerce_after_single_product_summary', array($this, 'productPage'));
-            }
-            add_shortcode('product_reviews_widget', array($this, 'product_reviews_widget_shortcode'));
+        public function initReviewsActions()
+        {
+            add_action('woocommerce_order_status_completed', array($this, 'processCompletedOrder'));
 
             if (get_option('REVIEWSio_enable_rating_snippet_custom_collection_location') && !empty(get_option('REVIEWSio_custom_rating_snippet_collection_hook'))) {
                 $this->custom_rating_snippet_hooks();
@@ -1894,8 +1832,6 @@ if (!class_exists('WooCommerce_Reviews')) {
                 add_action('woocommerce_after_shop_loop_item', array($this, 'product_rating_snippet_markup'), 5);
             }
             add_action('woocommerce_single_product_summary', array($this, 'product_rating_snippet_markup'), 5);
-            add_shortcode('rating_snippet', array($this, 'product_rating_snippet_shortcode'));
-            add_shortcode('richsnippet', array($this, 'richsnippet_widget'));
 
             if (get_option('REVIEWSio_enable_product_rating_snippet')) {
                 add_action('wp_footer', array($this, 'reviewsio_rating_snippet_scripts'));
@@ -1919,31 +1855,9 @@ if (!class_exists('WooCommerce_Reviews')) {
                 }
             }
 
-            if (get_option('REVIEWSio_enable_nuggets_widget')) {
-                add_filter('woocommerce_single_product_summary', array($this, 'reviewsio_nuggets_widget_scripts'));
-            }
-            add_shortcode('nuggets_widget', array($this, 'nuggets_widget_shortcode'));
-
-            // if (get_option('REVIEWSio_enable_nuggets_bar_widget')) {
-            //     add_filter('wp_footer', array($this, 'reviewsio_nuggets_bar_widget_scripts'));
-            // }
-            add_shortcode('nuggets_bar_widget', array($this, 'nuggets_bar_widget_shortcode'));
-
-
             if (get_option('REVIEWSio_enable_floating_react_widget')) {
                 add_action('wp_footer', array($this, 'reviewsio_floating_react_widget_scripts'));
             }
-
-            add_shortcode('ugc_widget', array($this, 'ugc_widget_shortcode'));
-
-            add_shortcode('rating_bar_widget', array($this, 'rating_bar_widget_shortcode'));
-
-            add_shortcode('carousel_widget', array($this, 'carousel_widget_shortcode'));
-
-            if (get_option('REVIEWSio_enable_survey_widget')) {
-                add_filter('wp_footer', array($this, 'reviewsio_survey_widget_scripts'));
-            }
-            add_shortcode('survey_widget', array($this, 'survey_widget_shortcode'));
 
             if (get_option('REVIEWSio_enable_footer_scripts') && !empty(get_option('REVIEWSio_custom_footer_hooks'))) {
                 $this->insert_custom_scripts_before_footer();
@@ -1960,11 +1874,40 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             if ($_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'reviewscouk_menu_nonce'))) {
                 //wp_die('Nonce verification failed.');
-            } else {
-                if (isset($_GET["page"]) && trim($_GET["page"]) == 'reviewscouk') {
-                    add_action('admin_enqueue_scripts', 'reviewsio_admin_scripts');
-                }
             }
+            if (isset($_GET["page"]) && trim($_GET["page"]) == 'reviewscouk') {
+                add_action('admin_enqueue_scripts', 'reviewsio_admin_scripts');
+            }
+        }
+
+        public function initReviewsFilters()
+        {
+            add_filter('template_redirect', array($this, 'redirect_hook'));
+            add_filter('woocommerce_product_tabs', array($this, 'product_review_tab'));
+            if (get_option('REVIEWSio_polaris_review_widget') == 'bottom') {
+                add_filter('woocommerce_after_single_product', array($this, 'productPage'));
+            } else {
+                add_filter('woocommerce_after_single_product_summary', array($this, 'productPage'));
+            }
+            if (get_option('REVIEWSio_enable_nuggets_widget')) {
+                add_filter('woocommerce_single_product_summary', array($this, 'reviewsio_nuggets_widget_scripts'));
+            }
+            if (get_option('REVIEWSio_enable_survey_widget')) {
+                add_filter('wp_footer', array($this, 'reviewsio_survey_widget_scripts'));
+            }
+        }
+
+        public function initReviewsShortCodes()
+        {
+            add_shortcode('product_reviews_widget', array($this, 'product_reviews_widget_shortcode'));
+            add_shortcode('rating_snippet', array($this, 'product_rating_snippet_shortcode'));
+            add_shortcode('richsnippet', array($this, 'richsnippet_widget'));
+            add_shortcode('nuggets_widget', array($this, 'nuggets_widget_shortcode'));
+            add_shortcode('nuggets_bar_widget', array($this, 'nuggets_bar_widget_shortcode'));
+            add_shortcode('ugc_widget', array($this, 'ugc_widget_shortcode'));
+            add_shortcode('rating_bar_widget', array($this, 'rating_bar_widget_shortcode'));
+            add_shortcode('carousel_widget', array($this, 'carousel_widget_shortcode'));
+            add_shortcode('survey_widget', array($this, 'survey_widget_shortcode'));
         }
 
         public function add_richsnippet_shortcode_scripts()
@@ -1972,7 +1915,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             wp_register_script('richsnippet-shortcode-script', false, array(), $this->appVersion, false);
             wp_enqueue_script('richsnippet-shortcode-script');
             wp_add_inline_script('richsnippet-shortcode-script', "
-                jQuery.get('" . $this->richsnippet_shortcode_url . "', function(r){
+                jQuery.get('" . esc_url($this->richsnippet_shortcode_url) . "', function(r){
                     jQuery('#snippetWidget').html(r);
                 });
             ");
@@ -2031,11 +1974,10 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             $storeid = get_option('REVIEWSio_store_id');
 
-            $this->richsnippet_shortcode_url = $this->getWidgetDomain() . 'rich-snippet-reviews/widget?store=' . $storeid . '&primaryClr=%23' . $opts['primary'] . '&textClr=%23' . $opts['text'] . '&bgClr=%23' . $opts['bg'] . '&height=' . $opts['height'] . '&headClr=%23' . $opts['head'] . '&header=' . $opts['header'] . '&headingSize=' . $opts['headingsize'] . 'px&numReviews=' . $opts['numreviews'] . '&names=' . $opts['names'] . '&dates=' . $opts['dates'] . '&footer=' . $opts['footer'];
-
+            $this->richsnippet_shortcode_url = esc_url($this->getWidgetDomain() . 'rich-snippet-reviews/widget?store=' . $storeid . '&primaryClr=%23' . $opts['primary'] . '&textClr=%23' . $opts['text'] . '&bgClr=%23' . $opts['bg'] . '&height=' . $opts['height'] . '&headClr=%23' . $opts['head'] . '&header=' . $opts['header'] . '&headingSize=' . $opts['headingsize'] . 'px&numReviews=' . $opts['numreviews'] . '&names=' . $opts['names'] . '&dates=' . $opts['dates'] . '&footer=' . $opts['footer']);
 
             if (isset($opts['tag'])) {
-                $this->richsnippet_shortcode_url .= '&tag=' . $opts['tag'];
+                $this->richsnippet_shortcode_url .= esc_url('&tag=' . $opts['tag']);
             }
             ?>
 
@@ -2057,7 +1999,7 @@ if (class_exists('WooCommerce_Reviews')) {
         function woocommercereviews_settings_link($links)
         {
             $nonce = wp_create_nonce('reviewscouk_menu_nonce');
-            $settings_link = '<a href="options-general.php?page=reviewscouk&_wpnonce=' . esc_url($nonce) . '">' . __('Settings', 'woocommercereviews') . '</a>';
+            $settings_link = '<a href="options-general.php?page=reviewscouk&_wpnonce=' . $nonce . '">' . __('Settings', 'woocommercereviews') . '</a>';
             array_unshift($links, $settings_link);
             return $links;
         }
