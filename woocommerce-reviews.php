@@ -659,8 +659,8 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function reviewsio_floating_react_widget_scripts($skus = null)
         {
-            wp_register_script('reviewsio-floating-react-widget-script', 'https://widget.reviews.io/modern-widgets/floating.js', array(), $this->appVersion, true);
-            wp_register_style('reviewsio-floating-react-widget-style',  'https://assets.reviews.io/css/widgets/floating-widget.css', array(), $this->appVersion, true);
+            wp_register_script('reviewsio-floating-react-widget-script', 'https://widget.reviews.io/modern-widgets/floating.js', array(), $this->appVersion, false);
+            wp_register_style('reviewsio-floating-react-widget-style',  'https://assets.reviews.io/css/widgets/floating-widget.css', array(), $this->appVersion, false);
 
             wp_enqueue_script('reviewsio-floating-react-widget-script');
             wp_enqueue_style('reviewsio-floating-react-widget-style');
@@ -677,8 +677,8 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function ugc_widget_shortcode($widget = null)
         {
-            wp_register_script('reviewsio-floating-react-widget-script', 'https://widget.reviews.io/modern-widgets/ugc.js', array(), $this->appVersion, true);
-            wp_enqueue_script('reviewsio-floating-react-widget-script');
+            wp_register_script('reviewsio-ugc-react-widget-script', 'https://widget.reviews.io/modern-widgets/ugc.js', array(), $this->appVersion, true);
+            wp_enqueue_script('reviewsio-ugc-react-widget-script');
 
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != '' && $widget['widget_id'] != '') {
                 return '
@@ -1980,9 +1980,8 @@ if (!class_exists('WooCommerce_Reviews')) {
                 $this->richsnippet_shortcode_url .= esc_url('&tag=' . $opts['tag']);
             }
             ?>
-
-            <div id='snippetWidget'></div>
-<?php
+                <div id='snippetWidget'></div>
+            <?php
             add_action('wp_footer', array($this, 'add_richsnippet_shortcode_scripts'));
             $contents = ob_get_contents();
             ob_end_clean();
