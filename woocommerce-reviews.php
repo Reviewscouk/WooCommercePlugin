@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.3.0
+ * Version: 1.3.1
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -41,7 +41,7 @@ add_action('before_woocommerce_init', 'declare_wc_compatibility');
  */
 function reviewsio_admin_scripts()
 {
-    $appVersion = '1.3.0';
+    $appVersion = '1.3.1';
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__), [], $appVersion, false);
     wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__), [], $appVersion, false);
@@ -84,7 +84,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         protected $numWidgets = 0;
         protected $richsnippet_shortcode_url = '';
-        protected $appVersion = '1.3.0';
+        protected $appVersion = '1.3.1';
 
 
         public function __construct()
@@ -1234,7 +1234,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                         "@context" => "http://schema.org",
                         "@type" => "Product",
                         "name" => esc_js(htmlspecialchars($product->get_name())),
-                        "image" => esc_js($image[0]) ?? '',
+                        "image" => esc_js($image[0] ?? ''),
                         "description" => wp_json_encode(apply_filters('REVIEWSio_description', htmlspecialchars(wp_strip_all_tags($product->get_description())), $product)),
                         "brand" => [
                             "@type" => "Brand",
@@ -1258,7 +1258,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             "@context": "http://schema.org",
                             "@type": "Product",
                             "name": "' . esc_js(htmlspecialchars($product->get_name())) . '",
-                            image: "' . (esc_js($image[0]) ?? "") . '",
+                            image: "' . (esc_js($image[0] ?? "")) . '",
                             description: ' . wp_json_encode(apply_filters('REVIEWSio_description', htmlspecialchars(wp_strip_all_tags($product->get_description())), $product)) . ',
                             brand: {
                             "@type": "Brand",

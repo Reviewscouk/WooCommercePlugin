@@ -69,6 +69,9 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 
 == Changelog ==
 
+= 1.3.1 =
+* Fix - Fix ternary on image array index zero used on escape functions.
+
 = 1.3.0 =
 * Fix - Remove escaping around footer and rating snippet script actions.
 
