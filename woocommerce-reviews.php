@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.2.9
+ * Version: 1.3.0
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -41,7 +41,7 @@ add_action('before_woocommerce_init', 'declare_wc_compatibility');
  */
 function reviewsio_admin_scripts()
 {
-    $appVersion = '1.2.9';
+    $appVersion = '1.3.0';
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__), [], $appVersion, false);
     wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__), [], $appVersion, false);
@@ -84,7 +84,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         protected $numWidgets = 0;
         protected $richsnippet_shortcode_url = '';
-        protected $appVersion = '1.2.9';
+        protected $appVersion = '1.3.0';
 
 
         public function __construct()
@@ -1803,7 +1803,7 @@ if (!class_exists('WooCommerce_Reviews')) {
         {
             $customHooks = explode(", ", get_option('REVIEWSio_custom_footer_hooks'));
             foreach ($customHooks as $hook) {
-                add_action(wp_kses($hook, array($this, 'insert_scripts_before_footer'), []));
+                add_action($hook, array($this, 'insert_scripts_before_footer'));
             }
         }
 
@@ -1811,7 +1811,7 @@ if (!class_exists('WooCommerce_Reviews')) {
         {
             $customHooks = explode(", ", get_option('REVIEWSio_custom_rating_snippet_collection_hook'));
             foreach ($customHooks as $hook) {
-                add_action(wp_kses($hook, array($this, 'product_rating_snippet_markup'), 5, []));
+                add_action($hook, array($this, 'product_rating_snippet_markup'), 5);
             }
         }
 
@@ -1980,8 +1980,8 @@ if (!class_exists('WooCommerce_Reviews')) {
                 $this->richsnippet_shortcode_url .= esc_url('&tag=' . $opts['tag']);
             }
             ?>
-                <div id='snippetWidget'></div>
-            <?php
+            <div id='snippetWidget'></div>
+<?php
             add_action('wp_footer', array($this, 'add_richsnippet_shortcode_scripts'));
             $contents = ob_get_contents();
             ob_end_clean();
