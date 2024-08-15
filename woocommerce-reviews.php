@@ -1277,7 +1277,7 @@ if (!class_exists('WooCommerce_Reviews')) {
         {
             $json = [];
             $maxRetries = 3;
-            $url = esc_url('https://api.reviews.asdasio/json-ld/product/richsnippet?store=' . get_option('REVIEWSio_store_id') . '&sku=' . urlencode($sku) . '&data=true&k=1');
+            $url = esc_url('https://api.reviews.io/json-ld/product/richsnippet?store=' . get_option('REVIEWSio_store_id') . '&sku=' . urlencode($sku) . '&data=true&k=1');
 
             for ($i = 0; $i < $maxRetries; $i++) {
                 $data = @wp_remote_get($url);
