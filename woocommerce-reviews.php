@@ -1275,21 +1275,25 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         private function getServerSideSnippets($sku, $baseData)
         {
-            $json = false;
+            $json = [];
             $maxRetries = 3;
-            $url = 'https://api.reviews.io/json-ld/product/richsnippet?store=' . esc_url(get_option('REVIEWSio_store_id')) . '&sku=' . esc_url(urlencode($sku)) . '&data=true&k=1';
+            $url = esc_url('https://api.reviews.io/json-ld/product/richsnippet?store=' . get_option('REVIEWSio_store_id') . '&sku=' . urlencode($sku) . '&data=true&k=1');
+
             for ($i = 0; $i < $maxRetries; $i++) {
                 $data = @wp_remote_get($url);
 
-                if ((is_string($data) && $json = json_decode($data, 1)) !== false || (is_array($data))) {
-                    break;
-                } else {
-                    sleep(10);
+                if (is_wp_error($data)) {
+                    usleep(200000); // 200ms
                     $url .= "1";
+
+                    continue;
                 }
+
+                $json = json_decode($data['body'] ?? '', 1);
+                break;
             }
 
-            if (!$json) {
+            if (!$json || !is_array($json)) {
                 $json = [];
             }
 
