@@ -498,10 +498,18 @@ if (!defined('ABSPATH')) {
                                                     <div class="Field u-marginTop--xxs u-width--100">
                                                         <select name='REVIEWSio_polaris_lang' class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;">
                                                             <?php
-                                                            foreach ([
-                                                                'English (Default)' => 'en', 'Deutsch' => 'de', 'Deutsch (Informal)' => 'de-informal', 'Español' => 'es', 'Français' => 'fr',
-                                                                'Italiano' => 'it', 'Nederlands' => 'nl', 'Suomi' => 'fi'
-                                                            ] as $key => $value) {
+                                                            foreach (
+                                                                [
+                                                                    'English (Default)' => 'en',
+                                                                    'Deutsch' => 'de',
+                                                                    'Deutsch (Informal)' => 'de-informal',
+                                                                    'Español' => 'es',
+                                                                    'Français' => 'fr',
+                                                                    'Italiano' => 'it',
+                                                                    'Nederlands' => 'nl',
+                                                                    'Suomi' => 'fi'
+                                                                ] as $key => $value
+                                                            ) {
                                                             ?>
                                                                 <option <?php echo ($value == $polaris_lang ? 'selected' : ''); ?> value='<?php echo esc_attr($value); ?>'>
                                                                     <?php echo esc_html($key); ?>
@@ -684,6 +692,96 @@ if (!defined('ABSPATH')) {
                                                 $polaris_custom_styles = get_option('REVIEWSio_polaris_custom_styles');
                                                 ?>
                                                 <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_polaris_custom_styles" style="width:100%;height:400px;border-color:#D1D8DA;border-radius:4px;padding:12px;"><?php echo esc_html($polaris_custom_styles); ?></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="flex-row">
+                                            <div class="flex-col-xxs-12 u-paddingTop--sm">
+                                                <div>
+                                                    <p>Allow your visitors to ask questions about your products. Your answers will be published publicly.</p>
+                                                    <div class="form-table">
+                                                        <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_rich_snippet">Enable Q&A: </label>
+                                                        <p class="TextBody TextBody--xxxs">This will add a Q&A Tab to your Product Review Widget.</p>
+                                                        <?php
+                                                        $polaris_review_widget_questions = get_option('REVIEWSio_polaris_review_widget_questions');
+                                                        ?>
+                                                        <div class="flex-row">
+                                                            <div class="flex-col-xxs-12 flex-col-sm-6">
+                                                                <div class="Field u-marginTop--xxs u-width--100">
+                                                                    <select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_polaris_review_widget_questions">
+                                                                        <option <?php echo ($polaris_review_widget_questions == 1) ? 'selected' : '' ?> value="1">Yes</option>
+                                                                        <option <?php echo ($polaris_review_widget_questions == 0) ? 'selected' : '' ?> value="0">No</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_header_config">Advanced Product Reviews 'Header' Config</label>
+                                                    <p class="TextBody TextBody--xxxs">
+                                                        Sets 'header' section config for the Product Reviews Widget. After using the designer tool, copy the "header" block, which begins with "header: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
+                                                    </p>
+
+                                                    <?php
+                                                    $custom_widget_header_config = get_option('REVIEWSio_widget_custom_header_config');
+                                                    ?>
+                                                    <div class="flex-row">
+                                                        <div class="flex-col-xxs-12 flex-col-sm-6">
+                                                            <div class="Field u-marginTop--xxs u-width--100">
+                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_header_config" style="width:100%;height:50px;"><?php echo esc_textarea(htmlentities($custom_widget_header_config)); ?></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_filtering_config">Advanced Product Reviews 'Filtering' Config</label>
+                                                    <p class="TextBody TextBody--xxxs">
+                                                        Sets 'filtering' section config for the Product Reviews Widget. After using the designer tool, copy the "filtering" block, which begins with "filtering: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
+                                                    </p>
+                                                    <?php
+                                                    $custom_widget_filtering_config = get_option('REVIEWSio_widget_custom_filtering_config');
+                                                    ?>
+                                                    <div class="flex-row">
+                                                        <div class="flex-col-xxs-12 flex-col-sm-6">
+                                                            <div class="Field u-marginTop--xxs u-width--100">
+                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_filtering_config" style="width:100%;height:50px;"><?php echo esc_textarea(htmlentities($custom_widget_filtering_config)); ?></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_reviews_config">Advanced Product Reviews 'Reviews' Config</label>
+                                                    <p class="TextBody TextBody--xxxs">
+                                                        Sets 'reviews' section config for the Product Reviews Widget. After using the designer tool, copy the "reviews" block, which begins with "reviews: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
+                                                    </p>
+
+                                                    <?php
+                                                    $custom_widget_reviews_config = get_option('REVIEWSio_widget_custom_reviews_config');
+                                                    ?>
+                                                    <div class="flex-row">
+                                                        <div class="flex-col-xxs-12 flex-col-sm-6">
+                                                            <div class="Field u-marginTop--xxs u-width--100">
+                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_reviews_config" style="width:100%;height:50px;"><?php echo esc_textarea(htmlentities($custom_widget_reviews_config)); ?></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_css">Advanced Product Reviews Widget 'Styles' Config</label>
+                                                    <p class="TextBody TextBody--xxxs">
+                                                        Sets the 'styles' for the Product Reviews Widget. After using the designer tool, copy the "styles" block, which begins with "styles: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
+                                                    </p>
+                                                    <?php
+                                                    $custom_reviews_widget_styles = get_option('REVIEWSio_custom_reviews_widget_styles');
+                                                    ?>
+                                                    <div class="flex-row">
+                                                        <div class="flex-col-xxs-12 flex-col-sm-6">
+                                                            <div class="Field u-marginTop--xxs u-width--100">
+                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_custom_reviews_widget_styles" style="width:100%;height:50px;"><?php echo esc_textarea(htmlentities($custom_reviews_widget_styles)); ?></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1603,128 +1701,6 @@ if (!defined('ABSPATH')) {
                                     </div>
                                     <div class="u-hr u-marginTop--md u-marginBottom--md"></div>
                                     <div>
-                                        <h3><strong>Product Reviews Settings</strong></h3>
-                                        <div>
-                                            <p>Allow your visitors to ask questions about your products. Your answers will be published publicly.</p>
-
-                                            <?php
-                                            if (!$hide_legacy) {
-                                            ?>
-                                                <div class="form-table">
-                                                    <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_product_review_widget">Show Legacy Question Answers Widget: </label>
-                                                    <p class="TextBody TextBody--xxxs" style="font-size:12px;font-weight:100;">The widget will be displayed in a tab on your product pages.</p>
-
-                                                    <?php
-                                                    $question_answers_widget = get_option('REVIEWSio_question_answers_widget');
-                                                    ?>
-                                                    <div class="flex-row">
-                                                        <div class="flex-col-xxs-12 flex-col-sm-6">
-                                                            <div class="Field u-marginTop--xxs u-width--100">
-                                                                <select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_question_answers_widget">
-                                                                    <option <?php echo ($question_answers_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Tab</option>
-                                                                    <option <?php echo ($question_answers_widget == 'summary') ? 'selected' : '' ?> value="summary">Show Below Product Summary</option>
-                                                                    <option <?php echo ($question_answers_widget == 'both') ? 'selected' : '' ?> value="both">Show in Both Places</option>
-                                                                    <option <?php echo ($question_answers_widget == '0') ? 'selected' : '' ?> value="0">Dont Display</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            <?php
-                                            } else {
-                                            ?>
-
-                                                <div class="form-table">
-                                                    <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_rich_snippet">Enable Q&A: </label>
-                                                    <p class="TextBody TextBody--xxxs">This will add a Q&A Tab to your Product Review Widget.</p>
-
-                                                    <?php
-                                                    $polaris_review_widget_questions = get_option('REVIEWSio_polaris_review_widget_questions');
-                                                    ?>
-                                                    <div class="flex-row">
-                                                        <div class="flex-col-xxs-12 flex-col-sm-6">
-                                                            <div class="Field u-marginTop--xxs u-width--100">
-                                                                <select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_polaris_review_widget_questions">
-                                                                    <option <?php echo ($polaris_review_widget_questions == 1) ? 'selected' : '' ?> value="1">Yes</option>
-                                                                    <option <?php echo ($polaris_review_widget_questions == 0) ? 'selected' : '' ?> value="0">No</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            <?php
-                                            }
-                                            ?>
-                                        </div>
-                                        <div>
-                                            <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_header_config">Advanced Product Reviews 'Header' Config</label>
-                                            <p class="TextBody TextBody--xxxs">
-                                                Sets 'header' section config for the Product Reviews Widget. After using the designer tool, copy the "header" block, which begins with "header: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
-                                            </p>
-
-                                            <?php
-                                            $custom_widget_header_config = get_option('REVIEWSio_widget_custom_header_config');
-                                            ?>
-                                            <div class="flex-row">
-                                                <div class="flex-col-xxs-12 flex-col-sm-6">
-                                                    <div class="Field u-marginTop--xxs u-width--100">
-                                                        <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_header_config" style="width:100%;height:50px;"><?php echo esc_textarea(htmlentities($custom_widget_header_config)); ?></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_filtering_config">Advanced Product Reviews 'Filtering' Config</label>
-                                            <p class="TextBody TextBody--xxxs">
-                                                Sets 'filtering' section config for the Product Reviews Widget. After using the designer tool, copy the "filtering" block, which begins with "filtering: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
-                                            </p>
-                                            <?php
-                                            $custom_widget_filtering_config = get_option('REVIEWSio_widget_custom_filtering_config');
-                                            ?>
-                                            <div class="flex-row">
-                                                <div class="flex-col-xxs-12 flex-col-sm-6">
-                                                    <div class="Field u-marginTop--xxs u-width--100">
-                                                        <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_filtering_config" style="width:100%;height:50px;"><?php echo esc_textarea(htmlentities($custom_widget_filtering_config)); ?></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_reviews_config">Advanced Product Reviews 'Reviews' Config</label>
-                                            <p class="TextBody TextBody--xxxs">
-                                                Sets 'reviews' section config for the Product Reviews Widget. After using the designer tool, copy the "reviews" block, which begins with "reviews: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
-                                            </p>
-
-                                            <?php
-                                            $custom_widget_reviews_config = get_option('REVIEWSio_widget_custom_reviews_config');
-                                            ?>
-                                            <div class="flex-row">
-                                                <div class="flex-col-xxs-12 flex-col-sm-6">
-                                                    <div class="Field u-marginTop--xxs u-width--100">
-                                                        <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_reviews_config" style="width:100%;height:50px;"><?php echo esc_textarea(htmlentities($custom_widget_reviews_config)); ?></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_css">Advanced Product Reviews Widget 'Styles' Config</label>
-                                            <p class="TextBody TextBody--xxxs">
-                                                Sets the 'styles' for the Product Reviews Widget. After using the designer tool, copy the "styles" block, which begins with "styles: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
-                                            </p>
-                                            <?php
-                                            $custom_reviews_widget_styles = get_option('REVIEWSio_custom_reviews_widget_styles');
-                                            ?>
-                                            <div class="flex-row">
-                                                <div class="flex-col-xxs-12 flex-col-sm-6">
-                                                    <div class="Field u-marginTop--xxs u-width--100">
-                                                        <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_custom_reviews_widget_styles" style="width:100%;height:50px;"><?php echo esc_textarea(htmlentities($custom_reviews_widget_styles)); ?></textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="u-hr u-marginTop--md u-marginBottom--md"></div>
                                         <div>
                                             <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_hide_legacy">Show Legacy Widget Settings</label>
                                             <p class="TextBody TextBody--xxxs">Enable this if you would like to use the legacy product widget.</p>
@@ -1776,6 +1752,31 @@ if (!defined('ABSPATH')) {
                                                     </div>
                                                 </div>
                                             </div>
+                                        <?php
+                                        }
+                                        if (!$hide_legacy) {
+                                        ?>
+                                            <div class="form-table">
+                                                <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_product_review_widget">Show Legacy Question Answers Widget: </label>
+                                                <p class="TextBody TextBody--xxxs" style="font-size:12px;font-weight:100;">The widget will be displayed in a tab on your product pages.</p>
+
+                                                <?php
+                                                $question_answers_widget = get_option('REVIEWSio_question_answers_widget');
+                                                ?>
+                                                <div class="flex-row">
+                                                    <div class="flex-col-xxs-12 flex-col-sm-6">
+                                                        <div class="Field u-marginTop--xxs u-width--100">
+                                                            <select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_question_answers_widget">
+                                                                <option <?php echo ($question_answers_widget == 'tab') ? 'selected' : '' ?> value="tab">Show In Tab</option>
+                                                                <option <?php echo ($question_answers_widget == 'summary') ? 'selected' : '' ?> value="summary">Show Below Product Summary</option>
+                                                                <option <?php echo ($question_answers_widget == 'both') ? 'selected' : '' ?> value="both">Show in Both Places</option>
+                                                                <option <?php echo ($question_answers_widget == '0') ? 'selected' : '' ?> value="0">Dont Display</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         <?php
                                         }
                                         ?>
