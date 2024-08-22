@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.3.2
+ * Version: 1.3.3
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -41,7 +41,7 @@ add_action('before_woocommerce_init', 'declare_wc_compatibility');
  */
 function reviewsio_admin_scripts()
 {
-    $appVersion = '1.3.2';
+    $appVersion = '1.3.3';
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__), [], $appVersion, false);
     wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__), [], $appVersion, false);
@@ -84,7 +84,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         protected $numWidgets = 0;
         protected $richsnippet_shortcode_url = '';
-        protected $appVersion = '1.3.2';
+        protected $appVersion = '1.3.3';
 
 
         public function __construct()
@@ -154,15 +154,75 @@ if (!class_exists('WooCommerce_Reviews')) {
         {
             $optionsPrefix = 'REVIEWSio_';
             $options = [
-                "region", "domain", "store_id", "api_key", "product_feed", "widget_hex_colour", "widget_custom_css",
-                "enable_rich_snippet", "enable_product_rich_snippet", "enable_product_rich_snippet_server_side", "enable_product_rating_snippet", "enable_rating_snippet_custom_collection_location", "custom_rating_snippet_collection_hook",
-                "enable_nuggets_widget", "nuggets_widget_options", "nuggets_widget_tags", "enable_nuggets_bar_widget", "nuggets_bar_widget_id", "nuggets_bar_widget_tags", "enable_floating_react_widget", "floating_react_widget_options", "ugc_widget_options", "enable_survey_widget", "survey_widget_options", "survey_widget_campaign_options", "carousel_type", "carousel_custom_styles",
-                "polaris_review_widget", "reviews_tab_name", "polaris_review_widget_questions", "polaris_custom_styles", "product_review_widget", "question_answers_widget",
-                "hide_write_review_button", "per_page_review_widget", "send_product_review_invitation", "enable_cron", "enable_product_feed_cron", "product_feed_cron_frequency", "current_product_feed_cron_frequency",
-                "enable_floating_widget", "product_identifier", "disable_elementor_blocks", "disable_reviews_per_product", "use_parent_product", "use_parent_product_rich_snippet",
-                "custom_reviews_widget_styles", "disable_rating_snippet_popup", "disable_rating_snippet_popup_category", "minimum_rating", "rating_snippet_text", "enable_rating_snippet_listen_for_changes", "enable_rating_snippet_show_empty_stars", "polaris_lang", "disable_rating_snippet_offset", "hide_legacy", "rating_snippet_no_linebreak", "enable_footer_scripts", "custom_footer_hooks", "footer_show_on_homepage", "footer_show_on_collection_pages", "footer_custom_script",
-                "new_variables_set", "product_feed_custom_attributes",
-                "widget_custom_header_config", "widget_custom_filtering_config", "widget_custom_reviews_config", "product_feed_wpseo_global_ids", "enable_gpf_data"
+                "region",
+                "domain",
+                "store_id",
+                "api_key",
+                "product_feed",
+                "widget_hex_colour",
+                "widget_custom_css",
+                "enable_rich_snippet",
+                "enable_product_rich_snippet",
+                "enable_product_rich_snippet_server_side",
+                "enable_product_rating_snippet",
+                "enable_rating_snippet_custom_collection_location",
+                "custom_rating_snippet_collection_hook",
+                "enable_nuggets_widget",
+                "nuggets_widget_options",
+                "nuggets_widget_tags",
+                "enable_nuggets_bar_widget",
+                "nuggets_bar_widget_id",
+                "nuggets_bar_widget_tags",
+                "enable_floating_react_widget",
+                "floating_react_widget_options",
+                "ugc_widget_options",
+                "enable_survey_widget",
+                "survey_widget_options",
+                "survey_widget_campaign_options",
+                "carousel_type",
+                "carousel_custom_styles",
+                "polaris_review_widget",
+                "reviews_tab_name",
+                "polaris_review_widget_questions",
+                "polaris_custom_styles",
+                "product_review_widget",
+                "question_answers_widget",
+                "hide_write_review_button",
+                "per_page_review_widget",
+                "send_product_review_invitation",
+                "enable_cron",
+                "enable_product_feed_cron",
+                "product_feed_cron_frequency",
+                "current_product_feed_cron_frequency",
+                "enable_floating_widget",
+                "product_identifier",
+                "disable_elementor_blocks",
+                "disable_reviews_per_product",
+                "use_parent_product",
+                "use_parent_product_rich_snippet",
+                "custom_reviews_widget_styles",
+                "disable_rating_snippet_popup",
+                "disable_rating_snippet_popup_category",
+                "minimum_rating",
+                "rating_snippet_text",
+                "enable_rating_snippet_listen_for_changes",
+                "enable_rating_snippet_show_empty_stars",
+                "polaris_lang",
+                "disable_rating_snippet_offset",
+                "hide_legacy",
+                "rating_snippet_no_linebreak",
+                "enable_footer_scripts",
+                "custom_footer_hooks",
+                "footer_show_on_homepage",
+                "footer_show_on_collection_pages",
+                "footer_custom_script",
+                "new_variables_set",
+                "product_feed_custom_attributes",
+                "widget_custom_header_config",
+                "widget_custom_filtering_config",
+                "widget_custom_reviews_config",
+                "product_feed_wpseo_global_ids",
+                "enable_gpf_data"
             ];
 
             foreach ($options as $o) {
@@ -542,7 +602,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     document.head.insertBefore(snippetCss, document.head.childNodes[document.head.childNodes.length - 1].nextSibling);
 
                     loadReviewsIoRatingSnippets();
-                    ' . wp_kses($snippet_disable, []) . '
+                    ' . $snippet_disable . '
                 });
 
                 var loadReviewsIoRatingSnippets = function () {
@@ -558,9 +618,9 @@ if (!class_exists('WooCommerce_Reviews')) {
                       showEmptyStars: ' . (get_option('REVIEWSio_enable_rating_snippet_show_empty_stars') == 1 ? esc_js('true') : esc_js('false')) . ',
                       ' . wp_kses($writeButton, []) . '
                       ' . (!empty(get_option('REVIEWSio_per_page_review_widget')) && is_int((int)get_option('REVIEWSio_per_page_review_widget')) ? esc_js('polarisPerPage:') . esc_js(get_option('REVIEWSio_per_page_review_widget')) . ',' : '') . '
-                      ' . (!empty(get_option('REVIEWSio_widget_custom_header_config')) ? 'polarisHeader: {' . wp_kses(get_option('REVIEWSio_widget_custom_header_config'), []) . '},' : '') . '
-                      ' . (!empty(get_option('REVIEWSio_widget_custom_filtering_config')) ? 'polarisFiltering: {' . wp_kses(get_option('REVIEWSio_widget_custom_filtering_config'), []) . '},' : '') . '
-                      ' . (!empty(get_option('REVIEWSio_widget_custom_reviews_config')) ? 'polarisReviews: {' . wp_kses(get_option('REVIEWSio_widget_custom_reviews_config'), []) . '},' : '') . '
+                      ' . (!empty(get_option('REVIEWSio_widget_custom_header_config')) ? 'polarisHeader: {' . get_option('REVIEWSio_widget_custom_header_config') . '},' : '') . '
+                      ' . (!empty(get_option('REVIEWSio_widget_custom_filtering_config')) ? 'polarisFiltering: {' . get_option('REVIEWSio_widget_custom_filtering_config') . '},' : '') . '
+                      ' . (!empty(get_option('REVIEWSio_widget_custom_reviews_config')) ? 'polarisReviews: {' . get_option('REVIEWSio_widget_custom_reviews_config') . '},' : '') . '
                   });
                 }
             ');
@@ -1105,13 +1165,13 @@ if (!class_exists('WooCommerce_Reviews')) {
                         tabClr: "#eee",
                         ratingStars: false,
                         showAvatars: true,
-                        ' . wp_kses($writeButton, []) . '
+                        ' . $writeButton . '
                         onSummary: function(data){
                             if(jQuery){
                                 jQuery(\'[href="#tab-reviews"]\').html(\'Reviews (\'+data.count+\')\');
                             }
                         },
-                        css: "' . wp_kses($custom_css, []) . '",
+                        css: "' . $custom_css . '",
                     });
                 });
             ');
