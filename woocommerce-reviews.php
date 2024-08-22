@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.3.3
+ * Version: 1.3.4
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -41,7 +41,7 @@ add_action('before_woocommerce_init', 'declare_wc_compatibility');
  */
 function reviewsio_admin_scripts()
 {
-    $appVersion = '1.3.3';
+    $appVersion = '1.3.4';
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__), [], $appVersion, false);
     wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__), [], $appVersion, false);
@@ -84,7 +84,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         protected $numWidgets = 0;
         protected $richsnippet_shortcode_url = '';
-        protected $appVersion = '1.3.3';
+        protected $appVersion = '1.3.4';
 
 
         public function __construct()
@@ -1337,7 +1337,7 @@ if (!class_exists('WooCommerce_Reviews')) {
         {
             $json = [];
             $maxRetries = 3;
-            $url = esc_url('https://api.reviews.io/json-ld/product/richsnippet?store=' . get_option('REVIEWSio_store_id') . '&sku=' . urlencode($sku) . '&data=true&k=1');
+            $url = esc_url_raw('https://api.reviews.io/json-ld/product/richsnippet?store=' . get_option('REVIEWSio_store_id') . '&sku=' . urlencode($sku) . '&data=true&k=1');
 
             for ($i = 0; $i < $maxRetries; $i++) {
                 $data = @wp_remote_get($url);
