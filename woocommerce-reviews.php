@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.3.4
+ * Version: 1.3.5
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -41,7 +41,7 @@ add_action('before_woocommerce_init', 'declare_wc_compatibility');
  */
 function reviewsio_admin_scripts()
 {
-    $appVersion = '1.3.4';
+    $appVersion = '1.3.5';
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__), [], $appVersion, false);
     wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__), [], $appVersion, false);
@@ -84,7 +84,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         protected $numWidgets = 0;
         protected $richsnippet_shortcode_url = '';
-        protected $appVersion = '1.3.4';
+        protected $appVersion = '1.3.5';
 
 
         public function __construct()
@@ -880,124 +880,75 @@ if (!class_exists('WooCommerce_Reviews')) {
                     document.getElementsByTagName('head')[0].appendChild(carouselStylesheet)
 
                     new carouselInlineWidget(('carousel-widget-<?php echo esc_attr($this->numWidgets) ?>'), {
-                            //Your REVIEWS.io account ID and widget type:
-                            store: '<?php echo esc_js(get_option('REVIEWSio_store_id')) ?>',
-                            sku: '<?php echo esc_js($skus) ?>',
-                            lang: '<?php echo (get_option('REVIEWSio_polaris_lang') ? esc_js(get_option('REVIEWSio_polaris_lang')) : esc_js('en')) ?>',
-                            carousel_type: '<?php echo esc_js($this->getCarouselType('option', $carouselType)); ?>',
-                            styles_carousel: '<?php echo wp_kses($this->getCarouselType('styles', $carouselType), []); ?>',
+                        //Your REVIEWS.io account ID and widget type:
+                        store: '<?php echo esc_js(get_option('REVIEWSio_store_id')) ?>',
+                        sku: '<?php echo esc_js($skus) ?>',
+                        lang: '<?php echo (get_option('REVIEWSio_polaris_lang') ? esc_js(get_option('REVIEWSio_polaris_lang')) : esc_js('en')) ?>',
+                        carousel_type: '<?php echo esc_js($this->getCarouselType('option', $carouselType)); ?>',
+                        styles_carousel: '<?php echo wp_kses($this->getCarouselType('styles', $carouselType), []); ?>',
 
-                            <?php if (empty(get_option('REVIEWSio_carousel_custom_styles'))) { ?>
-                                /* Widget settings: */
-                                options: {
-                                    general: {
-                                        /*What reviews should the widget display? Available options: company, product, third_party. You can choose one type or multiple separated by comma.*/
-                                        review_type: 'company, product',
-                                        /*Minimum number of reviews required for widget to be displayed*/
-                                        min_reviews: '1',
-                                        /*Maximum number of reviews to include in the carousel widget.*/
-                                        max_reviews: '20',
-                                        address_format: 'CITY, COUNTRY',
-                                        /*Carousel auto-scrolling speed. 3000 = 3 seconds. If you want to disable auto-scroll, set this value to false.*/
-                                        enable_auto_scroll: 10000,
-                                    },
-                                    header: {
-                                        /*Show overall rating stars*/
-                                        enable_overall_stars: true,
-                                        rating_decimal_places: 2,
-                                    },
-                                    reviews: {
-                                        /*Show customer name*/
-                                        enable_customer_name: true,
-                                        /*Show customer location*/
-                                        enable_customer_location: true,
-                                        /*Show "verified review" badge*/
-                                        enable_verified_badge: true,
-                                        /*Show "verified subscriber" badge*/
-                                        enable_subscriber_badge: true,
-                                        /*Show "I recommend this product" badge (Only for product reviews)*/
-                                        enable_recommends_badge: true,
-                                        /*Show photos attached to reviews*/
-                                        enable_photos: true,
-                                        /*Show videos attached to reviews*/
-                                        enable_videos: true,
-                                        /*Show when review was written*/
-                                        enable_review_date: true,
-                                        /*Hide reviews written by the same customer (This may occur when customer reviews multiple products)*/
-                                        disable_same_customer: true,
-                                        /*Minimum star rating*/
-                                        min_review_percent: 4,
-                                        /*Show 3rd party review source*/
-                                        third_party_source: true,
-                                        /*Hide reviews without comments (still shows if review has a photo)*/
-                                        hide_empty_reviews: true,
-                                        /*Show product name*/
-                                        enable_product_name: true,
-                                        /*Show only reviews which have specific tags (multiple semicolon separated tags allowed i.e tag1;tag2)*/
-                                        tags: "",
-                                        /*Show branch, only one input*/
-                                        branch: "",
-                                        enable_branch_name: false,
-                                    },
-                                    popups: {
-                                        /*Make review items clickable (When they are clicked, a popup appears with more information about a customer and review)*/
-                                        enable_review_popups: true,
-                                        /*Show "was this review helpful" buttons*/
-                                        enable_helpful_buttons: true,
-                                        /*Show how many times review was upvoted as helpful*/
-                                        enable_helpful_count: true,
-                                        /*Show share buttons*/
-                                        enable_share_buttons: true,
-                                    },
-                                },
-                                header: {
-                                    /*Show overall rating stars*/
-                                    enable_overall_stars: true,
-                                    rating_decimal_places: 2,
-                                },
-                                reviews: {
-                                    /*Show customer name*/
-                                    enable_customer_name: true,
-                                    /*Show customer location*/
-                                    enable_customer_location: true,
-                                    /*Show "verified review" badge*/
-                                    enable_verified_badge: true,
-                                    /*Show "verified subscriber" badge*/
-                                    enable_subscriber_badge: true,
-                                    /*Show "I recommend this product" badge (Only for product reviews)*/
-                                    enable_recommends_badge: true,
-                                    /*Show photos attached to reviews*/
-                                    enable_photos: true,
-                                    /*Show videos attached to reviews*/
-                                    enable_videos: true,
-                                    /*Show when review was written*/
-                                    enable_review_date: true,
-                                    /*Hide reviews written by the same customer (This may occur when customer reviews multiple products)*/
-                                    disable_same_customer: true,
-                                    /*Minimum star rating*/
-                                    min_review_percent: 4,
-                                    /*Show 3rd party review source*/
-                                    third_party_source: true,
-                                    /*Hide reviews without comments (still shows if review has a photo)*/
-                                    hide_empty_reviews: true,
-                                    /*Show product name*/
-                                    enable_product_name: true,
-                                    /*Show only reviews which have specific tags (multiple semicolon separated tags allowed i.e tag1;tag2)*/
-                                    tags: "",
-                                    /*Show branch, only one input*/
-                                    branch: "",
-                                    enable_branch_name: false,
-                                },
-                                popups: {
-                                    /*Make review items clickable (When they are clicked, a popup appears with more information about a customer and review)*/
-                                    enable_review_popups: true,
-                                    /*Show "was this review helpful" buttons*/
-                                    enable_helpful_buttons: true,
-                                    /*Show how many times review was upvoted as helpful*/
-                                    enable_helpful_count: true,
-                                    /*Show share buttons*/
-                                    enable_share_buttons: true,
-                                },
+                        <?php if (empty(get_option('REVIEWSio_carousel_custom_styles'))) { ?>
+                        /* Widget settings: */
+                        options: {
+                            general: {
+                                /*What reviews should the widget display? Available options: company, product, third_party. You can choose one type or multiple separated by comma.*/
+                                review_type: 'company, product',
+                                /*Minimum number of reviews required for widget to be displayed*/
+                                min_reviews: '1',
+                                /*Maximum number of reviews to include in the carousel widget.*/
+                                max_reviews: '20',
+                                address_format: 'CITY, COUNTRY',
+                                /*Carousel auto-scrolling speed. 3000 = 3 seconds. If you want to disable auto-scroll, set this value to false.*/
+                                enable_auto_scroll: 10000,
+                            },
+                            header: {
+                                /*Show overall rating stars*/
+                                enable_overall_stars: true,
+                                rating_decimal_places: 2,
+                            },
+                            reviews: {
+                                /*Show customer name*/
+                                enable_customer_name: true,
+                                /*Show customer location*/
+                                enable_customer_location: true,
+                                /*Show "verified review" badge*/
+                                enable_verified_badge: true,
+                                /*Show "verified subscriber" badge*/
+                                enable_subscriber_badge: true,
+                                /*Show "I recommend this product" badge (Only for product reviews)*/
+                                enable_recommends_badge: true,
+                                /*Show photos attached to reviews*/
+                                enable_photos: true,
+                                /*Show videos attached to reviews*/
+                                enable_videos: true,
+                                /*Show when review was written*/
+                                enable_review_date: true,
+                                /*Hide reviews written by the same customer (This may occur when customer reviews multiple products)*/
+                                disable_same_customer: true,
+                                /*Minimum star rating*/
+                                min_review_percent: 4,
+                                /*Show 3rd party review source*/
+                                third_party_source: true,
+                                /*Hide reviews without comments (still shows if review has a photo)*/
+                                hide_empty_reviews: true,
+                                /*Show product name*/
+                                enable_product_name: true,
+                                /*Show only reviews which have specific tags (multiple semicolon separated tags allowed i.e tag1;tag2)*/
+                                tags: "",
+                                /*Show branch, only one input*/
+                                branch: "",
+                                enable_branch_name: false,
+                            },
+                            popups: {
+                                /*Make review items clickable (When they are clicked, a popup appears with more information about a customer and review)*/
+                                enable_review_popups: true,
+                                /*Show "was this review helpful" buttons*/
+                                enable_helpful_buttons: true,
+                                /*Show how many times review was upvoted as helpful*/
+                                enable_helpful_count: true,
+                                /*Show share buttons*/
+                                enable_share_buttons: true,
+                            },
                         },
                         translations: {
                             verified_customer: "Verified Customer",
@@ -1129,8 +1080,8 @@ if (!class_exists('WooCommerce_Reviews')) {
                             '--tooltip-text-color': '#ffffff',
                         },
                     <?php } else {
-                                echo wp_kses(get_option('REVIEWSio_carousel_custom_styles'), []);
-                            } ?>
+                        echo wp_kses(get_option('REVIEWSio_carousel_custom_styles'), []);
+                    } ?>
                     });
                 });
             </script>
