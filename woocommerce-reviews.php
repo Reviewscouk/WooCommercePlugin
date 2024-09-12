@@ -854,7 +854,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
         }
 
-        private function carouselInlineScript(int $widgetNum, string $skus, string $carouselType): string 
+        private function carouselInlineScript($widgetNum, $skus, $carouselType) 
         {
             $script = <<<CAROUSEL
                 window.addEventListener('load', function() {
