@@ -12,13 +12,14 @@ if (!defined('ABSPATH')) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.3.5
+ * Version: 1.3.6
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
  */
 
 require_once(__DIR__ . '/includes/elementor-functions.php');
+
 
 use Automattic\WooCommerce\Utilities\FeaturesUtil;
 use Automattic\WooCommerce\Utilities\OrderUtil;
@@ -41,7 +42,7 @@ add_action('before_woocommerce_init', 'declare_wc_compatibility');
  */
 function reviewsio_admin_scripts()
 {
-    $appVersion = '1.3.5';
+    $appVersion = '1.3.6';
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__), [], $appVersion, false);
     wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__), [], $appVersion, false);
@@ -84,7 +85,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         protected $numWidgets = 0;
         protected $richsnippet_shortcode_url = '';
-        protected $appVersion = '1.3.5';
+        protected $appVersion = '1.3.6';
 
 
         public function __construct()
@@ -854,238 +855,214 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
         }
 
-        public function carousel_widget_shortcode($widget = null)
+        private function carouselInlineScript($widgetNum, $skus, $carouselType)
         {
-            $this->numWidgets++;
-            if (get_option('REVIEWSio_api_key') == '' && get_option('REVIEWSio_store_id') == '') {
-                echo 'Missing REVIEWS.io API Credentials';
-                return;
-            }
-
-            ?>
-            <?php add_action('wp_footer', array($this, 'reviewsio_carousel_widget_scripts')); ?>
-            <?php
-            $skus = '';
-            $color = $this->getHexColor();
-            $carouselType = get_option('REVIEWSio_carousel_type');
-            if ($carouselType == '') $carouselType = 'card';
-            if (!empty($widget) && !empty($widget['sku'])) $skus = $widget['sku'];
-            ?>
-            <script>
+            $script = <<<CAROUSEL
                 window.addEventListener('load', function() {
                     let carouselStylesheet = document.createElement('link');
-                    carouselStylesheet.type = 'text/css'
-                    carouselStylesheet.rel = 'stylesheet'
+                    carouselStylesheet.type = 'text/css';
+                    carouselStylesheet.rel = 'stylesheet';
                     carouselStylesheet.href = 'https://assets.reviews.io/css/widgets/carousel-widget.css?_t=2023032710';
-                    document.getElementsByTagName('head')[0].appendChild(carouselStylesheet)
+                    document.getElementsByTagName('head')[0].appendChild(carouselStylesheet);
 
-                    new carouselInlineWidget(('carousel-widget-<?php echo esc_attr($this->numWidgets) ?>'), {
-                        //Your REVIEWS.io account ID and widget type:
-                        store: '<?php echo esc_js(get_option('REVIEWSio_store_id')) ?>',
-                        sku: '<?php echo esc_js($skus) ?>',
-                        lang: '<?php echo (get_option('REVIEWSio_polaris_lang') ? esc_js(get_option('REVIEWSio_polaris_lang')) : esc_js('en')) ?>',
-                        carousel_type: '<?php echo esc_js($this->getCarouselType('option', $carouselType)); ?>',
-                        styles_carousel: '<?php echo wp_kses($this->getCarouselType('styles', $carouselType), []); ?>',
+                    new carouselInlineWidget('carousel-widget-%d', {
+                        store: '%s',
+                        sku: '%s',
+                        lang: '%s',
+                        carousel_type: '%s',
+                        styles_carousel: '%s',
+                        %s
+                    }); 
+                })
+                        CAROUSEL;
 
-                        <?php if (empty(get_option('REVIEWSio_carousel_custom_styles'))) { ?>
-                        /* Widget settings: */
-                        options: {
-                            general: {
-                                /*What reviews should the widget display? Available options: company, product, third_party. You can choose one type or multiple separated by comma.*/
-                                review_type: 'company, product',
-                                /*Minimum number of reviews required for widget to be displayed*/
-                                min_reviews: '1',
-                                /*Maximum number of reviews to include in the carousel widget.*/
-                                max_reviews: '20',
-                                address_format: 'CITY, COUNTRY',
-                                /*Carousel auto-scrolling speed. 3000 = 3 seconds. If you want to disable auto-scroll, set this value to false.*/
-                                enable_auto_scroll: 10000,
-                            },
-                            header: {
-                                /*Show overall rating stars*/
-                                enable_overall_stars: true,
-                                rating_decimal_places: 2,
-                            },
-                            reviews: {
-                                /*Show customer name*/
-                                enable_customer_name: true,
-                                /*Show customer location*/
-                                enable_customer_location: true,
-                                /*Show "verified review" badge*/
-                                enable_verified_badge: true,
-                                /*Show "verified subscriber" badge*/
-                                enable_subscriber_badge: true,
-                                /*Show "I recommend this product" badge (Only for product reviews)*/
-                                enable_recommends_badge: true,
-                                /*Show photos attached to reviews*/
-                                enable_photos: true,
-                                /*Show videos attached to reviews*/
-                                enable_videos: true,
-                                /*Show when review was written*/
-                                enable_review_date: true,
-                                /*Hide reviews written by the same customer (This may occur when customer reviews multiple products)*/
-                                disable_same_customer: true,
-                                /*Minimum star rating*/
-                                min_review_percent: 4,
-                                /*Show 3rd party review source*/
-                                third_party_source: true,
-                                /*Hide reviews without comments (still shows if review has a photo)*/
-                                hide_empty_reviews: true,
-                                /*Show product name*/
-                                enable_product_name: true,
-                                /*Show only reviews which have specific tags (multiple semicolon separated tags allowed i.e tag1;tag2)*/
-                                tags: "",
-                                /*Show branch, only one input*/
-                                branch: "",
-                                enable_branch_name: false,
-                            },
-                            popups: {
-                                /*Make review items clickable (When they are clicked, a popup appears with more information about a customer and review)*/
-                                enable_review_popups: true,
-                                /*Show "was this review helpful" buttons*/
-                                enable_helpful_buttons: true,
-                                /*Show how many times review was upvoted as helpful*/
-                                enable_helpful_count: true,
-                                /*Show share buttons*/
-                                enable_share_buttons: true,
-                            },
-                        },
-                        translations: {
-                            verified_customer: "Verified Customer",
-                        },
-                        styles: {
-                            /*Base font size is a reference size for all text elements. When base value gets changed, all TextHeading and TexBody elements get proportionally adjusted.*/
-                            '--base-font-size': '18px',
-                            '--base-maxwidth': '768px',
+            $options = <<<CAROUSEL_DEFAULT_OPTIONS
+                options: {
+                    general: {
+                        review_type: 'company, product',
+                        min_reviews: '1',
+                        max_reviews: '20',
+                        address_format: 'CITY, COUNTRY',
+                        enable_auto_scroll: 10000,
+                    },
+                    header: {
+                        enable_overall_stars: true,
+                        rating_decimal_places: 2,
+                    },
+                    reviews: {
+                        enable_customer_name: true,
+                        enable_customer_location: true,
+                        enable_verified_badge: true,
+                        enable_subscriber_badge: true,
+                        enable_recommends_badge: true,
+                        enable_photos: true,
+                        enable_videos: true,
+                        enable_review_date: true,
+                        disable_same_customer: true,
+                        min_review_percent: 4,
+                        third_party_source: true,
+                        hide_empty_reviews: true,
+                        enable_product_name: true,
+                        tags: "",
+                        branch: "",
+                        enable_branch_name: false,
+                    },
+                    popups: {
+                        enable_review_popups: true,
+                        enable_helpful_buttons: true,
+                        enable_helpful_count: true,
+                        enable_share_buttons: true,
+                    },
+                },
+                translations: {
+                    verified_customer: "Verified Customer",
+                },
+                styles: {
+                    '--base-font-size': '18px',
+                    '--base-maxwidth': '768px',
 
-                            /*Logo styles:*/
-                            '--reviewsio-logo-style': 'var(--logo-normal)',
+                    '--reviewsio-logo-style': 'var(--logo-normal)',
 
-                            /*Star styles:*/
-                            '--common-star-color': ' #0E1311',
-                            '--common-star-disabled-color': ' rgba(0,0,0,0.25)',
-                            '--medium-star-size': '28px',
-                            '--small-star-size': '19px',
-                            /*Modal*/
-                            '--x-small-star-size': '22px',
-                            '--x-small-star-display': 'inline-flex',
+                    '--common-star-color': ' #0E1311',
+                    '--common-star-disabled-color': ' rgba(0,0,0,0.25)',
+                    '--medium-star-size': '28px',
+                    '--small-star-size': '19px',
+                    '--x-small-star-size': '22px',
+                    '--x-small-star-display': 'inline-flex',
 
-                            /*Header styles:*/
-                            '--header-order': '1',
-                            '--header-width': '160px',
-                            '--header-bg-start-color': 'transparent',
-                            '--header-bg-end-color': 'transparent',
-                            '--header-gradient-direction': '135deg',
-                            '--header-padding': '0.5em',
-                            '--header-border-width': '0px',
-                            '--header-border-color': 'rgba(0,0,0,0.1)',
-                            '--header-border-radius': '0px',
-                            '--header-shadow-size': '0px',
-                            '--header-shadow-color': 'rgba(0, 0, 0, 0.1)',
+                    '--header-order': '1',
+                    '--header-width': '160px',
+                    '--header-bg-start-color': 'transparent',
+                    '--header-bg-end-color': 'transparent',
+                    '--header-gradient-direction': '135deg',
+                    '--header-padding': '0.5em',
+                    '--header-border-width': '0px',
+                    '--header-border-color': 'rgba(0,0,0,0.1)',
+                    '--header-border-radius': '0px',
+                    '--header-shadow-size': '0px',
+                    '--header-shadow-color': 'rgba(0, 0, 0, 0.1)',
 
-                            /*Header content styles:*/
-                            '--header-star-color': 'inherit',
-                            '--header-disabled-star-color': 'inherit',
-                            '--header-heading-text-color': 'inherit',
-                            '--header-heading-font-size': '1.3em',
-                            '--header-heading-font-weight': 'inherit',
-                            '--header-heading-line-height': 'inherit',
-                            '--header-heading-text-transform': 'inherit',
-                            '--header-subheading-text-color': 'inherit',
-                            '--header-subheading-font-size': 'inherit',
-                            '--header-subheading-font-weight': 'inherit',
-                            '--header-subheading-line-height': 'inherit',
-                            '--header-subheading-text-transform': 'inherit',
+                    '--header-star-color': 'inherit',
+                    '--header-disabled-star-color': 'inherit',
+                    '--header-heading-text-color': 'inherit',
+                    '--header-heading-font-size': '1.3em',
+                    '--header-heading-font-weight': 'inherit',
+                    '--header-heading-line-height': 'inherit',
+                    '--header-heading-text-transform': 'inherit',
+                    '--header-subheading-text-color': 'inherit',
+                    '--header-subheading-font-size': 'inherit',
+                    '--header-subheading-font-weight': 'inherit',
+                    '--header-subheading-line-height': 'inherit',
+                    '--header-subheading-text-transform': 'inherit',
 
-                            /*Review item styles:*/
-                            '--item-maximum-columns': '1',
-                            /*Must be 1*/
-                            '--item-background-start-color': 'transparent',
-                            '--item-background-end-color': 'transparent',
-                            '--item-gradient-direction': '135deg',
-                            '--item-padding': '0.5em',
-                            '--item-border-width': '0px',
-                            '--item-border-color': 'rgba(0,0,0,0.1)',
-                            '--item-border-radius': '0px',
-                            '--item-shadow-size': '0px',
-                            '--item-shadow-color': 'rgba(0,0,0,0.1)',
+                    '--item-maximum-columns': '1',
+                    '--item-background-start-color': 'transparent',
+                    '--item-background-end-color': 'transparent',
+                    '--item-gradient-direction': '135deg',
+                    '--item-padding': '0.5em',
+                    '--item-border-width': '0px',
+                    '--item-border-color': 'rgba(0,0,0,0.1)',
+                    '--item-border-radius': '0px',
+                    '--item-shadow-size': '0px',
+                    '--item-shadow-color': 'rgba(0,0,0,0.1)',
 
-                            /*Heading styles:*/
-                            '--heading-text-color': ' #0E1311',
-                            '--heading-text-font-weight': ' 600',
-                            '--heading-text-font-family': ' inherit',
-                            '--heading-text-line-height': ' 1.4',
-                            '--heading-text-letter-spacing': '0',
-                            '--heading-text-transform': 'none',
+                    '--heading-text-color': ' #0E1311',
+                    '--heading-text-font-weight': ' 600',
+                    '--heading-text-font-family': ' inherit',
+                    '--heading-text-line-height': ' 1.4',
+                    '--heading-text-letter-spacing': '0',
+                    '--heading-text-transform': 'none',
 
-                            /*Body text styles:*/
-                            '--body-text-color': ' #0E1311',
-                            '--body-text-font-weight': '400',
-                            '--body-text-font-family': ' inherit',
-                            '--body-text-line-height': ' 1.4',
-                            '--body-text-letter-spacing': '0',
-                            '--body-text-transform': 'none',
+                    '--body-text-color': ' #0E1311',
+                    '--body-text-font-weight': '400',
+                    '--body-text-font-family': ' inherit',
+                    '--body-text-line-height': ' 1.4',
+                    '--body-text-letter-spacing': '0',
+                    '--body-text-transform': 'none',
 
-                            /*Scroll button styles:*/
-                            '--scroll-button-icon-color': '#0E1311',
-                            '--scroll-button-icon-size': '24px',
-                            '--scroll-button-bg-color': 'transparent',
+                    '--scroll-button-icon-color': '#0E1311',
+                    '--scroll-button-icon-size': '24px',
+                    '--scroll-button-bg-color': 'transparent',
 
-                            '--scroll-button-border-width': '0px',
-                            '--scroll-button-border-color': 'rgba(0,0,0,0.1)',
+                    '--scroll-button-border-width': '0px',
+                    '--scroll-button-border-color': 'rgba(0,0,0,0.1)',
 
-                            '--scroll-button-border-radius': '60px',
-                            '--scroll-button-shadow-size': '0px',
-                            '--scroll-button-shadow-color': 'rgba(0,0,0,0.1)',
-                            '--scroll-button-horizontal-position': '0px',
-                            '--scroll-button-vertical-position': '0px',
+                    '--scroll-button-border-radius': '60px',
+                    '--scroll-button-shadow-size': '0px',
+                    '--scroll-button-shadow-color': 'rgba(0,0,0,0.1)',
+                    '--scroll-button-horizontal-position': '0px',
+                    '--scroll-button-vertical-position': '0px',
 
-                            /*Badge styles:*/
-                            '--badge-icon-color': '#0E1311',
-                            '--badge-icon-font-size': '20px',
-                            '--badge-text-color': '#0E1311',
-                            '--badge-text-font-size': '1.2em',
-                            '--badge-text-letter-spacing': 'inherit',
-                            '--badge-text-transform': 'inherit',
+                    '--badge-icon-color': '#0E1311',
+                    '--badge-icon-font-size': '20px',
+                    '--badge-text-color': '#0E1311',
+                    '--badge-text-font-size': '1.2em',
+                    '--badge-text-letter-spacing': 'inherit',
+                    '--badge-text-transform': 'inherit',
 
-                            /*Author styles:*/
-                            '--author-font-size': '1.2em',
-                            '--author-font-weight': 'inherit',
-                            '--author-text-transform': 'inherit',
+                    '--author-font-size': '1.2em',
+                    '--author-font-weight': 'inherit',
+                    '--author-text-transform': 'inherit',
 
-                            /*Product photo or review photo styles:*/
-                            '--photo-video-thumbnail-size': '60px',
-                            '--photo-video-thumbnail-border-radius': '0px',
+                    '--photo-video-thumbnail-size': '60px',
+                    '--photo-video-thumbnail-border-radius': '0px',
 
-                            /*Popup styles:*/
-                            '--popup-backdrop-color': 'rgba(0,0,0,0.75)',
-                            '--popup-color': '#ffffff',
-                            '--popup-star-color': 'inherit',
-                            '--popup-disabled-star-color': 'inherit',
-                            '--popup-heading-text-color': 'inherit',
-                            '--popup-body-text-color': 'inherit',
-                            '--popup-badge-icon-color': 'inherit',
-                            '--popup-badge-icon-font-size': '19px',
-                            '--popup-badge-text-color': 'inherit',
-                            '--popup-badge-text-font-size': '14px',
-                            '--popup-border-width': '0px',
-                            '--popup-border-color': 'rgba(0,0,0,0.1)',
-                            '--popup-border-radius': '0px',
-                            '--popup-shadow-size': '0px',
-                            '--popup-shadow-color': 'rgba(0,0,0,0.1)',
-                            '--popup-icon-color': '#0E1311',
+                    '--popup-backdrop-color': 'rgba(0,0,0,0.75)',
+                    '--popup-color': '#ffffff',
+                    '--popup-star-color': 'inherit',
+                    '--popup-disabled-star-color': 'inherit',
+                    '--popup-heading-text-color': 'inherit',
+                    '--popup-body-text-color': 'inherit',
+                    '--popup-badge-icon-color': 'inherit',
+                    '--popup-badge-icon-font-size': '19px',
+                    '--popup-badge-text-color': 'inherit',
+                    '--popup-badge-text-font-size': '14px',
+                    '--popup-border-width': '0px',
+                    '--popup-border-color': 'rgba(0,0,0,0.1)',
+                    '--popup-border-radius': '0px',
+                    '--popup-shadow-size': '0px',
+                    '--popup-shadow-color': 'rgba(0,0,0,0.1)',
+                    '--popup-icon-color': '#0E1311',
 
-                            /*Tooltip styles:*/
-                            '--tooltip-bg-color': '#0E1311',
-                            '--tooltip-text-color': '#ffffff',
-                        },
-                    <?php } else {
-                        echo wp_kses(get_option('REVIEWSio_carousel_custom_styles'), []);
-                    } ?>
-                    });
-                });
-            </script>
-            <?php
+                    '--tooltip-bg-color': '#0E1311',
+                    '--tooltip-text-color': '#ffffff',
+                },
+            CAROUSEL_DEFAULT_OPTIONS;
+
+            $inlineScript = sprintf($script,
+                $widgetNum,
+                esc_js(get_option('REVIEWSio_store_id')),
+                esc_js($skus),
+                get_option('REVIEWSio_polaris_lang') ? esc_js(get_option('REVIEWSio_polaris_lang')) : esc_js('en'),
+                esc_js($this->getCarouselType('option', $carouselType)),
+                wp_kses($this->getCarouselType('styles', $carouselType), []),
+                !empty(get_option('REVIEWSio_carousel_custom_styles')) ? wp_kses(get_option('REVIEWSio_carousel_custom_styles'), []) : $options,
+            );
+
+            return $inlineScript;
+        }
+
+        public function carousel_widget_shortcode($widget = null): string
+        {
+            $this->numWidgets++;
+
+            if (get_option('REVIEWSio_api_key') == '' && get_option('REVIEWSio_store_id') == '') {
+                return 'Missing REVIEWS.io API Credentials';
+            }
+
+            add_action('wp_footer', array($this, 'reviewsio_carousel_widget_scripts'));
+
+            $skus = '';
+            $carouselType = get_option('REVIEWSio_carousel_type');
+            $carouselType = $carouselType == '' ? 'card' : $carouselType;
+
+            if (!empty($widget) && !empty($widget['sku']))
+                $skus = $widget['sku'];
+
+            wp_register_script('reviewsio-carousel-' . $this->numWidgets, false, [], $this->appVersion, false);
+            wp_enqueue_script('reviewsio-carousel-' . $this->numWidgets);
+            wp_add_inline_script('reviewsio-carousel-' . $this->numWidgets, $this->carouselInlineScript($this->numWidgets, $skus, $carouselType));
+
             return '<div id="carousel-widget-' . esc_attr($this->numWidgets) . '"></div>';
         }
 
@@ -1539,11 +1516,227 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             if (!empty($skus)) {
-                return $this->polarisReviewWidget($skus);
+                ob_start();
+                $this->polarisReviewWidget($skus);
+                return ob_get_clean();
             }
         }
 
         public function polarisReviewWidget($skus = null)
+        {
+            $this->numWidgets++;
+
+            if (empty(get_option('REVIEWSio_api_key')) || empty(get_option('REVIEWSio_store_id'))) {
+                return 'Missing REVIEWS.io API Credentials';
+            }
+
+            if (!is_array($skus)) {
+                $skus = $this->getProductSkus();
+            }
+
+            add_action('wp_footer', array($this, 'reviewsio_polaris_review_scripts'));
+
+            $color = esc_js($this->getHexColor());
+            $store = esc_js(get_option('REVIEWSio_store_id'));
+            $types = esc_js('product_review' . (get_option('REVIEWSio_polaris_review_widget_questions') ? ', questions' : ''));
+            $lang = esc_js(get_option('REVIEWSio_polaris_lang') ? get_option('REVIEWSio_polaris_lang') : 'en');
+            $per_page = get_option('REVIEWSio_per_page_review_widget');
+            $per_page = (!empty($per_page) && is_int($per_page)) ? esc_js($per_page) : '8';
+            $sku = esc_js(implode(';', $skus));
+            $min_rating = esc_js(get_option('REVIEWSio_minimum_rating') ? get_option('REVIEWSio_minimum_rating') : 1);
+            $write_a_review = esc_js(get_option('REVIEWSio_hide_write_review_button') ? 'false' : 'true');
+
+            /**
+             * We define the default styles and options in these Heredocs, they can be overridden by the user in the admin.
+             */
+
+            $header_options = <<<PRODUCT_REVIEWS_WIDGET_HEADER_OPTIONS
+                header: {
+                    enable_summary: true,
+                    enable_ratings: true,
+                    enable_attributes: true,
+                    enable_image_gallery: true,
+                    enable_percent_recommended: false,
+                    enable_write_review: "$write_a_review",
+                    enable_ask_question: true,
+                    enable_sub_header: true,
+                },
+            PRODUCT_REVIEWS_WIDGET_HEADER_OPTIONS;
+            $header_options = !empty(get_option('REVIEWSio_widget_custom_header_config')) ? wp_kses(get_option('REVIEWSio_widget_custom_header_config'), []) : $header_options;
+
+            $filter_options = <<<PRODUCT_REVIEWS_WIDGET_FILTER_OPTIONS
+                filtering: {
+                    enable: true,
+                    enable_text_search: true,
+                    enable_sorting: true,
+                    enable_overall_rating_filter: true,
+                    enable_ratings_filters: true,
+                    enable_attributes_filters: true,
+                },
+            PRODUCT_REVIEWS_WIDGET_FILTER_OPTIONS;
+            $filter_options = !empty(get_option('REVIEWSio_widget_custom_filtering_config')) ? wp_kses(get_option('REVIEWSio_widget_custom_filtering_config'), []) : $filter_options;
+
+            $reviews_options = <<<PRODUCT_REVIEWS_WIDGET_REVIEWS_OPTIONS
+                reviews: {
+                    enable_avatar: true,
+                    enable_reviewer_name: true,
+                    enable_reviewer_address: true,
+                    reviewer_address_format: 'city, country',
+                    enable_verified_badge: true,
+                    enable_reviewer_recommends: true,
+                    enable_attributes: true,
+                    enable_product_name: true,
+                    enable_images: true,
+                    enable_ratings: true,
+                    enable_share: true,
+                    enable_helpful_vote: true,
+                    enable_helpful_display: true,
+                    enable_report: true,
+                    enable_date: true,
+                },
+            PRODUCT_REVIEWS_WIDGET_REVIEWS_OPTIONS;
+            $reviews_options = !empty(get_option('REVIEWSio_widget_custom_reviews_config')) ? wp_kses(get_option('REVIEWSio_widget_custom_reviews_config'), []) : $reviews_options;
+
+            $options = <<<PRODUCT_REVIEWS_WIDGET_OPTIONS
+                options: {
+                    types: '$types',
+                    lang: '$lang',
+                    layout: '',
+                    per_page: $per_page,
+                    product_review: {
+                        sku: '$sku',
+                        min_rating: '$min_rating',
+                        hide_if_no_results: false,
+                        enable_rich_snippets: false,
+                    },
+                    questions: {
+                        hide_if_no_results: false,
+                        enable_ask_question: true,
+                        show_dates: true,
+                        grouping: '$sku',
+                    }, 
+                    $header_options
+                    $filter_options
+                    $reviews_options
+                },
+            PRODUCT_REVIEWS_WIDGET_OPTIONS;
+            $options = !empty(get_option('REVIEWSio_polaris_custom_styles')) ? wp_kses(get_option('REVIEWSio_polaris_custom_styles'), []) : $options;
+
+            $styles = <<<PRODUCT_REVIEWS_WIDGET_STYLES
+               styles: {
+                    '--base-font-size': '16px',
+
+                    '--common-button-font-family': 'inherit',
+                    '--common-button-font-size': '16px',
+                    '--common-button-font-weight': '500',
+                    '--common-button-letter-spacing': '0',
+                    '--common-button-text-transform': 'none',
+                    '--common-button-vertical-padding': '10px',
+                    '--common-button-horizontal-padding': '20px',
+                    '--common-button-border-width': '2px',
+                    '--common-button-border-radius': '0px',
+
+                    '--primary-button-bg-color': '#0E1311',
+                    '--primary-button-border-color': '#0E1311',
+                    '--primary-button-text-color': '#ffffff',
+
+                    '--secondary-button-bg-color': 'transparent',
+                    '--secondary-button-border-color': '#0E1311',
+                    '--secondary-button-text-color': '#0E1311',
+
+                    '--common-star-color': '$color',
+                    '--common-star-disabled-color': 'rgba(0,0,0,0.25)',
+                    '--medium-star-size': '22px',
+                    '--small-star-size': '19px',
+
+                    '--heading-text-color': '#0E1311',
+                    '--heading-text-font-weight': '600',
+                    '--heading-text-font-family': 'inherit',
+                    '--heading-text-line-height': '1.4',
+                    '--heading-text-letter-spacing': '0',
+                    '--heading-text-transform': 'none',
+
+                    '--body-text-color': '#0E1311',
+                    '--body-text-font-weight': '400',
+                    '--body-text-font-family': 'inherit',
+                    '--body-text-line-height': '1.4',
+                    '--body-text-letter-spacing': '0',
+                    '--body-text-transform': 'none',
+
+                    '--inputfield-text-font-family': 'inherit',
+                    '--input-text-font-size': '14px',
+                    '--inputfield-text-font-weight': '400',
+                    '--inputfield-text-color': '#0E1311',
+                    '--inputfield-border-color': 'rgba(0,0,0,0.2)',
+                    '--inputfield-background-color': 'transparent',
+                    '--inputfield-border-width': '1px',
+                    '--inputfield-border-radius': '0px',
+
+                    '--common-border-color': 'rgba(0,0,0,0.15)',
+                    '--common-border-width': '1px',
+                    '--common-sidebar-width': '190px',
+
+                    '--slider-indicator-bg-color': 'rgba(0,0,0,0.1)',
+                    '--slider-indicator-button-color': '#0E1311',
+                    '--slider-indicator-width': '190px',
+
+                    '--badge-icon-color': '#0E1311',
+                    '--badge-icon-font-size': 'inherit',
+                    '--badge-text-color': '#0E1311',
+                    '--badge-text-font-size': 'inherit',
+                    '--badge-text-letter-spacing': 'inherit',
+                    '--badge-text-transform': 'inherit',
+
+                    '--author-font-size': 'inherit',
+                    '--author-text-transform': 'none',
+
+                    '--avatar-thumbnail-size': '60px',
+                    '--avatar-thumbnail-border-radius': '100px',
+                    '--avatar-thumbnail-text-color': '#0E1311',
+                    '--avatar-thumbnail-bg-color': 'rgba(0,0,0,0.1)',
+
+                    '--photo-video-thumbnail-size': '80px',
+                    '--photo-video-thumbnail-border-radius': '0px',
+
+                    '--mediaslider-scroll-button-icon-color': '#0E1311',
+                    '--mediaslider-scroll-button-bg-color': 'rgba(255, 255, 255, 0.85)',
+                    '--mediaslider-overlay-text-color': '#ffffff',
+                    '--mediaslider-overlay-bg-color': 'rgba(0, 0, 0, 0.8))',
+                    '--mediaslider-item-size': '110px',
+
+                    '--pagination-tab-text-color': '#0E1311',
+                    '--pagination-tab-text-transform': 'none',
+                    '--pagination-tab-text-letter-spacing': '0',
+                    '--pagination-tab-text-font-size': '16px',
+                    '--pagination-tab-text-font-weight': '600',
+
+                    '--pagination-tab-active-text-color': '#0E1311',
+                    '--pagination-tab-active-text-font-weight': '600',
+                    '--pagination-tab-active-border-color': '#0E1311',
+                    '--pagination-tab-border-width': '3px',
+                }, 
+            PRODUCT_REVIEWS_WIDGET_STYLES;
+            $styles = !empty(get_option('REVIEWSio_custom_reviews_widget_styles')) ? wp_kses(get_option('REVIEWSio_custom_reviews_widget_styles'), []) : $styles;
+
+            $widget = <<<PRODUCT_REVIEWS_WIDGET
+                window.addEventListener('load', function() {
+                    new ReviewsWidget('#widget-$this->numWidgets', {
+                        store: '$store',
+                        widget: 'polaris',
+                        $options
+                        $styles
+                    });
+                });
+            PRODUCT_REVIEWS_WIDGET;
+
+            wp_register_script('reviewsio-polaris-' . $this->numWidgets, false, [], $this->appVersion, false);
+            wp_enqueue_script('reviewsio-polaris-' . $this->numWidgets);
+            wp_add_inline_script('reviewsio-polaris-' . $this->numWidgets, $widget);
+
+            echo "<div id='widget-{$this->numWidgets}'></div>";
+        }
+
+        public function polarisReviewWidgetV1($skus = null)
         {
             $this->numWidgets++;
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != '') {
