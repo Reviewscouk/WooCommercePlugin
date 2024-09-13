@@ -728,7 +728,7 @@ if (!defined('ABSPATH')) {
                                                     <div class="flex-row">
                                                         <div class="flex-col-xxs-12 flex-col-sm-6">
                                                             <div class="Field u-marginTop--xxs u-width--100">
-                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_header_config" style="width:100%;height:50px;"><?php echo htmlentities($custom_widget_header_config); ?></textarea>
+                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_header_config" style="width:100%;height:50px;"><?php echo wp_kses(htmlentities($custom_widget_header_config),[]); ?></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -744,7 +744,7 @@ if (!defined('ABSPATH')) {
                                                     <div class="flex-row">
                                                         <div class="flex-col-xxs-12 flex-col-sm-6">
                                                             <div class="Field u-marginTop--xxs u-width--100">
-                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_filtering_config" style="width:100%;height:50px;"><?php echo htmlentities($custom_widget_filtering_config); ?></textarea>
+                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_filtering_config" style="width:100%;height:50px;"><?php echo wp_kses(htmlentities($custom_widget_filtering_config), []); ?></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -761,7 +761,7 @@ if (!defined('ABSPATH')) {
                                                     <div class="flex-row">
                                                         <div class="flex-col-xxs-12 flex-col-sm-6">
                                                             <div class="Field u-marginTop--xxs u-width--100">
-                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_reviews_config" style="width:100%;height:50px;"><?php echo htmlentities($custom_widget_reviews_config); ?></textarea>
+                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_reviews_config" style="width:100%;height:50px;"><?php echo wp_kses(htmlentities($custom_widget_reviews_config), []); ?></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -777,7 +777,7 @@ if (!defined('ABSPATH')) {
                                                     <div class="flex-row">
                                                         <div class="flex-col-xxs-12 flex-col-sm-6">
                                                             <div class="Field u-marginTop--xxs u-width--100">
-                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_custom_reviews_widget_styles" style="width:100%;height:50px;"><?php echo htmlentities($custom_reviews_widget_styles); ?></textarea>
+                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_custom_reviews_widget_styles" style="width:100%;height:50px;"><?php echo wp_kses(htmlentities($custom_reviews_widget_styles), []); ?></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
