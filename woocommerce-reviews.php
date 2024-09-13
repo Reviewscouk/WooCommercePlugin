@@ -1516,13 +1516,11 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             if (!empty($skus)) {
-                ob_start();
-                $this->polarisReviewWidget($skus);
-                return ob_get_clean();
+                return $this->polarisReviewWidget($skus, true);
             }
         }
 
-        public function polarisReviewWidget($skus = null)
+        public function polarisReviewWidget($skus = null, $isShortCode = false)
         {
             $this->numWidgets++;
 
@@ -1535,7 +1533,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             add_action('wp_footer', array($this, 'reviewsio_polaris_review_scripts'));
-
+            
             $color = esc_js($this->getHexColor());
             $store = esc_js(get_option('REVIEWSio_store_id'));
             $types = esc_js('product_review' . (get_option('REVIEWSio_polaris_review_widget_questions') ? ', questions' : ''));
@@ -1733,247 +1731,12 @@ if (!class_exists('WooCommerce_Reviews')) {
             wp_enqueue_script('reviewsio-polaris-' . $this->numWidgets);
             wp_add_inline_script('reviewsio-polaris-' . $this->numWidgets, $widget);
 
-            echo "<div id='widget-{$this->numWidgets}'></div>";
-        }
-
-        public function polarisReviewWidgetV1($skus = null)
-        {
-            $this->numWidgets++;
-            if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != '') {
-            ?>
-                <?php add_action('wp_footer', array($this, 'reviewsio_polaris_review_scripts')); ?>
-                <?php
-                $color = $this->getHexColor();
-                if (!is_array($skus)) {
-                    $skus = $this->getProductSkus();
-                }
-                ?>
-
-                <script>
-                    var REVIEWSio_options = {
-                        //Your REVIEWS.io account ID and widget type:
-                        store: '<?php echo esc_js(get_option('REVIEWSio_store_id')) ?>',
-                        widget: 'polaris',
-
-                        <?php if (empty(get_option('REVIEWSio_polaris_custom_styles'))) { ?>
-                            /* Widget Settings */
-                            options: {
-                                types: 'product_review<?php echo (get_option('REVIEWSio_polaris_review_widget_questions') ? esc_js(', questions') : '') ?>',
-                                lang: '<?php echo (get_option('REVIEWSio_polaris_lang') ? esc_js(get_option('REVIEWSio_polaris_lang')) : 'en') ?>',
-                                //Possible layout options: bordered, large and reverse.
-                                layout: '',
-                                //How many reviews & questions to show per page?
-                                per_page: <?php echo !empty(get_option('REVIEWSio_per_page_review_widget')) && is_int((int)get_option('REVIEWSio_per_page_review_widget')) ? esc_js(get_option('REVIEWSio_per_page_review_widget')) : esc_js(8) ?>,
-                                //Product specific settings. Provide product SKU for which reviews should be displayed:
-                                product_review: {
-                                    //Display product reviews - include multiple product SKUs seperated by Semi-Colons (Main Indentifer in your product catalog )
-                                    sku: '<?php echo esc_js(implode(';', $skus)) ?>',
-                                    min_rating: '<?php echo (get_option('REVIEWSio_minimum_rating') ? esc_js(get_option('REVIEWSio_minimum_rating')) : 1) ?>',
-                                    hide_if_no_results: false,
-                                    enable_rich_snippets: false,
-                                },
-                                //Questions settings:
-                                questions: {
-                                    hide_if_no_results: false,
-                                    enable_ask_question: true,
-                                    show_dates: true,
-                                    //Display group questions by providing a grouping variable, new questions will be assigned to this group.
-                                    grouping: '<?php echo esc_js(implode(';', $skus)) ?>',
-                                },
-                                <?php if (!empty(get_option('REVIEWSio_widget_custom_header_config'))) {
-                                    echo wp_kses(get_option('REVIEWSio_widget_custom_header_config'), []);
-                                } else { ?>
-                                    //Header settings:
-                                    header: {
-                                        enable_summary: true, //Show overall rating & review count
-                                        enable_ratings: true,
-                                        enable_attributes: true,
-                                        enable_image_gallery: true, //Show photo & video gallery
-                                        enable_percent_recommended: false, //Show what percentage of reviewers recommend it
-                                        enable_write_review: "<?php echo (get_option('REVIEWSio_hide_write_review_button') == '1' ? false : true) ?>",
-                                        enable_ask_question: true,
-                                        enable_sub_header: true, //Show subheader
-                                    },
-                                <?php
-                                }
-
-                                if (!empty(get_option('REVIEWSio_widget_custom_filtering_config'))) {
-                                    echo wp_kses(get_option('REVIEWSio_widget_custom_filtering_config'), []);
-                                } else { ?>
-                                    //Filtering settings:
-                                    filtering: {
-                                        enable: true, //Show filtering options
-                                        enable_text_search: true, //Show search field
-                                        enable_sorting: true, //Show sorting options (most recent, most popular)
-                                        enable_overall_rating_filter: true, //Show overall rating breakdown filter
-                                        enable_ratings_filters: true, //Show product attributes filter
-                                        enable_attributes_filters: true, //Show author attributes filter
-                                    },
-                                <?php
-                                }
-
-                                if (!empty(get_option('REVIEWSio_widget_custom_reviews_config'))) {
-                                    echo wp_kses(get_option('REVIEWSio_widget_custom_reviews_config'), []);
-                                } else {
-                                ?>
-                                    //Review settings:
-                                    reviews: {
-                                        enable_avatar: true, //Show author avatar
-                                        enable_reviewer_name: true, //Show author name
-                                        enable_reviewer_address: true, //Show author location
-                                        reviewer_address_format: 'city, country', //Author location display format
-                                        enable_verified_badge: true,
-                                        enable_reviewer_recommends: true,
-                                        enable_attributes: true, //Show author attributes
-                                        enable_product_name: true, //Show display product name
-                                        enable_images: true, //Show display review photos
-                                        enable_ratings: true, //Show product attributes (additional ratings)
-                                        enable_share: true, //Show share buttons
-                                        enable_helpful_vote: true,
-                                        enable_helpful_display: true, //Show how many times times review upvoted
-                                        enable_report: true, //Show report button
-                                        enable_date: true, //Show when review was published
-                                    },
-                                <?php
-                                }
-                                ?>
-                            },
-                            //Style settings:
-                            <?php if (!empty(get_option('REVIEWSio_custom_reviews_widget_styles'))) {
-                                echo wp_kses(get_option('REVIEWSio_custom_reviews_widget_styles'), []);
-                            } else {
-                            ?>
-                                styles: {
-                                    //Base font size is a reference size for all text elements. When base value gets changed, all TextHeading and TexBody elements get proportionally adjusted.
-                                    '--base-font-size': '16px',
-
-                                    //Button styles (shared between buttons):
-                                    '--common-button-font-family': 'inherit',
-                                    '--common-button-font-size': '16px',
-                                    '--common-button-font-weight': '500',
-                                    '--common-button-letter-spacing': '0',
-                                    '--common-button-text-transform': 'none',
-                                    '--common-button-vertical-padding': '10px',
-                                    '--common-button-horizontal-padding': '20px',
-                                    '--common-button-border-width': '2px',
-                                    '--common-button-border-radius': '0px',
-
-                                    //Primary button styles:
-                                    '--primary-button-bg-color': '#0E1311',
-                                    '--primary-button-border-color': '#0E1311',
-                                    '--primary-button-text-color': '#ffffff',
-
-                                    //Secondary button styles:
-                                    '--secondary-button-bg-color': 'transparent',
-                                    '--secondary-button-border-color': '#0E1311',
-                                    '--secondary-button-text-color': '#0E1311',
-
-                                    //Star styles:
-                                    '--common-star-color': '<?php echo esc_js($color) ?>',
-                                    '--common-star-disabled-color': 'rgba(0,0,0,0.25)',
-                                    '--medium-star-size': '22px',
-                                    '--small-star-size': '19px',
-
-                                    //Heading styles:
-                                    '--heading-text-color': '#0E1311',
-                                    '--heading-text-font-weight': '600',
-                                    '--heading-text-font-family': 'inherit',
-                                    '--heading-text-line-height': '1.4',
-                                    '--heading-text-letter-spacing': '0',
-                                    '--heading-text-transform': 'none',
-
-                                    //Body text styles:
-                                    '--body-text-color': '#0E1311',
-                                    '--body-text-font-weight': '400',
-                                    '--body-text-font-family': 'inherit',
-                                    '--body-text-line-height': '1.4',
-                                    '--body-text-letter-spacing': '0',
-                                    '--body-text-transform': 'none',
-
-                                    //Input field styles:
-                                    '--inputfield-text-font-family': 'inherit',
-                                    '--input-text-font-size': '14px',
-                                    '--inputfield-text-font-weight': '400',
-                                    '--inputfield-text-color': '#0E1311',
-                                    '--inputfield-border-color': 'rgba(0,0,0,0.2)',
-                                    '--inputfield-background-color': 'transparent',
-                                    '--inputfield-border-width': '1px',
-                                    '--inputfield-border-radius': '0px',
-
-                                    '--common-border-color': 'rgba(0,0,0,0.15)',
-                                    '--common-border-width': '1px',
-                                    '--common-sidebar-width': '190px',
-
-                                    //Slider indicator (for attributes) styles:
-                                    '--slider-indicator-bg-color': 'rgba(0,0,0,0.1)',
-                                    '--slider-indicator-button-color': '#0E1311',
-                                    '--slider-indicator-width': '190px',
-
-                                    //Badge styles:
-                                    '--badge-icon-color': '#0E1311',
-                                    '--badge-icon-font-size': 'inherit',
-                                    '--badge-text-color': '#0E1311',
-                                    '--badge-text-font-size': 'inherit',
-                                    '--badge-text-letter-spacing': 'inherit',
-                                    '--badge-text-transform': 'inherit',
-
-                                    //Author styles:
-                                    '--author-font-size': 'inherit',
-                                    '--author-text-transform': 'none',
-
-                                    //Author avatar styles:
-                                    '--avatar-thumbnail-size': '60px',
-                                    '--avatar-thumbnail-border-radius': '100px',
-                                    '--avatar-thumbnail-text-color': '#0E1311',
-                                    '--avatar-thumbnail-bg-color': 'rgba(0,0,0,0.1)',
-
-                                    //Product photo or review photo styles:
-                                    '--photo-video-thumbnail-size': '80px',
-                                    '--photo-video-thumbnail-border-radius': '0px',
-
-                                    //Media (photo & video) slider styles:
-                                    '--mediaslider-scroll-button-icon-color': '#0E1311',
-                                    '--mediaslider-scroll-button-bg-color': 'rgba(255, 255, 255, 0.85)',
-                                    '--mediaslider-overlay-text-color': '#ffffff',
-                                    '--mediaslider-overlay-bg-color': 'rgba(0, 0, 0, 0.8))',
-                                    '--mediaslider-item-size': '110px',
-
-                                    //Pagination & tabs styles (normal):
-                                    '--pagination-tab-text-color': '#0E1311',
-                                    '--pagination-tab-text-transform': 'none',
-                                    '--pagination-tab-text-letter-spacing': '0',
-                                    '--pagination-tab-text-font-size': '16px',
-                                    '--pagination-tab-text-font-weight': '600',
-
-                                    //Pagination & tabs styles (active):
-                                    '--pagination-tab-active-text-color': '#0E1311',
-                                    '--pagination-tab-active-text-font-weight': '600',
-                                    '--pagination-tab-active-border-color': '#0E1311',
-                                    '--pagination-tab-border-width': '3px',
-                                },
-                        <?php
-                            }
-                        } else {
-                            echo wp_kses(get_option('REVIEWSio_polaris_custom_styles'), []);
-                        } ?>
-                    };
-
-                    var REVIEWSio_sku = '<?php echo esc_js(implode(';', $skus)); ?>';
-                    REVIEWSio_options.options.product_review.sku = REVIEWSio_sku;
-                    REVIEWSio_options.options.questions.grouping = REVIEWSio_sku;
-
-
-                    window.addEventListener('load', function() {
-                        new ReviewsWidget(('#widget-<?php echo esc_attr($this->numWidgets); ?>'), REVIEWSio_options);
-                    });
-                </script>
-                <div id="widget-<?php echo esc_attr($this->numWidgets); ?>"></div>
-            <?php
-            } else {
-                echo 'Missing REVIEWS.io API Credentials';
+            if (is_bool($isShortCode) && $isShortCode) {
+                return '<div id="widget-' . $this->numWidgets . '"></div>';
             }
-        }
 
+            echo "<div id='widget-" . esc_js($this->numWidgets) . "'></div>";
+        }
 
         public function questionAnswersWidget()
         {
