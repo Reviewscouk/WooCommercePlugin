@@ -20,7 +20,6 @@ if (!defined('ABSPATH')) {
 
 require_once(__DIR__ . '/includes/elementor-functions.php');
 
-
 use Automattic\WooCommerce\Utilities\FeaturesUtil;
 use Automattic\WooCommerce\Utilities\OrderUtil;
 
@@ -42,7 +41,7 @@ add_action('before_woocommerce_init', 'declare_wc_compatibility');
  */
 function reviewsio_admin_scripts()
 {
-    $appVersion = '1.3.6';
+    $appVersion = 'eeee6';
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__), [], $appVersion, false);
     wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__), [], $appVersion, false);
