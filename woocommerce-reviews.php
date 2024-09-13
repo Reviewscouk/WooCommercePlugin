@@ -854,7 +854,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
         }
 
-        private function carouselInlineScript($widgetNum, $skus, $carouselType)
+        private function carouselInlineScript($widgetNum, $skus, $carouselType) 
         {
             $script = <<<CAROUSEL
                 window.addEventListener('load', function() {
@@ -873,7 +873,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                         %s
                     }); 
                 })
-                        CAROUSEL;
+            CAROUSEL;
 
             $options = <<<CAROUSEL_DEFAULT_OPTIONS
                 options: {
@@ -1035,13 +1035,13 @@ if (!class_exists('WooCommerce_Reviews')) {
                 get_option('REVIEWSio_polaris_lang') ? esc_js(get_option('REVIEWSio_polaris_lang')) : esc_js('en'),
                 esc_js($this->getCarouselType('option', $carouselType)),
                 wp_kses($this->getCarouselType('styles', $carouselType), []),
-                !empty(get_option('REVIEWSio_carousel_custom_styles')) ? wp_kses(get_option('REVIEWSio_carousel_custom_styles'), []) : $options,
+                !empty(get_option('REVIEWSio_carousel_custom_styles')) ? wp_kses(get_option('REVIEWSio_carousel_custom_styles'), []) : $options, 
             );
 
             return $inlineScript;
         }
 
-        public function carousel_widget_shortcode($widget = null): string
+        public function carousel_widget_shortcode($widget = null): string 
         {
             $this->numWidgets++;
 
@@ -1055,8 +1055,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             $carouselType = get_option('REVIEWSio_carousel_type');
             $carouselType = $carouselType == '' ? 'card' : $carouselType;
 
-            if (!empty($widget) && !empty($widget['sku']))
-                $skus = $widget['sku'];
+            if (!empty($widget) && !empty($widget['sku'])) $skus = $widget['sku'];
 
             wp_register_script('reviewsio-carousel-' . $this->numWidgets, false, [], $this->appVersion, false);
             wp_enqueue_script('reviewsio-carousel-' . $this->numWidgets);
@@ -1519,7 +1518,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
         }
 
-        public function polarisReviewWidget($skus = null, $isShortCode = false)
+        public function polarisReviewWidget($skus = null, $isShortCode = false) 
         {
             $this->numWidgets++;
 
