@@ -1616,7 +1616,6 @@ if (!class_exists('WooCommerce_Reviews')) {
                     $reviews_options
                 },
             PRODUCT_REVIEWS_WIDGET_OPTIONS;
-            $options = !empty(get_option('REVIEWSio_polaris_custom_styles')) ? wp_kses(get_option('REVIEWSio_polaris_custom_styles'), []) : $options;
 
             $styles = <<<PRODUCT_REVIEWS_WIDGET_STYLES
                styles: {
@@ -1714,13 +1713,18 @@ if (!class_exists('WooCommerce_Reviews')) {
             PRODUCT_REVIEWS_WIDGET_STYLES;
             $styles = !empty(get_option('REVIEWSio_custom_reviews_widget_styles')) ? wp_kses(get_option('REVIEWSio_custom_reviews_widget_styles'), []) : $styles;
 
+            $settings = <<<PRODUCT_REVIEWS_SETTINGS
+                $options
+                $styles
+            PRODUCT_REVIEWS_SETTINGS;
+            $settings = !empty(get_option('REVIEWSio_polaris_custom_styles')) ? wp_kses(get_option('REVIEWSio_polaris_custom_styles'), []) : $settings;
+
             $widget = <<<PRODUCT_REVIEWS_WIDGET
                 window.addEventListener('load', function() {
                     new ReviewsWidget('#widget-$this->numWidgets', {
                         store: '$store',
                         widget: 'polaris',
-                        $options
-                        $styles
+                        $settings
                     });
                 });
             PRODUCT_REVIEWS_WIDGET;
