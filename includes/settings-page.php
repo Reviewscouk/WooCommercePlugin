@@ -728,7 +728,7 @@ if (!defined('ABSPATH')) {
                                                     <div class="flex-row">
                                                         <div class="flex-col-xxs-12 flex-col-sm-6">
                                                             <div class="Field u-marginTop--xxs u-width--100">
-                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_header_config" style="width:100%;height:50px;"><?php echo esc_textarea(htmlentities($custom_widget_header_config)); ?></textarea>
+                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_header_config" style="width:100%;height:50px;"><?php echo wp_kses(htmlentities($custom_widget_header_config),[]); ?></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -744,7 +744,7 @@ if (!defined('ABSPATH')) {
                                                     <div class="flex-row">
                                                         <div class="flex-col-xxs-12 flex-col-sm-6">
                                                             <div class="Field u-marginTop--xxs u-width--100">
-                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_filtering_config" style="width:100%;height:50px;"><?php echo esc_textarea(htmlentities($custom_widget_filtering_config)); ?></textarea>
+                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_filtering_config" style="width:100%;height:50px;"><?php echo wp_kses(htmlentities($custom_widget_filtering_config), []); ?></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -761,7 +761,7 @@ if (!defined('ABSPATH')) {
                                                     <div class="flex-row">
                                                         <div class="flex-col-xxs-12 flex-col-sm-6">
                                                             <div class="Field u-marginTop--xxs u-width--100">
-                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_reviews_config" style="width:100%;height:50px;"><?php echo esc_textarea(htmlentities($custom_widget_reviews_config)); ?></textarea>
+                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_reviews_config" style="width:100%;height:50px;"><?php echo wp_kses(htmlentities($custom_widget_reviews_config), []); ?></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -777,7 +777,36 @@ if (!defined('ABSPATH')) {
                                                     <div class="flex-row">
                                                         <div class="flex-col-xxs-12 flex-col-sm-6">
                                                             <div class="Field u-marginTop--xxs u-width--100">
-                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_custom_reviews_widget_styles" style="width:100%;height:50px;"><?php echo esc_textarea(htmlentities($custom_reviews_widget_styles)); ?></textarea>
+                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_custom_reviews_widget_styles" style="width:100%;height:50px;"><?php echo wp_kses(htmlentities($custom_reviews_widget_styles), []); ?></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <h3><strong>Generate Product Reviews Shortcode</strong></h3>
+
+                                                <p class="TextBody TextBody--xxxs">
+                                                    If set to manual mode, you can install the Product Reviews widget using the following shortcode: <code>[product_reviews_widget sku='your-sku']</code>
+                                                </p>
+
+                                                <p class="TextBody TextBody--xxxs u-marginBottom--md">
+                                                    Additional information on embedding shortcodes can be found in the <a href="https://wordpress.com/support/wordpress-editor/blocks/shortcode-block/" target="_blank">WordPress Documentation</a>.
+                                                </p>
+
+                                                <div class="GlobalNotification GlobalNotification--coloured-success u-marginBottom--lg">
+                                                    <div class="flex-row flex-middle-xxs">
+                                                        <div class="flex-col-xxs-1 u-textCenter--all">
+                                                            <img class="GlobalNotification__imageIcon" src="https://assets.reviews.io/img/all-global-assets/icons/icon-code--md--colour.svg">
+                                                        </div>
+                                                        <div class="flex-col-xxs-9">
+                                                            <div class="TextHeading TextHeading--xxxxs">Use the following shortcode to embed widget on a page:</div>
+                                                            <div id="product_reviews_widget-shortcode" class="TextBody TextBody--xxxs u-marginBottom--none">
+                                                                [product_reviews_widget<span></span><span></span>]
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-col-xxs-2 u-textRight--all">
+                                                            <div id="product_reviews_widget-shortcode-copy-button" class="Button Button--xs Button--outline u-marginBottom--none" onclick="copyToClipboard('product_reviews_widget-shortcode-copy-button', 'product_reviews_widget-shortcode')">
+                                                                Copy
                                                             </div>
                                                         </div>
                                                     </div>
