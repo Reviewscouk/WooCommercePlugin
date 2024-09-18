@@ -1721,11 +1721,17 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             $widget = <<<PRODUCT_REVIEWS_WIDGET
                 window.addEventListener('load', function() {
-                    new ReviewsWidget('#widget-$this->numWidgets', {
+                    let REVIEWS_WIDGET_OPTIONS = {
                         store: '$store',
                         widget: 'polaris',
                         $settings
-                    });
+                    };
+
+                    let REVIEWS_WIDGET_SKU = '$sku';
+                    REVIEWS_WIDGET_OPTIONS.options.product_review.sku = REVIEWS_WIDGET_SKU;
+                    REVIEWS_WIDGET_OPTIONS.options.questions.grouping = REVIEWS_WIDGET_SKU;
+
+                    new ReviewsWidget('#widget-$this->numWidgets', REVIEWS_WIDGET_OPTIONS);
                 });
             PRODUCT_REVIEWS_WIDGET;
 
