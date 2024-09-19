@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.3.7
+ * Version: 1.3.8
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -41,7 +41,7 @@ add_action('before_woocommerce_init', 'declare_wc_compatibility');
  */
 function reviewsio_admin_scripts()
 {
-    $appVersion = '1.3.7';
+    $appVersion = '1.3.8';
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__), [], $appVersion, false);
     wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__), [], $appVersion, false);
@@ -84,7 +84,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         protected $numWidgets = 0;
         protected $richsnippet_shortcode_url = '';
-        protected $appVersion = '1.3.7';
+        protected $appVersion = '1.3.8';
 
 
         public function __construct()
@@ -1721,11 +1721,17 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             $widget = <<<PRODUCT_REVIEWS_WIDGET
                 window.addEventListener('load', function() {
-                    new ReviewsWidget('#widget-$this->numWidgets', {
+                    let REVIEWS_WIDGET_OPTIONS = {
                         store: '$store',
                         widget: 'polaris',
                         $settings
-                    });
+                    };
+
+                    let REVIEWS_WIDGET_SKU = '$sku';
+                    REVIEWS_WIDGET_OPTIONS.options.product_review.sku = REVIEWS_WIDGET_SKU;
+                    REVIEWS_WIDGET_OPTIONS.options.questions.grouping = REVIEWS_WIDGET_SKU;
+
+                    new ReviewsWidget('#widget-$this->numWidgets', REVIEWS_WIDGET_OPTIONS);
                 });
             PRODUCT_REVIEWS_WIDGET;
 
