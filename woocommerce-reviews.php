@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.3.8
+ * Version: 1.3.9
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -41,7 +41,7 @@ add_action('before_woocommerce_init', 'declare_wc_compatibility');
  */
 function reviewsio_admin_scripts()
 {
-    $appVersion = '1.3.8';
+    $appVersion = '1.3.9';
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__), [], $appVersion, false);
     wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__), [], $appVersion, false);
@@ -84,7 +84,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         protected $numWidgets = 0;
         protected $richsnippet_shortcode_url = '';
-        protected $appVersion = '1.3.8';
+        protected $appVersion = '1.3.9';
 
 
         public function __construct()
@@ -222,7 +222,8 @@ if (!class_exists('WooCommerce_Reviews')) {
                 "widget_custom_filtering_config",
                 "widget_custom_reviews_config",
                 "product_feed_wpseo_global_ids",
-                "enable_gpf_data"
+                "enable_gpf_data",
+                "sentiment_analysis"
             ];
 
             foreach ($options as $o) {
@@ -1541,6 +1542,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             $sku = esc_js(implode(';', $skus));
             $min_rating = esc_js(get_option('REVIEWSio_minimum_rating') ? get_option('REVIEWSio_minimum_rating') : 1);
             $write_a_review = esc_js(get_option('REVIEWSio_hide_write_review_button') ? 'false' : 'true');
+            $sentiment_analysis = esc_js(get_option('REVIEWSio_sentiment_analysis') ? 'true' : 'false');
 
             /**
              * We define the default styles and options in these Heredocs, they can be overridden by the user in the admin.
@@ -1599,6 +1601,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     lang: '$lang',
                     layout: '',
                     per_page: $per_page,
+                    enable_sentiment_analysis: $sentiment_analysis,
                     product_review: {
                         sku: '$sku',
                         min_rating: '$min_rating',
