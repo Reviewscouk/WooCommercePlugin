@@ -116,3 +116,11 @@ label {
 .Field--colourPicker .colourPicker__indicator .pickr .pcr-button {
     transform: scale(2);
 }
+
+.reviews-collapse-content {
+    display: none;
+}
+
+.reviews-content-active {
+    display: flex !important;
+}

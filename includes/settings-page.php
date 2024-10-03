@@ -679,13 +679,52 @@ if (!defined('ABSPATH')) {
                                         </div>
 
                                         <div class="flex-row">
+                                            <div class="flex-col-xxs-12 u-paddingTop--sm form-table">
+                                                <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_rich_snippet">Enable Q&A: </label>
+                                                <p class="TextBody TextBody--xxxs">Allow your visitors to ask questions about your products. Your answers will be published publicly. This will add a Q&A Tab to your Product Review Widget.</p>
+                                                <?php
+                                                    $polaris_review_widget_questions = get_option('REVIEWSio_polaris_review_widget_questions');
+                                                ?>
+                                                <div class="flex-row">
+                                                    <div class="flex-col-xxs-12 flex-col-sm-6">
+                                                        <div class="Field u-marginTop--xxs u-width--100">
+                                                            <select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_polaris_review_widget_questions">
+                                                                <option <?php echo ($polaris_review_widget_questions == 1) ? 'selected' : '' ?> value="1">Yes</option>
+                                                                <option <?php echo ($polaris_review_widget_questions == 0) ? 'selected' : '' ?> value="0">No</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="flex-col-xxs-12 u-paddingTop--sm form-table">
+                                                <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_sentiment_analysis">Include AI Summary: </label>
+                                                <p class="TextBody TextBody--xxxs">This will add an AI summary section on your Product Reviews Widget.</p>
+                                                <p class="TextBody TextBody--xxxs">
+                                                    <strong>Note:</strong> A product requires 50 reviews to generate summary, feature must be enabled in the REVIEWS.io dashboard and is only plans Grow and higher.
+                                                </p>
+                                                <?php
+                                                    $polaris_sentiment = get_option('REVIEWSio_sentiment_analysis');
+                                                ?>
+                                                <div class="flex-row">
+                                                    <div class="flex-col-xxs-12 flex-col-sm-6">
+                                                        <div class="Field u-marginTop--xxs u-width--100">
+                                                            <select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_sentiment_analysis">
+                                                                <option <?php echo ($polaris_sentiment == 1) ? 'selected' : '' ?> value="1">Yes</option>
+                                                                <option <?php echo ($polaris_sentiment == 0) ? 'selected' : '' ?> value="0">No</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div class="flex-col-xxs-12 u-paddingTop--sm">
-                                                <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_carousel_custom_styles">Custom Product Review Widget Styles</label>
+                                                <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_carousel_custom_styles">Custom Product Review Widget Config Override</label>
                                                 <p class="TextBody TextBody--xxxs">
                                                     Set custom options and styles for the Product Review widget below to thoroughly customize every aspect of the widget. The options can be edited from the <a href="https://dash.reviews.<?php echo $region == 'uk' ? 'co.uk' : 'io' ?>/widgets/editor/product-reviews-widget" target="_blank">REVIEWS.io widget editor</a>
                                                 </p>
                                                 <p class="TextBody TextBody--xxxs">
-                                                    <strong>Note:</strong> Adding styles in the field below will overwrite the styles form the Global Customizations tab. Leave the field empty if you wish to use styles from Global Customization and Advanced tab.
+                                                    <strong>Note:</strong> Adding anything in the field below will overwrite all other settings you have configured. Please leave this field empty if you wish to use the settings above, or legacy settings.
                                                 </p>
 
                                                 <?php
@@ -694,122 +733,128 @@ if (!defined('ABSPATH')) {
                                                 <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_polaris_custom_styles" style="width:100%;height:400px;border-color:#D1D8DA;border-radius:4px;padding:12px;"><?php echo esc_html($polaris_custom_styles); ?></textarea>
                                             </div>
                                         </div>
-                                        <div class="flex-row">
-                                            <div class="flex-col-xxs-12 u-paddingTop--sm">
-                                                <div>
-                                                    <p>Allow your visitors to ask questions about your products. Your answers will be published publicly.</p>
-                                                    <div class="form-table">
-                                                        <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_rich_snippet">Enable Q&A: </label>
-                                                        <p class="TextBody TextBody--xxxs">This will add a Q&A Tab to your Product Review Widget.</p>
-                                                        <?php
-                                                        $polaris_review_widget_questions = get_option('REVIEWSio_polaris_review_widget_questions');
-                                                        ?>
-                                                        <div class="flex-row">
-                                                            <div class="flex-col-xxs-12 flex-col-sm-6">
-                                                                <div class="Field u-marginTop--xxs u-width--100">
-                                                                    <select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_polaris_review_widget_questions">
-                                                                        <option <?php echo ($polaris_review_widget_questions == 1) ? 'selected' : '' ?> value="1">Yes</option>
-                                                                        <option <?php echo ($polaris_review_widget_questions == 0) ? 'selected' : '' ?> value="0">No</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_header_config">Advanced Product Reviews 'Header' Config</label>
-                                                    <p class="TextBody TextBody--xxxs">
-                                                        Sets 'header' section config for the Product Reviews Widget. After using the designer tool, copy the "header" block, which begins with "header: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
-                                                    </p>
 
-                                                    <?php
-                                                    $custom_widget_header_config = get_option('REVIEWSio_widget_custom_header_config');
-                                                    ?>
-                                                    <div class="flex-row">
-                                                        <div class="flex-col-xxs-12 flex-col-sm-6">
-                                                            <div class="Field u-marginTop--xxs u-width--100">
-                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_header_config" style="width:100%;height:50px;"><?php echo wp_kses(htmlentities($custom_widget_header_config),[]); ?></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                        <?php 
+                                            $legacyInUse = !empty(get_option('REVIEWSio_widget_custom_header_config')) || !empty(get_option('REVIEWSio_widget_custom_filtering_config')) || !empty(get_option('REVIEWSio_widget_custom_reviews_config')) || !empty(get_option('REVIEWSio_custom_reviews_widget_styles'));
+                                        ?>
+                                                        
+                                        <div class="reviews-collapse-trigger u-marginTop--md">
+                                            <div class="flex-row flex-row--noMargin flex-middle-xxs flex-between-xxs u-flexWrap--nowrap u-cursorPointer u-highlightHover--grey u-padding--sm">
                                                 <div>
-                                                    <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_filtering_config">Advanced Product Reviews 'Filtering' Config</label>
-                                                    <p class="TextBody TextBody--xxxs">
-                                                        Sets 'filtering' section config for the Product Reviews Widget. After using the designer tool, copy the "filtering" block, which begins with "filtering: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
-                                                    </p>
-                                                    <?php
-                                                    $custom_widget_filtering_config = get_option('REVIEWSio_widget_custom_filtering_config');
-                                                    ?>
-                                                    <div class="flex-row">
-                                                        <div class="flex-col-xxs-12 flex-col-sm-6">
-                                                            <div class="Field u-marginTop--xxs u-width--100">
-                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_filtering_config" style="width:100%;height:50px;"><?php echo wp_kses(htmlentities($custom_widget_filtering_config), []); ?></textarea>
-                                                            </div>
+                                                    <div class="flex-row flex-row--noMargin flex-start-xxs flex-middle-xxs">
+                                                        <div>
+                                                            <img class="u-marginRight--sm u-verticalAlign--top u-marginBottom--none" src="https://assets.reviews.io/img/all-global-assets/icons/icon-settings--sm.svg" style="width: 35px" alt="">
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_reviews_config">Advanced Product Reviews 'Reviews' Config</label>
-                                                    <p class="TextBody TextBody--xxxs">
-                                                        Sets 'reviews' section config for the Product Reviews Widget. After using the designer tool, copy the "reviews" block, which begins with "reviews: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
-                                                    </p>
 
-                                                    <?php
-                                                    $custom_widget_reviews_config = get_option('REVIEWSio_widget_custom_reviews_config');
-                                                    ?>
-                                                    <div class="flex-row">
-                                                        <div class="flex-col-xxs-12 flex-col-sm-6">
-                                                            <div class="Field u-marginTop--xxs u-width--100">
-                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_reviews_config" style="width:100%;height:50px;"><?php echo wp_kses(htmlentities($custom_widget_reviews_config), []); ?></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_css">Advanced Product Reviews Widget 'Styles' Config</label>
-                                                    <p class="TextBody TextBody--xxxs">
-                                                        Sets the 'styles' for the Product Reviews Widget. After using the designer tool, copy the "styles" block, which begins with "styles: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
-                                                    </p>
-                                                    <?php
-                                                    $custom_reviews_widget_styles = get_option('REVIEWSio_custom_reviews_widget_styles');
-                                                    ?>
-                                                    <div class="flex-row">
-                                                        <div class="flex-col-xxs-12 flex-col-sm-6">
-                                                            <div class="Field u-marginTop--xxs u-width--100">
-                                                                <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_custom_reviews_widget_styles" style="width:100%;height:50px;"><?php echo wp_kses(htmlentities($custom_reviews_widget_styles), []); ?></textarea>
-                                                            </div>
-                                                        </div>
+                                                        <h3 class="TextHeading TextHeading--xxs u-marginBottom--none">
+                                                            Legacy Settings <?php echo ($legacyInUse) ? '(In use)' : '' ?>
+                                                        </h3>
                                                     </div>
                                                 </div>
 
-                                                <h3><strong>Generate Product Reviews Shortcode</strong></h3>
+                                                <div class="IconButton IconButton--xs IconButton--rotateOnClick180 reviews-collapse-icon">
+                                                    <i class="IconButton__icon ricon-thin-arrow--up"></i>
+                                                </div>
+                                            </div>
+                                        </div>
 
+                                        <div class="flex-row reviews-collapse-content flex-col-xxs-12 u-paddingTop--sm" style="width:100%">
+                                            <div>
+                                                <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_header_config">Advanced Product Reviews 'Header' Config</label>
                                                 <p class="TextBody TextBody--xxxs">
-                                                    If set to manual mode, you can install the Product Reviews widget using the following shortcode: <code>[product_reviews_widget sku='your-sku']</code>
+                                                    Sets 'header' section config for the Product Reviews Widget. After using the designer tool, copy the "header" block, which begins with "header: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
                                                 </p>
 
-                                                <p class="TextBody TextBody--xxxs u-marginBottom--md">
-                                                    Additional information on embedding shortcodes can be found in the <a href="https://wordpress.com/support/wordpress-editor/blocks/shortcode-block/" target="_blank">WordPress Documentation</a>.
-                                                </p>
+                                                <?php
+                                                    $custom_widget_header_config = get_option('REVIEWSio_widget_custom_header_config');
+                                                ?>
 
-                                                <div class="GlobalNotification GlobalNotification--coloured-success u-marginBottom--lg">
-                                                    <div class="flex-row flex-middle-xxs">
-                                                        <div class="flex-col-xxs-1 u-textCenter--all">
-                                                            <img class="GlobalNotification__imageIcon" src="https://assets.reviews.io/img/all-global-assets/icons/icon-code--md--colour.svg">
-                                                        </div>
-                                                        <div class="flex-col-xxs-9">
-                                                            <div class="TextHeading TextHeading--xxxxs">Use the following shortcode to embed widget on a page:</div>
-                                                            <div id="product_reviews_widget-shortcode" class="TextBody TextBody--xxxs u-marginBottom--none">
-                                                                [product_reviews_widget<span></span><span></span>]
-                                                            </div>
-                                                        </div>
-                                                        <div class="flex-col-xxs-2 u-textRight--all">
-                                                            <div id="product_reviews_widget-shortcode-copy-button" class="Button Button--xs Button--outline u-marginBottom--none" onclick="copyToClipboard('product_reviews_widget-shortcode-copy-button', 'product_reviews_widget-shortcode')">
-                                                                Copy
-                                                            </div>
-                                                        </div>
+                                                <div class="flex-row flex-col-xxs-12">
+                                                    <div class="Field u-marginTop--xxs u-width--100">
+                                                        <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_header_config" style="width:100%;height:150px;"><?php echo wp_kses(htmlentities($custom_widget_header_config),[]); ?></textarea>
                                                     </div>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_filtering_config">Advanced Product Reviews 'Filtering' Config</label>
+                                                <p class="TextBody TextBody--xxxs">
+                                                    Sets 'filtering' section config for the Product Reviews Widget. After using the designer tool, copy the "filtering" block, which begins with "filtering: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
+                                                </p>
+
+                                                <?php
+                                                    $custom_widget_filtering_config = get_option('REVIEWSio_widget_custom_filtering_config');
+                                                ?>
+
+                                                <div class="flex-row flex-col-xxs-12">
+                                                    <div class="Field u-marginTop--xxs u-width--100">
+                                                        <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_filtering_config" style="width:100%;height:150px;"><?php echo wp_kses(htmlentities($custom_widget_filtering_config), []); ?></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_reviews_config">Advanced Product Reviews 'Reviews' Config</label>
+                                                <p class="TextBody TextBody--xxxs">
+                                                    Sets 'reviews' section config for the Product Reviews Widget. After using the designer tool, copy the "reviews" block, which begins with "reviews: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
+                                                </p>
+
+                                                <?php
+                                                    $custom_widget_reviews_config = get_option('REVIEWSio_widget_custom_reviews_config');
+                                                ?>
+
+                                                <div class="flex-row flex-col-xxs-12">
+                                                    <div class="Field u-marginTop--xxs u-width--100">
+                                                        <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_widget_custom_reviews_config" style="width:100%;height:150px;"><?php echo wp_kses(htmlentities($custom_widget_reviews_config), []); ?></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div>
+                                                <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_widget_custom_css">Advanced Product Reviews Widget 'Styles' Config</label>
+                                                <p class="TextBody TextBody--xxxs">
+                                                    Sets the 'styles' for the Product Reviews Widget. After using the designer tool, copy the "styles" block, which begins with "styles: {" and ends in "},". Please note that this is an advanced feature and incorrect use may break your Product Reviews Widget.
+                                                </p>
+
+                                                <?php
+                                                    $custom_reviews_widget_styles = get_option('REVIEWSio_custom_reviews_widget_styles');
+                                                ?>
+
+                                                <div class="flex-row flex-col-xxs-12">
+                                                    <div class="Field u-marginTop--xxs u-width--100">
+                                                        <textarea class="Field__input u-whiteSpace--prewrap" name="REVIEWSio_custom_reviews_widget_styles" style="width:100%;height:150px;"><?php echo wp_kses(htmlentities($custom_reviews_widget_styles), []); ?></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="u-marginTop--md">
+                                    <h3><strong>Generate Product Reviews Shortcode</strong></h3>
+
+                                    <p class="TextBody TextBody--xxxs">
+                                        If set to manual mode, you can install the Product Reviews widget using the following shortcode: <code>[product_reviews_widget sku='your-sku']</code>
+                                    </p>
+
+                                    <p class="TextBody TextBody--xxxs u-marginBottom--md">
+                                        Additional information on embedding shortcodes can be found in the <a href="https://wordpress.com/support/wordpress-editor/blocks/shortcode-block/" target="_blank">WordPress Documentation</a>.
+                                    </p>
+
+                                    <div class="GlobalNotification GlobalNotification--coloured-success u-marginBottom--lg">
+                                        <div class="flex-row flex-middle-xxs">
+                                            <div class="flex-col-xxs-1 u-textCenter--all">
+                                                <img class="GlobalNotification__imageIcon" src="https://assets.reviews.io/img/all-global-assets/icons/icon-code--md--colour.svg">
+                                            </div>
+                                            <div class="flex-col-xxs-9">
+                                                <div class="TextHeading TextHeading--xxxxs">Use the following shortcode to embed widget on a page:</div>
+                                                <div id="product_reviews_widget-shortcode" class="TextBody TextBody--xxxs u-marginBottom--none">
+                                                    [product_reviews_widget<span></span><span></span>]
+                                                </div>
+                                            </div>
+                                            <div class="flex-col-xxs-2 u-textRight--all">
+                                                <div id="product_reviews_widget-shortcode-copy-button" class="Button Button--xs Button--outline u-marginBottom--none" onclick="copyToClipboard('product_reviews_widget-shortcode-copy-button', 'product_reviews_widget-shortcode')">
+                                                    Copy
                                                 </div>
                                             </div>
                                         </div>
