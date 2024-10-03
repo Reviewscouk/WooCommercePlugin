@@ -456,7 +456,7 @@ if (!defined('ABSPATH')) {
                     </div>
 
                     <div class="flex-col-xxs-9 u-paddingLeft--none">
-                        <div class="ContentPanel u-shadow--none u-paddingRight--none" style="box-shadow: none;">
+                        <div class="ContentPanel u-shadow--none u-paddingRight--none" style="box-shadow: none; padding-top: 0;">
                             <div>
                                 <div id="global" class="form-table js-widget" style="display: none">
                                     <div>
@@ -617,7 +617,25 @@ if (!defined('ABSPATH')) {
                                 </div>
 
                                 <div id="product-reviews" class="form-table js-widget">
-                                    <div>
+                                    <?php if (!empty(get_option('REVIEWSio_polaris_custom_styles'))) { ?>                                         
+                                        <div class="GlobalNotification GlobalNotification--sm GlobalNotification--coloured-danger">
+                                            <div class="flex-row flex-middle-xxs">
+                                                <div class="flex-col-xxs-1 u-textCenter--all">
+                                                    <img class="GlobalNotification__imageIcon" src="https://assets.reviews.io/img/all-global-assets/icons/icon-warning--md.svg">
+                                                </div>
+                                                <div class="flex-col-xxs-11">
+                                                    <div class="TextHeading TextHeading--xxxxs">
+                                                        Configuration has been overridden.
+                                                    </div>
+                                                    <div class="TextBody TextBody--xxxs u-marginBottom--none">
+                                                        You have enabled <strong>Configuration Code Override</strong> please be aware that Enable Q&A, Include AI Summary and all Legacy settings are overriden.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+
+                                    <div>  
                                         <div class="flex-row">
                                             <div class="flex-col-xxs-12 flex-col-md-6">
                                                 <h3><strong>Product Review Widget Settings</strong></h3>
@@ -719,7 +737,7 @@ if (!defined('ABSPATH')) {
                                             </div>
 
                                             <div class="flex-col-xxs-12 u-paddingTop--sm">
-                                                <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_carousel_custom_styles">Custom Product Review Widget Config Override</label>
+                                                <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_carousel_custom_styles">Configuration Code Override</label>
                                                 <p class="TextBody TextBody--xxxs">
                                                     Set custom options and styles for the Product Review widget below to thoroughly customize every aspect of the widget. The options can be edited from the <a href="https://dash.reviews.<?php echo $region == 'uk' ? 'co.uk' : 'io' ?>/widgets/editor/product-reviews-widget" target="_blank">REVIEWS.io widget editor</a>
                                                 </p>
@@ -828,38 +846,39 @@ if (!defined('ABSPATH')) {
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="u-marginTop--md">
-                                    <h3><strong>Generate Product Reviews Shortcode</strong></h3>
-
-                                    <p class="TextBody TextBody--xxxs">
-                                        If set to manual mode, you can install the Product Reviews widget using the following shortcode: <code>[product_reviews_widget sku='your-sku']</code>
-                                    </p>
-
-                                    <p class="TextBody TextBody--xxxs u-marginBottom--md">
-                                        Additional information on embedding shortcodes can be found in the <a href="https://wordpress.com/support/wordpress-editor/blocks/shortcode-block/" target="_blank">WordPress Documentation</a>.
-                                    </p>
-
-                                    <div class="GlobalNotification GlobalNotification--coloured-success u-marginBottom--lg">
-                                        <div class="flex-row flex-middle-xxs">
-                                            <div class="flex-col-xxs-1 u-textCenter--all">
-                                                <img class="GlobalNotification__imageIcon" src="https://assets.reviews.io/img/all-global-assets/icons/icon-code--md--colour.svg">
-                                            </div>
-                                            <div class="flex-col-xxs-9">
-                                                <div class="TextHeading TextHeading--xxxxs">Use the following shortcode to embed widget on a page:</div>
-                                                <div id="product_reviews_widget-shortcode" class="TextBody TextBody--xxxs u-marginBottom--none">
-                                                    [product_reviews_widget<span></span><span></span>]
+                                    <div class="u-marginTop--md">
+                                        <h3><strong>Generate Product Reviews Shortcode</strong></h3>
+    
+                                        <p class="TextBody TextBody--xxxs">
+                                            If set to manual mode, you can install the Product Reviews widget using the following shortcode: <code>[product_reviews_widget sku='your-sku']</code>
+                                        </p>
+    
+                                        <p class="TextBody TextBody--xxxs u-marginBottom--md">
+                                            Additional information on embedding shortcodes can be found in the <a href="https://wordpress.com/support/wordpress-editor/blocks/shortcode-block/" target="_blank">WordPress Documentation</a>.
+                                        </p>
+    
+                                        <div class="GlobalNotification GlobalNotification--coloured-success u-marginBottom--lg">
+                                            <div class="flex-row flex-middle-xxs">
+                                                <div class="flex-col-xxs-1 u-textCenter--all">
+                                                    <img class="GlobalNotification__imageIcon" src="https://assets.reviews.io/img/all-global-assets/icons/icon-code--md--colour.svg">
                                                 </div>
-                                            </div>
-                                            <div class="flex-col-xxs-2 u-textRight--all">
-                                                <div id="product_reviews_widget-shortcode-copy-button" class="Button Button--xs Button--outline u-marginBottom--none" onclick="copyToClipboard('product_reviews_widget-shortcode-copy-button', 'product_reviews_widget-shortcode')">
-                                                    Copy
+                                                <div class="flex-col-xxs-9">
+                                                    <div class="TextHeading TextHeading--xxxxs">Use the following shortcode to embed widget on a page:</div>
+                                                    <div id="product_reviews_widget-shortcode" class="TextBody TextBody--xxxs u-marginBottom--none">
+                                                        [product_reviews_widget<span></span><span></span>]
+                                                    </div>
+                                                </div>
+                                                <div class="flex-col-xxs-2 u-textRight--all">
+                                                    <div id="product_reviews_widget-shortcode-copy-button" class="Button Button--xs Button--outline u-marginBottom--none" onclick="copyToClipboard('product_reviews_widget-shortcode-copy-button', 'product_reviews_widget-shortcode')">
+                                                        Copy
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
 
                                 <div id="rating-snippet" class="form-table js-widget" style="display: none">
                                     <div>
