@@ -4,7 +4,7 @@ Tags: Reviews, Seller Ratings, Google Reviews, Company Reviews, Stars in Adwords
 Author URI: https://www.reviews.io
 Tested up to: 6.6
 Requires PHP: 7.4
-Stable Tag: 1.3.8
+Stable Tag: 1.3.9
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -68,6 +68,9 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 
 
 == Changelog ==
+
+= 1.3.9 =
+* Update - Added AI Summary option to Product Reviews widget settings.
 
 = 1.3.8 = 
 * Fix - Hotfix for Product Reviews widget, SKU parameter not working when using full custom settings.

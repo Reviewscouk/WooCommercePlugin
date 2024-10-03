@@ -42,6 +42,33 @@ document.addEventListener("DOMContentLoaded", function () {
 	for (i = 0; i < colorSelectorIds.length; i++) {
 		initEditorColorPickr(colorSelectorIds[i]);
 	}
+
+	var triggers = document.querySelectorAll('.reviews-collapse-trigger');
+
+	triggers.forEach(function (trigger) {
+		trigger.addEventListener('click', function () {
+			var triggerIcon = this.querySelector('.reviews-collapse-icon');
+
+			if (triggerIcon) {
+				triggerIcon.classList.toggle('reviews-content-active');
+			}
+
+			var ico = trigger.querySelector('.IconButton__icon')
+			if (ico.classList.contains('ricon-thin-arrow--up')) {
+				ico.classList.remove('ricon-thin-arrow--up');
+				ico.classList.add('ricon-thin-arrow--down');
+			} else {
+				ico.classList.remove('ricon-thin-arrow--down');
+				ico.classList.add('ricon-thin-arrow--up');
+			}
+
+			var content = this.nextElementSibling;
+
+			if (content && content.classList.contains('reviews-collapse-content')) {
+				content.classList.toggle('reviews-content-active');
+			}
+		});
+	});
 });
 
 jQuery.ajax({
