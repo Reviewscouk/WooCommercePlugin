@@ -617,7 +617,7 @@ if (!defined('ABSPATH')) {
                                 </div>
 
                                 <div id="product-reviews" class="form-table js-widget">
-                                    <?php if (!empty(get_option('REVIEWSio_polaris_custom_styles'))) { ?>                                         
+                                    <?php if (!empty(get_option('REVIEWSio_polaris_custom_styles'))) { ?>
                                         <div class="GlobalNotification GlobalNotification--sm GlobalNotification--coloured-danger">
                                             <div class="flex-row flex-middle-xxs">
                                                 <div class="flex-col-xxs-1 u-textCenter--all">
@@ -635,7 +635,7 @@ if (!defined('ABSPATH')) {
                                         </div>
                                     <?php } ?>
 
-                                    <div>  
+                                    <div>
                                         <div class="flex-row">
                                             <div class="flex-col-xxs-12 flex-col-md-6">
                                                 <h3><strong>Product Review Widget Settings</strong></h3>
@@ -673,6 +673,7 @@ if (!defined('ABSPATH')) {
                                                         <option <?php echo ($polaris_review_widget == 'bottom') ? 'selected' : '' ?> value="bottom">Show At Bottom of Page</option>
                                                         <option <?php echo ($polaris_review_widget == 'manual') ? 'selected' : '' ?> value="manual">Manual</option>
                                                         <option <?php echo ($polaris_review_widget == '0') ? 'selected' : '' ?> value="0">Do Not Display</option>
+                                                        <option <?php echo ($polaris_review_widget == 'default') ? 'selected' : '' ?> value="default">Do Not Display & Show Default Reviews Tab</option>
                                                     </select>
                                                     <div class="Field__label">
                                                         Widget Location
@@ -752,10 +753,10 @@ if (!defined('ABSPATH')) {
                                             </div>
                                         </div>
 
-                                        <?php 
+                                        <?php
                                             $legacyInUse = !empty(get_option('REVIEWSio_widget_custom_header_config')) || !empty(get_option('REVIEWSio_widget_custom_filtering_config')) || !empty(get_option('REVIEWSio_widget_custom_reviews_config')) || !empty(get_option('REVIEWSio_custom_reviews_widget_styles'));
                                         ?>
-                                                        
+
                                         <div class="reviews-collapse-trigger u-marginTop--md">
                                             <div class="flex-row flex-row--noMargin flex-middle-xxs flex-between-xxs u-flexWrap--nowrap u-cursorPointer u-highlightHover--grey u-padding--sm">
                                                 <div>
@@ -849,15 +850,15 @@ if (!defined('ABSPATH')) {
 
                                     <div class="u-marginTop--md">
                                         <h3><strong>Generate Product Reviews Shortcode</strong></h3>
-    
+
                                         <p class="TextBody TextBody--xxxs">
                                             If set to manual mode, you can install the Product Reviews widget using the following shortcode: <code>[product_reviews_widget sku='your-sku']</code>
                                         </p>
-    
+
                                         <p class="TextBody TextBody--xxxs u-marginBottom--md">
                                             Additional information on embedding shortcodes can be found in the <a href="https://wordpress.com/support/wordpress-editor/blocks/shortcode-block/" target="_blank">WordPress Documentation</a>.
                                         </p>
-    
+
                                         <div class="GlobalNotification GlobalNotification--coloured-success u-marginBottom--lg">
                                             <div class="flex-row flex-middle-xxs">
                                                 <div class="flex-col-xxs-1 u-textCenter--all">
@@ -1262,7 +1263,7 @@ if (!defined('ABSPATH')) {
 										<p class="TextBody TextBody--xxxs">
 											Use the dropdown menu to enable or disable the Floating widget. Select 'Yes' to enable the widget, or 'No' to disable.
 										</p>
-										
+
 										<?php
 											$enable_floating_react_widget = get_option('REVIEWSio_enable_floating_react_widget');
 										?>
@@ -1277,7 +1278,7 @@ if (!defined('ABSPATH')) {
 											</div>
 										</div>
 									</div>
-			
+
 									<div>
 										<label class="TextHeading TextHeading--xxxs u-marginTop--xxs" for="REVIEWSio_floating_react_widget_option">Floating Widget Styles: </label>
 										<p class="TextBody TextBody--xxxs">

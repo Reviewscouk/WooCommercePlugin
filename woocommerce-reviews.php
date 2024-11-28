@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.3.10
+ * Version: 1.4.0
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -41,7 +41,7 @@ add_action('before_woocommerce_init', 'declare_wc_compatibility');
  */
 function reviewsio_admin_scripts()
 {
-    $appVersion = '1.3.10';
+    $appVersion = '1.4.0';
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__), [], $appVersion, false);
     wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__), [], $appVersion, false);
@@ -84,7 +84,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         protected $numWidgets = 0;
         protected $richsnippet_shortcode_url = '';
-        protected $appVersion = '1.3.10';
+        protected $appVersion = '1.4.0';
 
 
         public function __construct()
@@ -233,6 +233,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     update_option(($optionsPrefix . $o), get_option($o));
                 }
             }
+
             update_option($optionsPrefix . "new_variables_set", 1);
         }
 
@@ -671,7 +672,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             ?>
             <?php
                 return '
-                        <div 
+                        <div
                             class="reviews-io-nuggets-widget"
                             data-widget-id="' . esc_attr($widget_id) . '"
                             data-store-name="' . esc_attr(get_option('REVIEWSio_store_id')) . '"
@@ -705,7 +706,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             ?>
             <?php
                 return '
-                        <div 
+                        <div
                             class="reviews-io-nuggets-bar-widget"
                             data-widget-id="' . esc_attr($widget_id) . '"
                             data-store-name="' . esc_attr(get_option('REVIEWSio_store_id')) . '"
@@ -743,7 +744,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != '' && $widget['widget_id'] != '') {
                 return '
-                        <div 
+                        <div
                             class="reviews-io-ugc-widget"
                             data-widget-id="' . esc_attr($widget['widget_id']) . '"
                             data-store-name="' . esc_attr(get_option('REVIEWSio_store_id')) . '"
@@ -761,7 +762,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             wp_enqueue_script('reviewsio-ratingbar-react-widget-script');
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != '' && $widget['widget_id'] != '') {
                 return '
-                        <div 
+                        <div
                             class="reviews-io-rating-bar-widget"
                             data-widget-id="' . esc_attr($widget['widget_id']) . '"
                             data-store-name="' . esc_attr(get_option('REVIEWSio_store_id')) . '"
@@ -795,7 +796,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             if (get_option('REVIEWSio_api_key') != '' && get_option('REVIEWSio_store_id') != '' && $widget['widget_id'] != '' && $widget['campaign_id'] != '') {
                 return '
-                        <div 
+                        <div
                             class="reviews-io-survey-widget"
                             widget-id="' . esc_attr($widget['widget_id']) . '"
                             campaign-id="' . esc_attr($widget['campaign_id']) . '"
@@ -855,7 +856,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
         }
 
-        private function carouselInlineScript($widgetNum, $skus, $carouselType) 
+        private function carouselInlineScript($widgetNum, $skus, $carouselType)
         {
             $script = <<<CAROUSEL
                 window.addEventListener('load', function() {
@@ -872,7 +873,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                         carousel_type: '%s',
                         styles_carousel: '%s',
                         %s
-                    }); 
+                    });
                 })
             CAROUSEL;
 
@@ -1036,13 +1037,13 @@ if (!class_exists('WooCommerce_Reviews')) {
                 get_option('REVIEWSio_polaris_lang') ? esc_js(get_option('REVIEWSio_polaris_lang')) : esc_js('en'),
                 esc_js($this->getCarouselType('option', $carouselType)),
                 wp_kses($this->getCarouselType('styles', $carouselType), []),
-                !empty(get_option('REVIEWSio_carousel_custom_styles')) ? wp_kses(get_option('REVIEWSio_carousel_custom_styles'), []) : $options, 
+                !empty(get_option('REVIEWSio_carousel_custom_styles')) ? wp_kses(get_option('REVIEWSio_carousel_custom_styles'), []) : $options,
             );
 
             return $inlineScript;
         }
 
-        public function carousel_widget_shortcode($widget = null): string 
+        public function carousel_widget_shortcode($widget = null): string
         {
             $this->numWidgets++;
 
@@ -1149,7 +1150,6 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         public function reviewsio_rich_snippet_scripts()
         {
-
             wp_register_script('reviewsio-rich-snippet', esc_url($this->getWidgetDomain()) . 'rich-snippet/dist.js', array(), $this->appVersion, false);
             wp_enqueue_script('reviewsio-rich-snippet');
 
@@ -1167,7 +1167,6 @@ if (!class_exists('WooCommerce_Reviews')) {
                   });
               ');
             } else if ($product_enabled && !empty($skus) && is_product()) {
-
                 global $product;
 
                 $validUntil = gmdate('Y-m-d', strtotime('+30 days'));
@@ -1519,7 +1518,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
         }
 
-        public function polarisReviewWidget($skus = null, $isShortCode = false) 
+        public function polarisReviewWidget($skus = null, $isShortCode = false)
         {
             $this->numWidgets++;
 
@@ -1532,7 +1531,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             add_action('wp_footer', array($this, 'reviewsio_polaris_review_scripts'));
-            
+
             $color = esc_js($this->getHexColor());
             $store = esc_js(get_option('REVIEWSio_store_id'));
             $types = esc_js('product_review' . (get_option('REVIEWSio_polaris_review_widget_questions') ? ', questions' : ''));
@@ -1613,7 +1612,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                         enable_ask_question: true,
                         show_dates: true,
                         grouping: '$sku',
-                    }, 
+                    },
                     $header_options
                     $filter_options
                     $reviews_options
@@ -1712,7 +1711,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                     '--pagination-tab-active-text-font-weight': '600',
                     '--pagination-tab-active-border-color': '#0E1311',
                     '--pagination-tab-border-width': '3px',
-                }, 
+                },
             PRODUCT_REVIEWS_WIDGET_STYLES;
             $styles = !empty(get_option('REVIEWSio_custom_reviews_widget_styles')) ? wp_kses(get_option('REVIEWSio_custom_reviews_widget_styles'), []) : $styles;
 
@@ -1865,7 +1864,10 @@ if (!class_exists('WooCommerce_Reviews')) {
         public function initReviewsFilters()
         {
             add_filter('template_redirect', array($this, 'redirect_hook'));
-            add_filter('woocommerce_product_tabs', array($this, 'product_review_tab'));
+
+            if (get_option('REVIEWSio_polaris_review_widget') !== 'default') {
+                add_filter('woocommerce_product_tabs', array($this, 'product_review_tab'));
+            }
             if (get_option('REVIEWSio_polaris_review_widget') == 'bottom') {
                 add_filter('woocommerce_after_single_product', array($this, 'productPage'));
             } else {
