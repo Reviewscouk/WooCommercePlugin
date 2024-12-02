@@ -1170,7 +1170,6 @@ if (!class_exists('WooCommerce_Reviews')) {
                 global $product;
                 $prod = $product; // We may alter this variable, so we create a copy as to not disturb global var $product.
 
-
                 if (!is_object($prod)) {
                     $prod = wc_get_product(get_the_ID());
                 }
