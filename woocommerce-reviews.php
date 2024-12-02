@@ -1167,17 +1167,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                   });
               ');
             } else if ($product_enabled && !empty($skus) && is_product()) {
-                global $product;
-                $prod = $product; // We may alter this variable, so we create a copy as to not disturb global var $product.
-
-                if (!is_object($prod)) {
-                    $prod = wc_get_product(get_the_ID());
-                }
-
-                if (!is_object($prod)) {
-                    return;
-                }
-
+                $prod = $this->getProduct();
                 $validUntil = gmdate('Y-m-d', strtotime('+30 days'));
 
                 $brand = $prod->get_attribute('pa_brand');
@@ -1341,9 +1331,26 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
         }
 
-        public function getProductSkus()
+        public function getProduct()
         {
             global $product;
+
+            if (is_object($product) && $product instanceof WC_Product) {
+                return $product;
+            }
+
+            $prod = wc_get_product(get_the_ID());
+
+            if (is_object($prod) && $prod instanceof WC_Product) {
+                return $prod;
+            }
+
+            return null;
+        }
+
+        public function getProductSkus()
+        {
+            $prod = $this->getProduct();
             $cache = 'REVIEWSio_skus-' . get_the_ID();
 
             if (wp_cache_get($cache)) {
@@ -1351,7 +1358,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             $skus = [];
-            if (is_object($product) && $product instanceof WC_Product) {
+            if (is_object($prod) && $prod instanceof WC_Product) {
                 $meta = get_post_meta(get_the_ID(), '_sku');
                 $sku  = get_option('REVIEWSio_product_identifier') == 'id' ? get_the_ID() : (isset($meta[0]) ? $meta[0] : '');
                 if (!empty($sku)) {
@@ -1362,8 +1369,8 @@ if (!class_exists('WooCommerce_Reviews')) {
                     return $skus;
                 }
 
-                if ($product->get_type() == 'variable') {
-                    $available_variations = $product->get_available_variations();
+                if ($prod->get_type() == 'variable') {
+                    $available_variations = $prod->get_available_variations();
                     foreach ($available_variations as $variant) {
                         $skus[] = get_option('REVIEWSio_product_identifier') == 'id' ? $variant['variation_id'] : $variant['sku'];
                     }
