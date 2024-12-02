@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.4.0
+ * Version: 1.4.1
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -41,7 +41,7 @@ add_action('before_woocommerce_init', 'declare_wc_compatibility');
  */
 function reviewsio_admin_scripts()
 {
-    $appVersion = '1.4.0';
+    $appVersion = '1.4.1';
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__), [], $appVersion, false);
     wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__), [], $appVersion, false);
@@ -84,7 +84,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         protected $numWidgets = 0;
         protected $richsnippet_shortcode_url = '';
-        protected $appVersion = '1.4.0';
+        protected $appVersion = '1.4.1';
 
 
         public function __construct()
@@ -1167,25 +1167,29 @@ if (!class_exists('WooCommerce_Reviews')) {
                   });
               ');
             } else if ($product_enabled && !empty($skus) && is_product()) {
-                global $product;
+                $prod = $this->getProduct();
+
+                if (empty($prod)) {
+                    return;
+                }
 
                 $validUntil = gmdate('Y-m-d', strtotime('+30 days'));
 
-                $brand = $product->get_attribute('pa_brand');
+                $brand = $prod->get_attribute('pa_brand');
 
-                if ($product->is_type('variable')) {
-                    $variants = $product->get_available_variations();
+                if ($prod->is_type('variable')) {
+                    $variants = $prod->get_available_variations();
                 }
 
                 $offer = '{
                     "@type": "Offer",
                     "itemCondition": "NewCondition",
-                    "availability": " ' . esc_js($this->formatAvailability($product->get_stock_status())) . '",
-                    "price": "' . esc_js($product->get_price()) . '",
+                    "availability": " ' . esc_js($this->formatAvailability($prod->get_stock_status())) . '",
+                    "price": "' . esc_js($prod->get_price()) . '",
                     "priceCurrency": "' . esc_js(get_woocommerce_currency()) . '",
                     "sku": "' . esc_js($skus[0]) . '",
                     "priceValidUntil": "' . esc_js($validUntil) . '",
-                    "url": "' . esc_js(get_permalink($product->get_id())) . '",
+                    "url": "' . esc_js(get_permalink($prod->get_id())) . '",
                     "seller" : {
                         "@type": "Organization",
                         "name": "' . esc_js(get_bloginfo("name")) . '",
@@ -1203,8 +1207,8 @@ if (!class_exists('WooCommerce_Reviews')) {
                             "priceCurrency": "' . esc_js(get_woocommerce_currency()) . '",
                             "sku": "' . esc_js($variant['sku']) . '",
                             "priceValidUntil": "' . esc_js($validUntil) . '",
-                            "url": "' . esc_url(get_permalink($product->get_id())) . '",
-                            ' . wp_kses(apply_filters(('REVIEWSio_snippet-' . $variant['variation_id']), "", $product, $variant), []) . '
+                            "url": "' . esc_url(get_permalink($prod->get_id())) . '",
+                            ' . wp_kses(apply_filters(('REVIEWSio_snippet-' . $variant['variation_id']), "", $prod, $variant), []) . '
                             "seller" : {
                                 "@type": "Organization",
                                 "name": "' . esc_js(htmlspecialchars(get_bloginfo("name"))) . '",
@@ -1214,17 +1218,17 @@ if (!class_exists('WooCommerce_Reviews')) {
                     }
                 }
 
-                $image = wp_get_attachment_image_src(get_post_thumbnail_id($product->get_id()), 'single-post-thumbnail');
+                $image = wp_get_attachment_image_src(get_post_thumbnail_id($prod->get_id()), 'single-post-thumbnail');
                 if (get_option('REVIEWSio_enable_product_rich_snippet_server_side')) {
                     $baseData = [
                         "@context" => "http://schema.org",
                         "@type" => "Product",
-                        "name" => esc_js(htmlspecialchars($product->get_name())),
+                        "name" => esc_js(htmlspecialchars($prod->get_name())),
                         "image" => esc_js($image[0] ?? ''),
-                        "description" => wp_json_encode(apply_filters('REVIEWSio_description', htmlspecialchars(wp_strip_all_tags($product->get_description())), $product)),
+                        "description" => wp_json_encode(apply_filters('REVIEWSio_description', htmlspecialchars(wp_strip_all_tags($prod->get_description())), $prod)),
                         "brand" => [
                             "@type" => "Brand",
-                            "name: " => apply_filters('REVIEWSio_brand', (htmlspecialchars(!empty($brand) ? esc_js($brand) : esc_js(get_bloginfo("name")))), $product)
+                            "name: " => apply_filters('REVIEWSio_brand', (htmlspecialchars(!empty($brand) ? esc_js($brand) : esc_js(get_bloginfo("name")))), $prod)
                         ],
                         "offers" => [json_decode('[' . rtrim(wp_kses($offer, []), ',') . ']')]
                     ];
@@ -1243,14 +1247,14 @@ if (!class_exists('WooCommerce_Reviews')) {
                         data:{
                             "@context": "http://schema.org",
                             "@type": "Product",
-                            "name": "' . esc_js(htmlspecialchars($product->get_name())) . '",
+                            "name": "' . esc_js(htmlspecialchars($prod->get_name())) . '",
                             image: "' . (esc_js($image[0] ?? "")) . '",
-                            description: ' . wp_json_encode(apply_filters('REVIEWSio_description', htmlspecialchars(wp_strip_all_tags($product->get_description())), $product)) . ',
+                            description: ' . wp_json_encode(apply_filters('REVIEWSio_description', htmlspecialchars(wp_strip_all_tags($prod->get_description())), $prod)) . ',
                             brand: {
                             "@type": "Brand",
-                            name: "' . wp_kses(apply_filters('REVIEWSio_brand', (htmlspecialchars(!empty($brand) ? esc_js($brand) : esc_js(get_bloginfo("name")))), $product), []) . '"
+                            name: "' . wp_kses(apply_filters('REVIEWSio_brand', (htmlspecialchars(!empty($brand) ? esc_js($brand) : esc_js(get_bloginfo("name")))), $prod), []) . '"
                             },
-                            ' . wp_kses(apply_filters('REVIEWSio_snippet', "", $product), []) . '
+                            ' . wp_kses(apply_filters('REVIEWSio_snippet', "", $prod), []) . '
                             offers: [' . ($offer) . ']
                         }
                     });
@@ -1332,9 +1336,26 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
         }
 
-        public function getProductSkus()
+        public function getProduct()
         {
             global $product;
+
+            if (is_object($product) && $product instanceof WC_Product) {
+                return $product;
+            }
+
+            $prod = wc_get_product(get_the_ID());
+
+            if (is_object($prod) && $prod instanceof WC_Product) {
+                return $prod;
+            }
+
+            return null;
+        }
+
+        public function getProductSkus()
+        {
+            $prod = $this->getProduct();
             $cache = 'REVIEWSio_skus-' . get_the_ID();
 
             if (wp_cache_get($cache)) {
@@ -1342,7 +1363,7 @@ if (!class_exists('WooCommerce_Reviews')) {
             }
 
             $skus = [];
-            if (is_object($product) && $product instanceof WC_Product) {
+            if (is_object($prod) && $prod instanceof WC_Product) {
                 $meta = get_post_meta(get_the_ID(), '_sku');
                 $sku  = get_option('REVIEWSio_product_identifier') == 'id' ? get_the_ID() : (isset($meta[0]) ? $meta[0] : '');
                 if (!empty($sku)) {
@@ -1353,8 +1374,8 @@ if (!class_exists('WooCommerce_Reviews')) {
                     return $skus;
                 }
 
-                if ($product->get_type() == 'variable') {
-                    $available_variations = $product->get_available_variations();
+                if ($prod->get_type() == 'variable') {
+                    $available_variations = $prod->get_available_variations();
                     foreach ($available_variations as $variant) {
                         $skus[] = get_option('REVIEWSio_product_identifier') == 'id' ? $variant['variation_id'] : $variant['sku'];
                     }
