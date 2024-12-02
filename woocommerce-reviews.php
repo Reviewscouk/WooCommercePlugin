@@ -1168,6 +1168,11 @@ if (!class_exists('WooCommerce_Reviews')) {
               ');
             } else if ($product_enabled && !empty($skus) && is_product()) {
                 $prod = $this->getProduct();
+
+                if (empty($prod)) {
+                    return;
+                }
+
                 $validUntil = gmdate('Y-m-d', strtotime('+30 days'));
 
                 $brand = $prod->get_attribute('pa_brand');
