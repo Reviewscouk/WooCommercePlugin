@@ -2,9 +2,9 @@
 Contributors: Reviewscouk
 Tags: Reviews, Seller Ratings, Google Reviews, Company Reviews, Stars in Adwords
 Author URI: https://www.reviews.io
-Tested up to: 6.6
+Tested up to: 6.7
 Requires PHP: 7.4
-Stable Tag: 1.4.1
+Stable Tag: 1.4.2
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -68,6 +68,8 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 
 
 == Changelog ==
+= 1.4.2 =
+* Fix - Switched output method for product feed file
 
 = 1.4.1 =
 * Fix - Fallback to wc_get_product if global $product variable is incorrect.
