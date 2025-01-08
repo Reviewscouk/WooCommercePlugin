@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.4.1
+ * Version: 1.4.2
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -1030,7 +1030,8 @@ if (!class_exists('WooCommerce_Reviews')) {
                 },
             CAROUSEL_DEFAULT_OPTIONS;
 
-            $inlineScript = sprintf($script,
+            $inlineScript = sprintf(
+                $script,
                 $widgetNum,
                 esc_js(get_option('REVIEWSio_store_id')),
                 esc_js($skus),

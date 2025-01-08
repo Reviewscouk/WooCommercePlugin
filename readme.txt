@@ -68,6 +68,7 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 
 
 == Changelog ==
+
 = 1.4.2 =
 * Fix - Switched output method for product feed file
 
