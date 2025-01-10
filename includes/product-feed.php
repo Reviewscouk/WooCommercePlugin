@@ -34,7 +34,7 @@ if (WP_Filesystem()) {
         header('Content-Length: ' . $wp_filesystem->size($csvFilePath));
         ob_clean();
         flush();
-        readfile($wp_filesystem->get_contents($csvFilePath));
+        readfile($csvFilePath);
         exit;
     }
 
