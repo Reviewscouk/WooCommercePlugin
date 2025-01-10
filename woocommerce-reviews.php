@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 3
+ * Version: 1.4.3
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
