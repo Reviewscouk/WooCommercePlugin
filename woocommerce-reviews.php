@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.4.3
+ * Version: 1.4.4
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -41,7 +41,7 @@ add_action('before_woocommerce_init', 'declare_wc_compatibility');
  */
 function reviewsio_admin_scripts()
 {
-    $appVersion = '1.4.3';
+    $appVersion = '1.4.4';
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__), [], $appVersion, false);
     wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__), [], $appVersion, false);
@@ -84,7 +84,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         protected $numWidgets = 0;
         protected $richsnippet_shortcode_url = '';
-        protected $appVersion = '1.4.3';
+        protected $appVersion = '1.4.4';
 
 
         public function __construct()
@@ -1345,10 +1345,12 @@ if (!class_exists('WooCommerce_Reviews')) {
                 return $product;
             }
 
-            $prod = wc_get_product(get_the_ID());
+            if (function_exists('wc_get_product')) {
+                $prod = wc_get_product(get_the_ID());
 
-            if (is_object($prod) && $prod instanceof WC_Product) {
-                return $prod;
+                if (is_object($prod) && $prod instanceof WC_Product) {
+                    return $prod;
+                }
             }
 
             return null;
