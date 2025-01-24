@@ -190,6 +190,11 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
             }
         }
 
+        // Try to get the barcode from WooCommerce's new field.
+        if (method_exists($_product, 'get_global_unique_id') && !empty($_product->get_global_unique_id())) {
+            $barcode = $_product->get_global_unique_id();
+        }
+
         // Always add the parent product
         $productArray[] = [
             $sku,
