@@ -390,6 +390,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                         'meta_compare' => 'NOT EXISTS',
                         'type'         => wc_get_order_types(),
                         'status'       => array('wc-completed'),
+                        'date_created' => '>' . gmdate('Y-m-d', strtotime('-5 days')),
                     ));
                 } else {
                     $orders = get_posts(array(
