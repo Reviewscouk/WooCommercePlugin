@@ -1945,6 +1945,53 @@ if (!defined('ABSPATH')) {
                 </div>
                 <div class="u-hr u-marginTop--md u-marginBottom--md"></div>
                 <div>
+                    <label class="TextHeading TextHeading--xxxs" class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_cron">Enable Invitation Recency Limit For Cron Review Invitations: </label>
+                    <p class="TextBody TextBody--xxxs">
+                        Enabling this option allows you to limit cron invitation sending to orders completed within the last few days.
+                    </p>
+
+                    <?php
+                    $enable_order_processing_offset = get_option('REVIEWSio_enable_order_processing_offset');
+                    ?>
+                    <div class="flex-row">
+                        <div class="flex-col-xxs-12 flex-col-sm-6">
+                            <div class="Field u-marginTop--xxs u-width--100">
+                                <select class="Field__input Field__input--globalSelect u-width--100" style="max-width: none;" name="REVIEWSio_enable_order_processing_offset">
+                                    <option <?php echo ($enable_order_processing_offset == 1) ? 'selected' : '' ?> value="1">Yes</option>
+                                    <option <?php echo ($enable_order_processing_offset == 0) ? 'selected' : '' ?> value="0">No</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+                <div>
+                    <label class="TextHeading TextHeading--xxxs" class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_cron">Invitation Recency Limit Value: </label>
+                    <p class="TextBody TextBody--xxxs">
+                        Number of days .
+                    </p>
+
+                    <?php
+                    $order_processing_offset_days = get_option('REVIEWSio_order_processing_offset_days');
+                    ?>
+                    <div class="flex-row">
+                        <div class="flex-col-xxs-12 flex-col-sm-6">
+                            <div class="Field u-marginTop--xxs u-width--100">
+                                <input
+                                    class="Field__input u-width--100"
+                                    style="max-width: none;"
+                                    type="number"
+                                    min="1"
+                                    name="REVIEWSio_order_processing_offset_days"
+                                    value="<?php echo absint(esc_attr($order_processing_offset_days)); ?>"
+                                    placeholder="Number of days (e.g. 5)"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="u-hr u-marginTop--md u-marginBottom--md"></div>
+                <div>
                     <label class="TextHeading TextHeading--xxxs" class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_cron">Enable Cron For Product Feed: </label>
                     <p class="TextBody TextBody--xxxs">
                         Enable this option to generate a product feed updated daily to the server.
