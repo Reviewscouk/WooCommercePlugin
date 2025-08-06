@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.5.0
+ * Version: 1.5.1
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -41,7 +41,7 @@ add_action('before_woocommerce_init', 'declare_wc_compatibility');
  */
 function reviewsio_admin_scripts()
 {
-    $appVersion = '1.5.0';
+    $appVersion = '1.5.1';
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__), [], $appVersion, false);
     wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__), [], $appVersion, false);
@@ -84,7 +84,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         protected $numWidgets = 0;
         protected $richsnippet_shortcode_url = '';
-        protected $appVersion = '1.5.0';
+        protected $appVersion = '1.5.1';
 
 
         public function __construct()
@@ -223,7 +223,9 @@ if (!class_exists('WooCommerce_Reviews')) {
                 "widget_custom_reviews_config",
                 "product_feed_wpseo_global_ids",
                 "enable_gpf_data",
-                "sentiment_analysis"
+                "sentiment_analysis",
+                "enable_order_processing_offset",
+                "order_processing_offset_days"
             ];
 
             foreach ($options as $o) {
@@ -262,6 +264,8 @@ if (!class_exists('WooCommerce_Reviews')) {
             update_option('REVIEWSio_disable_elementor_blocks', 0);
             update_option('REVIEWSio_product_feed_cron_frequency', 'daily');
             update_option('REVIEWSio_current_product_feed_cron_frequency', 'daily');
+            update_option('REVIEWSio_enable_order_processing_offset', 0);
+            update_option('REVIEWSio_order_processing_offset_days', 5);
         }
 
         public function add_menu()
@@ -383,14 +387,27 @@ if (!class_exists('WooCommerce_Reviews')) {
         {
             wp_reset_query();
             if (get_option('REVIEWSio_enable_cron')) {
+
                 if ($this->is_hpos_enabled()) {
-                    $orders = wc_get_orders(array(
-                        'limit'        => 30,
-                        'meta_key'     => '_reviewscouk_status',
-                        'meta_compare' => 'NOT EXISTS',
-                        'type'         => wc_get_order_types(),
-                        'status'       => array('wc-completed'),
-                    ));
+                    if (get_option('REVIEWSio_enable_order_processing_offset') === '1') {
+                        $offset_days = get_option('REVIEWSio_order_processing_offset_days');
+                        $orders = wc_get_orders(array(
+                            'limit'        => 30,
+                            'meta_key'     => '_reviewscouk_status',
+                            'meta_compare' => 'NOT EXISTS',
+                            'type'         => wc_get_order_types(),
+                            'status'       => array('wc-completed'),
+                            'date_created' => '>' . gmdate('Y-m-d', strtotime("-{$offset_days} days"));
+                        ));
+                    } else {
+                        $orders = wc_get_orders(array(
+                            'limit'        => 30,
+                            'meta_key'     => '_reviewscouk_status',
+                            'meta_compare' => 'NOT EXISTS',
+                            'type'         => wc_get_order_types(),
+                            'status'       => array('wc-completed'),
+                        ));
+                    }
                 } else {
                     $orders = get_posts(array(
                         'numberposts'  => 30,
