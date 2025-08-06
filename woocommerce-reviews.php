@@ -397,7 +397,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             'meta_compare' => 'NOT EXISTS',
                             'type'         => wc_get_order_types(),
                             'status'       => array('wc-completed'),
-                            'date_created' => '>' . gmdate('Y-m-d', strtotime("-{$offset_days} days"));
+                            'date_created' => '>' . gmdate('Y-m-d', strtotime("-{$offset_days} days")),
                         ));
                     } else {
                         $orders = wc_get_orders(array(
