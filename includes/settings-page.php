@@ -1968,7 +1968,7 @@ if (!defined('ABSPATH')) {
                 <div>
                     <label class="TextHeading TextHeading--xxxs" class="TextHeading TextHeading--xxxs" for="REVIEWSio_enable_cron">Invitation Recency Limit Value: </label>
                     <p class="TextBody TextBody--xxxs">
-                        Number of days .
+                        How many days back the plugin will look for completed orders to send review invitations.
                     </p>
 
                     <?php
@@ -1981,7 +1981,7 @@ if (!defined('ABSPATH')) {
                                     class="Field__input u-width--100"
                                     style="max-width: none;"
                                     type="number"
-                                    min="1"
+                                    min="0"
                                     name="REVIEWSio_order_processing_offset_days"
                                     value="<?php echo absint(esc_attr($order_processing_offset_days)); ?>"
                                     placeholder="Number of days (e.g. 5)"
