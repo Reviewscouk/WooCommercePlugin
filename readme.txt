@@ -4,7 +4,7 @@ Tags: Reviews, Seller Ratings, Google Reviews, Company Reviews, Stars in Adwords
 Author URI: https://www.reviews.io
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable Tag: 1.5.1
+Stable Tag: 1.5.2
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -68,6 +68,9 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 
 
 == Changelog ==
+
+= 1.5.2 =
+* Fix - Fixed a bug related to not accepting certain values in Invitation Recency limit.
 
 = 1.5.1 =
 * Update - Add option to limit order processing to most recent orders and set the number of days to limit to.
