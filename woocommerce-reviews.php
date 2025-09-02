@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.5.3
+ * Version: 1.5.4
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -41,7 +41,7 @@ add_action('before_woocommerce_init', 'declare_wc_compatibility');
  */
 function reviewsio_admin_scripts()
 {
-    $appVersion = '1.5.3';
+    $appVersion = '1.5.4';
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__), [], $appVersion, false);
     wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__), [], $appVersion, false);
@@ -52,7 +52,8 @@ function reviewsio_admin_scripts()
 
     foreach ($js_scripts as $script) {
         wp_localize_script($script, 'reviewsio_data', array(
-            'store_id' => $store_id
+            'store_id' => $store_id,
+            'domain' => get_option('REVIEWSio_region') == 'uk' ? 'co.uk' : 'io'
         ));
     }
 
