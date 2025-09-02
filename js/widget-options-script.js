@@ -169,7 +169,7 @@ function getWidgetOptionsList(selectedWidget = "") {
 							class: "Button Button--primary Button--sm",
 							text: "Customise Widget",
 							target: "_blank",
-							href: `https://dash.reviews.${domain}/widgets/editor/${item.editor}`,
+							href: `https://dash.reviews.${reviewsio_data.domain}/widgets/editor/${item.editor}`,
 						}).appendTo(parent);
 					}
 				});
