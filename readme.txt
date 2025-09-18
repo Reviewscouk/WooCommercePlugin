@@ -68,6 +68,8 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 
 
 == Changelog ==
+= 1.5.5 =
+* Fix - Rollback product feed changes.
 
 = 1.5.4 =
 * Fix - Update all product property access to use methods.
