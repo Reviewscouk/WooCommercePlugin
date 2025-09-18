@@ -144,10 +144,10 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
 {
     foreach ($products as $product) {
         $_pf      = new WC_Product_Factory();
-        $_product = $_pf->get_product($product->get_id());
+        $_product = $_pf->get_product($product->ID);
 
         $woocommerce_sku = $_product->get_sku();
-        $woocommerce_id = $product->get_id();
+        $woocommerce_id = $product->ID;
 
         $sku = get_option('REVIEWSio_product_identifier') == 'id' ? $woocommerce_id : $woocommerce_sku;
 
@@ -158,7 +158,7 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
             $image_url = wp_get_attachment_url($image_id);
         }
 
-        $categories = get_the_terms($product->get_id(), 'product_cat');
+        $categories = get_the_terms($product->ID, 'product_cat');
         $categories_string = [];
 
         foreach ($categories as $cat) {
@@ -170,7 +170,7 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
         $categories_string = implode(', ', $categories_string);
 
         $attributes = $_product->get_attributes();
-        $meta = get_post_meta($product->get_id());
+        $meta = get_post_meta($product->ID);
 
         // Try to get barcode from meta, if nothing found, will return empty string
         $gtinFields = [
@@ -198,9 +198,9 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
         // Always add the parent product
         $productArray[] = [
             $sku,
-            $_product->get_name(),
+            $product->post_title,
             $image_url,
-            get_permalink($product->get_id()),
+            get_permalink($product->ID),
             $sku,
             $woocommerce_sku,
             $woocommerce_id,
@@ -228,7 +228,7 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
         foreach ($customProductAttributes as $key) {
             $key = strtolower($key);
             if (!empty($productAttributes[$key]) && !empty($productAttributes[$key]['is_taxonomy'])) {
-                $terms = wc_get_product_terms($product->get_id(), $key, ['fields' => 'names']);
+                $terms = wc_get_product_terms($product->ID, $key, ['fields' => 'names']);
                 $value = array_shift($terms);
                 $newFields[$key] = $value;
             } elseif (isset($productAttributes[$key]['options'][0])) {
@@ -241,7 +241,7 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
         }
 
         foreach ($customProductAttributes as $metaFieldKey) {
-            $productMetaData = get_post_meta($product->get_id(), $metaFieldKey);
+            $productMetaData = get_post_meta($product->ID, $metaFieldKey);
             if (!empty($productMetaData)) {
                 foreach ($productMetaData as $metaValue) {
                     if (!empty($metaValue)) {
@@ -308,15 +308,15 @@ function processProducts(&$productArray, $products, $headerArray, $customProduct
             }
         }
 
-        if ($_pf->get_product_type($product->get_id()) == 'variable' && get_option('REVIEWSio_use_parent_product') != 1) {
+        if ($_pf->get_product_type($product->ID) == 'variable' && get_option('REVIEWSio_use_parent_product') != 1) {
             $available_variations = $_product->get_available_variations();
 
             foreach ($available_variations as $variation) {
                 $variant_sku = get_option('REVIEWSio_product_identifier') == 'id' ? $variation['variation_id'] : $variation['sku'];
                 $variant_attributes = is_array($variation['attributes']) ? implode(' ', array_filter(array_values($variation['attributes']))) : '';
-                $variant_title = $_product->get_name();
+                $variant_title = $product->post_title;
 
-                $productArray[] = array($variant_sku, $variant_title, $image_url, get_permalink($product->get_id()), $variation['sku'], $variation['sku'], $variation['variation_id'], $barcode, $categories_string, $categories_json);
+                $productArray[] = array($variant_sku, $variant_title, $image_url, get_permalink($product->ID), $variation['sku'], $variation['sku'], $variation['variation_id'], $barcode, $categories_string, $categories_json);
 
                 $newFields = [];
                 foreach ($customProductAttributes as $key) {
