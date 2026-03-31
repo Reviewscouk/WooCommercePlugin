@@ -396,7 +396,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             'limit'        => 30,
                             'meta_key'     => '_reviewscouk_status',
                             'meta_compare' => 'NOT EXISTS',
-                            'type'         => wc_get_order_types(),
+                            'type'         => array_diff(wc_get_order_types(), ['shop_order_refund']),
                             'status'       => array('wc-completed'),
                             'date_created' => '>' . gmdate('Y-m-d', strtotime("-{$offset_days} days")),
                         ));
@@ -405,7 +405,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             'limit'        => 30,
                             'meta_key'     => '_reviewscouk_status',
                             'meta_compare' => 'NOT EXISTS',
-                            'type'         => wc_get_order_types(),
+                            'type'         => array_diff(wc_get_order_types(), ['shop_order_refund']),
                             'status'       => array('wc-completed'),
                         ));
                     }
@@ -414,7 +414,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                         'numberposts'  => 30,
                         'meta_key'     => '_reviewscouk_status',
                         'meta_compare' => 'NOT EXISTS',
-                        'post_type'    => wc_get_order_types(),
+                        'post_type'    => array_diff(wc_get_order_types(), ['shop_order_refund']),
                         'post_status'  => array('wc-completed'),
                         'date_query'   => array(
                             'after' => gmdate('Y-m-d', strtotime('-5 days')),
@@ -423,7 +423,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                 }
 
                 foreach ($orders as $order) {
-                    $this->processCompletedOrder($order->ID);
+                    $this->processCompletedOrder($order->get_id());
                 }
             }
         }
@@ -444,7 +444,7 @@ if (!class_exists('WooCommerce_Reviews')) {
         public function processCompletedOrder($order_id)
         {
             $api_url = $this->getApiDomain();
-            $order   = new WC_Order($order_id);
+            $order   = wc_get_order($order_id);
             $items   = $order->get_items();
 
             if ($this->is_hpos_enabled()) {
