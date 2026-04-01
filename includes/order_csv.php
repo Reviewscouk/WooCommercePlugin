@@ -22,6 +22,11 @@ function get_order_details($o)
 
     if ($using_hpos) {
         $order = wc_get_order($o->get_id());
+
+        if (!$order) {
+            return null;
+        }
+
         $order_data = $order->get_data();
 
         $order_id = $order->get_id();
@@ -29,6 +34,11 @@ function get_order_details($o)
         $email = $order_data['billing']['email'];
     } else {
         $order = wc_get_order($o->ID);
+
+        if (!$order) {
+            return null;
+        }
+
         $order_id  = $order->get_order_number();
         $firstname = $order->get_billing_first_name() . ' ' . $order->get_billing_last_name();
         $email = $order->get_billing_email();
@@ -69,6 +79,10 @@ if ($using_hpos) {
 
 foreach ($orders as $o) {
     $order_details = get_order_details($o);
+
+    if (!$order_details) {
+        continue;
+    }
 
     $order = $order_details->order;
     $order_id = $order_details->order_id;

@@ -423,7 +423,8 @@ if (!class_exists('WooCommerce_Reviews')) {
                 }
 
                 foreach ($orders as $order) {
-                    $this->processCompletedOrder($order->get_id());
+                    $order_id = $this->is_hpos_enabled() ? $order->get_id() : $order->ID;
+                    $this->processCompletedOrder($order_id);
                 }
             }
         }
@@ -445,6 +446,11 @@ if (!class_exists('WooCommerce_Reviews')) {
         {
             $api_url = $this->getApiDomain();
             $order   = wc_get_order($order_id);
+
+            if (!$order) {
+                return;
+            }
+
             $items   = $order->get_items();
 
             if ($this->is_hpos_enabled()) {
