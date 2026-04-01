@@ -396,7 +396,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             'limit'        => 30,
                             'meta_key'     => '_reviewscouk_status',
                             'meta_compare' => 'NOT EXISTS',
-                            'type'         => array_diff(wc_get_order_types(), ['shop_order_refund']),
+                            'type'         => array_diff(wc_get_order_types(), ['shop_order_refund', 'shop_order_placehold']),
                             'status'       => array('wc-completed'),
                             'date_created' => '>' . gmdate('Y-m-d', strtotime("-{$offset_days} days")),
                         ));
@@ -405,7 +405,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             'limit'        => 30,
                             'meta_key'     => '_reviewscouk_status',
                             'meta_compare' => 'NOT EXISTS',
-                            'type'         => array_diff(wc_get_order_types(), ['shop_order_refund']),
+                            'type'         => array_diff(wc_get_order_types(), ['shop_order_refund', 'shop_order_placehold']),
                             'status'       => array('wc-completed'),
                         ));
                     }
@@ -414,7 +414,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                         'numberposts'  => 30,
                         'meta_key'     => '_reviewscouk_status',
                         'meta_compare' => 'NOT EXISTS',
-                        'post_type'    => array_diff(wc_get_order_types(), ['shop_order_refund']),
+                        'post_type'    => array_diff(wc_get_order_types(), ['shop_order_refund', 'shop_order_placehold']),
                         'post_status'  => array('wc-completed'),
                         'date_query'   => array(
                             'after' => gmdate('Y-m-d', strtotime('-5 days')),
