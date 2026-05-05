@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.5.5
+ * Version: 1.5.6
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -41,7 +41,7 @@ add_action('before_woocommerce_init', 'declare_wc_compatibility');
  */
 function reviewsio_admin_scripts()
 {
-    $appVersion = '1.5.5';
+    $appVersion = '1.5.6';
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__), [], $appVersion, false);
     wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__), [], $appVersion, false);
@@ -85,7 +85,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         protected $numWidgets = 0;
         protected $richsnippet_shortcode_url = '';
-        protected $appVersion = '1.5.5';
+        protected $appVersion = '1.5.6';
 
 
         public function __construct()
@@ -396,7 +396,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             'limit'        => 30,
                             'meta_key'     => '_reviewscouk_status',
                             'meta_compare' => 'NOT EXISTS',
-                            'type'         => wc_get_order_types(),
+                            'type'         => array_diff(wc_get_order_types(), ['shop_order_refund', 'shop_order_placehold']),
                             'status'       => array('wc-completed'),
                             'date_created' => '>' . gmdate('Y-m-d', strtotime("-{$offset_days} days")),
                         ));
@@ -405,7 +405,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                             'limit'        => 30,
                             'meta_key'     => '_reviewscouk_status',
                             'meta_compare' => 'NOT EXISTS',
-                            'type'         => wc_get_order_types(),
+                            'type'         => array_diff(wc_get_order_types(), ['shop_order_refund', 'shop_order_placehold']),
                             'status'       => array('wc-completed'),
                         ));
                     }
@@ -414,7 +414,7 @@ if (!class_exists('WooCommerce_Reviews')) {
                         'numberposts'  => 30,
                         'meta_key'     => '_reviewscouk_status',
                         'meta_compare' => 'NOT EXISTS',
-                        'post_type'    => wc_get_order_types(),
+                        'post_type'    => array_diff(wc_get_order_types(), ['shop_order_refund', 'shop_order_placehold']),
                         'post_status'  => array('wc-completed'),
                         'date_query'   => array(
                             'after' => gmdate('Y-m-d', strtotime('-5 days')),
@@ -423,7 +423,8 @@ if (!class_exists('WooCommerce_Reviews')) {
                 }
 
                 foreach ($orders as $order) {
-                    $this->processCompletedOrder($order->ID);
+                    $order_id = $this->is_hpos_enabled() ? $order->get_id() : $order->ID;
+                    $this->processCompletedOrder($order_id);
                 }
             }
         }
@@ -444,7 +445,12 @@ if (!class_exists('WooCommerce_Reviews')) {
         public function processCompletedOrder($order_id)
         {
             $api_url = $this->getApiDomain();
-            $order   = new WC_Order($order_id);
+            $order   = wc_get_order($order_id);
+
+            if (!$order) {
+                return;
+            }
+
             $items   = $order->get_items();
 
             if ($this->is_hpos_enabled()) {
