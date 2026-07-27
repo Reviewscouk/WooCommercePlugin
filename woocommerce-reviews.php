@@ -17,7 +17,7 @@ if (is_admin() && isset($_GET['page']) && !is_string($_GET['page'])) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.5.6
+ * Version: 1.5.7
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -46,7 +46,7 @@ add_action('before_woocommerce_init', 'declare_wc_compatibility');
  */
 function reviewsio_admin_scripts()
 {
-    $appVersion = '1.5.6';
+    $appVersion = '1.5.7';
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__), [], $appVersion, false);
     wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__), [], $appVersion, false);
@@ -90,7 +90,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         protected $numWidgets = 0;
         protected $richsnippet_shortcode_url = '';
-        protected $appVersion = '1.5.6';
+        protected $appVersion = '1.5.7';
 
 
         public function __construct()
