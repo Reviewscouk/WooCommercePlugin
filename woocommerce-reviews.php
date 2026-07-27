@@ -4,6 +4,11 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// Guard for malformed requests like ?page[]=x make $_GET['page'] an array, which fatals WordPress core further down this request.
+if (is_admin() && isset($_GET['page']) && !is_string($_GET['page'])) {
+    unset($_GET['page']);
+}
+
 /**
  * Plugin Name: REVIEWS.io for WooCommerce
  * Depends: WooCommerce
