@@ -4,6 +4,11 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// Guard for malformed requests like ?page[]=x make $_GET['page'] an array, which fatals WordPress core further down this request.
+if (is_admin() && isset($_GET['page']) && !is_string($_GET['page'])) {
+    unset($_GET['page']);
+}
+
 /**
  * Plugin Name: REVIEWS.io for WooCommerce
  * Depends: WooCommerce
@@ -12,7 +17,7 @@ if (!defined('ABSPATH')) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.5.6
+ * Version: 1.5.7
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -41,7 +46,7 @@ add_action('before_woocommerce_init', 'declare_wc_compatibility');
  */
 function reviewsio_admin_scripts()
 {
-    $appVersion = '1.5.6';
+    $appVersion = '1.5.7';
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__), [], $appVersion, false);
     wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__), [], $appVersion, false);
@@ -85,7 +90,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         protected $numWidgets = 0;
         protected $richsnippet_shortcode_url = '';
-        protected $appVersion = '1.5.6';
+        protected $appVersion = '1.5.7';
 
 
         public function __construct()
@@ -1901,13 +1906,13 @@ if (!class_exists('WooCommerce_Reviews')) {
                 add_action('elementor/widgets/register', array('ElementorFunctions', 'unregister_widgets'));
             }
 
-            if (is_admin() && isset($_GET['page']) && trim($_GET['page']) === 'reviewscouk') {
+            if (is_admin() && isset($_GET['page']) && is_string($_GET['page']) && trim($_GET['page']) === 'reviewscouk') {
                 if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'GET' && (!isset($_GET['_wpnonce']) || !wp_verify_nonce($_GET['_wpnonce'], 'reviewscouk_menu_nonce'))) {
                     //wp_die('Nonce verification failed.');
                 }
             }
 
-            if (isset($_GET["page"]) && trim($_GET["page"]) == 'reviewscouk') {
+            if (isset($_GET["page"]) && is_string($_GET["page"]) && trim($_GET["page"]) == 'reviewscouk') {
                 add_action('admin_enqueue_scripts', 'reviewsio_admin_scripts');
             }
         }
