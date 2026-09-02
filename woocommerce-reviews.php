@@ -288,23 +288,61 @@ if (!class_exists('WooCommerce_Reviews')) {
             if (isset($_GET['settings-updated']) && $_GET['settings-updated']) {
                 try {
                     $this->afterSettingsUpdated();
-                } catch (Exception $e) {
+                } catch (Throwable $e) {
+                    $this->log(sprintf('sync threw: %s in %s:%d', $e->getMessage(), $e->getFile(), $e->getLine()));
                 }
             }
+        }
+
+        protected function log($message)
+        {
+            if (function_exists('wc_get_logger')) {
+                $logger = wc_get_logger();
+
+                if ($logger) {
+                    $logger->error($message, array('source' => 'reviewsio'));
+                    return;
+                }
+            }
+
+            error_log('[reviewsio] ' . $message);
         }
 
         protected function afterSettingsUpdated()
         {
             $feed    = $this->sendFeed();
             $install = $this->sendAppInstall();
+
+            $this->logFailure('set-feed', $feed);
+            $this->logFailure('app-installed', $install);
+
+            return array('feed' => $feed, 'install' => $install);
+        }
+
+        protected function logFailure($endpoint, array $result)
+        {
+            if ($result['ok']) {
+                return;
+            }
+
+            $this->log(sprintf(
+                '%s %s: %s | store=%s site=%s api=%s',
+                $endpoint,
+                $result['reached_api'] ? 'rejected by API' : 'NEVER REACHED API',
+                $result['error'],
+                get_option('REVIEWSio_store_id'),
+                get_site_url(),
+                $this->getApiDomain()
+            ));
         }
 
         protected function sendFeed()
         {
             return $this->apiPost('integration/set-feed', array(
-                'url'     => get_site_url() . '/index.php/reviews/product_feed',
-                'format'  => 'csv',
-                'mapping' => array(
+                'url'      => get_site_url() . '/index.php/reviews/product_feed',
+                'format'   => 'csv',
+                'platform' => 'woocommerce',
+                'mapping'  => array(
                     'id'        => 'sku',
                     'name'      => 'name',
                     'image_url' => 'image_url',
@@ -324,24 +362,42 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         protected function apiPost($url, $data)
         {
-            try {
-                $response = wp_remote_post($this->getApiDomain() . $url, array(
-                    'method'  => 'POST',
-                    'headers' => array(
-                        'store'        => get_option('REVIEWSio_store_id'),
-                        'apikey'       => get_option('REVIEWSio_api_key'),
-                        'Content-Type' => 'application/json',
-                    ),
-                    'body'    => wp_json_encode($data),
-                ));
+            $response = wp_remote_post($this->getApiDomain() . $url, array(
+                'method'  => 'POST',
+                'headers' => array(
+                    'store'        => get_option('REVIEWSio_store_id'),
+                    'apikey'       => get_option('REVIEWSio_api_key'),
+                    'Content-Type' => 'application/json',
+                ),
+                'body'    => wp_json_encode($data),
+            ));
 
-                if (is_array($response)) {
-                    return $response['body'];
-                }
-                return false;
-            } catch (Exception $e) {
-                return false;
+            if (is_wp_error($response)) {
+                return array(
+                    'ok'          => false,
+                    'reached_api' => false,
+                    'error'       => $response->get_error_code() . ': ' . $response->get_error_message(),
+                );
             }
+
+            $status = wp_remote_retrieve_response_code($response);
+            $body   = wp_remote_retrieve_body($response);
+
+            if ($status < 200 || $status >= 300) {
+                return array('ok' => false, 'reached_api' => true, 'error' => 'HTTP ' . $status . ' ' . $body);
+            }
+
+            $decoded = json_decode($body, true);
+
+            if (is_array($decoded) && array_key_exists('success', $decoded) && !$decoded['success']) {
+                return array(
+                    'ok'          => false,
+                    'reached_api' => true,
+                    'error'       => isset($decoded['error']) ? $decoded['error'] : 'success=false',
+                );
+            }
+
+            return array('ok' => true, 'reached_api' => true);
         }
 
         public function reviews_settings_page()
