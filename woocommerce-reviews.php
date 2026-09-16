@@ -321,21 +321,25 @@ if (!class_exists('WooCommerce_Reviews')) {
             update_option('REVIEWSio_last_diag_sent_date', $today);
             update_option('REVIEWSio_last_diag_sent_hash', $hash);
 
-            wp_remote_post($this->getApiDomain() . 'integration/client-log', array(
-                'method'    => 'POST',
-                'timeout'   => 5,
-                'blocking'  => false,
-                'headers'   => array(
-                    'store'        => get_option('REVIEWSio_store_id'),
-                    'apikey'       => get_option('REVIEWSio_api_key'),
-                    'Content-Type' => 'application/json',
-                ),
-                'body'      => wp_json_encode(array(
-                    'platform' => 'woocommerce',
-                    'site'     => get_site_url(),
-                    'message'  => $message,
-                )),
-            ));
+            try {
+                wp_remote_post($this->getApiDomain() . 'integration/client-log', array(
+                    'method'    => 'POST',
+                    'timeout'   => 5,
+                    'blocking'  => false,
+                    'headers'   => array(
+                        'store'        => get_option('REVIEWSio_store_id'),
+                        'apikey'       => get_option('REVIEWSio_api_key'),
+                        'Content-Type' => 'application/json',
+                    ),
+                    'body'      => wp_json_encode(array(
+                        'platform' => 'woocommerce',
+                        'site'     => get_site_url(),
+                        'message'  => $message,
+                    )),
+                ));
+            } catch (Throwable $e) {
+                error_log('[reviewsio] diagnostic log send threw: ' . $e->getMessage());
+            }
         }
 
         protected function afterSettingsUpdated()
