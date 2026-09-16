@@ -17,7 +17,7 @@ if (is_admin() && isset($_GET['page']) && !is_string($_GET['page'])) {
  * Author: Reviews.co.uk
  * License: GPLv3 or later
  * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * Version: 1.5.8
+ * Version: 1.5.9
  *
  * WC requires at least: 3.0.0
  * WC tested up to: 8.0.3
@@ -46,7 +46,7 @@ add_action('before_woocommerce_init', 'declare_wc_compatibility');
  */
 function reviewsio_admin_scripts()
 {
-    $appVersion = '1.5.8';
+    $appVersion = '1.5.9';
     // Register scripts
     wp_enqueue_script('reviewsio-admin-script', plugins_url('/js/admin-script.js', __FILE__), [], $appVersion, false);
     wp_enqueue_script('reviewsio-widget-options-script', plugins_url('/js/widget-options-script.js', __FILE__), [], $appVersion, false);
@@ -90,7 +90,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         protected $numWidgets = 0;
         protected $richsnippet_shortcode_url = '';
-        protected $appVersion = '1.5.8';
+        protected $appVersion = '1.5.9';
 
 
         public function __construct()
@@ -296,16 +296,50 @@ if (!class_exists('WooCommerce_Reviews')) {
 
         protected function log($message)
         {
-            if (function_exists('wc_get_logger')) {
-                $logger = wc_get_logger();
+            $logger = function_exists('wc_get_logger') ? wc_get_logger() : null;
 
-                if ($logger) {
-                    $logger->error($message, array('source' => 'reviewsio'));
-                    return;
-                }
+            if ($logger) {
+                $logger->error($message, array('source' => 'reviewsio'));
+            } else {
+                error_log('[reviewsio] ' . $message);
             }
 
-            error_log('[reviewsio] ' . $message);
+            $this->maybeSendDiagnosticLog($message);
+        }
+
+        protected function maybeSendDiagnosticLog($message)
+        {
+            $today = gmdate('Y-m-d');
+            $hash  = md5($message);
+
+            if (get_option('REVIEWSio_last_diag_sent_date') === $today
+                && get_option('REVIEWSio_last_diag_sent_hash') === $hash
+            ) {
+                return;
+            }
+
+            update_option('REVIEWSio_last_diag_sent_date', $today);
+            update_option('REVIEWSio_last_diag_sent_hash', $hash);
+
+            try {
+                wp_remote_post($this->getApiDomain() . 'integration/client-log', array(
+                    'method'    => 'POST',
+                    'timeout'   => 5,
+                    'blocking'  => false,
+                    'headers'   => array(
+                        'store'        => get_option('REVIEWSio_store_id'),
+                        'apikey'       => get_option('REVIEWSio_api_key'),
+                        'Content-Type' => 'application/json',
+                    ),
+                    'body'      => wp_json_encode(array(
+                        'platform' => 'woocommerce',
+                        'site'     => get_site_url(),
+                        'message'  => $message,
+                    )),
+                ));
+            } catch (Throwable $e) {
+                error_log('[reviewsio] diagnostic log send threw: ' . $e->getMessage());
+            }
         }
 
         protected function afterSettingsUpdated()
@@ -336,10 +370,48 @@ if (!class_exists('WooCommerce_Reviews')) {
             ));
         }
 
+        public static function get_product_feed_url()
+        {
+            $resolved = get_option('REVIEWSio_resolved_feed_url');
+
+            if ($resolved) {
+                return $resolved;
+            }
+
+            $prefix = get_option('permalink_structure') ? '' : '/index.php';
+
+            return get_site_url() . $prefix . '/reviews/product_feed';
+        }
+
+        protected function resolveProductFeedUrl()
+        {
+            $index_url = get_site_url() . '/index.php/reviews/product_feed';
+
+            if (!get_option('permalink_structure')) {
+                update_option('REVIEWSio_resolved_feed_url', $index_url);
+
+                return $index_url;
+            }
+
+            $clean_url = get_site_url() . '/reviews/product_feed';
+            $response  = wp_remote_get($clean_url, array('timeout' => 8, 'redirection' => 3));
+            $content_type = is_wp_error($response) ? '' : wp_remote_retrieve_header($response, 'content-type');
+
+            $resolved = (!is_wp_error($response)
+                && wp_remote_retrieve_response_code($response) === 200
+                && strpos((string) $content_type, 'csv') !== false)
+                ? $clean_url
+                : $index_url;
+
+            update_option('REVIEWSio_resolved_feed_url', $resolved);
+
+            return $resolved;
+        }
+
         protected function sendFeed()
         {
             return $this->apiPost('integration/set-feed', array(
-                'url'      => get_site_url() . '/index.php/reviews/product_feed',
+                'url'      => $this->resolveProductFeedUrl(),
                 'format'   => 'csv',
                 'platform' => 'woocommerce',
                 'mapping'  => array(
