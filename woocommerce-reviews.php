@@ -399,7 +399,7 @@ if (!class_exists('WooCommerce_Reviews')) {
 
             $resolved = (!is_wp_error($response)
                 && wp_remote_retrieve_response_code($response) === 200
-                && preg_match('/csv|octet-stream/', (string) $content_type))
+                && preg_match('/csv|octet-stream/i', (string) $content_type))
                 ? $clean_url
                 : $index_url;
 
