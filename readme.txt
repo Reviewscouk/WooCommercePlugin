@@ -4,7 +4,7 @@ Tags: Reviews, Seller Ratings, Google Reviews, Company Reviews, Stars in Adwords
 Author URI: https://www.reviews.io
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable Tag: 1.5.8
+Stable Tag: 1.5.9
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -68,6 +68,10 @@ Checkout the REVIEWS.io Changelog which outlines all of the feature updates & re
 
 
 == Changelog ==
+= 1.5.9 =
+* Fix - Verify the product feed URL is reachable before registering it, to avoid failures from firewalls or broken permalink rewrites
+* Fix - Report sync failures to REVIEWS.io so issues can be diagnosed without merchants needing to share logs
+
 = 1.5.8 =
 * Fix - Catch errors when syncing settings to REVIEWS.io
 

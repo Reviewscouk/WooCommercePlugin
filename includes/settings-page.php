@@ -219,7 +219,8 @@ if (!defined('ABSPATH')) {
                 <!-- Data Feeds-->
                 <div>
                     <label class="TextHeading TextHeading--xxxs" for="REVIEWSio_product_feed">Enable Product Feed: </label>
-                    <p class="TextBody TextBody--xxxs">For Product Invitations to queue correctly, we require access to your Product catalogue via a feed, which we will make available from <a href="<?php echo esc_url(get_site_url()); ?>/index.php/reviews/product_feed"><?php echo esc_url(get_site_url()); ?>/index.php/reviews/product_feed</a>.</p>
+                    <?php $productFeedUrl = WooCommerce_Reviews::get_product_feed_url(); ?>
+                    <p class="TextBody TextBody--xxxs">For Product Invitations to queue correctly, we require access to your Product catalogue via a feed, which we will make available from <a href="<?php echo esc_url($productFeedUrl); ?>"><?php echo esc_html($productFeedUrl); ?></a>.</p>
                     <p class="TextBody TextBody--xxxs">
                         <strong style="font-size:12px;">Note:</strong> There is an issue with data not being added correctly when renaming attributes in WooCommerce, please remove the attribute with changed name and the associated products, and then re-add them to ensure data integrity.
                     </p>
@@ -347,7 +348,7 @@ if (!defined('ABSPATH')) {
                         <div class="u-marginBottom--md">
                             <label class="TextHeading TextHeading--xxxs">Refresh Product Feed:</label>
                             <p class="TextBody TextBody--xxxs">Sync latest feed from WooCommerce.</p>
-                            <a class="Button Button--outline Button--xs" href="<?php echo esc_url(get_site_url()); ?>/index.php/reviews/product_feed?refresh">Refresh and Download Feed</a>
+                            <a class="Button Button--outline Button--xs" href="<?php echo esc_url(WooCommerce_Reviews::get_product_feed_url() . '?refresh'); ?>">Refresh and Download Feed</a>
                         </div>
                     </div>
                 <?php endif; ?>
